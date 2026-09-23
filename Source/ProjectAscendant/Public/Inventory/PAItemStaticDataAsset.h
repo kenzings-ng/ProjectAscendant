@@ -65,6 +65,10 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Item|Equipment")
 	EPAEquipmentSlot AllowedEquipmentSlot = EPAEquipmentSlot::None;
 
+	/** Mã nhận diện tài nguyên đồ họa Modular Paperdoll hiển thị trên nhân vật */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Item|Equipment|Paperdoll")
+	FName PaperdollVisualId = NAME_None;
+
 	/** Sát thương vật lý cộng thêm của trang bị (AC-1) */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Item|Equipment|Stats", meta = (ClampMin = "0.0"))
 	float BasePhysicalDamageBonus = 0.0f;
@@ -125,6 +129,18 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Item|Setup")
 	void SetupArmorIronPlate();
 
+	/** Thiết lập thông số tiêu chuẩn cho Quần Áo Vải Thô Tân Thủ */
+	UFUNCTION(BlueprintCallable, Category = "Item|Setup")
+	void SetupArmorStarterCloth();
+
+	/** Thiết lập thông số tiêu chuẩn cho Áo Da Thợ Săn */
+	UFUNCTION(BlueprintCallable, Category = "Item|Setup")
+	void SetupArmorLeatherRanger();
+
+	/** Thiết lập thông số tiêu chuẩn cho Pháp Bào Thuật Sĩ */
+	UFUNCTION(BlueprintCallable, Category = "Item|Setup")
+	void SetupArmorArcanistRobe();
+
 	/** Thiết lập thông số tiêu chuẩn cho Bình Máu Tiêu Hao (AC-2) */
 	UFUNCTION(BlueprintCallable, Category = "Item|Setup")
 	void SetupPotionHealth();
@@ -145,6 +161,9 @@ struct PROJECTASCENDANT_API FPAItemDataAssetPresets
 {
 	static void ConfigureWeaponIronSword(UItemStaticDataAsset* Asset);
 	static void ConfigureArmorIronPlate(UItemStaticDataAsset* Asset);
+	static void ConfigureArmorStarterCloth(UItemStaticDataAsset* Asset);
+	static void ConfigureArmorLeatherRanger(UItemStaticDataAsset* Asset);
+	static void ConfigureArmorArcanistRobe(UItemStaticDataAsset* Asset);
 	static void ConfigurePotionHealth(UItemStaticDataAsset* Asset);
 	static void ConfigureSkillBookDash(UItemStaticDataAsset* Asset);
 };

@@ -78,9 +78,55 @@ void FPAItemDataAssetPresets::ConfigureArmorIronPlate(UItemStaticDataAsset* Asse
 	Asset->AllowedEquipmentSlot = EPAEquipmentSlot::BodyArmor;
 	Asset->BasePhysicalDamageBonus = 0.0f;
 	Asset->BaseArmorBonus = 40.0f;
+	Asset->PaperdollVisualId = FName(TEXT("Visual_IronArmor"));
 	Asset->MaxStackSize = 1;
 	Asset->BaseSellPrice = 120;
 	Asset->EquipGameplayEffect = UGE_Item_IronPlate::StaticClass();
+}
+
+void FPAItemDataAssetPresets::ConfigureArmorStarterCloth(UItemStaticDataAsset* Asset)
+{
+	if (!Asset) return;
+	Asset->ItemId = FName(TEXT("Item_Armor_StarterCloth"));
+	Asset->ItemName = FText::FromString(TEXT("Starter Linen Clothes"));
+	Asset->ItemDescription = FText::FromString(TEXT("Simple linen garments woven from rough flax. Default attire for newly arrived wanderers."));
+	Asset->RarityTier = EPAItemRarity::Common;
+	Asset->Category = EPAItemCategory::Equipment;
+	Asset->AllowedEquipmentSlot = EPAEquipmentSlot::BodyArmor;
+	Asset->PaperdollVisualId = FName(TEXT("Visual_StarterCloth"));
+	Asset->BaseArmorBonus = 5.0f;
+	Asset->MaxStackSize = 1;
+	Asset->BaseSellPrice = 1;
+}
+
+void FPAItemDataAssetPresets::ConfigureArmorLeatherRanger(UItemStaticDataAsset* Asset)
+{
+	if (!Asset) return;
+	Asset->ItemId = FName(TEXT("Item_Armor_LeatherRanger"));
+	Asset->ItemName = FText::FromString(TEXT("Ranger Leather Scout Tunic"));
+	Asset->ItemDescription = FText::FromString(TEXT("Stitched cured leather armor offering balanced defense and silent mobility."));
+	Asset->RarityTier = EPAItemRarity::Uncommon;
+	Asset->Category = EPAItemCategory::Equipment;
+	Asset->AllowedEquipmentSlot = EPAEquipmentSlot::BodyArmor;
+	Asset->PaperdollVisualId = FName(TEXT("Visual_LeatherRanger"));
+	Asset->BaseArmorBonus = 25.0f;
+	Asset->MaxStackSize = 1;
+	Asset->BaseSellPrice = 80;
+}
+
+void FPAItemDataAssetPresets::ConfigureArmorArcanistRobe(UItemStaticDataAsset* Asset)
+{
+	if (!Asset) return;
+	Asset->ItemId = FName(TEXT("Item_Armor_ArcanistRobe"));
+	Asset->ItemName = FText::FromString(TEXT("Arcanist Mystic Scholar Robe"));
+	Asset->ItemDescription = FText::FromString(TEXT("Navy cloth embroidered with protective ancient runes of the Astral Academy."));
+	Asset->RarityTier = EPAItemRarity::Rare;
+	Asset->Category = EPAItemCategory::Equipment;
+	Asset->AllowedEquipmentSlot = EPAEquipmentSlot::BodyArmor;
+	Asset->PaperdollVisualId = FName(TEXT("Visual_ArcanistRobe"));
+	Asset->BaseArmorBonus = 18.0f;
+	Asset->MaxStackSize = 1;
+	Asset->BaseSellPrice = 150;
 }
 
 void FPAItemDataAssetPresets::ConfigurePotionHealth(UItemStaticDataAsset* Asset)
@@ -121,6 +167,21 @@ void UItemStaticDataAsset::SetupWeaponIronSword()
 void UItemStaticDataAsset::SetupArmorIronPlate()
 {
 	FPAItemDataAssetPresets::ConfigureArmorIronPlate(this);
+}
+
+void UItemStaticDataAsset::SetupArmorStarterCloth()
+{
+	FPAItemDataAssetPresets::ConfigureArmorStarterCloth(this);
+}
+
+void UItemStaticDataAsset::SetupArmorLeatherRanger()
+{
+	FPAItemDataAssetPresets::ConfigureArmorLeatherRanger(this);
+}
+
+void UItemStaticDataAsset::SetupArmorArcanistRobe()
+{
+	FPAItemDataAssetPresets::ConfigureArmorArcanistRobe(this);
 }
 
 void UItemStaticDataAsset::SetupPotionHealth()

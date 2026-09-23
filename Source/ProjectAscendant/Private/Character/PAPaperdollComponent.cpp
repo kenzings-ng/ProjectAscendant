@@ -3,6 +3,7 @@
 #include "Character/PAPaperdollComponent.h"
 #include "Character/PABaseCharacter.h"
 #include "Inventory/PAEquipmentComponent.h"
+#include "Inventory/PAItemStaticDataAsset.h"
 #include "PaperFlipbookComponent.h"
 #include "Net/UnrealNetwork.h"
 
@@ -119,8 +120,10 @@ void UPAPaperdollComponent::HandleItemEquipped(EPAEquipmentSlot Slot, const FPAI
 	EPAPaperdollLayer Layer;
 	if (FPAPaperdollModel::EquipmentSlotToPaperdollLayer(Slot, Layer))
 	{
-		// Mặc định mã hiển thị VisualAssetId lấy theo ItemDefId
-		const FName VisualId = Item.ItemDefId;
+		// Đọc VisualAssetId từ StaticData nếu được thiết lập, nếu không thì lấy ItemDefId
+		const FName VisualId = (Item.StaticData && !Item.StaticData->PaperdollVisualId.IsNone())
+			? Item.StaticData->PaperdollVisualId
+			: Item.ItemDefId;
 		EquipVisual(Layer, Item.ItemDefId, VisualId);
 	}
 }

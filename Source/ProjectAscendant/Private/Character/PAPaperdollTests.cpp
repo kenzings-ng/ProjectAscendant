@@ -2,6 +2,7 @@
 
 #include "Misc/AutomationTest.h"
 #include "Character/PAPaperdollTypes.h"
+#include "Inventory/PAItemStaticDataAsset.h"
 
 #if WITH_DEV_AUTOMATION_TESTS
 
@@ -110,6 +111,28 @@ bool FPAPaperdollTests::RunTest(const FString& Parameters)
 
 		TestFalse(TEXT("AC5: Ring1 does not map to large paperdoll layer"), FPAPaperdollModel::EquipmentSlotToPaperdollLayer(EPAEquipmentSlot::Ring1, OutLayer));
 		TestFalse(TEXT("AC5: Amulet does not map to large paperdoll layer"), FPAPaperdollModel::EquipmentSlotToPaperdollLayer(EPAEquipmentSlot::Amulet, OutLayer));
+	}
+
+	// ===========================================================
+	// AC-6: DataAsset Presets & Paperdoll Visual IDs
+	// ===========================================================
+	{
+		UItemStaticDataAsset* ClothAsset = NewObject<UItemStaticDataAsset>();
+		ClothAsset->SetupArmorStarterCloth();
+		TestEqual(TEXT("AC6: Starter cloth visual ID is Visual_StarterCloth"), ClothAsset->PaperdollVisualId, FName(TEXT("Visual_StarterCloth")));
+		TestEqual(TEXT("AC6: Starter cloth slot is BodyArmor"), ClothAsset->AllowedEquipmentSlot, EPAEquipmentSlot::BodyArmor);
+
+		UItemStaticDataAsset* IronAsset = NewObject<UItemStaticDataAsset>();
+		IronAsset->SetupArmorIronPlate();
+		TestEqual(TEXT("AC6: Iron armor visual ID is Visual_IronArmor"), IronAsset->PaperdollVisualId, FName(TEXT("Visual_IronArmor")));
+
+		UItemStaticDataAsset* RangerAsset = NewObject<UItemStaticDataAsset>();
+		RangerAsset->SetupArmorLeatherRanger();
+		TestEqual(TEXT("AC6: Ranger leather visual ID is Visual_LeatherRanger"), RangerAsset->PaperdollVisualId, FName(TEXT("Visual_LeatherRanger")));
+
+		UItemStaticDataAsset* RobeAsset = NewObject<UItemStaticDataAsset>();
+		RobeAsset->SetupArmorArcanistRobe();
+		TestEqual(TEXT("AC6: Arcanist robe visual ID is Visual_ArcanistRobe"), RobeAsset->PaperdollVisualId, FName(TEXT("Visual_ArcanistRobe")));
 	}
 
 	return true;
