@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Project Ascendant — Trung Tâm Xem Xét Art & Đồ Họa (Art Review Gallery)</title>
+    <title>Project Ascendant — Trung Tâm Xem Xét Art & Trang Bị (Master Art Review)</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -68,17 +68,16 @@
             color: var(--text-muted);
             font-size: 0.95rem;
             margin-top: 8px;
-            max-width: 800px;
+            max-width: 850px;
             margin-left: auto;
             margin-right: auto;
         }
 
-        /* Navigation Tabs */
         .tabs-bar {
             display: flex;
             justify-content: center;
             gap: 12px;
-            padding: 24px 20px;
+            padding: 20px;
             overflow-x: auto;
             background: #0E1014;
             border-bottom: 1px solid var(--border-card);
@@ -88,7 +87,7 @@
             background: #14171E;
             color: var(--text-muted);
             border: 1px solid var(--border-card);
-            padding: 10px 20px;
+            padding: 10px 18px;
             border-radius: 8px;
             cursor: pointer;
             font-size: 0.9rem;
@@ -144,11 +143,10 @@
             margin-top: 4px;
         }
 
-        /* Card Grid */
         .art-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 24px;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 22px;
         }
 
         .art-card {
@@ -172,12 +170,18 @@
         .card-media {
             position: relative;
             width: 100%;
-            height: 280px;
+            height: 260px;
             background: repeating-conic-gradient(#15171D 0% 25%, #1B1E26 0% 50%) 50% / 20px 20px;
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
+            padding: 12px;
+        }
+
+        .card-media.icon-media {
+            height: 200px;
+            background: #111317;
         }
 
         .card-media img {
@@ -189,42 +193,33 @@
         }
 
         .art-card:hover .card-media img {
-            transform: scale(1.05);
+            transform: scale(1.08);
         }
 
         .card-badge {
             position: absolute;
-            top: 12px;
-            right: 12px;
-            font-size: 0.7rem;
+            top: 10px;
+            right: 10px;
+            font-size: 0.68rem;
             font-weight: 700;
-            padding: 4px 10px;
+            padding: 3px 8px;
             border-radius: 6px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-        }
-
-        .badge-default {
-            background: rgba(19, 21, 26, 0.85);
+            background: rgba(19, 21, 26, 0.9);
             color: var(--border-gold);
             border: 1px solid var(--border-gold);
         }
 
-        .badge-gif {
-            background: rgba(30, 213, 198, 0.2);
-            color: var(--cyan-accent);
-            border: 1px solid var(--cyan-accent);
-        }
-
         .card-info {
-            padding: 18px;
+            padding: 16px;
             display: flex;
             flex-direction: column;
             flex-grow: 1;
         }
 
         .card-title {
-            font-size: 1.05rem;
+            font-size: 1rem;
             font-weight: 700;
             color: #FFFFFF;
             margin-bottom: 6px;
@@ -232,9 +227,9 @@
 
         .card-desc {
             color: var(--text-muted);
-            font-size: 0.82rem;
+            font-size: 0.8rem;
             line-height: 1.4;
-            margin-bottom: 14px;
+            margin-bottom: 12px;
             flex-grow: 1;
         }
 
@@ -247,8 +242,8 @@
         .tag {
             background: #1D212A;
             color: #A0A8B8;
-            font-size: 0.72rem;
-            padding: 3px 8px;
+            font-size: 0.7rem;
+            padding: 2px 7px;
             border-radius: 4px;
             border: 1px solid #2C3240;
         }
@@ -261,7 +256,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(5, 6, 8, 0.94);
+            background: rgba(5, 6, 8, 0.95);
             z-index: 1000;
             justify-content: center;
             align-items: center;
@@ -296,13 +291,13 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 20px;
-            max-height: 60vh;
+            padding: 24px;
+            max-height: 65vh;
         }
 
         .lightbox-img-wrap img {
             max-width: 100%;
-            max-height: 55vh;
+            max-height: 60vh;
             object-fit: contain;
             image-rendering: pixelated;
         }
@@ -351,397 +346,652 @@
 <body>
     <header>
         <div class="brand-subtitle">Project Ascendant &bull; 2.5D Isometric HD-2D Dark Fantasy</div>
-        <h1>Phòng Trưng Bày Đồ Họa & Art Thiết Kế</h1>
-        <p class="lead-text">Thư viện tổng hợp toàn bộ các tác phẩm Art, Spritesheet 8 hướng, Hoạt ảnh PaperZD, Sprite trang bị Modular Paperdoll và Bối cảnh thế giới trước khi tiến hành ghép nối vào Unreal Engine.</p>
+        <h1>Trung Tâm Trưng Bày & Kiểm Tra Đồ Họa Master Art</h1>
+        <p class="lead-text">Tập hợp toàn bộ các tác phẩm Art vẽ tay theo phong cách Stardew Valley & Octopath Traveler: Nhân vật Nữ/Nam đa tầng, Kho vũ khí & vật phẩm riêng lẻ, 4 Class cơ bản, Trùm thế giới và Bối cảnh game.</p>
     </header>
 
     <div class="tabs-bar">
         
-        <button class="nav-tab active" onclick="switchTab('tab_0')">
-            Modular Paperdoll (Trang Bị Nhân Vật)
+        <button class="nav-tab active" onclick="switchTab('tab_paperdoll_female')">
+            👩 Nhân Vật Nữ (Female Paperdoll)
             <span class="count-badge">8</span>
         </button>
         
-        <button class="nav-tab " onclick="switchTab('tab_1')">
-            4 Class Cơ Bản (Core Character Classes)
-            <span class="count-badge">7</span>
+        <button class="nav-tab " onclick="switchTab('tab_paperdoll_male')">
+            👨 Nhân Vật Nam (Male Paperdoll)
+            <span class="count-badge">8</span>
         </button>
         
-        <button class="nav-tab " onclick="switchTab('tab_2')">
-            Boss Thế Giới & Quái Vật (Bosses & Enemies)
-            <span class="count-badge">6</span>
+        <button class="nav-tab " onclick="switchTab('tab_items')">
+            ⚔️ Vật Phẩm & Trang Bị Riêng Lẻ (Individual Items)
+            <span class="count-badge">21</span>
         </button>
         
-        <button class="nav-tab " onclick="switchTab('tab_3')">
-            Môi Trường & Thế Giới Mở (Environment & World)
-            <span class="count-badge">3</span>
-        </button>
-        
-        <button class="nav-tab " onclick="switchTab('tab_4')">
-            Vật Phẩm & Biểu Tượng UI (Items & Icons)
+        <button class="nav-tab " onclick="switchTab('tab_classes_redrawn')">
+            🛡️ 4 Class Phong Cách Tự Nhiên (Core Classes Redrawn)
             <span class="count-badge">2</span>
+        </button>
+        
+        <button class="nav-tab " onclick="switchTab('tab_bosses_redrawn')">
+            👾 Boss & Quái Vật Vẽ Tay (Bosses Redrawn)
+            <span class="count-badge">4</span>
+        </button>
+        
+        <button class="nav-tab " onclick="switchTab('tab_environment')">
+            🏰 Bản Đồ & Môi Trường Thế Giới
+            <span class="count-badge">3</span>
         </button>
         
     </div>
 
     <main class="container">
         
-        <section id="tab_0" class="tab-content" style="display: block;">
+        <section id="tab_paperdoll_female" class="tab-content" style="display: block;">
             <div class="section-header">
-                <h2>Modular Paperdoll (Trang Bị Nhân Vật)</h2>
-                <p class="section-summary">Bao gồm 8 tài nguyên đồ họa hoàn chỉnh. Bấm vào bất kỳ ảnh nào để xem chi tiết độ phân giải cao.</p>
+                <h2>👩 Nhân Vật Nữ (Female Paperdoll)</h2>
+                <p class="section-summary">Bộ thiết kế nhân vật nữ hoàn chỉnh theo phong cách Pixel Art Stardew Valley & Octopath Traveler: Quần áo vải thô tân thủ, Giáp sắt Vanguard, Đồ da thợ săn và Pháp bào ma thuật.</p>
             </div>
             <div class="art-grid">
                 
-            <div class="art-card" onclick="openLightbox('01_Modular_Paperdoll/01_Concept_Starter_Cloth.jpg', 'Nhân Vật Tân Thủ (Starter Linen Cloth)', 'Trang phục sơ khai mặc định khi mới vào game: áo sơ mi vải thô mộc mạc và quần nâu sờn rách.')">
-                <div class="card-media">
-                    <img src="01_Modular_Paperdoll/01_Concept_Starter_Cloth.jpg" alt="Nhân Vật Tân Thủ (Starter Linen Cloth)" loading="lazy" />
-                    <span class="card-badge badge-default">Concept Art</span>
+            <div class="art-card" onclick="openLightbox('02_Modular_Paperdoll_Female/01_Concept_Female_Starter_Cloth.jpg', 'Nhân Vật Nữ Tân Thủ (Starter Cloth)', 'Áo vải thô mộc mạc và quần nâu sờn rách, tóc tết nâu năng động.')">
+                <div class="card-media ">
+                    <img src="02_Modular_Paperdoll_Female/01_Concept_Female_Starter_Cloth.jpg" alt="Nhân Vật Nữ Tân Thủ (Starter Cloth)" loading="lazy" />
+                    <span class="card-badge">Concept Art</span>
                 </div>
                 <div class="card-info">
-                    <h3 class="card-title">Nhân Vật Tân Thủ (Starter Linen Cloth)</h3>
-                    <p class="card-desc">Trang phục sơ khai mặc định khi mới vào game: áo sơ mi vải thô mộc mạc và quần nâu sờn rách.</p>
-                    <div class="card-tags"><span class="tag">Tier 1</span><span class="tag">Starter</span><span class="tag">Base Body</span></div>
+                    <h3 class="card-title">Nhân Vật Nữ Tân Thủ (Starter Cloth)</h3>
+                    <p class="card-desc">Áo vải thô mộc mạc và quần nâu sờn rách, tóc tết nâu năng động.</p>
+                    <div class="card-tags"><span class="tag">Starter</span><span class="tag">Female</span><span class="tag">Cloth</span></div>
                 </div>
             </div>
             
-            <div class="art-card" onclick="openLightbox('01_Modular_Paperdoll/02_Concept_Vanguard_Iron_Armor.jpg', 'Bộ Giáp Sắt Vanguard (Vanguard Steel Plate)', 'Giáp thép tấm kiên cố, cầu vai gia cố, đại kiếm thép và khiên tròn bảo vệ mặt trận.')">
-                <div class="card-media">
-                    <img src="01_Modular_Paperdoll/02_Concept_Vanguard_Iron_Armor.jpg" alt="Bộ Giáp Sắt Vanguard (Vanguard Steel Plate)" loading="lazy" />
-                    <span class="card-badge badge-default">Concept Art</span>
+            <div class="art-card" onclick="openLightbox('02_Modular_Paperdoll_Female/02_Concept_Female_Iron_Armor.jpg', 'Nữ Chiến Binh Giáp Sắt (Vanguard Plate)', 'Giáp ngực thép sáng bóng, cầu vai kiên cố, đại kiếm và khiên tròn.')">
+                <div class="card-media ">
+                    <img src="02_Modular_Paperdoll_Female/02_Concept_Female_Iron_Armor.jpg" alt="Nữ Chiến Binh Giáp Sắt (Vanguard Plate)" loading="lazy" />
+                    <span class="card-badge">Concept Art</span>
                 </div>
                 <div class="card-info">
-                    <h3 class="card-title">Bộ Giáp Sắt Vanguard (Vanguard Steel Plate)</h3>
-                    <p class="card-desc">Giáp thép tấm kiên cố, cầu vai gia cố, đại kiếm thép và khiên tròn bảo vệ mặt trận.</p>
-                    <div class="card-tags"><span class="tag">Tier 2</span><span class="tag">Vanguard</span><span class="tag">Heavy Armor</span></div>
+                    <h3 class="card-title">Nữ Chiến Binh Giáp Sắt (Vanguard Plate)</h3>
+                    <p class="card-desc">Giáp ngực thép sáng bóng, cầu vai kiên cố, đại kiếm và khiên tròn.</p>
+                    <div class="card-tags"><span class="tag">Vanguard</span><span class="tag">Heavy Armor</span><span class="tag">Sword/Shield</span></div>
                 </div>
             </div>
             
-            <div class="art-card" onclick="openLightbox('01_Modular_Paperdoll/03_Concept_Ranger_Leather_Scout.jpg', 'Áo Da Thợ Săn (Ranger Leather Scout)', 'Bộ giáp da thú thuộc nhẹ nhàng, bao tay bảo hộ, cung săn tầm xa và dao găm gài hông.')">
-                <div class="card-media">
-                    <img src="01_Modular_Paperdoll/03_Concept_Ranger_Leather_Scout.jpg" alt="Áo Da Thợ Săn (Ranger Leather Scout)" loading="lazy" />
-                    <span class="card-badge badge-default">Concept Art</span>
+            <div class="art-card" onclick="openLightbox('02_Modular_Paperdoll_Female/03_Concept_Female_Leather_Ranger.jpg', 'Nữ Thợ Săn Áo Da (Ranger Scout)', 'Áo da xanh rừng thuộc khâu chỉ nổi, bao tay da, cung săn uốn cong.')">
+                <div class="card-media ">
+                    <img src="02_Modular_Paperdoll_Female/03_Concept_Female_Leather_Ranger.jpg" alt="Nữ Thợ Săn Áo Da (Ranger Scout)" loading="lazy" />
+                    <span class="card-badge">Concept Art</span>
                 </div>
                 <div class="card-info">
-                    <h3 class="card-title">Áo Da Thợ Săn (Ranger Leather Scout)</h3>
-                    <p class="card-desc">Bộ giáp da thú thuộc nhẹ nhàng, bao tay bảo hộ, cung săn tầm xa và dao găm gài hông.</p>
-                    <div class="card-tags"><span class="tag">Tier 2</span><span class="tag">Ranger</span><span class="tag">Medium Armor</span></div>
+                    <h3 class="card-title">Nữ Thợ Săn Áo Da (Ranger Scout)</h3>
+                    <p class="card-desc">Áo da xanh rừng thuộc khâu chỉ nổi, bao tay da, cung săn uốn cong.</p>
+                    <div class="card-tags"><span class="tag">Ranger</span><span class="tag">Medium Armor</span><span class="tag">Bow</span></div>
                 </div>
             </div>
             
-            <div class="art-card" onclick="openLightbox('01_Modular_Paperdoll/04_Concept_Arcanist_Mystic_Robe.jpg', 'Pháp Bào Thuật Sĩ (Arcanist Mystic Robe)', 'Áo choàng nhung xanh thẫm thêu cổ ngữ ma thuật hoàng kim và trượng pha lê dẫn truyền mana.')">
-                <div class="card-media">
-                    <img src="01_Modular_Paperdoll/04_Concept_Arcanist_Mystic_Robe.jpg" alt="Pháp Bào Thuật Sĩ (Arcanist Mystic Robe)" loading="lazy" />
-                    <span class="card-badge badge-default">Concept Art</span>
+            <div class="art-card" onclick="openLightbox('02_Modular_Paperdoll_Female/04_Concept_Female_Arcanist_Robe.jpg', 'Nữ Thuật Sĩ Pháp Bào (Arcanist Robe)', 'Pháp bào nhung xanh thẫm thêu cổ ngữ vàng kim, trượng ngọc pha lê.')">
+                <div class="card-media ">
+                    <img src="02_Modular_Paperdoll_Female/04_Concept_Female_Arcanist_Robe.jpg" alt="Nữ Thuật Sĩ Pháp Bào (Arcanist Robe)" loading="lazy" />
+                    <span class="card-badge">Concept Art</span>
                 </div>
                 <div class="card-info">
-                    <h3 class="card-title">Pháp Bào Thuật Sĩ (Arcanist Mystic Robe)</h3>
-                    <p class="card-desc">Áo choàng nhung xanh thẫm thêu cổ ngữ ma thuật hoàng kim và trượng pha lê dẫn truyền mana.</p>
-                    <div class="card-tags"><span class="tag">Tier 3</span><span class="tag">Arcanist</span><span class="tag">Cloth Robe</span></div>
+                    <h3 class="card-title">Nữ Thuật Sĩ Pháp Bào (Arcanist Robe)</h3>
+                    <p class="card-desc">Pháp bào nhung xanh thẫm thêu cổ ngữ vàng kim, trượng ngọc pha lê.</p>
+                    <div class="card-tags"><span class="tag">Arcanist</span><span class="tag">Cloth Robe</span><span class="tag">Staff</span></div>
                 </div>
             </div>
             
-            <div class="art-card" onclick="openLightbox('01_Modular_Paperdoll/05_Sprite_Starter_Cloth_Transparent.png', 'Sprite Trong Suốt: Đồ Vải Tân Thủ', 'Đã khử phông tím Chroma-Key thành Alpha trong suốt (1024x1024 / 32-bit RGBA) sẵn sàng ghép lớp.')">
-                <div class="card-media">
-                    <img src="01_Modular_Paperdoll/05_Sprite_Starter_Cloth_Transparent.png" alt="Sprite Trong Suốt: Đồ Vải Tân Thủ" loading="lazy" />
-                    <span class="card-badge badge-default">In-Game Sprite</span>
+            <div class="art-card" onclick="openLightbox('02_Modular_Paperdoll_Female/05_Sprite_Female_Starter_Cloth_Transparent.png', 'Sprite Nữ Trong Suốt: Đồ Vải Tân Thủ', 'Sprite 32-bit RGBA tách nền sạch, căn chuẩn chân sẵn sàng ghép vào game.')">
+                <div class="card-media ">
+                    <img src="02_Modular_Paperdoll_Female/05_Sprite_Female_Starter_Cloth_Transparent.png" alt="Sprite Nữ Trong Suốt: Đồ Vải Tân Thủ" loading="lazy" />
+                    <span class="card-badge">In-Game Sprite</span>
                 </div>
                 <div class="card-info">
-                    <h3 class="card-title">Sprite Trong Suốt: Đồ Vải Tân Thủ</h3>
-                    <p class="card-desc">Đã khử phông tím Chroma-Key thành Alpha trong suốt (1024x1024 / 32-bit RGBA) sẵn sàng ghép lớp.</p>
-                    <div class="card-tags"><span class="tag">Transparent</span><span class="tag">Layer 0</span><span class="tag">Base Body</span></div>
+                    <h3 class="card-title">Sprite Nữ Trong Suốt: Đồ Vải Tân Thủ</h3>
+                    <p class="card-desc">Sprite 32-bit RGBA tách nền sạch, căn chuẩn chân sẵn sàng ghép vào game.</p>
+                    <div class="card-tags"><span class="tag">Transparent</span><span class="tag">Layer 0</span></div>
                 </div>
             </div>
             
-            <div class="art-card" onclick="openLightbox('01_Modular_Paperdoll/06_Sprite_Iron_Armor_Transparent.png', 'Sprite Trong Suốt: Giáp Sắt Vanguard', 'Sprite tách nền hoàn hảo, căn chuẩn trọng tâm chân đáy để xếp chồng lớp trực tiếp trong Paper2D.')">
-                <div class="card-media">
-                    <img src="01_Modular_Paperdoll/06_Sprite_Iron_Armor_Transparent.png" alt="Sprite Trong Suốt: Giáp Sắt Vanguard" loading="lazy" />
-                    <span class="card-badge badge-default">In-Game Sprite</span>
+            <div class="art-card" onclick="openLightbox('02_Modular_Paperdoll_Female/06_Sprite_Female_Iron_Armor_Transparent.png', 'Sprite Nữ Trong Suốt: Giáp Sắt', 'Sprite giáp ngực thép và khiên tách nền trong suốt, khớp tỷ lệ 100%.')">
+                <div class="card-media icon-media">
+                    <img src="02_Modular_Paperdoll_Female/06_Sprite_Female_Iron_Armor_Transparent.png" alt="Sprite Nữ Trong Suốt: Giáp Sắt" loading="lazy" />
+                    <span class="card-badge">In-Game Sprite</span>
                 </div>
                 <div class="card-info">
-                    <h3 class="card-title">Sprite Trong Suốt: Giáp Sắt Vanguard</h3>
-                    <p class="card-desc">Sprite tách nền hoàn hảo, căn chuẩn trọng tâm chân đáy để xếp chồng lớp trực tiếp trong Paper2D.</p>
-                    <div class="card-tags"><span class="tag">Transparent</span><span class="tag">Layer 1</span><span class="tag">Chest Armor</span></div>
+                    <h3 class="card-title">Sprite Nữ Trong Suốt: Giáp Sắt</h3>
+                    <p class="card-desc">Sprite giáp ngực thép và khiên tách nền trong suốt, khớp tỷ lệ 100%.</p>
+                    <div class="card-tags"><span class="tag">Transparent</span><span class="tag">Layer 1</span></div>
                 </div>
             </div>
             
-            <div class="art-card" onclick="openLightbox('01_Modular_Paperdoll/07_Sprite_Leather_Ranger_Transparent.png', 'Sprite Trong Suốt: Áo Da Ranger', 'Sprite tách nền không viền tím, đồng bộ tỷ lệ cơ thể và góc nhìn isometric 45 độ.')">
-                <div class="card-media">
-                    <img src="01_Modular_Paperdoll/07_Sprite_Leather_Ranger_Transparent.png" alt="Sprite Trong Suốt: Áo Da Ranger" loading="lazy" />
-                    <span class="card-badge badge-default">In-Game Sprite</span>
+            <div class="art-card" onclick="openLightbox('02_Modular_Paperdoll_Female/07_Sprite_Female_Leather_Ranger_Transparent.png', 'Sprite Nữ Trong Suốt: Áo Da Thợ Săn', 'Sprite áo da thợ săn tách nền không viền tím.')">
+                <div class="card-media ">
+                    <img src="02_Modular_Paperdoll_Female/07_Sprite_Female_Leather_Ranger_Transparent.png" alt="Sprite Nữ Trong Suốt: Áo Da Thợ Săn" loading="lazy" />
+                    <span class="card-badge">In-Game Sprite</span>
                 </div>
                 <div class="card-info">
-                    <h3 class="card-title">Sprite Trong Suốt: Áo Da Ranger</h3>
-                    <p class="card-desc">Sprite tách nền không viền tím, đồng bộ tỷ lệ cơ thể và góc nhìn isometric 45 độ.</p>
-                    <div class="card-tags"><span class="tag">Transparent</span><span class="tag">Layer 1</span><span class="tag">Chest Armor</span></div>
+                    <h3 class="card-title">Sprite Nữ Trong Suốt: Áo Da Thợ Săn</h3>
+                    <p class="card-desc">Sprite áo da thợ săn tách nền không viền tím.</p>
+                    <div class="card-tags"><span class="tag">Transparent</span><span class="tag">Layer 1</span></div>
                 </div>
             </div>
             
-            <div class="art-card" onclick="openLightbox('01_Modular_Paperdoll/08_Sprite_Arcanist_Robe_Transparent.png', 'Sprite Trong Suốt: Pháp Bào Arcanist', 'Sprite trong suốt với hiệu ứng rune phát sáng, khớp từng pixel khi gắn vào nhân vật.')">
-                <div class="card-media">
-                    <img src="01_Modular_Paperdoll/08_Sprite_Arcanist_Robe_Transparent.png" alt="Sprite Trong Suốt: Pháp Bào Arcanist" loading="lazy" />
-                    <span class="card-badge badge-default">In-Game Sprite</span>
+            <div class="art-card" onclick="openLightbox('02_Modular_Paperdoll_Female/08_Sprite_Female_Arcanist_Robe_Transparent.png', 'Sprite Nữ Trong Suốt: Pháp Bào', 'Sprite pháp bào xanh thẫm phát sáng ngọc pha lê.')">
+                <div class="card-media ">
+                    <img src="02_Modular_Paperdoll_Female/08_Sprite_Female_Arcanist_Robe_Transparent.png" alt="Sprite Nữ Trong Suốt: Pháp Bào" loading="lazy" />
+                    <span class="card-badge">In-Game Sprite</span>
                 </div>
                 <div class="card-info">
-                    <h3 class="card-title">Sprite Trong Suốt: Pháp Bào Arcanist</h3>
-                    <p class="card-desc">Sprite trong suốt với hiệu ứng rune phát sáng, khớp từng pixel khi gắn vào nhân vật.</p>
-                    <div class="card-tags"><span class="tag">Transparent</span><span class="tag">Layer 1</span><span class="tag">Chest Armor</span></div>
+                    <h3 class="card-title">Sprite Nữ Trong Suốt: Pháp Bào</h3>
+                    <p class="card-desc">Sprite pháp bào xanh thẫm phát sáng ngọc pha lê.</p>
+                    <div class="card-tags"><span class="tag">Transparent</span><span class="tag">Layer 1</span></div>
                 </div>
             </div>
             
             </div>
         </section>
         
-        <section id="tab_1" class="tab-content" style="display: none;">
+        <section id="tab_paperdoll_male" class="tab-content" style="display: none;">
             <div class="section-header">
-                <h2>4 Class Cơ Bản (Core Character Classes)</h2>
-                <p class="section-summary">Bao gồm 7 tài nguyên đồ họa hoàn chỉnh. Bấm vào bất kỳ ảnh nào để xem chi tiết độ phân giải cao.</p>
+                <h2>👨 Nhân Vật Nam (Male Paperdoll)</h2>
+                <p class="section-summary">Bộ thiết kế nhân vật nam cơ sở với trang phục vải thô sơ khai và các bộ giáp đại diện cho từng Class.</p>
             </div>
             <div class="art-grid">
                 
-            <div class="art-card" onclick="openLightbox('02_Character_Classes/Vanguard_Pixel_Spritesheet.png', 'Spritesheet Chiến Binh (Vanguard)', 'Tập hợp các hoạt ảnh 8 hướng: Đứng yên, Chạy bộ, Chém đòn 3-Hit Combo, Lướt né và Tử trận.')">
-                <div class="card-media">
-                    <img src="02_Character_Classes/Vanguard_Pixel_Spritesheet.png" alt="Spritesheet Chiến Binh (Vanguard)" loading="lazy" />
-                    <span class="card-badge badge-default">Spritesheet</span>
+            <div class="art-card" onclick="openLightbox('01_Modular_Paperdoll_Male/01_Concept_Starter_Cloth.jpg', 'Nhân Vật Nam Tân Thủ (Starter Cloth)', 'Áo sơ mi vải thô và quần nâu tân thủ.')">
+                <div class="card-media ">
+                    <img src="01_Modular_Paperdoll_Male/01_Concept_Starter_Cloth.jpg" alt="Nhân Vật Nam Tân Thủ (Starter Cloth)" loading="lazy" />
+                    <span class="card-badge">Concept Art</span>
                 </div>
                 <div class="card-info">
-                    <h3 class="card-title">Spritesheet Chiến Binh (Vanguard)</h3>
-                    <p class="card-desc">Tập hợp các hoạt ảnh 8 hướng: Đứng yên, Chạy bộ, Chém đòn 3-Hit Combo, Lướt né và Tử trận.</p>
-                    <div class="card-tags"><span class="tag">Vanguard</span><span class="tag">8-Way</span><span class="tag">Full Sheet</span></div>
+                    <h3 class="card-title">Nhân Vật Nam Tân Thủ (Starter Cloth)</h3>
+                    <p class="card-desc">Áo sơ mi vải thô và quần nâu tân thủ.</p>
+                    <div class="card-tags"><span class="tag">Starter</span><span class="tag">Male</span><span class="tag">Cloth</span></div>
                 </div>
             </div>
             
-            <div class="art-card" onclick="openLightbox('02_Character_Classes/Vanguard_Idle_Loop.gif', 'Hoạt Ảnh Đứng Yên: Vanguard', 'Vòng lặp animation Idle thở và cầm khiên phòng thủ nhịp nhàng 12 FPS.')">
-                <div class="card-media">
-                    <img src="02_Character_Classes/Vanguard_Idle_Loop.gif" alt="Hoạt Ảnh Đứng Yên: Vanguard" loading="lazy" />
-                    <span class="card-badge badge-gif">Animated GIF</span>
+            <div class="art-card" onclick="openLightbox('01_Modular_Paperdoll_Male/02_Concept_Vanguard_Iron_Armor.jpg', 'Chiến Binh Giáp Sắt (Vanguard Iron)', 'Giáp thép tấm đầy đủ, khiên tròn và thanh đại kiếm.')">
+                <div class="card-media ">
+                    <img src="01_Modular_Paperdoll_Male/02_Concept_Vanguard_Iron_Armor.jpg" alt="Chiến Binh Giáp Sắt (Vanguard Iron)" loading="lazy" />
+                    <span class="card-badge">Concept Art</span>
                 </div>
                 <div class="card-info">
-                    <h3 class="card-title">Hoạt Ảnh Đứng Yên: Vanguard</h3>
-                    <p class="card-desc">Vòng lặp animation Idle thở và cầm khiên phòng thủ nhịp nhàng 12 FPS.</p>
-                    <div class="card-tags"><span class="tag">Animation</span><span class="tag">Idle</span><span class="tag">Loop</span></div>
+                    <h3 class="card-title">Chiến Binh Giáp Sắt (Vanguard Iron)</h3>
+                    <p class="card-desc">Giáp thép tấm đầy đủ, khiên tròn và thanh đại kiếm.</p>
+                    <div class="card-tags"><span class="tag">Vanguard</span><span class="tag">Heavy Armor</span></div>
                 </div>
             </div>
             
-            <div class="art-card" onclick="openLightbox('02_Character_Classes/Vanguard_Anim_Attack.gif', 'Đòn Đánh Chém 1: Vanguard', 'Hoạt ảnh vung đại kiếm chém ngang uy lực với vệt kiếm sáng (Sword Trail) sắc nét.')">
-                <div class="card-media">
-                    <img src="02_Character_Classes/Vanguard_Anim_Attack.gif" alt="Đòn Đánh Chém 1: Vanguard" loading="lazy" />
-                    <span class="card-badge badge-gif">Animated GIF</span>
+            <div class="art-card" onclick="openLightbox('01_Modular_Paperdoll_Male/03_Concept_Ranger_Leather_Scout.jpg', 'Du Mục Áo Da (Ranger Scout)', 'Bộ giáp da thợ săn, cung săn và dao găm phụ.')">
+                <div class="card-media ">
+                    <img src="01_Modular_Paperdoll_Male/03_Concept_Ranger_Leather_Scout.jpg" alt="Du Mục Áo Da (Ranger Scout)" loading="lazy" />
+                    <span class="card-badge">Concept Art</span>
                 </div>
                 <div class="card-info">
-                    <h3 class="card-title">Đòn Đánh Chém 1: Vanguard</h3>
-                    <p class="card-desc">Hoạt ảnh vung đại kiếm chém ngang uy lực với vệt kiếm sáng (Sword Trail) sắc nét.</p>
-                    <div class="card-tags"><span class="tag">Combat</span><span class="tag">Attack</span><span class="tag">PaperZD</span></div>
+                    <h3 class="card-title">Du Mục Áo Da (Ranger Scout)</h3>
+                    <p class="card-desc">Bộ giáp da thợ săn, cung săn và dao găm phụ.</p>
+                    <div class="card-tags"><span class="tag">Ranger</span><span class="tag">Medium Armor</span></div>
                 </div>
             </div>
             
-            <div class="art-card" onclick="openLightbox('02_Character_Classes/Vanguard_Anim_Dash.gif', 'Lướt Né Tránh (Dash I-Frame): Vanguard', 'Hoạt ảnh lướt nhanh với bóng mờ ma thuật (Spectral Afterimage) bảo đảm an toàn I-frame 0.25s.')">
-                <div class="card-media">
-                    <img src="02_Character_Classes/Vanguard_Anim_Dash.gif" alt="Lướt Né Tránh (Dash I-Frame): Vanguard" loading="lazy" />
-                    <span class="card-badge badge-gif">Animated GIF</span>
+            <div class="art-card" onclick="openLightbox('01_Modular_Paperdoll_Male/04_Concept_Arcanist_Mystic_Robe.jpg', 'Thuật Sĩ Pháp Bào (Arcanist Robe)', 'Áo choàng nhung xanh thẫm và trượng ma thuật.')">
+                <div class="card-media ">
+                    <img src="01_Modular_Paperdoll_Male/04_Concept_Arcanist_Mystic_Robe.jpg" alt="Thuật Sĩ Pháp Bào (Arcanist Robe)" loading="lazy" />
+                    <span class="card-badge">Concept Art</span>
                 </div>
                 <div class="card-info">
-                    <h3 class="card-title">Lướt Né Tránh (Dash I-Frame): Vanguard</h3>
-                    <p class="card-desc">Hoạt ảnh lướt nhanh với bóng mờ ma thuật (Spectral Afterimage) bảo đảm an toàn I-frame 0.25s.</p>
-                    <div class="card-tags"><span class="tag">Combat</span><span class="tag">I-Frame</span><span class="tag">Dash</span></div>
+                    <h3 class="card-title">Thuật Sĩ Pháp Bào (Arcanist Robe)</h3>
+                    <p class="card-desc">Áo choàng nhung xanh thẫm và trượng ma thuật.</p>
+                    <div class="card-tags"><span class="tag">Arcanist</span><span class="tag">Cloth Robe</span></div>
                 </div>
             </div>
             
-            <div class="art-card" onclick="openLightbox('02_Character_Classes/Ranger_Pixel_Spritesheet.png', 'Spritesheet Du Mục (Ranger)', 'Hoạt ảnh cử động thợ săn viễn chiến: giương cung, bắn tên liên hoàn và lùi né phản kích.')">
-                <div class="card-media">
-                    <img src="02_Character_Classes/Ranger_Pixel_Spritesheet.png" alt="Spritesheet Du Mục (Ranger)" loading="lazy" />
-                    <span class="card-badge badge-default">Spritesheet</span>
+            <div class="art-card" onclick="openLightbox('01_Modular_Paperdoll_Male/05_Sprite_Starter_Cloth_Transparent.png', 'Sprite Nam Trong Suốt: Đồ Vải', 'Tách nền Chroma-Key sẵn sàng cho hệ thống Modular Paperdoll C++.')">
+                <div class="card-media ">
+                    <img src="01_Modular_Paperdoll_Male/05_Sprite_Starter_Cloth_Transparent.png" alt="Sprite Nam Trong Suốt: Đồ Vải" loading="lazy" />
+                    <span class="card-badge">In-Game Sprite</span>
                 </div>
                 <div class="card-info">
-                    <h3 class="card-title">Spritesheet Du Mục (Ranger)</h3>
-                    <p class="card-desc">Hoạt ảnh cử động thợ săn viễn chiến: giương cung, bắn tên liên hoàn và lùi né phản kích.</p>
-                    <div class="card-tags"><span class="tag">Ranger</span><span class="tag">Bow</span><span class="tag">Full Sheet</span></div>
+                    <h3 class="card-title">Sprite Nam Trong Suốt: Đồ Vải</h3>
+                    <p class="card-desc">Tách nền Chroma-Key sẵn sàng cho hệ thống Modular Paperdoll C++.</p>
+                    <div class="card-tags"><span class="tag">Transparent</span><span class="tag">Layer 0</span></div>
                 </div>
             </div>
             
-            <div class="art-card" onclick="openLightbox('02_Character_Classes/Arcanist_Pixel_Spritesheet.png', 'Spritesheet Thuật Sĩ (Arcanist)', 'Hoạt ảnh niệm chú, xoay trượng ma thuật và chưởng đạn năng lượng arcane huyền bí.')">
-                <div class="card-media">
-                    <img src="02_Character_Classes/Arcanist_Pixel_Spritesheet.png" alt="Spritesheet Thuật Sĩ (Arcanist)" loading="lazy" />
-                    <span class="card-badge badge-default">Spritesheet</span>
+            <div class="art-card" onclick="openLightbox('01_Modular_Paperdoll_Male/06_Sprite_Iron_Armor_Transparent.png', 'Sprite Nam Trong Suốt: Giáp Sắt', 'Sprite giáp sắt thân căn chuẩn trọng tâm.')">
+                <div class="card-media icon-media">
+                    <img src="01_Modular_Paperdoll_Male/06_Sprite_Iron_Armor_Transparent.png" alt="Sprite Nam Trong Suốt: Giáp Sắt" loading="lazy" />
+                    <span class="card-badge">In-Game Sprite</span>
                 </div>
                 <div class="card-info">
-                    <h3 class="card-title">Spritesheet Thuật Sĩ (Arcanist)</h3>
-                    <p class="card-desc">Hoạt ảnh niệm chú, xoay trượng ma thuật và chưởng đạn năng lượng arcane huyền bí.</p>
-                    <div class="card-tags"><span class="tag">Arcanist</span><span class="tag">Magic</span><span class="tag">Full Sheet</span></div>
+                    <h3 class="card-title">Sprite Nam Trong Suốt: Giáp Sắt</h3>
+                    <p class="card-desc">Sprite giáp sắt thân căn chuẩn trọng tâm.</p>
+                    <div class="card-tags"><span class="tag">Transparent</span><span class="tag">Layer 1</span></div>
                 </div>
             </div>
             
-            <div class="art-card" onclick="openLightbox('02_Character_Classes/Acolyte_Pixel_Spritesheet.png', 'Spritesheet Tu Sĩ (Acolyte)', 'Hoạt ảnh tu sĩ cầm chùy thánh, cầu nguyện hồi phục và phát tán hào quang bảo hộ đồng đội.')">
-                <div class="card-media">
-                    <img src="02_Character_Classes/Acolyte_Pixel_Spritesheet.png" alt="Spritesheet Tu Sĩ (Acolyte)" loading="lazy" />
-                    <span class="card-badge badge-default">Spritesheet</span>
+            <div class="art-card" onclick="openLightbox('01_Modular_Paperdoll_Male/07_Sprite_Leather_Ranger_Transparent.png', 'Sprite Nam Trong Suốt: Áo Da', 'Sprite áo da thợ săn tách nền.')">
+                <div class="card-media ">
+                    <img src="01_Modular_Paperdoll_Male/07_Sprite_Leather_Ranger_Transparent.png" alt="Sprite Nam Trong Suốt: Áo Da" loading="lazy" />
+                    <span class="card-badge">In-Game Sprite</span>
                 </div>
                 <div class="card-info">
-                    <h3 class="card-title">Spritesheet Tu Sĩ (Acolyte)</h3>
-                    <p class="card-desc">Hoạt ảnh tu sĩ cầm chùy thánh, cầu nguyện hồi phục và phát tán hào quang bảo hộ đồng đội.</p>
-                    <div class="card-tags"><span class="tag">Acolyte</span><span class="tag">Holy</span><span class="tag">Full Sheet</span></div>
+                    <h3 class="card-title">Sprite Nam Trong Suốt: Áo Da</h3>
+                    <p class="card-desc">Sprite áo da thợ săn tách nền.</p>
+                    <div class="card-tags"><span class="tag">Transparent</span><span class="tag">Layer 1</span></div>
+                </div>
+            </div>
+            
+            <div class="art-card" onclick="openLightbox('01_Modular_Paperdoll_Male/08_Sprite_Arcanist_Robe_Transparent.png', 'Sprite Nam Trong Suốt: Pháp Bào', 'Sprite pháp bào thuật sĩ trong suốt.')">
+                <div class="card-media ">
+                    <img src="01_Modular_Paperdoll_Male/08_Sprite_Arcanist_Robe_Transparent.png" alt="Sprite Nam Trong Suốt: Pháp Bào" loading="lazy" />
+                    <span class="card-badge">In-Game Sprite</span>
+                </div>
+                <div class="card-info">
+                    <h3 class="card-title">Sprite Nam Trong Suốt: Pháp Bào</h3>
+                    <p class="card-desc">Sprite pháp bào thuật sĩ trong suốt.</p>
+                    <div class="card-tags"><span class="tag">Transparent</span><span class="tag">Layer 1</span></div>
                 </div>
             </div>
             
             </div>
         </section>
         
-        <section id="tab_2" class="tab-content" style="display: none;">
+        <section id="tab_items" class="tab-content" style="display: none;">
             <div class="section-header">
-                <h2>Boss Thế Giới & Quái Vật (Bosses & Enemies)</h2>
-                <p class="section-summary">Bao gồm 6 tài nguyên đồ họa hoàn chỉnh. Bấm vào bất kỳ ảnh nào để xem chi tiết độ phân giải cao.</p>
+                <h2>⚔️ Vật Phẩm & Trang Bị Riêng Lẻ (Individual Items)</h2>
+                <p class="section-summary">Kho tài nguyên icon vật phẩm riêng lẻ vẽ tay theo phong cách Stardew Valley & Diablo 2: Vũ khí, Khiên, Bình dược phẩm, Trang sức ma pháp, Sách bí kíp và Bộ giáp.</p>
             </div>
             <div class="art-grid">
                 
-            <div class="art-card" onclick="openLightbox('03_Bosses_and_Monsters/Stone_Golem_Boss_Spritesheet.png', 'Spritesheet Trùm: Người Đá Cổ Đại (Stone Golem)', 'Spritesheet kích thước lớn của Boss Golem với các đòn Đập đất (Ground Slam), Quét đá và trạng thái Vỡ Thế Đứng (Posture Broken).')">
-                <div class="card-media">
-                    <img src="03_Bosses_and_Monsters/Stone_Golem_Boss_Spritesheet.png" alt="Spritesheet Trùm: Người Đá Cổ Đại (Stone Golem)" loading="lazy" />
-                    <span class="card-badge badge-default">Boss Spritesheet</span>
+            <div class="art-card" onclick="openLightbox('03_Individual_Items_and_Gear/Weapon_Steel_Broadsword.png', 'Đại Kiếm Thép (Steel Broadsword)', 'Vũ khí chính Vanguard: +15 Sát thương vật lý, đòn chém 3-Hit Combo sắc bén.')">
+                <div class="card-media icon-media">
+                    <img src="03_Individual_Items_and_Gear/Weapon_Steel_Broadsword.png" alt="Đại Kiếm Thép (Steel Broadsword)" loading="lazy" />
+                    <span class="card-badge">Vũ Khí</span>
                 </div>
                 <div class="card-info">
-                    <h3 class="card-title">Spritesheet Trùm: Người Đá Cổ Đại (Stone Golem)</h3>
-                    <p class="card-desc">Spritesheet kích thước lớn của Boss Golem với các đòn Đập đất (Ground Slam), Quét đá và trạng thái Vỡ Thế Đứng (Posture Broken).</p>
-                    <div class="card-tags"><span class="tag">Boss</span><span class="tag">Stone Golem</span><span class="tag">Heavy Enemy</span></div>
+                    <h3 class="card-title">Đại Kiếm Thép (Steel Broadsword)</h3>
+                    <p class="card-desc">Vũ khí chính Vanguard: +15 Sát thương vật lý, đòn chém 3-Hit Combo sắc bén.</p>
+                    <div class="card-tags"><span class="tag">Mainhand</span><span class="tag">Vanguard</span><span class="tag">Tier 2</span></div>
                 </div>
             </div>
             
-            <div class="art-card" onclick="openLightbox('03_Bosses_and_Monsters/Golem_Anim_Idle.gif', 'Hoạt Ảnh Boss Đứng Yên: Stone Golem', 'Người Đá tỏa sáng lõi năng lượng với nhịp thở đá rung chuyển mặt đất.')">
-                <div class="card-media">
-                    <img src="03_Bosses_and_Monsters/Golem_Anim_Idle.gif" alt="Hoạt Ảnh Boss Đứng Yên: Stone Golem" loading="lazy" />
-                    <span class="card-badge badge-gif">Animated GIF</span>
+            <div class="art-card" onclick="openLightbox('03_Individual_Items_and_Gear/Weapon_Recurve_Hunting_Bow.png', 'Cung Săn Uốn Cong (Recurve Bow)', 'Vũ khí viễn chiến Ranger: Tầm bắn xa 1800cm, bắn Snap Shot sau khi lướt né.')">
+                <div class="card-media icon-media">
+                    <img src="03_Individual_Items_and_Gear/Weapon_Recurve_Hunting_Bow.png" alt="Cung Săn Uốn Cong (Recurve Bow)" loading="lazy" />
+                    <span class="card-badge">Vũ Khí</span>
                 </div>
                 <div class="card-info">
-                    <h3 class="card-title">Hoạt Ảnh Boss Đứng Yên: Stone Golem</h3>
-                    <p class="card-desc">Người Đá tỏa sáng lõi năng lượng với nhịp thở đá rung chuyển mặt đất.</p>
-                    <div class="card-tags"><span class="tag">Boss</span><span class="tag">Idle</span><span class="tag">Animation</span></div>
+                    <h3 class="card-title">Cung Săn Uốn Cong (Recurve Bow)</h3>
+                    <p class="card-desc">Vũ khí viễn chiến Ranger: Tầm bắn xa 1800cm, bắn Snap Shot sau khi lướt né.</p>
+                    <div class="card-tags"><span class="tag">Mainhand</span><span class="tag">Ranger</span><span class="tag">Tier 2</span></div>
                 </div>
             </div>
             
-            <div class="art-card" onclick="openLightbox('03_Bosses_and_Monsters/Golem_Anim_Slam.gif', 'Đòn Nện Đất Hủy Diệt (Ground Slam)', 'Golem giơ 2 cánh tay đá nện xuống đất kích hoạt vòng cảnh báo sóng chấn động.')">
-                <div class="card-media">
-                    <img src="03_Bosses_and_Monsters/Golem_Anim_Slam.gif" alt="Đòn Nện Đất Hủy Diệt (Ground Slam)" loading="lazy" />
-                    <span class="card-badge badge-gif">Animated GIF</span>
+            <div class="art-card" onclick="openLightbox('03_Individual_Items_and_Gear/Weapon_Magic_Wizard_Staff.png', 'Trượng Pha Lê Huyền Bí (Wizard Staff)', 'Trượng phép Arcanist: Bắn đạn Arcane Orb xuyên thấu kẻ thù.')">
+                <div class="card-media icon-media">
+                    <img src="03_Individual_Items_and_Gear/Weapon_Magic_Wizard_Staff.png" alt="Trượng Pha Lê Huyền Bí (Wizard Staff)" loading="lazy" />
+                    <span class="card-badge">Vũ Khí</span>
                 </div>
                 <div class="card-info">
-                    <h3 class="card-title">Đòn Nện Đất Hủy Diệt (Ground Slam)</h3>
-                    <p class="card-desc">Golem giơ 2 cánh tay đá nện xuống đất kích hoạt vòng cảnh báo sóng chấn động.</p>
-                    <div class="card-tags"><span class="tag">Boss Attack</span><span class="tag">Slam</span><span class="tag">AoE</span></div>
+                    <h3 class="card-title">Trượng Pha Lê Huyền Bí (Wizard Staff)</h3>
+                    <p class="card-desc">Trượng phép Arcanist: Bắn đạn Arcane Orb xuyên thấu kẻ thù.</p>
+                    <div class="card-tags"><span class="tag">Mainhand</span><span class="tag">Arcanist</span><span class="tag">Tier 3</span></div>
                 </div>
             </div>
             
-            <div class="art-card" onclick="openLightbox('03_Bosses_and_Monsters/Golem_Anim_Stagger.gif', 'Trạng Thái Gục Ngã (Posture Broken / Stagger)', 'Golem quỵ gối, nứt vỡ lớp giáp ngoài tạo cửa sổ 4.0s cho người chơi áp sát tung đòn Kết Liễu (Finisher).')">
-                <div class="card-media">
-                    <img src="03_Bosses_and_Monsters/Golem_Anim_Stagger.gif" alt="Trạng Thái Gục Ngã (Posture Broken / Stagger)" loading="lazy" />
-                    <span class="card-badge badge-gif">Animated GIF</span>
+            <div class="art-card" onclick="openLightbox('03_Individual_Items_and_Gear/Weapon_Holy_War_Mace.png', 'Chùy Thánh Chiến (Holy War Mace)', 'Vũ khí nghi lễ Acolyte: Tăng sát thương phá thế đứng Posture +30%.')">
+                <div class="card-media icon-media">
+                    <img src="03_Individual_Items_and_Gear/Weapon_Holy_War_Mace.png" alt="Chùy Thánh Chiến (Holy War Mace)" loading="lazy" />
+                    <span class="card-badge">Vũ Khí</span>
                 </div>
                 <div class="card-info">
-                    <h3 class="card-title">Trạng Thái Gục Ngã (Posture Broken / Stagger)</h3>
-                    <p class="card-desc">Golem quỵ gối, nứt vỡ lớp giáp ngoài tạo cửa sổ 4.0s cho người chơi áp sát tung đòn Kết Liễu (Finisher).</p>
-                    <div class="card-tags"><span class="tag">Boss Stagger</span><span class="tag">Execution Window</span></div>
+                    <h3 class="card-title">Chùy Thánh Chiến (Holy War Mace)</h3>
+                    <p class="card-desc">Vũ khí nghi lễ Acolyte: Tăng sát thương phá thế đứng Posture +30%.</p>
+                    <div class="card-tags"><span class="tag">Mainhand</span><span class="tag">Acolyte</span><span class="tag">Tier 2</span></div>
                 </div>
             </div>
             
-            <div class="art-card" onclick="openLightbox('03_Bosses_and_Monsters/Lich_Necromancer_Spritesheet.webp', 'Spritesheet Pháp Sư Tử Linh (Lich Necromancer)', 'Thiết kế trùm phép thuật bóng tối với áo choàng rách bay bổng và linh hồn hư vô vây quanh.')">
-                <div class="card-media">
-                    <img src="03_Bosses_and_Monsters/Lich_Necromancer_Spritesheet.webp" alt="Spritesheet Pháp Sư Tử Linh (Lich Necromancer)" loading="lazy" />
-                    <span class="card-badge badge-default">Spritesheet</span>
+            <div class="art-card" onclick="openLightbox('03_Individual_Items_and_Gear/Weapon_Rogue_Hunting_Dagger.png', 'Dao Găm Thợ Săn (Hunting Dagger)', 'Vũ khí phụ Offhand: Kích hoạt đòn đâm chí mạng từ sau lưng (Backstab).')">
+                <div class="card-media icon-media">
+                    <img src="03_Individual_Items_and_Gear/Weapon_Rogue_Hunting_Dagger.png" alt="Dao Găm Thợ Săn (Hunting Dagger)" loading="lazy" />
+                    <span class="card-badge">Vũ Khí</span>
                 </div>
                 <div class="card-info">
-                    <h3 class="card-title">Spritesheet Pháp Sư Tử Linh (Lich Necromancer)</h3>
-                    <p class="card-desc">Thiết kế trùm phép thuật bóng tối với áo choàng rách bay bổng và linh hồn hư vô vây quanh.</p>
-                    <div class="card-tags"><span class="tag">Undead</span><span class="tag">Necromancer</span><span class="tag">Boss</span></div>
+                    <h3 class="card-title">Dao Găm Thợ Săn (Hunting Dagger)</h3>
+                    <p class="card-desc">Vũ khí phụ Offhand: Kích hoạt đòn đâm chí mạng từ sau lưng (Backstab).</p>
+                    <div class="card-tags"><span class="tag">Offhand</span><span class="tag">Ranger</span><span class="tag">Tier 2</span></div>
                 </div>
             </div>
             
-            <div class="art-card" onclick="openLightbox('03_Bosses_and_Monsters/Lich_Idle_Loop.gif', 'Hoạt Ảnh Lơ Lửng: Lich Necromancer', 'Chuyển động lơ lửng ma quái phát sáng hốc mắt xanh hư không.')">
-                <div class="card-media">
-                    <img src="03_Bosses_and_Monsters/Lich_Idle_Loop.gif" alt="Hoạt Ảnh Lơ Lửng: Lich Necromancer" loading="lazy" />
-                    <span class="card-badge badge-gif">Animated GIF</span>
+            <div class="art-card" onclick="openLightbox('03_Individual_Items_and_Gear/Shield_Iron_Round_Shield.png', 'Khiên Tròn Sắt (Iron Round Shield)', 'Trang bị Offhand: Giảm 60% sát thương Posture khi đỡ đòn (Block).')">
+                <div class="card-media icon-media">
+                    <img src="03_Individual_Items_and_Gear/Shield_Iron_Round_Shield.png" alt="Khiên Tròn Sắt (Iron Round Shield)" loading="lazy" />
+                    <span class="card-badge">Khiên</span>
                 </div>
                 <div class="card-info">
-                    <h3 class="card-title">Hoạt Ảnh Lơ Lửng: Lich Necromancer</h3>
-                    <p class="card-desc">Chuyển động lơ lửng ma quái phát sáng hốc mắt xanh hư không.</p>
-                    <div class="card-tags"><span class="tag">Animation</span><span class="tag">Loop</span><span class="tag">Floating</span></div>
+                    <h3 class="card-title">Khiên Tròn Sắt (Iron Round Shield)</h3>
+                    <p class="card-desc">Trang bị Offhand: Giảm 60% sát thương Posture khi đỡ đòn (Block).</p>
+                    <div class="card-tags"><span class="tag">Offhand</span><span class="tag">Vanguard</span><span class="tag">Shield</span></div>
                 </div>
             </div>
             
-            </div>
-        </section>
-        
-        <section id="tab_3" class="tab-content" style="display: none;">
-            <div class="section-header">
-                <h2>Môi Trường & Thế Giới Mở (Environment & World)</h2>
-                <p class="section-summary">Bao gồm 3 tài nguyên đồ họa hoàn chỉnh. Bấm vào bất kỳ ảnh nào để xem chi tiết độ phân giải cao.</p>
-            </div>
-            <div class="art-grid">
-                
-            <div class="art-card" onclick="openLightbox('04_Environment_and_World/Complete_Map_Showcase.jpg', 'Toàn Cảnh Bản Đồ Thế Giới Mở (Complete Map Showcase)', 'Góc nhìn Isometric tổng quan từ Tiền Đồn Tân Thủ (Tier 1 Verdant Outpost), Bờ thành phế tích qua Vùng Tro Tàn (Tier 2 Ashen Keep).')">
-                <div class="card-media">
-                    <img src="04_Environment_and_World/Complete_Map_Showcase.jpg" alt="Toàn Cảnh Bản Đồ Thế Giới Mở (Complete Map Showcase)" loading="lazy" />
-                    <span class="card-badge badge-default">Environment Art</span>
+            <div class="art-card" onclick="openLightbox('03_Individual_Items_and_Gear/Shield_Knight_Heraldic_Kite.png', 'Khiên Hiệp Sĩ Gia Huy (Kite Shield)', 'Khiên lớn hình diều viền vàng gia tăng thời gian căn Perfect Parry.')">
+                <div class="card-media icon-media">
+                    <img src="03_Individual_Items_and_Gear/Shield_Knight_Heraldic_Kite.png" alt="Khiên Hiệp Sĩ Gia Huy (Kite Shield)" loading="lazy" />
+                    <span class="card-badge">Khiên</span>
                 </div>
                 <div class="card-info">
-                    <h3 class="card-title">Toàn Cảnh Bản Đồ Thế Giới Mở (Complete Map Showcase)</h3>
-                    <p class="card-desc">Góc nhìn Isometric tổng quan từ Tiền Đồn Tân Thủ (Tier 1 Verdant Outpost), Bờ thành phế tích qua Vùng Tro Tàn (Tier 2 Ashen Keep).</p>
-                    <div class="card-tags"><span class="tag">Isometric</span><span class="tag">World Map</span><span class="tag">HD-2D</span></div>
+                    <h3 class="card-title">Khiên Hiệp Sĩ Gia Huy (Kite Shield)</h3>
+                    <p class="card-desc">Khiên lớn hình diều viền vàng gia tăng thời gian căn Perfect Parry.</p>
+                    <div class="card-tags"><span class="tag">Offhand</span><span class="tag">Knight</span><span class="tag">Rare</span></div>
                 </div>
             </div>
             
-            <div class="art-card" onclick="openLightbox('04_Environment_and_World/Ruins_Concept.jpg', 'Bản Vẽ Ý Niệm Phế Tích Cổ (Ancient Ruins Concept)', 'Khái niệm kiến trúc gothic cổ kính, bia mộ đổ nát và ánh sáng thể tích mờ ảo giữa rừng rậm.')">
-                <div class="card-media">
-                    <img src="04_Environment_and_World/Ruins_Concept.jpg" alt="Bản Vẽ Ý Niệm Phế Tích Cổ (Ancient Ruins Concept)" loading="lazy" />
-                    <span class="card-badge badge-default">Concept Art</span>
+            <div class="art-card" onclick="openLightbox('03_Individual_Items_and_Gear/Potion_Health_Crimson_Flask.png', 'Bình Máu Đỏ (Crimson Health Potion)', 'Hồi phục 150 HP trong 0.8s. Giảm 30% tốc độ di chuyển trong lúc uống.')">
+                <div class="card-media icon-media">
+                    <img src="03_Individual_Items_and_Gear/Potion_Health_Crimson_Flask.png" alt="Bình Máu Đỏ (Crimson Health Potion)" loading="lazy" />
+                    <span class="card-badge">Tiêu Hao</span>
                 </div>
                 <div class="card-info">
-                    <h3 class="card-title">Bản Vẽ Ý Niệm Phế Tích Cổ (Ancient Ruins Concept)</h3>
-                    <p class="card-desc">Khái niệm kiến trúc gothic cổ kính, bia mộ đổ nát và ánh sáng thể tích mờ ảo giữa rừng rậm.</p>
-                    <div class="card-tags"><span class="tag">Ruins</span><span class="tag">Architecture</span><span class="tag">Atmosphere</span></div>
+                    <h3 class="card-title">Bình Máu Đỏ (Crimson Health Potion)</h3>
+                    <p class="card-desc">Hồi phục 150 HP trong 0.8s. Giảm 30% tốc độ di chuyển trong lúc uống.</p>
+                    <div class="card-tags"><span class="tag">Consumable</span><span class="tag">Quickbar 1</span><span class="tag">Stack 20</span></div>
                 </div>
             </div>
             
-            <div class="art-card" onclick="openLightbox('04_Environment_and_World/Ruins_Blockout_3D_Isometric.gif', 'Khối Dựng 3D Isometric Xoay Tròn (3D Blockout Demo)', 'Animation xoay vòng 360 độ chứng minh chiều sâu hình học 3D thật kết hợp hài hòa với Pixel Art 2D.')">
-                <div class="card-media">
-                    <img src="04_Environment_and_World/Ruins_Blockout_3D_Isometric.gif" alt="Khối Dựng 3D Isometric Xoay Tròn (3D Blockout Demo)" loading="lazy" />
-                    <span class="card-badge badge-gif">Animated GIF</span>
+            <div class="art-card" onclick="openLightbox('03_Individual_Items_and_Gear/Potion_Mana_Cyan_Phial.png', 'Bình Mana Lam (Cyan Mana Phial)', 'Hồi phục 120 điểm Mana năng lượng ma thuật.')">
+                <div class="card-media icon-media">
+                    <img src="03_Individual_Items_and_Gear/Potion_Mana_Cyan_Phial.png" alt="Bình Mana Lam (Cyan Mana Phial)" loading="lazy" />
+                    <span class="card-badge">Tiêu Hao</span>
                 </div>
                 <div class="card-info">
-                    <h3 class="card-title">Khối Dựng 3D Isometric Xoay Tròn (3D Blockout Demo)</h3>
-                    <p class="card-desc">Animation xoay vòng 360 độ chứng minh chiều sâu hình học 3D thật kết hợp hài hòa với Pixel Art 2D.</p>
-                    <div class="card-tags"><span class="tag">3D Depth</span><span class="tag">Blockout</span><span class="tag">Isometric</span></div>
+                    <h3 class="card-title">Bình Mana Lam (Cyan Mana Phial)</h3>
+                    <p class="card-desc">Hồi phục 120 điểm Mana năng lượng ma thuật.</p>
+                    <div class="card-tags"><span class="tag">Consumable</span><span class="tag">Quickbar 2</span><span class="tag">Stack 20</span></div>
                 </div>
             </div>
             
-            </div>
-        </section>
-        
-        <section id="tab_4" class="tab-content" style="display: none;">
-            <div class="section-header">
-                <h2>Vật Phẩm & Biểu Tượng UI (Items & Icons)</h2>
-                <p class="section-summary">Bao gồm 2 tài nguyên đồ họa hoàn chỉnh. Bấm vào bất kỳ ảnh nào để xem chi tiết độ phân giải cao.</p>
-            </div>
-            <div class="art-grid">
-                
-            <div class="art-card" onclick="openLightbox('05_Items_and_Icons/Blacksmith_Ward_Stone_Concept.jpg', 'Đá Hộ Mệnh Thợ Rèn (Blacksmith Ward Stone Concept)', 'Bản vẽ chi tiết bảo vật bảo vệ trang bị không bị vỡ khi cường hóa lên cấp +7 ~ +10 tại Lò Rèn.')">
-                <div class="card-media">
-                    <img src="05_Items_and_Icons/Blacksmith_Ward_Stone_Concept.jpg" alt="Đá Hộ Mệnh Thợ Rèn (Blacksmith Ward Stone Concept)" loading="lazy" />
-                    <span class="card-badge badge-default">Item Concept</span>
+            <div class="art-card" onclick="openLightbox('03_Individual_Items_and_Gear/Potion_Stamina_Green_Draught.png', 'Dược Thể Lực Lục (Stamina Draught)', 'Lập tức xóa bỏ trạng thái Kiệt Sức và hồi phục 100% Stamina.')">
+                <div class="card-media icon-media">
+                    <img src="03_Individual_Items_and_Gear/Potion_Stamina_Green_Draught.png" alt="Dược Thể Lực Lục (Stamina Draught)" loading="lazy" />
+                    <span class="card-badge">Tiêu Hao</span>
                 </div>
                 <div class="card-info">
-                    <h3 class="card-title">Đá Hộ Mệnh Thợ Rèn (Blacksmith Ward Stone Concept)</h3>
-                    <p class="card-desc">Bản vẽ chi tiết bảo vật bảo vệ trang bị không bị vỡ khi cường hóa lên cấp +7 ~ +10 tại Lò Rèn.</p>
+                    <h3 class="card-title">Dược Thể Lực Lục (Stamina Draught)</h3>
+                    <p class="card-desc">Lập tức xóa bỏ trạng thái Kiệt Sức và hồi phục 100% Stamina.</p>
+                    <div class="card-tags"><span class="tag">Consumable</span><span class="tag">Quickbar 3</span><span class="tag">Stack 20</span></div>
+                </div>
+            </div>
+            
+            <div class="art-card" onclick="openLightbox('03_Individual_Items_and_Gear/Jewelry_Engraved_Gold_Ring.png', 'Nhẫn Vàng Cổ Xưa (Engraved Gold Ring)', 'Gia tăng tỷ lệ bạo kích Critical Strike +5% và giảm tiêu hao thể lực.')">
+                <div class="card-media icon-media">
+                    <img src="03_Individual_Items_and_Gear/Jewelry_Engraved_Gold_Ring.png" alt="Nhẫn Vàng Cổ Xưa (Engraved Gold Ring)" loading="lazy" />
+                    <span class="card-badge">Trang Sức</span>
+                </div>
+                <div class="card-info">
+                    <h3 class="card-title">Nhẫn Vàng Cổ Xưa (Engraved Gold Ring)</h3>
+                    <p class="card-desc">Gia tăng tỷ lệ bạo kích Critical Strike +5% và giảm tiêu hao thể lực.</p>
+                    <div class="card-tags"><span class="tag">Ring Slot</span><span class="tag">Tier 3</span><span class="tag">Accessory</span></div>
+                </div>
+            </div>
+            
+            <div class="art-card" onclick="openLightbox('03_Individual_Items_and_Gear/Jewelry_Sapphire_Pendant_Amulet.png', 'Dây Chuyền Lam Ngọc (Sapphire Amulet)', 'Tăng lượng Mana tối đa +50 và hồi phục 5 Mana mỗi giây.')">
+                <div class="card-media icon-media">
+                    <img src="03_Individual_Items_and_Gear/Jewelry_Sapphire_Pendant_Amulet.png" alt="Dây Chuyền Lam Ngọc (Sapphire Amulet)" loading="lazy" />
+                    <span class="card-badge">Trang Sức</span>
+                </div>
+                <div class="card-info">
+                    <h3 class="card-title">Dây Chuyền Lam Ngọc (Sapphire Amulet)</h3>
+                    <p class="card-desc">Tăng lượng Mana tối đa +50 và hồi phục 5 Mana mỗi giây.</p>
+                    <div class="card-tags"><span class="tag">Amulet Slot</span><span class="tag">Tier 3</span><span class="tag">Accessory</span></div>
+                </div>
+            </div>
+            
+            <div class="art-card" onclick="openLightbox('03_Individual_Items_and_Gear/SkillBook_Ancient_Arcane_Grimoire.png', 'Sách Bí Kíp: Grimoire Ma Thuật', 'Học kỹ năng mới vào Action Deck. Cấm đọc trong lúc đang giao tranh.')">
+                <div class="card-media ">
+                    <img src="03_Individual_Items_and_Gear/SkillBook_Ancient_Arcane_Grimoire.png" alt="Sách Bí Kíp: Grimoire Ma Thuật" loading="lazy" />
+                    <span class="card-badge">Sách Kỹ Năng</span>
+                </div>
+                <div class="card-info">
+                    <h3 class="card-title">Sách Bí Kíp: Grimoire Ma Thuật</h3>
+                    <p class="card-desc">Học kỹ năng mới vào Action Deck. Cấm đọc trong lúc đang giao tranh.</p>
+                    <div class="card-tags"><span class="tag">Skill Book</span><span class="tag">Grimoire</span><span class="tag">Non-stackable</span></div>
+                </div>
+            </div>
+            
+            <div class="art-card" onclick="openLightbox('03_Individual_Items_and_Gear/Crafting_Blacksmith_Ward_Stone.png', 'Đá Hộ Mệnh Thợ Rèn (Ward Stone)', 'Bảo vệ vật phẩm không bị vỡ khi cường hóa lên +7 ~ +10 tại Lò Rèn.')">
+                <div class="card-media ">
+                    <img src="03_Individual_Items_and_Gear/Crafting_Blacksmith_Ward_Stone.png" alt="Đá Hộ Mệnh Thợ Rèn (Ward Stone)" loading="lazy" />
+                    <span class="card-badge">Nguyên Liệu</span>
+                </div>
+                <div class="card-info">
+                    <h3 class="card-title">Đá Hộ Mệnh Thợ Rèn (Ward Stone)</h3>
+                    <p class="card-desc">Bảo vệ vật phẩm không bị vỡ khi cường hóa lên +7 ~ +10 tại Lò Rèn.</p>
                     <div class="card-tags"><span class="tag">Crafting</span><span class="tag">Protection</span><span class="tag">Forge</span></div>
                 </div>
             </div>
             
-            <div class="art-card" onclick="openLightbox('05_Items_and_Icons/Icon_Blacksmith_Ward_256.png', 'Icon Vật Phẩm: Đá Hộ Mệnh (256x256 PNG)', 'Biểu tượng giao diện sắc nét hiển thị trong túi đồ 30 ô và cửa sổ Lò Rèn Thợ Rèn.')">
-                <div class="card-media">
-                    <img src="05_Items_and_Icons/Icon_Blacksmith_Ward_256.png" alt="Icon Vật Phẩm: Đá Hộ Mệnh (256x256 PNG)" loading="lazy" />
-                    <span class="card-badge badge-default">UI Icon</span>
+            <div class="art-card" onclick="openLightbox('03_Individual_Items_and_Gear/Armor_Steel_Knight_Cuirass.png', 'Giáp Ngực Thép Tấm (Steel Cuirass)', 'Body Armor hạng nặng: +40 Giáp phòng ngự, chống đòn chém vật lý.')">
+                <div class="card-media icon-media">
+                    <img src="03_Individual_Items_and_Gear/Armor_Steel_Knight_Cuirass.png" alt="Giáp Ngực Thép Tấm (Steel Cuirass)" loading="lazy" />
+                    <span class="card-badge">Giáp Thân</span>
                 </div>
                 <div class="card-info">
-                    <h3 class="card-title">Icon Vật Phẩm: Đá Hộ Mệnh (256x256 PNG)</h3>
-                    <p class="card-desc">Biểu tượng giao diện sắc nét hiển thị trong túi đồ 30 ô và cửa sổ Lò Rèn Thợ Rèn.</p>
-                    <div class="card-tags"><span class="tag">Inventory</span><span class="tag">256x256</span><span class="tag">Transparent</span></div>
+                    <h3 class="card-title">Giáp Ngực Thép Tấm (Steel Cuirass)</h3>
+                    <p class="card-desc">Body Armor hạng nặng: +40 Giáp phòng ngự, chống đòn chém vật lý.</p>
+                    <div class="card-tags"><span class="tag">Body Armor</span><span class="tag">Heavy</span></div>
+                </div>
+            </div>
+            
+            <div class="art-card" onclick="openLightbox('03_Individual_Items_and_Gear/Armor_Leather_Scout_Vest.png', 'Áo Da Thợ Săn (Leather Scout Vest)', 'Body Armor hạng trung: +25 Giáp, không làm giảm tốc độ di chuyển.')">
+                <div class="card-media icon-media">
+                    <img src="03_Individual_Items_and_Gear/Armor_Leather_Scout_Vest.png" alt="Áo Da Thợ Săn (Leather Scout Vest)" loading="lazy" />
+                    <span class="card-badge">Giáp Thân</span>
+                </div>
+                <div class="card-info">
+                    <h3 class="card-title">Áo Da Thợ Săn (Leather Scout Vest)</h3>
+                    <p class="card-desc">Body Armor hạng trung: +25 Giáp, không làm giảm tốc độ di chuyển.</p>
+                    <div class="card-tags"><span class="tag">Body Armor</span><span class="tag">Medium</span></div>
+                </div>
+            </div>
+            
+            <div class="art-card" onclick="openLightbox('03_Individual_Items_and_Gear/Armor_Arcanist_Scholar_Tunic.png', 'Áo Thêu Học Giả (Arcanist Tunic)', 'Body Armor vải phép: +18 Giáp, +45 Kháng nguyên tố hắc ám.')">
+                <div class="card-media icon-media">
+                    <img src="03_Individual_Items_and_Gear/Armor_Arcanist_Scholar_Tunic.png" alt="Áo Thêu Học Giả (Arcanist Tunic)" loading="lazy" />
+                    <span class="card-badge">Giáp Thân</span>
+                </div>
+                <div class="card-info">
+                    <h3 class="card-title">Áo Thêu Học Giả (Arcanist Tunic)</h3>
+                    <p class="card-desc">Body Armor vải phép: +18 Giáp, +45 Kháng nguyên tố hắc ám.</p>
+                    <div class="card-tags"><span class="tag">Body Armor</span><span class="tag">Light</span></div>
+                </div>
+            </div>
+            
+            <div class="art-card" onclick="openLightbox('03_Individual_Items_and_Gear/Helmet_Steel_Knight_Closed.png', 'Mũ Giáp Hiệp Sĩ (Steel Greathelm)', 'Mũ sắt bảo vệ phần đầu: +20 Giáp, chống choáng Stun.')">
+                <div class="card-media icon-media">
+                    <img src="03_Individual_Items_and_Gear/Helmet_Steel_Knight_Closed.png" alt="Mũ Giáp Hiệp Sĩ (Steel Greathelm)" loading="lazy" />
+                    <span class="card-badge">Mũ Nón</span>
+                </div>
+                <div class="card-info">
+                    <h3 class="card-title">Mũ Giáp Hiệp Sĩ (Steel Greathelm)</h3>
+                    <p class="card-desc">Mũ sắt bảo vệ phần đầu: +20 Giáp, chống choáng Stun.</p>
+                    <div class="card-tags"><span class="tag">Helmet</span><span class="tag">Heavy</span></div>
+                </div>
+            </div>
+            
+            <div class="art-card" onclick="openLightbox('03_Individual_Items_and_Gear/Helmet_Leather_Ranger_Hood.png', 'Mũ Trùm Da Du Mục (Ranger Hood)', 'Mũ trùm đầu thợ săn ngụy trang trong rừng rậm.')">
+                <div class="card-media icon-media">
+                    <img src="03_Individual_Items_and_Gear/Helmet_Leather_Ranger_Hood.png" alt="Mũ Trùm Da Du Mục (Ranger Hood)" loading="lazy" />
+                    <span class="card-badge">Mũ Nón</span>
+                </div>
+                <div class="card-info">
+                    <h3 class="card-title">Mũ Trùm Da Du Mục (Ranger Hood)</h3>
+                    <p class="card-desc">Mũ trùm đầu thợ săn ngụy trang trong rừng rậm.</p>
+                    <div class="card-tags"><span class="tag">Helmet</span><span class="tag">Medium</span></div>
+                </div>
+            </div>
+            
+            <div class="art-card" onclick="openLightbox('03_Individual_Items_and_Gear/Greaves_Steel_Knight_Legguards.png', 'Xà Cạp Thép (Steel Greaves)', 'Giáp bảo vệ cẳng chân và đầu gối trong giao tranh cận chiến.')">
+                <div class="card-media ">
+                    <img src="03_Individual_Items_and_Gear/Greaves_Steel_Knight_Legguards.png" alt="Xà Cạp Thép (Steel Greaves)" loading="lazy" />
+                    <span class="card-badge">Trang Bị</span>
+                </div>
+                <div class="card-info">
+                    <h3 class="card-title">Xà Cạp Thép (Steel Greaves)</h3>
+                    <p class="card-desc">Giáp bảo vệ cẳng chân và đầu gối trong giao tranh cận chiến.</p>
+                    <div class="card-tags"><span class="tag">Greaves</span><span class="tag">Steel</span></div>
+                </div>
+            </div>
+            
+            <div class="art-card" onclick="openLightbox('03_Individual_Items_and_Gear/Boots_Leather_Traveler_Boots.png', 'Ủng Da Lữ Khách (Traveler Boots)', 'Ủng da mềm giúp di chuyển êm ái trên địa hình bùn đá.')">
+                <div class="card-media ">
+                    <img src="03_Individual_Items_and_Gear/Boots_Leather_Traveler_Boots.png" alt="Ủng Da Lữ Khách (Traveler Boots)" loading="lazy" />
+                    <span class="card-badge">Trang Bị</span>
+                </div>
+                <div class="card-info">
+                    <h3 class="card-title">Ủng Da Lữ Khách (Traveler Boots)</h3>
+                    <p class="card-desc">Ủng da mềm giúp di chuyển êm ái trên địa hình bùn đá.</p>
+                    <div class="card-tags"><span class="tag">Boots</span><span class="tag">Leather</span></div>
+                </div>
+            </div>
+            
+            </div>
+        </section>
+        
+        <section id="tab_classes_redrawn" class="tab-content" style="display: none;">
+            <div class="section-header">
+                <h2>🛡️ 4 Class Phong Cách Tự Nhiên (Core Classes Redrawn)</h2>
+                <p class="section-summary">Tác phẩm vẽ lại 4 Class Chiến Binh, Thợ Săn, Thuật Sĩ và Tu Sĩ với nét vẽ Pixel sinh động, nét biểu cảm ấm áp tự nhiên giống Stardew Valley.</p>
+            </div>
+            <div class="art-grid">
+                
+            <div class="art-card" onclick="openLightbox('04_Character_Classes/01_Core_Classes_Handcrafted_Showcase.jpg', 'Bộ 4 Chức Nghiệp: Vanguard, Ranger, Arcanist, Acolyte', 'Chiến Binh khiên sư tử, Nữ Thợ Săn mũ trùm xanh, Thuật Sĩ già thông thái và Nữ Tu Sĩ thuần khiết đứng trên gạch đá isometric.')">
+                <div class="card-media ">
+                    <img src="04_Character_Classes/01_Core_Classes_Handcrafted_Showcase.jpg" alt="Bộ 4 Chức Nghiệp: Vanguard, Ranger, Arcanist, Acolyte" loading="lazy" />
+                    <span class="card-badge">Tranh Tổng Quan</span>
+                </div>
+                <div class="card-info">
+                    <h3 class="card-title">Bộ 4 Chức Nghiệp: Vanguard, Ranger, Arcanist, Acolyte</h3>
+                    <p class="card-desc">Chiến Binh khiên sư tử, Nữ Thợ Săn mũ trùm xanh, Thuật Sĩ già thông thái và Nữ Tu Sĩ thuần khiết đứng trên gạch đá isometric.</p>
+                    <div class="card-tags"><span class="tag">4 Classes</span><span class="tag">Isometric</span><span class="tag">Handcrafted</span></div>
+                </div>
+            </div>
+            
+            <div class="art-card" onclick="openLightbox('04_Character_Classes/01_Core_Classes_Handcrafted_Transparent.png', 'Bộ 4 Chức Nghiệp (Tách Nền Trong Suốt)', 'Phiên bản trong suốt phục vụ làm banner, chọn nhân vật Character Select.')">
+                <div class="card-media ">
+                    <img src="04_Character_Classes/01_Core_Classes_Handcrafted_Transparent.png" alt="Bộ 4 Chức Nghiệp (Tách Nền Trong Suốt)" loading="lazy" />
+                    <span class="card-badge">Transparent</span>
+                </div>
+                <div class="card-info">
+                    <h3 class="card-title">Bộ 4 Chức Nghiệp (Tách Nền Trong Suốt)</h3>
+                    <p class="card-desc">Phiên bản trong suốt phục vụ làm banner, chọn nhân vật Character Select.</p>
+                    <div class="card-tags"><span class="tag">Banner</span><span class="tag">UI Ready</span></div>
+                </div>
+            </div>
+            
+            </div>
+        </section>
+        
+        <section id="tab_bosses_redrawn" class="tab-content" style="display: none;">
+            <div class="section-header">
+                <h2>👾 Boss & Quái Vật Vẽ Tay (Bosses Redrawn)</h2>
+                <p class="section-summary">Thiết kế trùm thế giới Người Đá Cổ Đại và Pháp Sư Tử Linh với hình khối rõ ràng, vân rêu đá, ngọn lửa linh hồn ma quái.</p>
+            </div>
+            <div class="art-grid">
+                
+            <div class="art-card" onclick="openLightbox('05_Bosses_and_Monsters/01_Boss_Stone_Golem_Handcrafted.jpg', 'Trùm Người Đá Cổ Đại (Ancient Stone Golem)', 'Khối cự thạch phủ rêu phong, cổ ngữ ma thuật xanh lam rực sáng, dáng đứng dũng mãnh.')">
+                <div class="card-media ">
+                    <img src="05_Bosses_and_Monsters/01_Boss_Stone_Golem_Handcrafted.jpg" alt="Trùm Người Đá Cổ Đại (Ancient Stone Golem)" loading="lazy" />
+                    <span class="card-badge">Boss Concept</span>
+                </div>
+                <div class="card-info">
+                    <h3 class="card-title">Trùm Người Đá Cổ Đại (Ancient Stone Golem)</h3>
+                    <p class="card-desc">Khối cự thạch phủ rêu phong, cổ ngữ ma thuật xanh lam rực sáng, dáng đứng dũng mãnh.</p>
+                    <div class="card-tags"><span class="tag">Stone Golem</span><span class="tag">World Boss</span></div>
+                </div>
+            </div>
+            
+            <div class="art-card" onclick="openLightbox('05_Bosses_and_Monsters/01_Boss_Stone_Golem_Transparent.png', 'Trùm Người Đá (Tách Nền Trong Suốt)', 'Sprite trong suốt khổng lồ sẵn sàng đưa vào làm Boss Arena.')">
+                <div class="card-media ">
+                    <img src="05_Bosses_and_Monsters/01_Boss_Stone_Golem_Transparent.png" alt="Trùm Người Đá (Tách Nền Trong Suốt)" loading="lazy" />
+                    <span class="card-badge">In-Game Sprite</span>
+                </div>
+                <div class="card-info">
+                    <h3 class="card-title">Trùm Người Đá (Tách Nền Trong Suốt)</h3>
+                    <p class="card-desc">Sprite trong suốt khổng lồ sẵn sàng đưa vào làm Boss Arena.</p>
+                    <div class="card-tags"><span class="tag">Transparent</span><span class="tag">Boss</span></div>
+                </div>
+            </div>
+            
+            <div class="art-card" onclick="openLightbox('05_Bosses_and_Monsters/02_Boss_Lich_Necromancer_Handcrafted.jpg', 'Pháp Sư Tử Linh (Lich Necromancer)', 'Tử thi hoàng gia lơ lửng, hốc mắt rực lửa lục bảo, tay nắm linh hồn tím và trượng đầu lâu.')">
+                <div class="card-media ">
+                    <img src="05_Bosses_and_Monsters/02_Boss_Lich_Necromancer_Handcrafted.jpg" alt="Pháp Sư Tử Linh (Lich Necromancer)" loading="lazy" />
+                    <span class="card-badge">Boss Concept</span>
+                </div>
+                <div class="card-info">
+                    <h3 class="card-title">Pháp Sư Tử Linh (Lich Necromancer)</h3>
+                    <p class="card-desc">Tử thi hoàng gia lơ lửng, hốc mắt rực lửa lục bảo, tay nắm linh hồn tím và trượng đầu lâu.</p>
+                    <div class="card-tags"><span class="tag">Lich</span><span class="tag">Undead Boss</span></div>
+                </div>
+            </div>
+            
+            <div class="art-card" onclick="openLightbox('05_Bosses_and_Monsters/02_Boss_Lich_Necromancer_Transparent.png', 'Pháp Sư Tử Linh (Tách Nền Trong Suốt)', 'Sprite tách nền ma quái trong suốt cho vùng đầm lầy Ashen Keep.')">
+                <div class="card-media ">
+                    <img src="05_Bosses_and_Monsters/02_Boss_Lich_Necromancer_Transparent.png" alt="Pháp Sư Tử Linh (Tách Nền Trong Suốt)" loading="lazy" />
+                    <span class="card-badge">In-Game Sprite</span>
+                </div>
+                <div class="card-info">
+                    <h3 class="card-title">Pháp Sư Tử Linh (Tách Nền Trong Suốt)</h3>
+                    <p class="card-desc">Sprite tách nền ma quái trong suốt cho vùng đầm lầy Ashen Keep.</p>
+                    <div class="card-tags"><span class="tag">Transparent</span><span class="tag">Boss</span></div>
+                </div>
+            </div>
+            
+            </div>
+        </section>
+        
+        <section id="tab_environment" class="tab-content" style="display: none;">
+            <div class="section-header">
+                <h2>🏰 Bản Đồ & Môi Trường Thế Giới</h2>
+                <p class="section-summary">Bối cảnh thế giới mở 2.5D Isometric: Tiền Đồn Tân Thủ, Phế Tích Cổ Gothic và Khối Dựng 3D.</p>
+            </div>
+            <div class="art-grid">
+                
+            <div class="art-card" onclick="openLightbox('06_Environment_and_World/Complete_Map_Showcase.jpg', 'Toàn Cảnh Bản Đồ Thế Giới (Complete Map)', 'Toàn cảnh từ Tiền Đồn Tân Thủ (Verdant Bastion) qua Vùng Tro Tàn (Ashen Keep).')">
+                <div class="card-media ">
+                    <img src="06_Environment_and_World/Complete_Map_Showcase.jpg" alt="Toàn Cảnh Bản Đồ Thế Giới (Complete Map)" loading="lazy" />
+                    <span class="card-badge">Environment</span>
+                </div>
+                <div class="card-info">
+                    <h3 class="card-title">Toàn Cảnh Bản Đồ Thế Giới (Complete Map)</h3>
+                    <p class="card-desc">Toàn cảnh từ Tiền Đồn Tân Thủ (Verdant Bastion) qua Vùng Tro Tàn (Ashen Keep).</p>
+                    <div class="card-tags"><span class="tag">World Map</span><span class="tag">Isometric</span></div>
+                </div>
+            </div>
+            
+            <div class="art-card" onclick="openLightbox('06_Environment_and_World/Ruins_Concept.jpg', 'Phế Tích Cổ Gothic (Ancient Ruins Concept)', 'Khái niệm kiến trúc gothic đổ nát và ánh sáng sương mù thể tích u tối.')">
+                <div class="card-media ">
+                    <img src="06_Environment_and_World/Ruins_Concept.jpg" alt="Phế Tích Cổ Gothic (Ancient Ruins Concept)" loading="lazy" />
+                    <span class="card-badge">Concept Art</span>
+                </div>
+                <div class="card-info">
+                    <h3 class="card-title">Phế Tích Cổ Gothic (Ancient Ruins Concept)</h3>
+                    <p class="card-desc">Khái niệm kiến trúc gothic đổ nát và ánh sáng sương mù thể tích u tối.</p>
+                    <div class="card-tags"><span class="tag">Ruins</span><span class="tag">Gothic</span></div>
+                </div>
+            </div>
+            
+            <div class="art-card" onclick="openLightbox('06_Environment_and_World/Ruins_Blockout_3D_Isometric.gif', 'Mô Hình 3D Isometric Xoay Tròn (3D Blockout)', 'Animation xoay 360 độ chứng minh sự hòa hợp giữa hình học 3D và Pixel Art 2D.')">
+                <div class="card-media ">
+                    <img src="06_Environment_and_World/Ruins_Blockout_3D_Isometric.gif" alt="Mô Hình 3D Isometric Xoay Tròn (3D Blockout)" loading="lazy" />
+                    <span class="card-badge">Animated GIF</span>
+                </div>
+                <div class="card-info">
+                    <h3 class="card-title">Mô Hình 3D Isometric Xoay Tròn (3D Blockout)</h3>
+                    <p class="card-desc">Animation xoay 360 độ chứng minh sự hòa hợp giữa hình học 3D và Pixel Art 2D.</p>
+                    <div class="card-tags"><span class="tag">3D Depth</span><span class="tag">Blockout</span></div>
                 </div>
             </div>
             
