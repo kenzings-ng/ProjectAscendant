@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Ascendant - Modular Paperdoll Equipment System</title>
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --panel-bg: rgba(22, 27, 34, 0.95);
+            --border-color: #30363d;
+            --accent-gold: #f59e0b;
+            --accent-blue: #3b82f6;
+            --text-color: #e6edf3;
+            --text-muted: #8b949e;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+            user-select: none;
+        }
+
+        body {
+            background: radial-gradient(circle at center, #1b2028 0%, #080a0d 100%);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 24px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        header h1 {
+            font-size: 28px;
+            color: var(--accent-gold);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 12px rgba(245, 158, 11, 0.4);
+        }
+
+        header p {
+            color: var(--text-muted);
+            margin-top: 6px;
+            font-size: 14px;
+        }
+
+        .main-container {
+            display: flex;
+            gap: 24px;
+            max-width: 1100px;
+            width: 100%;
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+        }
+
+        /* Character Viewport */
+        .character-stage {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at bottom, rgba(59, 130, 246, 0.12) 0%, rgba(0, 0, 0, 0.8) 75%);
+            border: 1px solid #21262d;
+            border-radius: 8px;
+            position: relative;
+            min-height: 520px;
+            overflow: hidden;
+        }
+
+        .iso-grid {
+            position: absolute;
+            bottom: 40px;
+            width: 260px;
+            height: 130px;
+            border-radius: 50%;
+            background: radial-gradient(ellipse at center, rgba(245, 158, 11, 0.25) 0%, transparent 70%);
+            border: 1px dashed rgba(245, 158, 11, 0.3);
+            transform: rotateX(60deg);
+        }
+
+        canvas#viewportCanvas {
+            z-index: 2;
+            image-rendering: pixelated;
+            max-width: 90%;
+            max-height: 480px;
+            filter: drop-shadow(0 12px 20px rgba(0,0,0,0.8));
+            transition: transform 0.15s ease-out;
+        }
+
+        .current-badge {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid var(--accent-gold);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            color: var(--accent-gold);
+            font-weight: 600;
+            z-index: 3;
+            letter-spacing: 1px;
+        }
+
+        /* Equipment Panel */
+        .equipment-panel {
+            width: 440px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .section-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 6px;
+        }
+
+        .item-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .item-card {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 12px 16px;
+            background: rgba(13, 17, 23, 0.7);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .item-card:hover {
+            border-color: #58a6ff;
+            background: rgba(56, 139, 253, 0.1);
+            transform: translateX(4px);
+        }
+
+        .item-card.active {
+            border-color: var(--accent-gold);
+            background: rgba(245, 158, 11, 0.12);
+            box-shadow: 0 0 16px rgba(245, 158, 11, 0.2);
+        }
+
+        .item-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            background: #161b22;
+            border: 1px solid var(--border-color);
+            flex-shrink: 0;
+        }
+
+        .item-card.active .item-icon {
+            border-color: var(--accent-gold);
+        }
+
+        .item-info {
+            flex: 1;
+        }
+
+        .item-name {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 3px;
+        }
+
+        .item-type {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .item-tier {
+            font-size: 11px;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+
+        .tier-common { background: #374151; color: #d1d5db; }
+        .tier-rare { background: #1e3a8a; color: #93c5fd; }
+        .tier-legendary { background: #78350f; color: #fde68a; }
+
+        /* Stats Panel */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            background: rgba(13, 17, 23, 0.8);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 14px;
+        }
+
+        .stat-box {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        .stat-value {
+            font-size: 16px;
+            font-weight: 700;
+            color: #58a6ff;
+            margin-top: 2px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Project Ascendant</h1>
+    <p>Hệ Thống Hiển Thị Trang Bị Nhân Vật Đa Tầng (Modular Paperdoll Visualizer)</p>
+</header>
+
+<div class="main-container">
+    <!-- Character Display Stage -->
+    <div class="character-stage">
+        <div class="current-badge" id="currentBadge">QUẦN ÁO VẢI TÂN THỦ</div>
+        <div class="iso-grid"></div>
+        <canvas id="viewportCanvas" width="400" height="400"></canvas>
+    </div>
+
+    <!-- Equipment List -->
+    <div class="equipment-panel">
+        <div class="section-title">Chọn Trang Bị Để Mặc Lên Người</div>
+        
+        <div class="item-list">
+            <!-- Set 0: Starter Cloth -->
+            <div class="item-card active" onclick="equipSet(0)">
+                <div class="item-icon">🥋</div>
+                <div class="item-info">
+                    <div class="item-name">Bộ Vải Thô Tân Thủ (Starter Cloth)</div>
+                    <div class="item-type">Áo vải gai, quần thô, giày vải sơ cấp</div>
+                </div>
+                <span class="item-tier tier-common">Tier 1</span>
+            </div>
+
+            <!-- Set 1: Vanguard Steel Armor -->
+            <div class="item-card" onclick="equipSet(1)">
+                <div class="item-icon">🛡️</div>
+                <div class="item-info">
+                    <div class="item-name">Bộ Giáp Sắt Hiệp Sĩ (Vanguard Steel)</div>
+                    <div class="item-type">Giáp tấm thép, Đại kiếm & Khiên tròn gỗ</div>
+                </div>
+                <span class="item-tier tier-rare">Tier 2</span>
+            </div>
+
+            <!-- Set 2: Ranger Leather Scout -->
+            <div class="item-card" onclick="equipSet(2)">
+                <div class="item-icon">🏹</div>
+                <div class="item-info">
+                    <div class="item-name">Bộ Áo Da Thợ Săn (Ranger Leather)</div>
+                    <div class="item-type">Áo da tán đinh, Cung săn gỗ & Dao găm</div>
+                </div>
+                <span class="item-tier tier-rare">Tier 2</span>
+            </div>
+
+            <!-- Set 3: Arcanist Mystic Robe -->
+            <div class="item-card" onclick="equipSet(3)">
+                <div class="item-icon">🔮</div>
+                <div class="item-info">
+                    <div class="item-name">Pháp Bào Cổ Ngữ (Arcanist Robe)</div>
+                    <div class="item-type">Áo choàng nhung thêu chỉ vàng, Trượng lam tinh</div>
+                </div>
+                <span class="item-tier tier-legendary">Tier 3</span>
+            </div>
+        </div>
+
+        <!-- Live Attributes (GAS) -->
+        <div class="section-title">Chỉ Số Nhân Vật (UAscendantAttributeSet)</div>
+        <div class="stats-grid">
+            <div class="stat-box">
+                <span class="stat-label">Máu Tối Đa (Max HP)</span>
+                <span class="stat-value" id="statHP">100</span>
+            </div>
+            <div class="stat-box">
+                <span class="stat-label">Mana Tối Đa (Max MP)</span>
+                <span class="stat-value" id="statMP">80</span>
+            </div>
+            <div class="stat-box">
+                <span class="stat-label">Thể Lực (Stamina)</span>
+                <span class="stat-value" id="statStamina">100</span>
+            </div>
+            <div class="stat-box">
+                <span class="stat-label">Thế Đứng (Posture)</span>
+                <span class="stat-value" id="statPosture">100</span>
+            </div>
+            <div class="stat-box">
+                <span class="stat-label">Giáp Vật Lý (Armor)</span>
+                <span class="stat-value" id="statArmor">5 (Giảm 2%)</span>
+            </div>
+            <div class="stat-box">
+                <span class="stat-label">Tốc Độ Chạy (Move Speed)</span>
+                <span class="stat-value" id="statSpeed">500 cm/s</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const itemSets = [
+        {
+            name: "QUẦN ÁO VẢI TÂN THỦ",
+            image: "/home/kenzings/.gemini/antigravity-cli/brain/5d6493a0-c1f8-4516-8f3d-342b9b826625/hero_starter_cloth_1790138979243.jpg",
+            hp: 100, mp: 80, stamina: 100, posture: 100, armor: "5 (Giảm 2%)", speed: "500 cm/s"
+        },
+        {
+            name: "GIÁP SẮT VANGUARD & ĐẠI KIẾM",
+            image: "/home/kenzings/.gemini/antigravity-cli/brain/5d6493a0-c1f8-4516-8f3d-342b9b826625/hero_iron_armor_1790139001271.jpg",
+            hp: 120, mp: 80, stamina: 110, posture: 120, armor: "45 (Giảm 28%)", speed: "520 cm/s"
+        },
+        {
+            name: "ÁO DA RANGER & CUNG TẬT PHONG",
+            image: "/home/kenzings/.gemini/antigravity-cli/brain/5d6493a0-c1f8-4516-8f3d-342b9b826625/hero_leather_ranger_1790139031021.jpg",
+            hp: 90, mp: 90, stamina: 120, posture: 90, armor: "22 (Giảm 14%)", speed: "570 cm/s"
+        },
+        {
+            name: "PHÁP BÀO ARCANIST & TRƯỢNG LAM TINH",
+            image: "/home/kenzings/.gemini/antigravity-cli/brain/5d6493a0-c1f8-4516-8f3d-342b9b826625/hero_arcanist_robe_1790139057554.jpg",
+            hp: 85, mp: 140, stamina: 90, posture: 80, armor: "12 (Giảm 7%)", speed: "530 cm/s"
+        }
+    ];
+
+    const canvas = document.getElementById('viewportCanvas');
+    const ctx = canvas.getContext('2d');
+    const cards = document.querySelectorAll('.item-card');
+
+    function renderImageChromaKey(imgSrc) {
+        const img = new Image();
+        img.crossOrigin = "Anonymous";
+        img.src = imgSrc;
+        img.onload = () => {
+            canvas.width = img.width;
+            canvas.height = img.height;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(img, 0, 0);
+
+            // Tự động tách màu nền hồng cánh sen (#FF00FF) sang Alpha trong suốt
+            const frame = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const l = frame.data.length / 4;
+            for (let i = 0; i < l; i++) {
+                const r = frame.data[i * 4 + 0];
+                const g = frame.data[i * 4 + 1];
+                const b = frame.data[i * 4 + 2];
+                // Điều kiện Magenta key
+                if (r > 200 && g < 60 && b > 200) {
+                    frame.data[i * 4 + 3] = 0; // Alpha = 0
+                }
+            }
+            ctx.putImageData(frame, 0, 0);
+        };
+    }
+
+    function equipSet(index) {
+        cards.forEach((card, idx) => {
+            card.classList.toggle('active', idx === index);
+        });
+
+        const current = itemSets[index];
+        document.getElementById('currentBadge').textContent = current.name;
+        document.getElementById('statHP').textContent = current.hp;
+        document.getElementById('statMP').textContent = current.mp;
+        document.getElementById('statStamina').textContent = current.stamina;
+        document.getElementById('statPosture').textContent = current.posture;
+        document.getElementById('statArmor').textContent = current.armor;
+        document.getElementById('statSpeed').textContent = current.speed;
+
+        renderImageChromaKey(current.image);
+    }
+
+    // Load initial starter cloth
+    equipSet(0);
+</script>
+
+</body>
+</html>
