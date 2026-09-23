@@ -1,8 +1,8 @@
 # Epics Index: Project Ascendant
 
-> **Last Updated**: 2026-09-17  
+> **Last Updated**: 2026-09-23  
 > **Engine**: Unreal Engine 5.8 (C++, GAS, Iris, PaperZD)  
-> **Current Stage**: Pre-Production  
+> **Current Stage**: Production  
 
 ---
 
@@ -38,7 +38,7 @@
 
 ---
 
-## Presentation & Interface Layer Epics (Sprint 4 - Production Active)
+## Presentation & Interface Layer Epics (Sprint 4 - 100% Complete)
 
 | Epic | Layer | System | Design Document (GDD) | Governing ADRs | Stories Status | Epic Status |
 |---|---|---|---|---|---|---|
@@ -46,7 +46,7 @@
 
 ---
 
-## Encounter Layer Epics (Sprint 5 - Production Active)
+## Encounter Layer Epics (Sprint 5 - 100% Complete)
 
 | Epic | Layer | System | Design Document (GDD) | Governing ADRs | Stories Status | Epic Status |
 |---|---|---|---|---|---|---|
@@ -54,10 +54,10 @@
 
 ---
 
-## World Integration & Auth Layer Epics (Sprint 6 - Production Active)
+## World Integration & Auth Layer Epics (Sprint 6 - 100% Complete)
 
 | Epic | Layer | System | Design Document (GDD) | Governing ADRs | Stories Status | Epic Status |
 |---|---|---|---|---|---|---|
-| [`world-zone-auth`](world-zone-auth/EPIC.md) | World / Auth | Seamless Zones, Campfire Sanctuaries, Karma, DDS & Account Auth | [`zone-system.md`](../../design/gdd/zone-system.md), [`authentication-account-system.md`](../../design/gdd/authentication-account-system.md) | ADR-0001, ADR-0003 | 4 stories | **Ready** |
+| [`world-zone-auth`](world-zone-auth/EPIC.md) | World / Auth | Seamless Zones, Campfire Sanctuaries, Karma, DDS & Account Auth | [`zone-system.md`](../../design/gdd/zone-system.md), [`authentication-account-system.md`](../../design/gdd/authentication-account-system.md) | ADR-0001, ADR-0003 | 4 stories | **Done** |
 
 

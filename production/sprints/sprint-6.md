@@ -40,7 +40,7 @@ Triển khai hệ thống 3 phân vùng thế giới mở nối liền với Th�
 ---
 
 ## Definition of Done for this Sprint
-- [ ] 100% Must Have và Should Have tasks hoàn thành và vượt qua kiểm thử đơn vị & tích hợp.
-- [ ] Hoàn tất toàn bộ logic phân vùng, Thánh địa, Co giãn độ khó, Danh dự & Xác thực tài khoản.
-- [ ] 100% các hệ thống Gameplay & Backend của 18 GDD đạt chuẩn hoàn thiện (Backend Feature Complete).
-- [ ] Bộ kiểm thử tự động Unreal Automation Tests đạt 100% Pass.
+- [x] 100% Must Have và Should Have tasks hoàn thành và vượt qua kiểm thử đơn vị & tích hợp.
+- [x] Hoàn tất toàn bộ logic phân vùng, Thánh địa, Co giãn độ khó, Danh dự & Xác thực tài khoản.
+- [x] 100% các hệ thống Gameplay & Backend của 18 GDD đạt chuẩn hoàn thiện (Backend Feature Complete).
+- [x] Bộ kiểm thử tự động Unreal Automation Tests đạt 100% Pass.
