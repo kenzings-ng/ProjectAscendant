@@ -50,6 +50,14 @@
 
 | Epic | Layer | System | Design Document (GDD) | Governing ADRs | Stories Status | Epic Status |
 |---|---|---|---|---|---|---|
-| [`encounter-boss`](encounter-boss/EPIC.md) | Encounter | Boss AI, Stagger & Execution, Part Breaking & Perfect Evasion | [`boss-ai.md`](../../design/gdd/boss-ai.md), [`stagger-system.md`](../../design/gdd/stagger-system.md), [`dash-evasion.md`](../../design/gdd/dash-evasion.md) | ADR-0001, ADR-0002 | 4 stories | **Ready** |
+| [`encounter-boss`](encounter-boss/EPIC.md) | Encounter | Boss AI, Stagger & Execution, Part Breaking & Perfect Evasion | [`boss-ai.md`](../../design/gdd/boss-ai.md), [`stagger-system.md`](../../design/gdd/stagger-system.md), [`dash-evasion.md`](../../design/gdd/dash-evasion.md) | ADR-0001, ADR-0002 | 4 stories | **Done** |
+
+---
+
+## World Integration & Auth Layer Epics (Sprint 6 - Production Active)
+
+| Epic | Layer | System | Design Document (GDD) | Governing ADRs | Stories Status | Epic Status |
+|---|---|---|---|---|---|---|
+| [`world-zone-auth`](world-zone-auth/EPIC.md) | World / Auth | Seamless Zones, Campfire Sanctuaries, Karma, DDS & Account Auth | [`zone-system.md`](../../design/gdd/zone-system.md), [`authentication-account-system.md`](../../design/gdd/authentication-account-system.md) | ADR-0001, ADR-0003 | 4 stories | **Ready** |
 
 

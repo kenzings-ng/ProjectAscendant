@@ -9,50 +9,50 @@
 #   done           ↔  Complete
 #   blocked        ↔  Blocked
 
-sprint: 5
-goal: "Deliver the Encounter & Boss Mechanics Layer for Project Ascendant — Ironclad Warlord Behavior Tree & 4-Phase Telegraph System, Posture Stagger & 25% True Damage Execution with Motion Warping, Anatomical Part Breaking with Dynamic Skill Disabling, and Dash I-Frame with 0.05-0.15s Perfect Dodge Sweet Spot & Hitstop."
-start: "2026-10-03"
-end: "2026-10-17"
+sprint: 6
+goal: "Deliver the World Integration, Sanctuaries & Account Authentication Layer for Project Ascendant — Seamless 3-Tier Zones, Campfire Sanctuaries (1000cm barrier/rest/2.0s fast travel), AI Leash Boundary (2500cm), Dynamic Difficulty Scaling (Boss HP/Posture formulas) with Instanced Loot Thresholds (>=5% HP / 10% Posture), 5-Tier Karma State Machine with PvE/PvP/Wanted Death Penalties & Labor Prison, and UPAAccountSubsystem with 1-Click Fast Playtest (<0.1s) and Server Token Handshake."
+start: "2026-10-17"
+end: "2026-10-31"
 generated: "2026-09-23"
 updated: "2026-09-23"
 
 stories:
-  - id: "boss-001"
-    name: "Prototype Boss AI & 4-Phase Telegraph System"
-    file: "production/epics/encounter-boss/story-001-boss-ai-telegraphs.md"
+  - id: "zone-001"
+    name: "3-Tier Seamless Zones, Campfire Sanctuaries & AI Leash"
+    file: "production/epics/world-zone-auth/story-001-seamless-zones-campfires.md"
     priority: must-have
-    status: done
-    owner: "gameplay-programmer"
+    status: backlog
+    owner: "world-designer"
     estimate_days: 1.0
     blocker: ""
-    completed: "2026-09-23"
+    completed: ""
 
-  - id: "stgr-001"
-    name: "Posture Stagger, Kneel Window & True Damage Execution"
-    file: "production/epics/encounter-boss/story-002-stagger-execution.md"
+  - id: "zone-002"
+    name: "Dynamic Difficulty Scaling & Contested Instanced Loot"
+    file: "production/epics/world-zone-auth/story-002-dynamic-difficulty-instanced-loot.md"
     priority: must-have
-    status: done
+    status: backlog
     owner: "gameplay-programmer"
     estimate_days: 1.0
     blocker: ""
-    completed: "2026-09-23"
+    completed: ""
 
-  - id: "stgr-002"
-    name: "Anatomical Part Breaking & Skill Disabling Matrix"
-    file: "production/epics/encounter-boss/story-003-part-breaking-matrix.md"
+  - id: "zone-003"
+    name: "5-Tier Karma State Machine & Death Penalties Matrix"
+    file: "production/epics/world-zone-auth/story-003-karma-death-penalties.md"
     priority: should-have
-    status: done
-    owner: "gameplay-programmer"
+    status: backlog
+    owner: "systems-designer"
     estimate_days: 1.0
     blocker: ""
-    completed: "2026-09-23"
+    completed: ""
 
-  - id: "dash-001"
-    name: "Dash I-Frame, Perfect Dodge Sweet Spot & Hitstop"
-    file: "production/epics/encounter-boss/story-004-dash-iframe-perfect-dodge.md"
+  - id: "auth-001"
+    name: "Account Subsystem, 1-Click Fast Playtest & Server Token Handshake"
+    file: "production/epics/world-zone-auth/story-004-account-subsystem-auth-handshake.md"
     priority: should-have
-    status: done
-    owner: "gameplay-programmer"
+    status: backlog
+    owner: "backend-engineer"
     estimate_days: 1.0
     blocker: ""
-    completed: "2026-09-23"
+    completed: ""
