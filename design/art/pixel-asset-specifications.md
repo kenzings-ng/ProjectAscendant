@@ -1,220 +1,276 @@
 # 2D Pixel Asset Technical Specifications & Production Contract
-## Quy Chuẩn Kỹ Thuật Đồ Họa 2D Pixel & Hợp Đồng Sản Xuất Tài Nguyên
+## Hợp Đồng Quy Chuẩn Kỹ Thuật Đồ Họa 2D Pixel — Project Ascendant
 
-> **Dự án**: Project Ascendant  
-> **Phiên bản tài liệu**: v1.0.0 — Production Standard  
-> **Cơ quan ban hành**: Lead Game Designer & Lead Art Director  
-> **Tham chiếu chuẩn mực (Benchmarks)**: *Stardew Valley* (ConcernedApe), *Terraria* (Re-Logic), *Octopath Traveler* (Square Enix), *Chrono Trigger* (Square).  
-> **Bộ kỹ năng áp dụng**: `game-art-studio` (Anti-AI Craft Rules & Asset Contract Presets)  
+> **Mã hợp đồng**: `SPEC-ART-2026-09-23-V2`  
+> **Cơ quan ban hành**: Lead Game Designer & Technical Art Director  
+> **Tiêu chuẩn áp dụng**: `game-art-studio` (Anti-AI Craft Guide, Asset Contract Presets & Meowa Pipeline)  
+> **Game tham chiếu chuẩn mực (Benchmarks)**: *Stardew Valley* (ConcernedApe), *Terraria* (Re-Logic), *Octopath Traveler* (Square Enix), *Capcom CPS2 Arcade* (Capcom).  
 > **Engine mục tiêu**: Unreal Engine 5.7 (Paper2D / PaperZD / CommonUI / Lumen HD-2D)  
-> **Trạng thái**: **BẮT BUỘC THỰC THI (MANDATORY ENFORCEMENT)** — Mọi asset đồ họa không đạt bài kiểm tra nghiệm thu (QA Gate Check) sẽ bị loại bỏ khỏi build game.
+> **Hiệu lực**: **BẮT BUỘC THỰC THI (MANDATORY)** — Mọi tài nguyên đồ họa vi phạm bất kỳ điều răn nào sẽ bị hệ thống QA Gate Check tự động từ chối.
 
 ---
 
-## 1. Triết Lý Thiết Kế: "Hardcore Indie Pixel Artisan"
+## 1. Giao Thức Khởi Tạo Hợp Đồng Bắt Buộc (Mandatory Asset Contract)
 
-Khác biệt hoàn toàn với xu hướng lạm dụng AI tạo ra các bức ảnh "trông hào nhoáng nhưng rỗng tuếch, đơ cứng và bẩn màu", *Project Ascendant* tuân thủ nghiêm ngặt tinh thần **Thủ Công Mỹ Nghệ Pixel (Handcrafted Pixel Artistry)**:
+> 🛑 **NGUYÊN TẮC TỐI THƯỢNG**: CẤM ĐOÁN MÒ VÀ CẤM SINH ẢNH BỪA BÃI KHI THIẾU RÀNG BUỘC KỸ THUẬT.  
+> Việc sinh ảnh tự do không qua hợp đồng sẽ tạo ra các bức ảnh "nhựa", sai tỷ lệ (mixels), mờ nhòe (pillow shading) và lệch khung lưới UI, gây lãng phí tài nguyên và công sức làm lại.
 
-1. **Pixel-Perfect First**: Mỗi điểm ảnh (pixel) trên màn hình phải có lý do tồn tại. Từng đường nét, điểm nhấn ánh sáng (specular highlight) và bóng đổ (cast shadow) đều do ý đồ thiết kế quyết định, không phải ngẫu nhiên do thuật toán nội suy.
-2. **Kỷ Luật Bảng Màu (Palette Discipline)**: Nói không với dải màu trôi nổi hàng ngàn sắc độ mờ mờ (Color Bleed). Mọi chất liệu từ sắt rỉ, vàng ròng, gỗ mun đến ngọc bích đều có công thức nấc màu (Color Ramp) cố định từ 3 đến 4 bậc.
-3. **Thổi Hồn Vào Tư Thế (Action-First & Contrapposto)**: Nhân vật không đứng thẳng đơ như ma-nơ-canh cửa hiệu. Dáng đứng luôn có đường cong động lực (Line of Action) và trọng tâm lệch rõ rệt, sẵn sàng lao vào giao tranh.
-4. **Đọc Được Từ Khoảng Cách (Silhouette Readability)**: Ở góc nhìn Isometric nghiêng $-45^\circ$, người chơi phải nhận biết tức khắc loại vũ khí trên tay và trang bị trên người chỉ qua hình khối bao ngoài (Silhouette) trong vòng 0.1 giây.
+### Quy Trình Khóa Hợp Đồng 2 Nhánh (Two-Branch Contract Resolution):
+
+```mermaid
+flowchart TD
+    Request[Yêu Cầu Vẽ Tài Nguyên Đồ Họa] --> Check{Có Chỉ Định Game Cụ Thể?}
+    
+    Check -->|Có: Stardew / Capcom / Octopath| Preset[Nhánh 1: TỰ ĐỘNG KHÓA PRESET CHUẨN]
+    Preset --> P_Stardew[Preset Stardew Valley: Lưới 16x16 / 24x24, 8-16 Màu, Góc 45°]
+    Preset --> P_Capcom[Preset Capcom CPS2: Lưới 64x64 / 128x128, Hue-Shifting, 1px Dark Contour]
+    Preset --> P_Octopath[Preset HD-2D: 32 PPU, Normal Mapping, Lumen Grounding]
+    
+    Check -->|Không: Yêu cầu chung chung| Interrogate[Nhánh 2: KHẢO SÁT 3 BƯỚC BẮT BUỘC]
+    Interrogate --> Q1[1. Phong Cách: 16x16 Micro / 32-bit Arcade / Stylized HD]
+    Interrogate --> Q2[2. Mục Đích & Góc Đặt: Icon 45° / Sprite 8 hướng / Tileset]
+    Interrogate --> Q3[3. Bảng Màu & Độ Hiếm: 4-Tone Ramp / 5-Tier Rarity]
+    
+    P_Stardew --> Exec[Áp Dụng Bộ Lọc Anti-AI & Xuất Xưởng Engine]
+    P_Capcom --> Exec
+    P_Octopath --> Exec
+    Q3 --> Exec
+```
 
 ---
 
-## 2. Quy Chuẩn Kỹ Thuật: Hệ Thống Nhân Vật & Modular Paperdoll
+## 2. Các Bộ Hợp Đồng Định Sẵn (Asset Contract Presets)
 
-```
-                          [ ATOMICAL PIVOT & PROPORTIONS ]
-      ┌─────────────────────────────────────────────────────────────────┐
-      │ (0, 0)                                                (128, 0)  │
-      │                                                                 │
-      │                    ┌──────────────┐                             │
-      │                    │   ĐẦU (Head) │ ◄── [Y: 28-56] (28px)       │
-      │                    │  Eye: Y=44   │                             │
-      │                    └──────┬───────┘                             │
-      │                   ┌───────┴────────┐                            │
-      │                   │ THÂN TRÊN (Torso) ◄── [Y: 56-82] (26px)     │
-      │    VŨ KHÍ PHỤ ──► │  Waist: Y=80   │ ◄── VŨ KHÍ CHÍNH (X:96,Y:76│
-      │   (X:32, Y:76)    └───────┬────────┘                            │
-      │                    ┌──────┴───────┐                             │
-      │                    │ CHÂN (Legs)  │ ◄── [Y: 82-114] (32px)      │
-      │                    │  Chân Trụ:80%│                             │
-      │                    └──────┬───────┘                             │
-      │                          ▼ PIVOT ANCHOR (X: 64, Y: 114)         │
-      │                      (Bottom-Center Tiếp Đất)                   │
-      │ (0, 128)                                              (128, 128)│
-      └─────────────────────────────────────────────────────────────────┘
-```
+### Preset A: *Stardew Valley* & *Terraria* (Chunky Micro-Pixel Style)
+* **Hệ quy chiếu lưới pixel**:
+  * **Kích thước bản vẽ gốc (Native Grid)**: Chuẩn xác **$16 \times 16$ pixel** (vũ khí lớn/trượng đại pháp sư: **$24 \times 24$ pixel**).
+  * **Kích thước xuất xưởng cho UI (Export Canvas)**: Phóng to thuật toán **Nearest Neighbor $4\times$ thành $64 \times 64$** hoặc **$8\times$ thành $256 \times 256$ pixel** để nhập vào CommonUI của Unreal Engine.
+  * **Kích thước hạt pixel**: Siêu thô (Chunky Micro-pixel), mỗi điểm màu là một khối vuông đanh thép, tuyệt đối không có hạt mờ lơ lửng.
+* **Ngân sách màu (Color Budget)**:
+  * Giới hạn nghiêm ngặt **từ 8 đến 16 màu độc nhất** cho toàn bộ icon.
+  * Không dùng dải chuyển màu mịn (Smooth Gradients). Mỗi bước chuyển độ sáng là một nấc màu dứt khoát.
+* **Góc đặt vật phẩm**:
+  * Cố định **$45^\circ$ đường chéo**, chạy từ góc dưới-trái `(X:2, Y:14)` lên góc trên-phải `(X:14, Y:2)`.
+  * Chiếm trọn $85-90\%$ không gian ô để người chơi nhận diện rõ mồn một trong khay Quickbar 4 phím tắt.
+* **Vũ khí dòng Thiên Hà & Thần Binh (Galaxy / Divine Equipment)**:
+  * **Chất liệu**: Tinh thể vũ trụ nguyên khối (Monolithic Cosmic Crystal), không tách chuôi kim loại vàng rườm rà.
+  * **Đổ sáng phát quang ngược (Inverted Neon Glow)**: Viền ngoài cùng của lưỡi kiếm là màu hồng tím neon rực sáng nhất (`#F193FF`), lòng kiếm màu tím sẫm (`#5D269B`), chuôi kiếm và lõi bóng đổ là xanh navy/tím than vũ trụ (`#000053`, `#310074`).
 
-### 2.1 Tỷ Lệ Nhân Vật (Proportions)
-- **Tỷ lệ cơ thể**: Chuẩn **3.2 - 3.5 Đầu** (Heroic Chibi tỉ lệ vàng phong cách *Stardew Valley* x *Octopath Traveler*).
-  - Chiều cao tổng thể hiển thị: $86$ pixel trên lưới bản vẽ.
-  - Phần Đầu & Tóc: $28$ pixel (Chiếm $32\%$, đôi mắt to rõ 2–3px để biểu cảm).
-  - Phần Thân & Giáp Ngực: $26$ pixel (Chiếm $30\%$, khối giáp và thắt lưng).
-  - Phần Chân & Ủng: $32$ pixel (Chiếm $38\%$, thế đứng tấn vững chắc).
-- **Quy chuẩn Canvas**:
-  - **Lưới hiển thị cơ thể (Native Body Grid)**: $64 \times 96$ pixel.
-  - **Canvas Flipbook xuất khẩu (Export Canvas)**: $128 \times 128$ pixel (chuẩn lũy thừa cơ số 2 cho GPU Texture).
-  - **Khoảng đệm an toàn động lực (Motion Padding)**: Dành riêng $32$px phía trước và $14$px phía trên để chứa vệt kiếm chém (Slash VFX), mũi giáo đâm hoặc cánh cung giương rộng mà không bao giờ bị cắt cụt biên.
-  - **Điểm neo trọng tâm (Pivot Anchor Point)**: Khóa cứng tại tọa độ đáy giữa `(X: 64, Y: 114)` (Bottom-Center, vị trí bàn chân tiếp xúc mặt đất). Trùng khớp $100\%$ với tâm của `CapsuleComponent` trong Unreal Engine 5.
-
-### 2.2 Quy Chuẩn Khớp Khóa Mô-đun Trang Phục (Modular Paperdoll Alignment)
-Tất cả các lớp trang phục (Lớp Vải Tân Thủ, Giáp Sắt Vanguard, Giáp Da Ranger, Pháp Bào Arcanist) bắt buộc phải tuân thủ nghiêm ngặt tọa độ giải phẫu (Landmark Coordinates) để khi người chơi click thay đồ, sprite mới khớp kín khít vào cơ thể mà không hở da hay lệch khớp:
-
-| Mốc Giải Phẫu (Landmark) | Tọa Độ Pixel Chuẩn (X, Y) | Dung Sai Cho Phép | Mục Đích Khóa Khớp |
-| :--- | :---: | :---: | :--- |
-| **Trục Mắt (Eye Level)** | `Y = 44` | $\pm 0$ px | Khóa vị trí mũ sắt, nón da, khăn trùm đầu. |
-| **Cổ Áo (Neck Seam)** | `Y = 56` | $\pm 0$ px | Mép giao thoa giữa giáp ngực và đầu/tóc. |
-| **Thắt Lưng (Waistline)** | `Y = 80` | $\pm 0$ px | Điểm nối giữa giáp thân trên và giáp chân/quần. |
-| **Khớp Tay Cầm Chính (Mainhand Grip)** | `(X: 96, Y: 76)` | $\pm 1$ px | Vị trí bàn tay nắm chuôi kiếm, cán búa, thân cung. |
-| **Khớp Tay Cầm Phụ (Offhand Grip)** | `(X: 32, Y: 76)` | $\pm 1$ px | Vị trí bàn tay cầm khiên, dao găm, sách phép. |
-
-### 2.3 Thứ Tự Xếp Lớp Hiển Thị Trong PaperZD (Layer Sorting Order)
-Để đảm bảo chiều sâu 2.5D chính xác ở góc nhìn nghiêng $-45^\circ$, các thành phần được gán số thứ tự Z-Order cố định:
-1. `Z = 0`: **Vết Bóng Đổ Thời Gian Thực (Lumen Dynamic Shadow)** — Do Engine tính toán, tuyệt đối cấm vẽ đốm đen phẳng dưới chân sprite.
-2. `Z = 1`: **Thân Nhân Vật Trần (Base Body Skin)** — Nam / Nữ.
-3. `Z = 2`: **Trang Phục Vải Lót / Tân Thủ (`Visual_StarterCloth`)**.
-4. `Z = 3`: **Giáp Thân / Áo Choàng (`Visual_Armor`)**.
-5. `Z = 4`: **Mũ Giáp / Tóc Giả (`Visual_Helmet`)**.
-6. `Z = 5`: **Vũ Khí Phụ / Khiên (`Visual_Offhand`)**.
-7. `Z = 6`: **Vũ Khí Chính (`Visual_Mainhand`)**.
+### Preset B: *Capcom CPS2* / *NeoGeo* (16-bit & 32-bit Arcade Fighting)
+* **Hệ quy chiếu lưới pixel**:
+  * **Kích thước bản vẽ gốc**: $64 \times 64$ đến $128 \times 128$ pixel.
+* **Ngân sách bảng màu**:
+  * Giới hạn 16 đến 32 màu độc nhất. Mỗi chất liệu dùng **4 bậc sắc độ dứt khoát** (Highlight, Midtone, Core Shadow, Dark Crease).
+* **Đặc trưng mỹ thuật**:
+  * Viền bao ngoài (Outer Contour) màu đen than sẫm `#121316` dày đúng 1px dứt khoát.
+  * Chuyển nhiệt độ màu gắt (Hue Shifting): Da đón nắng vàng ấm đổ bóng sang tím mận; giáp thép xám đổ bóng sang xanh navy.
+  * Khối mảng hình học phẳng phân diện sắc bén (Hard Cel-Shading).
 
 ---
 
-## 3. Quy Chuẩn Kỹ Thuật: Vật Phẩm, Vũ Khí & Nguyên Liệu (Items & Gear)
+## 3. Bản Đồ 5 Dấu Hiệu "Mùi AI" & Giải Pháp Thủ Công Triệt Để
 
-Hệ thống vật phẩm được chuẩn hóa theo phong cách **Chunky Micro-Pixel kinh điển của *Stardew Valley*** nhưng được nâng cấp độ nét để chạy mượt mà trên UI hiện đại.
+| Dấu Hiệu AI (AI Tell) | Bản Chất Lỗi Của AI | Hậu Quả Trong Game | Giải Pháp Nghệ Nhân Thủ Công (Master Cure) |
+| :--- | :--- | :--- | :--- |
+| **1. Pillow Shading (Đánh bóng gối ôm)** | AI lấy trung bình màu và làm tối dần từ mép ngoài vào tâm mọi chi tiết, không có nguồn sáng vật lý. | Vật thể phồng như gối ôm, mềm nhũn như đất sét, mất chất kim loại cứng. | **Khóa chặt nguồn sáng đơn góc $45^\circ$ (Key Light)** từ góc trên-trái ($10$ giờ). Đổ bóng đổ cứng (Cast Shadow) dứt khoát dưới cằm, lưỡi kiếm, vạt áo. |
+| **2. Micro-Color Bleed (Dải màu bẩn)** | AI pha trộn hàng nghìn dải màu trung gian mờ mờ thay vì dùng bảng màu giới hạn (Indexed Palette). | Tranh bị đục, bẩn, tái ngắt, mất độ trong trẻo retro của pixel art. | **Quy tắc dải màu 3–4 bậc (3-4 Color Ramp)** kết hợp **Hue-Shifting** (Sáng ngả Vàng chanh, Tối ngả Tím Navy). |
+| **3. Ornate Greeble (Chi tiết rác ngẫu nhiên)** | Khi prompt từ khóa "knight" hay "sword", AI tự ý thêm hoa văn vàng uốn lượn, ren ren, dây đai chằng chịt. | Gây nhiễu thị giác cực độ, không thể đọc được hình dạng nhân vật từ camera -45°. | **Quy tắc tỉ lệ chi tiết 70 - 20 - 10**. Dành trọn 70% diện tích là mảng phẳng trơn để mắt nghỉ ngơi. Cấm hoa văn vàng vô nghĩa. |
+| **4. Stiff Mannequin Poses (Tư thế ma-nơ-canh)** | AI luôn vẽ nhân vật đứng thẳng tưng $90^\circ$, hai chân chịu lực đều 50/50, mắt nhìn vô hồn vào camera. | Nhân vật đơ cứng như tượng sáp hoặc đồ chơi nhựa chưa bóc hộp. | **Line of Action (Đường cong chữ C/S)**, **Contrapposto (Trọng tâm chân trụ 80/20)**, thân người ngả góc $15^\circ-25^\circ$. |
+| **5. Pixel Sins (Lỗi vỡ hạt điểm ảnh)** | AI sinh "pixel giả": pixel to nhỏ lẫn lộn (mixels), pixel đơn độc trôi nổi (orphan pixels), bậc thang gãy khúc (jaggies). | Trông như ảnh JPG chất lượng thấp bị giảm phân giải cẩu thả chứ không phải pixel art thật. | **Đường nét phân bậc toán học (1-1-1, 2-2-2, 1-2-3)**, **Viền bao ngoài 1px than sẫm**, và **Selout** (viền nội bộ theo màu gốc). |
+
+---
+
+## 4. Tỷ Lệ Chi Tiết Vàng 70 - 20 - 10 (Resting Area Rule)
+
+Để loại trừ tận gốc căn bệnh "AI Greeble" (nhồi nhét chi tiết vô nghĩa), mọi thiết kế nhân vật và vũ khí bắt buộc phân bổ diện tích theo tỷ lệ:
 
 ```
-                           [ ITEM CANVAS ARCHITECTURE ]
-     ┌─────────────────────────────────────────────────────────────────┐
-     │ (0, 0)                                                 (32, 0)  │
-     │       MŨI VŨ KHÍ / ĐIỂM SÁNG                                    │
-     │               \                                                 │
-     │                \   [ 1px Outer Contour: #121316 ]               │
-     │                 \                                               │
-     │                  \   ◄── GÓC NGHIÊNG 45° CHUẨN STARDREW         │
-     │                   \                                             │
-     │                    \                                            │
-     │                     \                                           │
-     │                      CHUÔI VŨ KHÍ / TÂM ĐÁ                     │
-     │ (0, 32)                                                (32, 32) │
-     └─────────────────────────────────────────────────────────────────┘
-        Native Resolution: 32 x 32 px  ──►  Upscale 8x (Nearest Neighbor)
-                                       ──►  Export Canvas: 256 x 256 px
+┌────────────────────────────────────────────────────────────────────────┐
+│                        70% VÙNG NGHỈ MẮT                               │
+│       (Mảng giáp ngực phẳng, tà áo choàng trơn, phiến lưỡi kiếm)       │
+│               ── Giúp mắt người chơi định vị khối lớn ──               │
+├───────────────────────────────────┬────────────────────────────────────┤
+│       20% CHI TIẾT CHỨC NĂNG      │      10% ĐIỂM NHẤN TIÊU ĐIỂM       │
+│ (Khóa thắt lưng, nẹp ủng, quấn cán)│ (Lóe sáng mũi nhọn, ngọc đính đốc) │
+└───────────────────────────────────┴────────────────────────────────────┘
 ```
 
-### 3.1 Kích Thước Bản Vẽ & Kích Thước Xuất Khẩu (Canvas Resolutions)
-1. **Lưới Điểm Ảnh Gốc (Native Pixel Grid)**:
-   - **Icon Chuẩn (Vũ khí 1 tay, Khiên, Potion, Quặng, Đá quý, Mũ)**: **$32 \times 32$ pixel**.
-   - **Icon Cỡ Lớn (Đại kiếm 2 tay, Trượng Ma Pháp Cổ, Lưỡi Hái)**: **$40 \times 40$ pixel** (đặt trong canvas đệm $48 \times 48$).
-   - *Cấm tuyệt đối*: Không vẽ icon trực tiếp ở độ phân giải lớn rồi thu nhỏ, hành vi này tạo ra pixel nhòe (anti-aliasing) làm mất chất retro.
-2. **Kích Thước Xuất Xưởng Engine (Export Engine Canvas)**:
-   - **Độ phân giải file PNG**: **$256 \times 256$ pixel**.
-   - **Thuật toán phóng to (Upscale Algorithm)**: **Nearest Neighbor $8\times$** chính xác từng hạt pixel (1 pixel gốc = khối $8 \times 8$ pixel trên file PNG).
-   - *Mục đích*: Tương thích hoàn hảo với hệ thống `UImage` của CommonUI trên mọi màn hình từ Full HD (1080p), 2K đến 4K mà không bao giờ bị vỡ hạt hay mờ cạnh.
+1. **70% Vùng nghỉ mắt (Resting Areas / Broad Planes)**:
+   - Tấm giáp sắt phẳng, ống quần trơn, tà áo choàng buông thẳng, thân kiếm không hoa văn.
+   - Tạo cảm giác đồ họa vững chãi, khỏe khoắn, giúp nhận diện rõ silhouette từ khoảng cách xa.
+2. **20% Chi tiết chức năng (Functional Secondary Elements)**:
+   - Dây nịt đai, khóa cài kim loại, rãnh thoát máu trên kiếm, đường chỉ may trên áo da.
+   - Chỉ vẽ chi tiết khi chi tiết đó có mục đích công năng thực tế.
+3. **10% Điểm nhấn tiêu điểm (Focal Highlights)**:
+   - Điểm sáng trắng 1px phản quang trên chóp mũi kiếm, vết nứt le lói trên viên ngọc quyền trượng, con ngươi mắt phát sáng.
 
-### 3.2 Quy Chuẩn Góc Đặt Vật Phẩm (Composition & Angles)
+---
 
-| Nhóm Vật Phẩm | Góc Đặt Quy Chuẩn | Mô Tả Bố Cục Thẩm Mỹ (Stardew Style) |
+## 5. Quy Chuẩn Động Lực Học Nhân Vật (Meowa Action-First Pipeline)
+
+```
+       ❌ DÁNG ĐỨNG AI (Cứng đơ)                  ✅ DÁNG ĐỨNG THỦ CÔNG (Sống động)
+           [ O ] (Đầu thẳng)                          [ O ]  (Đầu nghiêng ngắm mục tiêu)
+          /  |  \                                     /   \
+         |   |   | (Tay ép sát sườn, cột sống 90°)   /  S  \ (Đường cong S-line mạnh mẽ)
+         |   |   |                                  /       \
+            / \                                    /  /|     \ (Chân trước tấn, chân sau đẩy)
+           |   | (Chân chia lực 50/50)            *   |
+                                                  (Trọng tâm lệch 80% chân trước)
+```
+
+### 5.1 Kỹ Thuật Tư Thế Mở Đầu Hành Động (Action-First Pose)
+Trong hoạt ảnh game hành động hardcore, khung hình đầu tiên của animation chính là nguồn phát động lực:
+* **Đòn Đánh (Attack Animation)**: Tư thế đầu tiên phải là nhân vật **đã giương kiếm/kéo căng dây cung sẵn sàng vung đòn**, không bắt đầu từ tư thế đứng im (Neutral Idle) làm trễ nhịp combo.
+* **Chạy / Lướt (Run / Dash)**: Khung hình đầu tiên là hai chân đã bước sải rộng, thân người chúi về phía trước $20^\circ$.
+* **Khoảng đệm chuyển động (Directional Motion Padding)**:
+  * Phía trước hướng mặt: Dành riêng **$32$px không gian trong suốt** để chứa vệt chém kiếm (Slash Trail VFX).
+  * Phía trên đỉnh đầu: Dành riêng **$14$px không gian trong suốt** để chứa động tác nhảy hoặc vung búa lên cao.
+
+### 5.2 Khóa Tọa Độ Mốc Giải Phẫu Khung Paperdoll (Modular Landmarks)
+Để đảm bảo khi người chơi click thay đổi trang bị từ Áo vải sang Giáp sắt, Áo da hay Pháp bào, các lớp sprite gắn khít $100\%$ không bị trôi lệch:
+
+```
+(0, 0) ───────────────────────────────────────────────────────────── (128, 0)
+│                                                                           │
+│                      [Trục Mắt / Nón Mũ: Y = 44]                          │
+│                      [Cổ Áo / Giáp Ngực: Y = 56]                          │
+│  [Tay Cầm Phụ (Khiên)]                        [Tay Cầm Chính (Vũ Khí)]    │
+│    (X: 32, Y: 76)                                  (X: 96, Y: 76)         │
+│                      [Thắt Lưng / Quần: Y = 80]                           │
+│                                                                           │
+│                   ▼ PIVOT ANCHOR CHÂN TIẾP ĐẤT (X: 64, Y: 114)            │
+│                       (Khóa cứng với UE5 Capsule)                         │
+(0, 128) ───────────────────────────────────────────────────────── (128, 128)
+```
+
+---
+
+## 6. Quy Chuẩn Kỹ Thuật Icon Trang Bị & Ma Trận 5 Bậc Hiếm
+
+### 6.1 Bố Cục Góc Đặt Thẩm Mỹ Chuẩn Mực
+
+| Nhóm Vật Phẩm | Góc Đặt Quy Chuẩn | Mô Tả Kỹ Thuật Chi Tiết |
 | :--- | :---: | :--- |
-| **Vũ Khí Cận Chiến** (Kiếm, Đại kiếm, Dao găm, Chùy, Rìu) | **$45^\circ$ Đường Chéo** | Chuôi kiếm nằm tại góc dưới-trái `(X:4, Y:28)`, mũi kiếm vươn tới góc trên-phải `(X:28, Y:4)`. Chiếm trọn $85-90\%$ đường chéo ô đồ. |
-| **Cung Tên (Bows)** | **$45^\circ$ Đường Chéo** | Cánh cung cong hướng về góc trên-trái, dây cung căng chéo, mũi tên gắn sẵn hướng thẳng lên góc trên-phải. |
-| **Gậy Phép & Trượng (Staffs)** | **$45^\circ$ Đường Chéo** | Cán trượng thẳng tắp, đầu trượng chứa viên ngọc hoặc tinh thể phát quang ở góc trên-phải, đính kèm 2–3 hạt bụi ma thuật lơ lửng. |
-| **Khiên Phòng Ngự (Shields)** | **Chính diện nghiêng $15^\circ$** | Mặt khiên hướng thẳng về người chơi, viền khiên vát cạnh $15^\circ$ để khoe độ dày kim loại/gỗ và hoa văn gia tộc. |
-| **Bình Thuốc (Potions)** | **Thẳng đứng $90^\circ$** | Cổ bình thắt nút bấc ở đỉnh `Y=6`, thân bình tròn/vuông chứa dung dịch chiếm $70\%$ chiều cao, vệt phản quang thủy tinh 1px trắng chéo qua thân. |
-| **Nguyên Liệu Quặng & Gạch** | **Khối 3D Isometry** | 3 mặt diện rõ rệt (Mặt đỉnh đón sáng, Mặt trái chuyển sắc, Mặt phải bóng đổ tối). Nứt gãy góc cạnh, không bo tròn. |
-| **Đá Quý Cắt Giác (Cut Gems)** | **Đa giác kim cương $0^\circ$** | Cắt giác hình học sắc nét (Brilliant / Octagonal cut). Tâm ngọc sáng rực, viền ngoài đổ bóng sâu tạo độ khúc xạ thủy tinh. |
-| **Trang Bị Mặc (Áo Giáp, Mũ, Ủng)** | **Chính diện $0^\circ$** | Mô phỏng dạng trưng bày trên giá đỡ (Armor Stand), cân đối trục dọc đối xứng $50/50$. |
+| **Vũ Khí Cận Chiến** (Kiếm, Đại kiếm, Dao găm, Chùy, Rìu, Lưỡi hái) | **$45^\circ$ Đường Chéo** | Chuôi kiếm nằm tại góc dưới-trái, mũi kiếm vươn tới góc trên-phải. Chiếm trọn $85-90\%$ đường chéo ô đồ. |
+| **Vũ Khí Tầm Xa & Gậy Phép** (Cung tên, Trượng ma pháp) | **$45^\circ$ Đường Chéo** | Thân cung vắt chéo, đầu trượng chứa khối ngọc/tinh thể phát sáng ở góc trên-phải. |
+| **Khiên Phòng Ngự** | **Nghiêng nhẹ $15^\circ$** | Mặt khiên hướng chính diện, vát mép $15^\circ$ để thấy độ dày tấm kim loại/gỗ sồi. |
+| **Bình Dược Phẩm (Potions)** | **Thẳng đứng $90^\circ$** | Cổ bình thắt nút bấc ở đỉnh, thân bình chứa dung dịch $70\%$, vệt sáng phản quang thủy tinh 1px trắng chéo qua thân. |
+| **Nguyên Liệu Quặng & Thỏi Kim Loại** | **Khối 3D Isometry** | Vát 3 mặt diện rõ ràng (Mặt đỉnh đón nắng, Mặt trái chuyển sắc, Mặt phải bóng đổ sẫm). |
+| **Đá Quý Cắt Giác (Cut Gems)** | **Đa giác kim cương $0^\circ$** | Cắt giác hình học sắc nét. Tâm ngọc sáng rực, viền ngoài đổ bóng sâu tạo độ khúc xạ thủy tinh. |
+| **Trang Bị Mặc (Áo Giáp, Mũ, Ủng)** | **Chính diện $0^\circ$** | Dạng trưng bày trên giá đỡ (Armor Stand), trục dọc cân đối đối xứng. |
 
----
+### 6.2 Khung Viền Phân Hạng 5 Bậc Hiếm (5-Tier Rarity Color Matrix)
+Tích hợp trực tiếp với script tự động `generate_item_icon_sheet.py`:
 
-## 4. Kỷ Luật Màu Sắc & Bộ Quy Tắc Chống "Mùi AI" (Anti-AI Artisan Rules)
-
-Mọi họa sĩ hoặc công cụ tạo asset bắt buộc phải vượt qua 5 điều răn cấm kỵ sau:
-
-### 4.1 Điều Răn 1: Diệt Trừ Pillow Shading (Cấm Đánh Bóng Viền Gối)
-- **Hành vi AI vi phạm**: Lấy trung bình màu rồi làm tối dần từ mép ngoài vào tâm của từng chi tiết, khiến vật phẩm trông như túi cát mềm, không có chất rắn kim loại.
-- **Quy chuẩn bắt buộc**: Thiết lập **Nguồn sáng đơn góc $45^\circ$ (Key Light)** từ góc trên-trái ($10$ giờ). Toàn bộ bề mặt hứng sáng phải sáng rõ, toàn bộ mặt khuất sáng phải đổ bóng cứng (Hard Cast Shadow) với ranh giới phân định dứt khoát.
-
-### 4.2 Điều Răn 2: Bắt Buộc Dịch Chuyển Nhiệt Độ Màu (Strict Hue-Shifting)
-- **Hành vi AI vi phạm**: Tạo bóng bằng cách pha thêm Đen/Xám, tạo sáng bằng cách pha Trắng $\rightarrow$ Bức tranh bị đục, bẩn và tái ngắt.
-- **Quy tắc vàng**:
-  - Khi tăng sáng (Highlight): **Dịch bước sóng màu về phía Vàng Chanh / Kem Ấm (Warm Spectrum)**.
-  - Khi hạ tối (Shadow): **Dịch bước sóng màu về phía Tím Indigo / Xanh Navy / Đỏ Rượu Vang (Cool Spectrum)** do ảnh hưởng của ánh sáng vòm trời (Sky Ambient Light).
-
-```
-   [ QUY TẮC COLOR RAMP 4 BẬC CHUẨN MỰC ]
-   
-   1. Thép Sáng (Steel / Iron):
-      Highlight:  #F0F6FC (Trắng pha xanh băng nhẹ) ── 10%
-      Midtone:    #8B949E (Xám kim loại sạch)        ── 50%
-      Shadow:     #30363D (Chàm than u tối)          ── 35%
-      Deep Crease:#161B22 (Xanh đen rãnh sâu)        ── 5%
-      
-   2. Vàng Ròng (Gold Ingot / Divine Trim):
-      Highlight:  #FEF08A (Vàng chanh rực rỡ)        ── 10%
-      Midtone:    #E6A122 (Vàng hổ phách rực lửa)    ── 50%
-      Shadow:     #92400E (Đồng nâu cháy)            ── 35%
-      Deep Crease:#451A03 (Nâu socola đen)           ── 5%
-      
-   3. Máu & Sinh Mệnh (Crimson Potion / Ruby):
-      Highlight:  #FCA5A5 (Hồng san hô sáng)         ── 10%
-      Midtone:    #DC2626 (Đỏ tươi cờ)               ── 50%
-      Shadow:     #7F1D1D (Đỏ mận rượu vang)         ── 35%
-      Deep Crease:#450A0A (Đỏ đen huyết dụ)          ── 5%
+```python
+RARITY_COLORS = {
+    "common":    (156, 163, 175, 255),  # Gray #9CA3AF (Xám đá phiến - Normal Tier 1)
+    "uncommon":  (34, 197, 94, 255),   # Green #22C55E (Xanh ngọc bích - Magic Tier 2)
+    "rare":      (59, 130, 246, 255),   # Blue #3B82F6 (Xanh lam cobalt - Rare Tier 2)
+    "epic":      (168, 85, 247, 255),   # Purple #A855F7 (Tím huyền bí - Epic Tier 3)
+    "legendary": (245, 158, 11, 255),   # Gold #F59E0B (Hoàng kim rực lửa - Legendary Tier 3/4)
+}
 ```
 
-### 4.3 Điều Răn 3: Tỷ Lệ Nghỉ Mắt 70 - 20 - 10 (Resting Areas)
-- Cấm vẽ các đường vân vàng uốn lượn, ren ren, dây xích rác (Ornate Greeble) mà AI hay tự ý vẽ bừa lên vũ khí.
-- **$70\%$ Vùng nghỉ mắt**: Lưỡi kiếm phẳng, thân khiên trơn, mảng giáp đơn sắc.
-- **$20\%$ Chi tiết chức năng**: Rãnh thoát máu (Blood groove), ốc tán khiên, dây quấn chuôi kiếm.
-- **$10\%$ Điểm nhấn định vị**: Đốm sáng lóe trên mũi nhọn, viên hồng ngọc đính ở đốc kiếm.
-
-### 4.4 Điều Răn 4: Kỹ Thuật Viền Màu Chọn Lọc (Selective Outlining - Selout)
-- **Viền bao ngoài (Outer Silhouette Outline)**: Bắt buộc viền 1px màu đen than pha sắc chất liệu (`#121316` hoặc `#181124`) để tách biệt vật thể khỏi mọi loại nền bản đồ.
-- **Viền chia khối nội bộ (Internal Seams)**: CẤM dùng nét đen kịt. Phải dùng **phiên bản sẫm hơn 2 bậc của chính mảng màu đó** (ví dụ: lằn ranh giữa các ngón tay da người dùng màu Nâu Đỏ sẫm `#8B4513`, không dùng màu đen `#000000`).
-
-### 4.5 Điều Răn 5: Cấm Tuyệt Đối "Mixels" & "Jaggies"
-- **Mixels (Mixed Pixels)**: Cấm tình trạng trong cùng một icon/sprite lại có pixel hạt to lẫn hạt nhỏ bất nhất.
-- **Jaggies**: Mọi đường cong và đường xiên pixel phải tuân thủ dãy số bậc thang toán học đều đặn: `1-1-1`, `2-2-2`, hoặc `1-2-3`. Cấm nhảy bước dị tật như `1-3-1-4` làm đường nét méo mó.
+* Quy chuẩn viền: Độ dày viền đúng **2px** bao quanh mép icon (`border_width=2`).
 
 ---
 
-## 5. Quy Chuẩn Khung Viền Phân Hạng Vật Phẩm (5-Tier Rarity Matrix)
+## 7. Quy Tắc Soạn Thảo Prompt: "Chống Mùi AI"
 
-Mọi icon trang bị khi hiển thị trong túi đồ lưới $6 \times 5$ hoặc thanh phím tắt Quickbar đều được lồng vào khung viền thẩm mỹ tương ứng với dữ liệu trong [`inventory-system.md`](file:///mnt/Data/Projects/project-games/design/gdd/inventory-system.md):
+### 7.1 Từ Điển Đen Tuyệt Đối Cấm (Negative Blacklist)
+> ❌ **CẤM SỬ DỤNG CÁC TỪ KHÓA SAU**:
+> `masterpiece`, `hyperdetailed`, `ultra-realistic 8k`, `intricate filigree`, `unreal engine render`, `octane render`, `cinematic lighting`, `volumetric fog`, `diffuse bloom`, `ambient occlusion`, `trending on artstation`, `photorealistic`.
+> *(Các từ khóa này kích hoạt thuật toán nội suy tạo hạt mịn, làm nhòe viền và sinh ra hoa văn rác vàng kim đặc trưng của AI slop).*
 
-| Bậc (Tier) | Tên Phân Cấp | Mã Viền Ngoài (Hex) | Hiệu Ứng Nền (Backdrop Style) | Chi Tiết Viền Góc (Corner Accent) |
-| :---: | :--- | :---: | :--- | :--- |
-| **Tier 1** | **Normal (Thường)** | `#4B5563` (Xám Thép) | Đá phiến đen mờ phẳng, không hiệu ứng hạt. | Vát góc $45^\circ$ phẳng phiu 2px. |
-| **Tier 2** | **Rare (Hiếm)** | `#2563EB` (Lam Sapphire) | Ánh hào quang lam ngọc dịu nhẹ tỏa từ tâm ra biên. | 4 góc nẹp đinh tán thép mạ bạc. |
-| **Tier 3** | **Legendary (Huyền Thoại)** | `#D97706` (Vàng Hổ Phách) | Khói tro than hồng bay nhẹ, nền tím than huyền bí. | Hoa văn sừng rồng vát nhọn bọc góc. |
-| **Tier 4** | **Immortal (Bất Tử)** | `#DC2626` (Đỏ Huyết Ngọc) | Hào quang sát khí đỏ rực nhấp nháy chu kỳ 2.0s. | Khảm 4 mảnh ngọc đỏ rực tại 4 góc viền. |
-| **Tier 5** | **Divine (Thần Thánh)** | `#F59E0B` + `#7C3AED` | Vòng xoáy thiên hà vũ trụ chuyển màu quang phổ. | Viền kép Hoàng kim cổ đại khắc ký tự Rune. |
+### 7.2 Từ Điển Vàng Thủ Công (Positive Craft Keywords)
+> ✅ **BẮT BUỘC SỬ DỤNG**:
+> - **Pixel Art**: `16-bit arcade sprite, authentic Stardew Valley chunky pixel grid, Capcom CPS2 aesthetic, strict 4-tone color ramp, dynamic S-curve line of action, hue-shifted cool violet shadows, crisp 1px dark charcoal contour, no pillow shading, flat solid background #FF00FF`.
+> - **HD 2D / Icons**: `Clean 32-bit RPG inventory icon, angled diagonally at 45 degrees, readable chunky silhouette, hard-edged cel-shaded facets, limited 12-color palette, solid dark charcoal border, flat solid background #FF00FF, perfectly pixelated with zero anti-aliasing`.
 
 ---
 
-## 6. Quy Trình Nghiệm Thu Chất Lượng (QA Gate Check Checklist)
+## 8. Ví Dụ Đối Chiếu Mẫu: Dở vs Xuất Sắc
 
-Mọi tài nguyên đồ họa trước khi được merge vào nhánh `main` và import vào Unreal Engine 5 **BẮT BUỘC** phải vượt qua bảng kiểm định 6 bước sau:
+### Ví Dụ 1: Sprite Nhân Vật Chiến Binh Lao Đánh (Combat Sprite)
 
-- [ ] **1. Bài Kiểm Tra Bóng Đen (Blackout Silhouette Test)**:
-  - *Thực hiện*: Đổ đen toàn bộ sprite/icon thành `#000000` trên nền trắng.
-  - *Tiêu chuẩn*: Người chơi phải nhận biết được loại vật phẩm (kiếm/cung/trượng/bình thuốc) trong vòng 0.2 giây mà không cần nhìn màu sắc.
-- [ ] **2. Bài Kiểm Tra Biên Trong Suốt (Zero Border Bleed Test)**:
-  - *Thực hiện*: Quét mảng alpha 4 cạnh ngoài cùng (Top, Bottom, Left, Right).
-  - *Tiêu chuẩn*: Giá trị Alpha tại viền ngoài cùng bắt buộc bằng $0$. Tuyệt đối không có pixel nào bị cụt góc, cụt chuôi kiếm hay đứt đầu mũi tên.
-- [ ] **3. Bài Kiểm Tra Ngân Sách Màu (Color Budget Audit)**:
-  - *Thực hiện*: Đếm số lượng màu độc nhất (Unique Color Palette).
-  - *Tiêu chuẩn*: Một icon vật phẩm chuẩn $32 \times 32$ không được vượt quá **24 màu độc nhất**. Nếu vượt quá 32 màu chứng tỏ tranh bị nhòe dải màu AI (Color Bleed) $\rightarrow$ Trả về làm sạch màu.
-- [ ] **4. Bài Kiểm Tra Đồng Bộ Tỷ Lệ Điểm Ảnh (Mixel-Free Audit)**:
-  - *Thực hiện*: Đặt icon cạnh sprite nhân vật trên cùng một màn hình game.
-  - *Tiêu chuẩn*: Kích thước hạt pixel của vật phẩm trên tay nhân vật phải đồng nhất $1:1$ với hạt pixel của cơ thể nhân vật.
-- [ ] **5. Bài Kiểm Tra Khớp Khóa Paperdoll (Landmark Lockstep Test)**:
-  - *Thực hiện*: Lồng ghép 4 lớp trang phục lên cơ thể nhân vật nữ/nam.
-  - *Tiêu chuẩn*: Không có da thịt lòi ra ngoài áo giáp; tay cầm vũ khí không bị trôi khỏi khớp tay `(X: 96, Y: 76)` qua tất cả 8 hướng di chuyển.
-- [ ] **6. Bài Kiểm Tra Tương Thích Ánh Sáng HD-2D (Normal Map / Depth Readiness)**:
-  - *Thực hiện*: Chiếu đèn điểm (Point Light) của Unreal Engine quét qua sprite.
-  - *Tiêu chuẩn*: Sprite nhận ánh sáng định hướng rõ rệt từ mặt phẳng vát cạnh, tôn vinh độ khối 2.5D chân thực.
+* ❌ **Prompt Kém (Đầy mùi AI, kết quả đơ cứng và bẩn màu)**:
+  ```text
+  A fantasy knight warrior swinging a sword, masterpiece, 8k, hyper detailed armor with gold ornaments, dynamic lighting, octane render, unreal engine 5, beautiful background.
+  ```
+  *(Hậu quả: Giáp đầy hoa văn vàng rác vụn vặt, người đứng thẳng tưng vô hồn, bóng viền mờ căm như đất sét, nền lem nhem).*
+
+* ✅ **Prompt Chuẩn Studio (Đậm chất nghệ nhân thủ công Stardew/Capcom)**:
+  ```text
+  16-bit arcade pixel art sprite of an athletic rogue knight mid-strike with an executioner sword. Action-first pose: body lunging forward at 20-degree angle, weight heavy on front bent knee, claymore swinging in a sharp motion arc. Clean Capcom CPS2 palette: burnished steel armor with crisp cel-shaded plane shifts, sunlight highlights from top-left shifting to deep indigo shadows. 70 percent clean resting metal plates, zero filigree, bold 1px charcoal outer contour, clear negative space between legs and blade, pure magenta background #FF00FF, no floor shadow.
+  ```
+
+---
+
+### Ví Dụ 2: Biểu Tượng Trang Bị Kiếm Băng (Item Icon)
+
+* ❌ **Prompt Kém**:
+  ```text
+  Magic sword icon, ultra realistic glowing crystal sword, epic detailed, fantasy concept art, artstation.
+  ```
+
+* ✅ **Prompt Chuẩn Studio (Stardew Valley 45° Chunky Style)**:
+  ```text
+  Authentic 16x16 chunky pixel art inventory icon of a runic frost broadsword, displayed at 45-degree diagonal from bottom-left to top-right. Chunky readable silhouette, clear geometric crossguard, deep cobalt steel blade with crisp cyan-white edge highlight. No blurry glow, hard-edged cel-shaded facets, limited 8-color palette, solid dark slate border #121316, flat solid background #000000, perfectly pixelated with zero anti-aliasing.
+  ```
+
+---
+
+## 9. Pipeline Tự Động Hóa Xuất Xưởng Engine (CLI Commands)
+
+Tất cả các script trong bộ kỹ năng `game-art-studio` được gọi theo đúng cú pháp CLI chuẩn hóa:
+
+### 1. Cắt Ghép Tách Nền & Ghim Pivot Chân:
+```bash
+python3 /home/kenzings/.gemini/config/skills/game-art-studio/scripts/slice_spritesheet.py \
+    --input_sheet <path_to_spritesheet.png> \
+    --output_dir <output_frames_folder> \
+    --frames 8 \
+    --color_key auto \
+    --tolerance 35 \
+    --anchor bottom_center
+```
+
+### 2. Đóng Khung 5 Bậc Hiếm Cho Icon Trang Bị:
+```bash
+python3 /home/kenzings/.gemini/config/skills/game-art-studio/scripts/generate_item_icon_sheet.py \
+    --input_sheet <icons_raw.png> \
+    --output_dir <output_dir> \
+    --grid 4x4 \
+    --rarity rare
+```
+
+### 3. Ghép GIF Hoạt Ảnh Xem Trước:
+```bash
+python3 /home/kenzings/.gemini/config/skills/game-art-studio/scripts/assemble_flipbook_gif.py \
+    --frames_dir <output_frames_folder> \
+    --output_gif <preview.gif> \
+    --fps 12.0
+```
+
+### 4. Tự Động Import Vào Unreal Engine 5 Paper2D / PaperZD:
+```bash
+/mnt/Data/Engine/Binaries/Linux/UnrealEditor-Cmd \
+    ProjectAscendant/ProjectAscendant.uproject \
+    -ExecutePythonScript="scripts/import_ue_flipbooks.py --frames_dir <output_frames_folder> --dest_path /Game/Art/Flipbooks --name FB_Hero_Attack --fps 12.0" \
+    -nullrhi -nosound -unattended
+```
+
+---
+
+## 10. Bảng Kiểm Tra Nghiệm Thu Chất Lượng (QA Gate Check Checklist)
+
+Trước khi bất kỳ file đồ họa nào được chấp thuận đưa vào game, kiểm tra viên (Art QA) phải tích đủ 6 tiêu chí:
+
+- [ ] **1. Blackout Silhouette Test**: Đổ đen toàn bộ sprite thành `#000000` trên nền trắng $\rightarrow$ Phải phân biệt rõ class/loại vũ khí trong 0.2 giây.
+- [ ] **2. Zero Border Bleed Test**: Quét mảng alpha 4 cạnh biên (Top, Bottom, Left, Right) $\rightarrow$ Bắt buộc Alpha = 0, không cụt góc hay mất chuôi kiếm.
+- [ ] **3. Color Budget Audit**: Đếm số màu độc nhất $\rightarrow$ Không vượt quá 16 màu đối với icon $16 \times 16$ hoặc 32 màu đối với sprite nhân vật.
+- [ ] **4. Mixel-Free Audit**: Kiểm tra kích thước pixel trên toàn màn hình $\rightarrow$ Kích thước hạt pixel của vũ khí trên tay phải đồng nhất $1:1$ với cơ thể nhân vật.
+- [ ] **5. Landmark Lockstep Test**: Ghép thử trang phục lên khung nhân vật $\rightarrow$ Khớp $100\%$ tại các mốc `Y=44`, `Y=56`, `Y=80`, không lòi da thịt.
+- [ ] **6. HD-2D Lumen Test**: Chiếu đèn thời gian thực trong UE5 $\rightarrow$ Khối phản xạ ánh sáng nổi khối chân thực, không bị phẳng lì.
