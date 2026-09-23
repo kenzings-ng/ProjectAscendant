@@ -135,8 +135,11 @@ def generate_gallery():
             "badge": "Handcrafted Pixel",
             "summary": "Bộ 4 Chức nghiệp nền tảng (Vanguard, Ranger, Arcanist, Acolyte) đứng trên các bệ đá isometric. Nét vẽ pixel art thủ công mộc mạc, tỷ lệ hài hòa, loại bỏ hoàn toàn cảm giác nhựa AI.",
             "items": [
-                ("01_Core_Classes_Handcrafted_Showcase.jpg", "4 Chức Nghiệp Khởi Đầu (Concept Art)", "Bản vẽ phối cảnh 4 chức nghiệp trên bệ đá cổ hoang phế.", "Concept Art", ["4 Classes", "Vanguard", "Ranger", "Arcanist", "Acolyte"]),
-                ("01_Core_Classes_Handcrafted_Transparent.png", "Sprite Trong Suốt 4 Chức Nghiệp", "Phiên bản tách nền trong suốt chất lượng cao, sẵn sàng cho màn hình Chọn Nhân Vật.", "In-Game Sprite", ["Transparent", "Character Select", "UI Asset"]),
+                ("02_Warrior_Knight_ActionFirst_512x512_showcase.png", "Hiệp Sĩ Vanguard (Anti-AI Action-First Handcrafted)", "⭐ TIÊU CHUẨN MỚI GAME ART STUDIO: Tư thế Action-First Pose (chân trước tấn chữ S, lùi kiếm nén lực), Bảng màu Capcom CPS2 chuẩn xác 30 màu độc nhất (Hue-shifting nắng vàng chanh -> bóng tím navy), Canvas 128x128 (Body cao 88px, Pivot 64,114). Sạch 100% mùi AI!", "Chuẩn CPS2 30 Màu", ["Action-First", "Vanguard", "CPS2 32-Color", "Handcrafted", "88px Body", "QA Passed"]),
+                ("02_Warrior_Knight_ActionFirst_256x256_ingame.png", "Hiệp Sĩ Vanguard (2x In-Game Canvas)", "Phiên bản phóng to 2x Nearest-Neighbor cho viewport game. Lưới pixel 1:1 đanh gọn, không một hạt mixel, viền ngoài than chì 1px sắc lẹm.", "In-Game 2x", ["2x Scale", "Pixelated", "Capcom CPS2"]),
+                ("02_Warrior_Knight_ActionFirst_128x128_native.png", "Hiệp Sĩ Vanguard (128x128 Native Pixel)", "File gốc 128x128 pixel native đạt tỷ lệ Chibi Heroic 3.5 đầu, điểm neo chân (64, 114) gắn vừa khít CapsuleComponent UE5.7.", "Native 128px", ["Native 128x128", "Pivot 64,114", "UE5 Ready"]),
+                ("01_Core_Classes_Handcrafted_Showcase.jpg", "4 Chức Nghiệp Khởi Đầu (Concept Minh Họa)", "Bản vẽ phối cảnh tổng quan 4 chức nghiệp trên bệ đá cổ hoang phế.", "Concept Art", ["4 Classes", "Vanguard", "Ranger", "Arcanist", "Acolyte"]),
+                ("01_Core_Classes_Handcrafted_Transparent.png", "4 Chức Nghiệp (Bản Cũ 1024px - Đang Chờ Chuẩn Hóa Lưới)", "Bản cũ tách nền độ phân giải 1024px (119,538 màu). Đang được lên kế hoạch vẽ lại toàn bộ theo chuẩn Action-First như Hiệp Sĩ Vanguard ở trên.", "Bản Cũ (1024px)", ["Legacy", "Needs Pixelation"]),
             ]
         },
         {
