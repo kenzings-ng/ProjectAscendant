@@ -1,7 +1,7 @@
 # Story 001: Prototype Boss AI & 4-Phase Telegraph System
 
 > **Epic**: Encounter & Boss Mechanics Layer  
-> **Status**: Ready  
+> **Status**: ✅ Done  
 > **Layer**: Encounter / AI  
 > **Type**: Gameplay / AI  
 > **Estimate**: 8 hours (1.0 days)  
@@ -24,22 +24,22 @@
 
 ## Acceptance Criteria
 
-- [ ] **AC-1 (4-Phase Attack Timing Lifecycle)**: Mọi đòn tấn công của Trùm tuân thủ nghiêm ngặt 4 pha:
+- [x] **AC-1 (4-Phase Attack Timing Lifecycle)**: Mọi đòn tấn công của Trùm tuân thủ nghiêm ngặt 4 pha:
   - **Telegraph Phase (0.50s–0.80s)**: Tỷ lệ lấp đầy decal đỏ $0\% \to 100\%$.
   - **Flash Cue Window (0.10s cuối)**: Khi $FillRatio \ge 0.85$, kích hoạt Flash Cue (cửa sổ vàng để người chơi phản xạ né).
   - **Active Hitbox Phase (0.15s–0.25s)**: Quét vùng sát thương thực tế theo decal.
   - **Recovery / Punish Window (0.60s–1.00s)**: Trùm rơi vào trạng thái hồi phục, cho phép người chơi phản công tích Posture.
-- [ ] **AC-2 (Moveset & Action Selection Score)**: 5 kỹ năng chiến đấu với trọng số EQS dựa trên khoảng cách và góc quay người chơi:
+- [x] **AC-2 (Moveset & Action Selection Score)**: 5 kỹ năng chiến đấu với trọng số EQS dựa trên khoảng cách và góc quay người chơi:
   - `Cleave Strike`: Cận chiến phía trước ($<350\text{cm}$, góc $\le 60^\circ$).
   - `Overhead Smash`: Vùng thẳng ($<450\text{cm}$).
   - `Iron Horn Charge`: Tầm xa ($>500\text{cm}$).
   - `Iron Tail Sweep`: Phía sau ($>120^\circ$, cự ly $<300\text{cm}$, 90% ưu tiên).
-  - `Earthquake Stomp`: Vòng tròn tâm ($<500\text{cm}$, chỉ kích hoạt ở Pha 3).
-- [ ] **AC-3 (3-Phase Health Progression)**:
+  - `Earthquake Stomp`: Vùng tròn tâm ($<500\text{cm}$, chỉ kích hoạt ở Pha 3).
+- [x] **AC-3 (3-Phase Health Progression)**:
   - Phase 1 (100% → 75% HP): Đòn đơn lẻ, hồi chiêu dài (0.90s).
   - Phase 2 (75% → 25% HP): Kích hoạt combo 2-3 đòn, hồi chiêu giảm xuống 0.70s.
   - Phase 3 (<25% HP - Enrage): Tốc độ di chuyển tăng $420 \to 480\text{cm/s}$, mở khóa Earthquake Stomp.
-- [ ] **AC-4 (Wall Crash Stun)**: Khi trùm dùng kỹ năng Charge húc vào chướng ngại vật/tường, chuyển sang trạng thái `State.WallStunned` trong đúng 1.80s (người chơi được thưởng thời gian gây sát thương tự do).
+- [x] **AC-4 (Wall Crash Stun)**: Khi trùm dùng kỹ năng Charge húc vào chướng ngại vật/tường, chuyển sang trạng thái `State.WallStunned` trong đúng 1.80s (người chơi được thưởng thời gian gây sát thương tự do).
 
 ---
 
