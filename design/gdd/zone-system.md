@@ -10,25 +10,23 @@
 
 ## Overview
 
-Hệ thống Bản Đồ Mở & Điểm Lưu (Non-gated Open Zones & Checkpoints) định hình cấu trúc không gian thế giới, phân tầng địa lý và nhịp độ thám hiểm cốt lõi trong Project Ascendant, kết nối trực tiếp cơ chế điều khiển góc nhìn 2.5D Isometric ([`isometric-controller.md`](file:///mnt/Data/Projects/project-games/design/gdd/isometric-controller.md)) với vòng lặp kinh tế dã ngoại và thợ rèn phân vùng ([`blacksmithing-system.md`](file:///mnt/Data/Projects/project-games/design/gdd/blacksmithing-system.md)). Khác biệt hoàn toàn với các tựa game nhập vai tuyến tính khóa đường bằng rào cản cấp độ nhân vật (Level-gating) hay tường vô hình, thế giới trò chơi được kiến trúc hoàn toàn mở và kết nối liền mạch qua 3 bậc nguy hiểm—từ *Tiền Trạm Sơ Khai* (Tier 1: Outpost/Verdant Frontier), *Hoang Dã Tàn Tích* (Tier 2: Ashen Wilderness) cho đến *Cấm Địa Thần Tích* (Tier 3: Forbidden Sanctum). Thiết kế này trao trọn quyền tự quyết cho người chơi: những ai sở hữu phản xạ và kỹ năng né tránh i-frame ([`dash-evasion.md`](file:///mnt/Data/Projects/project-games/design/gdd/dash-evasion.md)) điêu luyện có thể vượt cấp thâm nhập sào huyệt nguy hiểm ngay từ những phút đầu tiên.
+Hệ thống Bản Đồ Mở & Tòa Thành An Toàn (Non-gated Open Zones & Citadel Sanctuaries) định hình cấu trúc không gian thế giới, phân tầng địa lý và nhịp độ thám hiểm cốt lõi trong Project Ascendant, kết nối trực tiếp cơ chế điều khiển góc nhìn 2.5D Isometric ([`isometric-controller.md`](file:///mnt/Data/Projects/project-games/design/gdd/isometric-controller.md)) với vòng lặp kinh tế dã ngoại và thợ rèn phân vùng ([`blacksmithing-system.md`](file:///mnt/Data/Projects/project-games/design/gdd/blacksmithing-system.md)). Khác biệt hoàn toàn với các tựa game nhập vai tuyến tính khóa đường bằng rào cản cấp độ nhân vật (Level-gating) hay tường vô hình, thế giới trò chơi được kiến trúc hoàn toàn mở và kết nối liền mạch qua 3 bậc nguy hiểm—từ *Tiền Trạm Sơ Khai* (Tier 1: Verdant Frontier), *Hoang Dã Tàn Tích* (Tier 2: Ashen Wilderness) cho đến *Cấm Địa Thần Tích* (Tier 3: Forbidden Sanctum). Thiết kế này trao trọn quyền tự quyết cho người chơi: những ai sở hữu phản xạ và kỹ năng né tránh i-frame ([`dash-evasion.md`](file:///mnt/Data/Projects/project-games/design/gdd/dash-evasion.md)) điêu luyện có thể vượt cấp thâm nhập sào huyệt nguy hiểm ngay từ những phút đầu tiên.
 
-Trọng tâm điều tiết nhịp độ sinh tồn của thế giới là mạng lưới Điểm Lưu / Lửa Trại (Campfires / Checkpoints)—những ốc đảo an toàn hiếm hoi giữa vùng đất chết. Người chơi chủ động tương tác với Lửa Trại để hồi phục trọn vẹn Sinh Lực, Nội Lực và Thể Lực ([`attributes-system.md`](file:///mnt/Data/Projects/project-games/design/gdd/attributes-system.md)), thiết lập điểm hồi sinh khi tử trận, tự do tinh chỉnh bộ kỹ năng xuất trận (Action Deck Loadout từ [`skill-progression-system.md`](file:///mnt/Data/Projects/project-games/design/gdd/skill-progression-system.md)), luân chuyển Chức nghiệp trong số các Class đã mở khóa ([`foundational-classes.md`](file:///mnt/Data/Projects/project-games/design/gdd/foundational-classes.md)), và kích hoạt Dịch Chuyển Nhanh (Fast Travel) giữa các Lửa Trại đã được thắp sáng. Đổi lại, mỗi lần tĩnh dưỡng tại Lửa Trại sẽ lập tức tái tạo (respawn) toàn bộ quái vật thông thường ngoài tự nhiên, buộc người chơi phải liên tục đưa ra quyết định đánh cược chiến thuật: quay về trạm nghỉ an toàn hay dấn thân sâu hơn vào lãnh địa Lãnh Chúa.
+Trọng tâm an toàn và bảo toàn tiến trình của thế giới là hệ thống **Tòa Thành Kiên Cố (Citadels / Strongholds / Safe Cities)**—những đại bản doanh an toàn tuyệt đối của từng phân vùng. Trò chơi **không sử dụng hệ thống Lửa Trại dã ngoại** mà toàn bộ các mốc bảo vệ và lưu trữ gắn liền với Tòa Thành. Người chơi khi bước vào cổng Tòa Thành (vùng an toàn) sẽ lập tức kích hoạt cơ chế **Tự Động Lưu (Auto-Save)** toàn bộ tiến trình, được hồi phục trọn vẹn Sinh Lực, Nội Lực và Thể Lực ([`attributes-system.md`](file:///mnt/Data/Projects/project-games/design/gdd/attributes-system.md)), đầy bình dược phẩm, và ghim Tòa Thành này làm mốc xuất hiện gần nhất. **Đặc biệt, khi người chơi thoát game (quit/disconnect) ở bất kỳ đâu ngoài hoang dã, khi đăng nhập lại sẽ luôn luôn được đưa về Tòa Thành mà họ đã ghé thăm gần nhất**, đảm bảo không bao giờ bị rơi vào bẫy quái cắn trộm hay tử nạn lúc vừa nạp dữ liệu.
 
 ## Player Fantasy
 
-Hệ thống Bản Đồ Mở & Điểm Lưu phục vụ trực tiếp Trụ cột 1: **"Chinh phục điều không thể bằng kỹ năng tuyệt đỉnh"** và Trụ cột 3: **"Kinh tế dã ngoại & Thám hiểm rủi ro cao - phần thưởng lớn"**. Không gian mở không rào chắn mang lại cho người chơi cảm giác tự do vô bờ bến đi đôi với sự tính toán chiến thuật nghẹt thở thông qua góc nhìn Isometric 2.5D và sự ấm áp kỳ diệu khi tìm thấy đồng loại giữa tử địa:
+Hệ thống Bản Đồ Mở & Tòa Thành An Toàn phục vụ trực tiếp Trụ cột 1: **"Chinh phục điều không thể bằng kỹ năng tuyệt đỉnh"** và Trụ cột 3: **"Kinh tế dã ngoại & Thám hiểm rủi ro cao - phần thưởng lớn"**. Không gian mở không rào chắn mang lại cho người chơi cảm giác tự do vô bờ bến đi đôi với sự tính toán chiến thuật nghẹt thở thông qua góc nhìn Isometric 2.5D:
 
 > *"Từ góc nhìn Isometric nghiêng -45° khoáng đạt, toàn cảnh vùng đất chết hiện ra như một bàn cờ sinh tử sống động. Bạn lia nhẹ tâm ngắm về phía trước, hệ thống camera Lookahead mở rộng tầm nhìn cho bạn quan sát từ trên cao: những rãnh nứt nham thạch sủi bọt, cạm bẫy gai cổ đại rải rác trên lối mòn, và quỹ đạo tuần tra gắt gao của những con quái tinh anh cấp 30 to lớn gấp ba lần nhân vật cấp 12 của bạn.*
 > 
-> *Không có đường ranh giới nhân tạo hay màn hình tải cắt cảnh, việc thám hiểm trở thành một vũ điệu chiến thuật đầy mê hoặc. Tận dụng địa hình cao thấp và các vách đá che khuất tầm nhìn, bạn căn chỉnh từng bước chân, lướt né I-frame qua những góc mù của quái vật. Một bước sẩy chân, một va chạm nhỏ cũng đủ kích hoạt đàn quái truy sát và tiễn bạn về điểm xuất phát. Nhưng chính từ độ cao bao quát này, mắt bạn bắt trọn một dải khói lam thanh mảnh—Cột Khói Lửa Trại (Smoke Beacon) đang kiêu hãnh bốc lên giữa hẻm núi tử thần, xuyên qua lớp sương mù mờ ảo.*
+> *Không có đường ranh giới nhân tạo hay màn hình tải cắt cảnh, việc thám hiểm trở thành một vũ điệu chiến thuật đầy mê hoặc. Tận dụng địa hình cao thấp và các vách đá che khuất tầm nhìn, bạn căn chỉnh từng bước chân, lướt né I-frame qua những góc mù của quái vật. Một bước sẩy chân, một va chạm nhỏ cũng đủ kích hoạt đàn quái truy sát và tiễn bạn về điểm xuất phát. Nhưng chính từ độ cao bao quát này, mắt bạn bắt trọn ánh sáng rực rỡ từ những ngọn hải đăng của Tòa Thành kiên cố ở đường chân trời.*
 > 
-> *Bạn bấm lướt Dash liên hoàn qua khe nứt hiểm hóc, luồn qua cú quét móng vuốt chết người trong gang tấc với chỉ một vạch máu mong manh. Khi chạm tới bãi đá tàn tích, bạn rút gươm quẹt mạnh vào đá lửa.*
+> *Bạn bấm lướt Dash liên hoàn qua khe nứt hiểm hóc, luồn qua cú quét móng vuốt chết người trong gang tấc với chỉ một vạch máu mong manh. Khi sải bước qua cánh cổng sắt khổng lồ của Tòa Thành, tiếng còi hiệu vang lên từ chòi canh gác.*
 > 
-> *'XOẸT! BÙNG!'*
+> *'KENG! XÈO!'*
 > 
-> *Ngọn lửa trại bùng lên rực rỡ, tạo thành một vầng hào quang ấm áp đẩy lùi lũ quái vật gầm gừ ngoài ranh giới an toàn. Toàn bộ thanh Sinh Lực, Thể Lực và bình hồi phục lập tức hồi sinh trong tiếng vĩ cầm trầm lắng. Và rồi, trong ánh lửa bập bùng, những bóng hình đồng loại thân quen dần hiện rõ: một gã Thương Nhân lang thang đang thong thả rít tẩu thuốc ngắm nhìn bầu trời đêm, và người Thợ Rèn Dã Ngoại bụi bặm đang nhịp nhàng gõ chiếc búa nặng lên đe sắt di động—'KENG... KENG... KENG...'—khẽ gật đầu chào bạn với ánh mắt tán thưởng.*
-> 
-> *Từ cảm giác cô độc cận kề cái chết chuyển sang khoảnh khắc an tâm, ấm áp bên những người bạn đồng hành dã ngoại giữa lòng hiểm nguy, đó là thứ khoái cảm sinh tồn chân thực nhất mà chỉ những kẻ dám đánh cược tính mạng mới có thể chạm tới."*
+> *Bạn bước vào Vùng An Toàn của Thành. Lũ quái vật gầm gừ giận dữ dừng bước ngoài cổng thành rồi quay đầu bỏ đi (drop aggro). Biểu tượng [AUTO-SAVED] màu hoàng kim lấp lánh xuất hiện ở góc màn hình. Toàn bộ thanh Sinh Lực, Thể Lực và 5 bình dược phẩm lập tức hồi phục 100%. Mọi âu lo tan biến—dù lúc này bạn có tắt game đi ngủ, thì ngày mai khi đăng nhập lại, bạn vẫn sẽ an toàn thức giấc ngay tại quảng trường Tòa Thành này bên cạnh các Thợ Rèn, Thương Nhân và lính canh dũng cảm."*
 
 ## Detailed Design
 
@@ -37,24 +35,32 @@ Hệ thống Bản Đồ Mở & Điểm Lưu phục vụ trực tiếp Trụ c�
 #### 1. Ma Trận Phân Cấp 3 Bậc Vùng Đất Mở Không Rào Cản (3-Tier Non-gated Open Zones)
 Thế giới Project Ascendant được xây dựng bằng công nghệ Unreal Engine 5 World Partition, kết nối liền mạch không màn hình chờ (No Loading Screens) và không rào cản nhân tạo (No Invisible Walls / Level-gating):
 
-| Bậc Vùng Đất | Tên Khu Vực Địa Lý | Cấp Độ Quái Khuyến Nghị | Đặc Điểm Môi Trường & Địa Hình | Điểm An Toàn & Cơ Sở Dã Ngoại | Cơ Chế PvP / Cạnh Tranh |
+| Bậc Vùng Đất | Tên Khu Vực Địa Lý | Cấp Độ Quái Khuyến Nghị | Đặc Điểm Môi Trường & Địa Hình | Tòa Thành An Toàn & Cơ Sở Dịch Vụ | Cơ Chế PvP / Cạnh Tranh |
 | :---: | :--- | :---: | :--- | :--- | :--- |
-| **Tier 1** | **Tiền Trạm Sơ Khai** *(Verdant Frontier)* | Cấp 1–15 | Rừng thưa ôn hòa, lối mòn rộng, ít cạm bẫy địa hình. Quái đơn lẻ hoặc nhóm nhỏ 2–3 con. | **Thị Trấn Tiền Trạm** (Trấn thủ bởi Vệ Binh NPC cấp 50); Thợ Rèn Tier 1 ([`blacksmithing-system.md`](file:///mnt/Data/Projects/project-games/design/gdd/blacksmithing-system.md)); Thương Nhân Cơ Bản. | **Khu Vực Bảo Hộ**: Cấm PvP hoàn toàn trong bán kính thị trấn; ngoài hoang dã PvP tự do có áp dụng Karma. |
-| **Tier 2** | **Hoang Dã Tàn Tích** *(Ashen Wilderness)* | Cấp 16–30 | Rừng rậm tro tàn, đầm lầy độc tố, hẻm núi dung nham. Quái tinh anh tuần tra theo bầy 4–6 con. | Các đốm **Lửa Trại Dã Ngoại** rải rác; Doanh Trại Thợ Rèn Dã Ngoại Tier 2 (đục 2 lỗ ngọc, lên +6); Thương Nhân Lang Thang. | **PvP Hoang Dã Tự Do**: Cạnh tranh Boss dã ngoại khốc liệt; hạ sát người vô tội trừ -30 Karma. |
-| **Tier 3** | **Cấm Địa Thần Tích** *(Forbidden Sanctum)* | Cấp 31–50 | Vùng tử địa sương mù dày đặc, rãnh vực không thời gian, bẫy sét và nham thạch phun trào. Quái cấp cao mang kháng hiệu ứng và sát thương hủy diệt. | 1–2 Lửa Trại ẩn sâu trong hang động; **Lò Rèn Cấm Địa Tier 3** (nơi duy nhất đúc Thần Binh Bậc 5 từ Linh Hồn Boss); Chợ Đen bí mật. | **Vùng Đất Tử Thần (High-Risk)**: Điểm nóng của các trận săn World Boss và thợ săn tiền thưởng thanh trừng tội đồ Wanted. |
+| **Tier 1** | **Tiền Trạm Sơ Khai** *(Verdant Frontier)* | Cấp 1–15 | Rừng thưa ôn hòa, lối mòn rộng, ít cạm bẫy địa hình. Quái đơn lẻ hoặc nhóm nhỏ 2–3 con. | **Thành Tiền Trạm (Verdant Bastion)** (Vệ Binh NPC cấp 50; Safe Zone tuyệt đối; Auto-Save khi vào cổng; Thợ Rèn Tier 1; Thương Nhân Cơ Bản). | **Khu Vực Bảo Hộ**: Cấm PvP hoàn toàn trong bán kính Tòa Thành; ngoài hoang dã PvP tự do có áp dụng Karma. |
+| **Tier 2** | **Hoang Dã Tàn Tích** *(Ashen Wilderness)* | Cấp 16–30 | Rừng rậm tro tàn, đầm lầy độc tố, hẻm núi dung nham. Quái tinh anh tuần tra theo bầy 4–6 con. | **Pháo Đài Tro Tàn (Ashen Keep)** (Vùng An Toàn kiên cố; Auto-Save khi vào cổng; Doanh Trại Thợ Rèn Tier 2 lên +6; Thương Nhân Lang Thang). | **PvP Hoang Dã Tự Do**: Cạnh tranh Boss dã ngoại khốc liệt; hạ sát người vô tội trừ -30 Karma; bước vào Ashen Keep được bảo vệ tuyệt đối. |
+| **Tier 3** | **Cấm Địa Thần Tích** *(Forbidden Sanctum)* | Cấp 31–50 | Vùng tử địa sương mù dày đặc, rãnh vực không thời gian, bẫy sét và nham thạch phun trào. Quái cấp cao mang kháng hiệu ứng và sát thương hủy diệt. | **Thánh Điện Thần Tích (Sanctum Fortress)** (Đại bản doanh cuối cùng; Auto-Save khi vào; Lò Rèn Cấm Địa Tier 3 đúc Thần Binh Bậc 5 từ Linh Hồn Boss; Chợ Đen bí mật). | **Vùng Đất Tử Thần (High-Risk)**: Điểm nóng của các trận săn World Boss và thanh trừng Outlaw; trong Sanctum Fortress an toàn tuyệt đối. |
 
 ---
 
-#### 2. Cơ Chế Lửa Trại & Thánh Địa An Toàn (Campfire & Sanctuary System)
-Mỗi Lửa Trại dã ngoại là một ốc đảo sinh tồn có bán kính bảo vệ **Sanctuary Radius = 1000 cm**:
-1. **Kết Giới Thánh Địa**:
-   * Quái vật không thể bước qua ranh giới Sanctuary (AI NavMesh Barrier đẩy lùi quái). Mọi trạng thái Aggro hiện tại của người chơi được xóa sạch ngay khi bước chân vào kết giới.
-   * **Cấm Giao Tranh PvP Trong Thánh Địa**: Mọi vũ khí và kỹ năng tấn công của người chơi tự động bị khóa (`State.Pacified`), ngăn chặn hoàn toàn việc camp cửa giết người tại điểm hồi sinh.
-2. **Các Thao Tác Tại Lửa Trại**:
-   * **Tĩnh Dưỡng (Rest)**: Kích hoạt GAS GameplayEffect hồi phục tức thì 100% Max HP, 100% Max Mana, 100% Max Stamina, và nạp đầy số lần dùng của Bình Dược Phẩm (Flask charges). Đồng thời, máy chủ lập tức tái tạo (respawn) toàn bộ quái vật thường và tinh anh trong vùng (World Boss và Miniboss độc bản không bị hồi sinh).
-   * **Điểm Hồi Sinh (Spawn Anchor)**: Ghi đè tọa độ hồi sinh mới nhất của người chơi tại Lửa Trại vừa tương tác.
-   * **Dịch Chuyển Nhanh (Fast Travel)**: Cho phép dịch chuyển tức thời giữa bất kỳ 2 Lửa Trại nào đã được thắp sáng. Thời gian niệm chú 2.0 giây tại Lửa Trại; hoàn toàn miễn phí; nếu chịu sát thương hoặc di chuyển sẽ bị ngắt niệm.
-   * **Thay Đổi Class & Action Deck**: Cho phép người chơi tự do hoán đổi 4 Active Skills + 3 Passive Skills (Action Deck từ [`skill-progression-system.md`](file:///mnt/Data/Projects/project-games/design/gdd/skill-progression-system.md)) và chuyển đổi linh hoạt giữa 12 Chức nghiệp đã mở khóa ([`foundational-classes.md`](file:///mnt/Data/Projects/project-games/design/gdd/foundational-classes.md)) mà không tốn bất kỳ chi phí nào.
+#### 2. Cơ Chế Tòa Thành An Toàn, Tự Động Lưu & Đăng Nhập Lại (Citadel Safe Zone, Auto-Save & Relog System)
+Mỗi Tòa Thành (Citadel) là một trung tâm kiên cố đại diện cho từng phân vùng thế giới với bán kính an toàn **SafeZoneRadius = 5000 cm**:
+1. **Kết Giới Vùng An Toàn (Safe Zone Protection)**:
+   * Quái vật tuyệt đối không thể bước qua cổng thành (AI NavMesh Barrier đẩy lùi quái). Mọi trạng thái cừu hận (Aggro) của quái vật lập tức bị xóa sạch (`DropAggro`) khi người chơi bước vào thành.
+   * **Cấm Giao Tranh PvP Tuyệt Đối**: Toàn bộ kỹ năng và vũ khí của người chơi tự động đưa vào trạng thái Pacified (`State.Pacified`), ngăn chặn hoàn toàn các hành vi PK, gank điểm dịch chuyển hoặc quấy phá.
+2. **Cơ Chế Tự Động Lưu (Citadel Auto-Save on Entry)**:
+   * **Kích hoạt tức thì**: Ngay khi người chơi vượt qua cổng thành và bước vào vùng an toàn, máy chủ tự động kích hoạt `ExecuteAutoSave()`.
+   * **Dữ liệu được lưu trữ**: Ghi nhận `LastVisitedCitadelId` (Tòa thành người chơi vào gần nhất), lưu vị trí xuất hiện, cấp độ, kinh nghiệm, túi đồ (Inventory), trang bị, số lượng tiền tệ (Vàng & Void Shards), điểm kỹ năng và Karma.
+   * **Hồi phục tài nguyên trọn vẹn**: Tức thì khôi phục 100% Max HP, 100% Max Mana, 100% Max Stamina, và nạp đầy số lượt dùng của Bình Dược Phẩm (5/5 Flask charges).
+3. **Cơ Chế Thoát Game & Đăng Nhập Lại (Relog Return to Last Visited Citadel)**:
+   * Khi người chơi thoát game (Quit, Disconnect, ngắt kết nối mạng hoặc treo máy) ở bất kỳ đâu ngoài hoang dã hay trong dungeon:
+   * **Khi đăng nhập lại vào game (Login / Relog)**: Hệ thống luôn luôn đưa nhân vật xuất hiện an toàn tại **Tòa Thành mà người chơi đã ghé thăm gần nhất (Last Visited Citadel)** với 100% máu, mana và thể lực.
+   * Ngăn chặn triệt để tình trạng người chơi bị quái vật tấn công trong lúc đang tải màn hình, hoặc bị kẹt chết giữa bầy quái dã ngoại.
+4. **Cổng Dịch Chuyển Nhanh Giữa Các Thành Trì (Citadel Waygate Fast Travel)**:
+   * Người chơi có thể dịch chuyển tức thời giữa các Tòa Thành đã từng khám phá (Discovered).
+   * Thời gian niệm chú 2.0 giây; hoàn toàn miễn phí; bị ngắt quãng nếu nhận sát thương hoặc di chuyển.
+5. **Thay Đổi Class & Action Deck Tại Tòa Thành**:
+   * Cho phép người chơi tự do hoán đổi 4 Active Skills + 3 Passive Skills (Action Deck từ [`skill-progression-system.md`](file:///mnt/Data/Projects/project-games/design/gdd/skill-progression-system.md)) và chuyển đổi linh hoạt giữa 12 Chức nghiệp đã mở khóa ([`foundational-classes.md`](file:///mnt/Data/Projects/project-games/design/gdd/foundational-classes.md)).
 
 ---
 
@@ -110,14 +116,13 @@ Mỗi Lửa Trại dã ngoại là một ốc đảo sinh tồn có bán kính b
 
 ### States and Transitions
 
-#### Bảng Trạng Thái Lửa Trại (Campfire State Machine)
+#### Bảng Trạng Thái Tòa Thành & Tự Động Lưu (Citadel & Auto-Save State Machine)
 
 | Trạng Thái | Điều Kiện Vào (Entry Condition) | Điều Kiện Thoát (Exit Condition) | Hành Vi & Quyền Năng |
 | :--- | :--- | :--- | :--- |
-| **Dormant (Đã Tắt)** | Trạng thái mặc định của thế giới khi người chơi chưa khám phá tới. | Người chơi tiếp cận bấm tương tác thắp lửa (Hold E 1.5s). | Phát cột khói lam mảnh cao 3000 cm lên không trung; không cung cấp kết giới an toàn hay dịch chuyển. |
-| **Active (Đã Kích Hoạt)** | Hoàn tất tương tác thắp lửa lần đầu. | Bấm phím ngồi tĩnh dưỡng (Rest) hoặc rời xa quá bán kính Sanctuary. | Kết giới Sanctuary 1000 cm kích hoạt; mở khóa tọa độ lên bản đồ; cho phép làm điểm hồi sinh và đích đến Dịch Chuyển Nhanh. |
-| **Resting (Đang Nghỉ Ngơi)** | Người chơi bấm tương tác "Tĩnh Dưỡng" khi đang ở trạng thái Active. | Người chơi đứng dậy hoặc đóng menu Lửa Trại. | Hồi đầy 100% HP/Mana/Stamina/Flasks; respawn quái thường toàn vùng; mở giao diện đổi Class & Action Deck Loadout. |
-| **Fast Traveling (Đang Niệm Dịch Chuyển)** | Người chơi chọn 1 Lửa Trại đích trên bản đồ và bấm "Dịch Chuyển". | Niệm chú thành công sau 2.0s HOẶC bị quái/người chơi ngắt chiêu. | Kích hoạt hiệu ứng biến mất; tải dữ liệu World Partition và dịch chuyển nhân vật tới Lửa Trại đích đến. |
+| **Undiscovered (Chưa Khám Phá)** | Trạng thái mặc định của Tòa Thành khi người chơi chưa từng đặt chân tới. | Người chơi bước qua cổng thành (vào SafeZoneRadius). | Hiển thị sương mù trên bản đồ; không thể chọn làm đích đến của Cổng Dịch Chuyển. |
+| **Discovered & Active (Đã Khám Phá)** | Bước vào phạm vi SafeZoneRadius của Tòa Thành. | Rời khỏi phạm vi Safe Zone ra ngoài hoang dã. | **Kích hoạt Auto-Save tức thì**; ghim làm `LastVisitedCitadel`; hồi 100% HP/Mana/Stamina/Flasks; quái bị drop aggro không thể vào; cấm PvP (`State.Pacified`); mở Cổng Dịch Chuyển giữa các thành đã mở khóa; cho phép đổi Class & Action Deck. |
+| **Fast Traveling (Đang Niệm Dịch Chuyển)** | Người chơi tương tác Cổng Dịch Chuyển chọn 1 Tòa Thành đích đã khám phá. | Niệm chú thành công sau 2.0s HOẶC bị di chuyển/ngắt chiêu. | Kích hoạt hiệu ứng ma thuật dịch chuyển; đưa nhân vật tới quảng trường Tòa Thành đích và kích hoạt Auto-Save tại thành mới. |
 
 ---
 
@@ -137,12 +142,12 @@ Mỗi Lửa Trại dã ngoại là một ốc đảo sinh tồn có bán kính b
 
 | Hệ Thống Liên Quan | Luồng Dữ Liệu Vào (Data In) | Luồng Dữ Liệu Ra (Data Out) | Trách Nhiệm Giao Diện |
 | :--- | :--- | :--- | :--- |
-| **`isometric-controller.md`** | Tọa độ nhân vật, góc ngắm, hướng di chuyển 8 hướng. | Tín hiệu dịch chuyển tức thời (Teleport transform), áp dụng Dither Opacity Mask lên tán cây/vách đá chắn camera. | Controller quản lý camera arm 1200 cm; Zone System kích hoạt Stream Grid và Dither Occlusion. |
-| **`attributes-system.md`** | Chỉ số Max HP/Mana/Stamina hiện tại của nhân vật. | GAS GameplayEffect `GE_CampfireRestoration` hồi đầy 100% tài nguyên; xử lý chết và respawn. | Zone System phát trigger; Attributes System áp dụng GameplayEffect. |
-| **`skill-progression-system.md`** | Danh sách các kỹ năng Active/Passive đã học của nhân vật. | Cập nhật Action Deck Loadout mới (4 Active + 3 Passive) khi người chơi cấu hình tại Lửa Trại. | Skill System quản lý dữ liệu kỹ năng; Zone System cung cấp ngữ cảnh cho phép đổi chiêu. |
-| **`foundational-classes.md`** | Danh sách 12 Chức nghiệp đã được người chơi mở khóa. | Hoán đổi Class ID hiện tại của nhân vật tại Lửa Trại. | Class System cập nhật bộ thuộc tính cơ sở và passive nội tại; Zone System cung cấp trạm hoán đổi. |
-| **`blacksmithing-system.md`** | Cấp độ Lò Rèn (Tier 1, Tier 2, Tier 3) gắn với tọa độ Lửa Trại tương ứng. | Kích hoạt menu rèn trang bị, đục lỗ ngọc hoặc đúc Thần Binh từ Linh Hồn Boss. | Blacksmithing System quản lý công thức và tỷ lệ; Zone System quản lý vị trí NPC dã ngoại. |
-| **`inventory-system.md`** | Số lượng Vàng, Tàn Trang và Trang Bị hiện có trong kho đồ. | Trừ 50% Vàng / 100% Tàn Trang (PvE) tạo Vệt Tro Tàn; nạp đầy số lần dùng Bình Dược Phẩm khi nghỉ. | Inventory System trừ/cộng vật phẩm; Zone System sinh thực thể Vệt Tro Tàn ngoài thế giới. |
+| **`isometric-controller.md`** | Tọa độ nhân vật, góc ngắm, hướng di chuyển 8 hướng. | Tín hiệu dịch chuyển tức thời (Teleport transform), áp dụng Dither Opacity Mask lên tường thành/mái vòm chắn camera. | Controller quản lý camera arm 1200 cm; Zone System kích hoạt Safe Zone và Dither Occlusion. |
+| **`attributes-system.md`** | Chỉ số Max HP/Mana/Stamina hiện tại của nhân vật. | GAS GameplayEffect `GE_CitadelRestoration` hồi đầy 100% tài nguyên khi vào thành; xử lý respawn / relog về Tòa Thành gần nhất. | Zone System phát trigger Auto-Save; Attributes System áp dụng GameplayEffect. |
+| **`skill-progression-system.md`** | Danh sách các kỹ năng Active/Passive đã học của nhân vật. | Cập nhật Action Deck Loadout mới (4 Active + 3 Passive) khi người chơi cấu hình tại Tòa Thành. | Skill System quản lý dữ liệu kỹ năng; Zone System cung cấp Safe Zone cho phép đổi chiêu an toàn. |
+| **`foundational-classes.md`** | Danh sách 12 Chức nghiệp đã được người chơi mở khóa. | Hoán đổi Class ID hiện tại của nhân vật tại Tòa Thành. | Class System cập nhật bộ thuộc tính cơ sở và passive nội tại; Zone System cung cấp trạm hoán đổi an toàn. |
+| **`blacksmithing-system.md`** | Cấp độ Lò Rèn (Tier 1, Tier 2, Tier 3) đặt tại các Tòa Thành tương ứng. | Kích hoạt menu rèn trang bị, đục lỗ ngọc hoặc đúc Thần Binh từ Linh Hồn Boss. | Blacksmithing System quản lý công thức và tỷ lệ; Zone System quản lý vị trí NPC trong Tòa Thành. |
+| **`inventory-system.md`** | Số lượng Vàng, Tàn Trang và Trang Bị hiện có trong kho đồ. | Trừ 50% Vàng / 100% Tàn Trang (PvE) tạo Vệt Tro Tàn; nạp đầy số lần dùng Bình Dược Phẩm khi vào Tòa Thành; lưu dữ liệu vào bản ghi Auto-Save. | Inventory System trừ/cộng vật phẩm; Zone System kích hoạt Auto-Save. |
 
 ## Formulas
 
@@ -242,9 +247,9 @@ The `pvp_victim_gold_loss` formula is defined as:
 - **Nếu người chơi ngắt kết nối mạng hoặc cố tình tắt game (Disconnect / Combat Alt-F4) khi đang giao tranh ngoài hoang dã**: Nhân vật được máy chủ duy trì dưới dạng "Hình nhân thế mạng" (`Server_CombatGhost`) tại vị trí hiện tại trong **15.0 giây** trước khi biến mất hoàn toàn. Nếu bị quái vật hoặc người chơi khác tiêu diệt trong 15.0s này, xử lý tử trận bình thường theo quy tắc PvE hoặc PvP tương ứng. Nếu sống sót sau 15.0s, nhân vật tự động được lưu tọa độ an toàn và đưa về Lửa Trại gần nhất khi đăng nhập lại (triệt tiêu hoàn toàn thủ thuật Alt-F4 trốn chết hoặc trốn thợ săn tiền thưởng).
 - **Nếu người chơi cố tình kéo Boss thế giới hoặc quái tinh anh vượt cấp về cổng Thị Trấn Tiền Trạm**: Ngay khi quái vật chạm vào ranh giới Sanctuary (1000 cm) của Thị Trấn, dàn Vệ Binh NPC Cấp 50 lập tức kích hoạt kỹ năng *Thần Uy Trấn Áp* gây $50\%$ Max HP sát thương chuẩn mỗi đòn lên quái vật; đồng thời quái vật bị cưỡng chế nhận thẻ `State.Invulnerable`, xóa sạch bảng Aggro và bị dịch chuyển tức thời (teleport) về lại Spawn Origin với 100% HP.
 - **Nếu người chơi tử trận lần thứ hai khi Vệt Tro Tàn cũ (Ash Remnant) chưa được thu hồi**: Vệt Tro Tàn cũ lập tức tan biến vĩnh viễn vào không gian (toàn bộ 50% Vàng và 100% Tàn Trang cũ bị mất vĩnh viễn); máy chủ sinh ra một Vệt Tro Tàn mới tại vị trí vừa chết chứa lượng Vàng và Tàn Trang đánh rơi của lần chết thứ hai.
-- **Nếu người chơi bị quái vật tấn công khi đang cố gắng thắp sáng Lửa Trại (Dormant -> Active)**: Quá trình tương tác thắp lửa yêu cầu giữ phím E trong $1.5\text{s}$. Bất kỳ sát thương hay hiệu ứng khống chế nào trúng phải nhân vật sẽ lập tức ngắt quá trình thắp lửa, buộc người chơi phải dọn sạch quái hoặc lướt né ra xa trước khi thử lại.
+- **Nếu người chơi bị quái vật tấn công khi đang ngoài hoang dã**: Người chơi có thể lướt né chạy về phía Tòa Thành. Ngay khi vượt qua ranh giới SafeZoneRadius, toàn bộ quái vật sẽ lập tức ngừng truy sát và quay đầu (drop aggro), đồng thời kích hoạt Auto-Save.
 - **Nếu người chơi đang niệm Dịch Chuyển Nhanh (Fast Travel 2.0s) mà bị tấn công**: Thanh niệm chú lập tức bị hủy bỏ, đưa nhân vật vào trạng thái Giao Tranh (`State.InCombat`), đồng thời khóa hoàn toàn chức năng Dịch Chuyển Nhanh trong **10.0 giây** tính từ đòn đánh cuối cùng.
-- **Nếu Kẻ Bị Truy Nã (Wanted Outlaw / Red Name) liều lĩnh xông vào phạm vi Thánh Địa / Thị Trấn**: Tháp Canh và Vệ Binh Thánh Địa tự động phóng ra các tia sét Thần Phạt tầm xa $1500\text{ cm}$ gây $20\%$ Max HP sát thương chuẩn mỗi giây, bỏ qua giáp và cấm hồi phục, tiêu diệt kẻ thủ ác tại chỗ và áp giải vào Ngục Tối Khổ Sai 5 phút.
+- **Nếu Kẻ Bị Truy Nã (Wanted Outlaw / Red Name) liều lĩnh xông vào phạm vi Tòa Thành**: Tháp Canh và Vệ Binh Tòa Thành tự động phóng ra các tia sét Thần Phạt tầm xa $1500\text{ cm}$ gây $20\%$ Max HP sát thương chuẩn mỗi giây, bỏ qua giáp và cấm hồi phục, tiêu diệt kẻ thủ ác tại chỗ và áp giải vào Ngục Tối Khổ Sai 5 phút.
 - **Nếu Boss thế giới bị bẻ gãy Posture (Stagger) nhưng người tung đòn Finisher bị tử trận hoặc bị khống chế cứng trong 1.5s đầu**: Cửa sổ ưu tiên 1.5s lập tức kết thúc sớm; nút bấm Execution rút 25% Max HP được kích hoạt mở tự do ngay lập tức cho bất kỳ người chơi tham chiến nào còn sống trong bán kính 1000 cm.
 - **Nếu nhiều tổ đội cùng tham gia hạ sát Boss và tất cả đều đạt ngưỡng đóng góp $\ge 5\%$**: Máy chủ ghi nhận thành tích cho từng tổ đội độc lập; toàn bộ thành viên hợp lệ của mọi tổ đội đều nhận hòm đồ cá nhân riêng biệt (Instanced Loot) tại màn hình tổng kết mà không có bất kỳ xung đột tài nguyên nào.
 
@@ -254,8 +259,8 @@ The `pvp_victim_gold_loss` formula is defined as:
 
 | Hệ Thống Thượng Nguồn | Bản Tả Thiết Kế (GDD) | Bản Chất Phụ Thuộc | Dữ Liệu & Giao Diện Tiếp Nhận |
 | :--- | :--- | :---: | :--- |
-| **Input & Isometric Controller** | [`isometric-controller.md`](file:///mnt/Data/Projects/project-games/design/gdd/isometric-controller.md) | **Bắt Buộc (Hard)** | Nhận tọa độ vị trí nhân vật, góc quay camera SpringArm 1200 cm, độ mở rộng tầm nhìn Lookahead 250 cm; cung cấp tín hiệu kích hoạt Dither Opacity Mask lên các vách đá/tán cây che khuất camera. |
-| **Attributes & Stats (GAS)** | [`attributes-system.md`](file:///mnt/Data/Projects/project-games/design/gdd/attributes-system.md) | **Bắt Buộc (Hard)** | Nhận các thuộc tính sinh tồn (HP, Mana, Stamina) để thực thi hồi phục trọn vẹn qua `GE_CampfireRestoration` khi nghỉ tại Lửa Trại; tiếp nhận sự kiện tử trận để kích hoạt quy trình rơi Vàng/Tàn Trang và hồi sinh. |
+| **Input & Isometric Controller** | [`isometric-controller.md`](file:///mnt/Data/Projects/project-games/design/gdd/isometric-controller.md) | **Bắt Buộc (Hard)** | Nhận tọa độ vị trí nhân vật, góc quay camera SpringArm 1200 cm, độ mở rộng tầm nhìn Lookahead 250 cm; cung cấp tín hiệu kích hoạt Dither Opacity Mask lên các tường thành/vách đá che khuất camera. |
+| **Attributes & Stats (GAS)** | [`attributes-system.md`](file:///mnt/Data/Projects/project-games/design/gdd/attributes-system.md) | **Bắt Buộc (Hard)** | Nhận các thuộc tính sinh tồn (HP, Mana, Stamina) để thực thi hồi phục trọn vẹn qua `GE_CitadelRestoration` khi bước vào Tòa Thành; xử lý sự kiện tử trận hoặc thoát game/relog để xuất hiện an toàn tại Tòa Thành gần nhất. |
 | **Kiến Trúc Mạng & Combat MMO** | [`ADR-0001`](file:///mnt/Data/Projects/project-games/docs/architecture/adr-0001-open-world-mmo-combat-networking.md) | **Bắt Buộc (Hard)** | Ràng buộc 100% logic máy chủ (Server Authority); cung cấp công thức Dynamic Difficulty Scaling, quy tắc Instanced Loot ngưỡng 5%, cửa sổ ưu tiên Stagger Execution 1.5s, và cờ trạng thái Karma/Wanted. |
 | **Core Combat & Combo** | [`combat-system.md`](file:///mnt/Data/Projects/project-games/design/gdd/combat-system.md) | **Tương Thích (Soft)** | Xác định trạng thái Vào Giao Tranh (`State.InCombat`) để khóa các tính năng Dịch Chuyển Nhanh (Fast Travel) và chuyển đổi Chức nghiệp. |
 
@@ -265,9 +270,9 @@ The `pvp_victim_gold_loss` formula is defined as:
 
 | Hệ Thống Hạ Nguồn | Bản Tả Thiết Kế (GDD) | Bản Chất Phụ Thuộc | Kỳ Vọng Zone System Cung Cấp |
 | :--- | :--- | :---: | :--- |
-| **Zone-tiered Blacksmithing** | [`blacksmithing-system.md`](file:///mnt/Data/Projects/project-games/design/gdd/blacksmithing-system.md) | **Bắt Buộc (Hard)** | Cung cấp vị trí địa lý cố định và bối cảnh an toàn cho 3 cấp lò rèn dã ngoại: Thợ Rèn Tiền Trạm (Tier 1), Thợ Rèn Dã Ngoại (Tier 2), và Lò Rèn Cấm Địa Thần Tích (Tier 3). |
-| **Merchant & Currency Economy** | `design/gdd/merchant-economy.md` | **Bắt Buộc (Hard)** | Cung cấp các điểm đỗ an toàn cho Thương Nhân Tiền Trạm, Thương Nhân Lang Thang dã ngoại và Chợ Đen bí mật tại Cấm Địa; áp dụng thuế suất hoặc danh mục hàng hóa theo từng bậc vùng đất. |
-| **Open World MMO Netcode** | `design/gdd/multiplayer-coop.md` | **Bắt Buộc (Hard)** | Cung cấp lưới tọa độ World Partition, ranh giới Leash Range của quái vật dã ngoại, và dữ liệu lưu trữ trạng thái Lửa Trại của từng người chơi trên máy chủ. |
+| **Zone-tiered Blacksmithing** | [`blacksmithing-system.md`](file:///mnt/Data/Projects/project-games/design/gdd/blacksmithing-system.md) | **Bắt Buộc (Hard)** | Cung cấp vị trí địa lý cố định và bối cảnh an toàn cho 3 cấp lò rèn đặt trong các Tòa Thành: Thợ Rèn Tiền Trạm (Verdant Bastion), Thợ Rèn Pháo Đài (Ashen Keep), và Lò Rèn Cấm Địa (Sanctum Fortress). |
+| **Merchant & Currency Economy** | `design/gdd/merchant-economy.md` | **Bắt Buộc (Hard)** | Cung cấp các điểm đỗ an toàn cho Thương Nhân trong Tòa Thành, Thương Nhân Lang Thang dã ngoại và Chợ Đen bí mật; áp dụng thuế suất hoặc danh mục hàng hóa theo từng bậc vùng đất. |
+| **Open World MMO Netcode** | `design/gdd/multiplayer-coop.md` | **Bắt Buộc (Hard)** | Cung cấp lưới tọa độ World Partition, ranh giới Leash Range của quái vật dã ngoại, và dữ liệu tự động lưu (Auto-Save) kèm Tòa Thành gần nhất (`LastVisitedCitadel`) của từng người chơi trên máy chủ. |
 | **World Boss Raids** | `design/gdd/world-bosses.md` | **Bắt Buộc (Hard)** | Cung cấp đấu trường mở không rào chắn tại Vùng 3 (Cấm Địa Thần Tích) và tích hợp công thức Dynamic HP / Posture Scaling khi hàng chục người cùng tham chiến. |
 
 ## Tuning Knobs
@@ -276,9 +281,8 @@ Bảng tổng hợp các biến số thiết kế được cấu hình qua `Data
 
 | Tên Biến Số (Tuning Knob) | Kiểu Dữ Liệu | Giá Trị Mặc Định | Dải An Toàn (Min – Max) | Hậu Quả Nếu Quá Thấp | Hậu Quả Nếu Quá Cao |
 | :--- | :---: | :---: | :---: | :--- | :--- |
-| `campfire_sanctuary_radius` | float | `1000.0 cm` | $600.0$ – $1500.0\text{ cm}$ | Quái vật đứng quá sát Lửa Trại, bắn tỉa người chơi đang nghỉ ngơi. | Khu vực an toàn quá rộng làm triệt tiêu sự căng thẳng khi bị rượt đuổi dã ngoại. |
-| `campfire_ignite_interaction_time` | float | `1.5 s` | $1.0$ – $3.0\text{ s}$ | Thắp lửa quá nhanh làm mất tính hồi hộp khi đang bị quái truy đuổi. | Quá lâu khiến người chơi hầu như không thể thắp lửa nếu có quái tầm xa. |
-| `fast_travel_cast_time` | float | `2.0 s` | $1.0$ – $5.0\text{ s}$ | Dễ bị lợi dụng để trốn chạy ngay trước mắt kẻ địch hoặc đối thủ PK. | Gây sốt ruột và cảm giác ì ạch khi dịch chuyển giữa các trạm an toàn. |
+| `citadel_safe_zone_radius` | float | `5000.0 cm` | $3000.0$ – $10000.0\text{ cm}$ | Quái vật đứng quá sát cổng thành, bắn tỉa người chơi đang vào thành. | Khu vực an toàn quá rộng làm triệt tiêu sự căng thẳng khi bị rượt đuổi dã ngoại. |
+| `fast_travel_cast_time` | float | `2.0 s` | $1.0$ – $5.0\text{ s}$ | Dễ bị lợi dụng để trốn chạy ngay trước mắt kẻ địch hoặc đối thủ PK. | Gây sốt ruột và cảm giác ì ạch khi dịch chuyển giữa các thành trì. |
 | `ai_leash_max_distance` | float | `2500.0 cm` | $1500.0$ – $4000.0\text{ cm}$ | Quái vừa đuổi 1 đoạn ngắn đã quay đầu, người chơi tầm xa dễ dàng cấu rỉa thả diều (kite). | Dễ bị người chơi kéo quái cấp cao qua nhiều vùng địa hình gây nhiễu loạn server. |
 | `combat_disconnect_ghost_duration`| float | `15.0 s` | $10.0$ – $30.0\text{ s}$ | Người chơi lợi dụng rút dây mạng/Alt-F4 để thoát hiểm khi sắp chết. | Bất công cho người chơi bị rớt mạng thật sự do đường truyền Internet kém. |
 | `boss_loot_contribution_hp` | float | `0.05` (5%) | $0.01$ – $0.15$ | Tạo điều kiện cho nạn bot/ăn hôi chỉ quẹt nhẹ rồi đứng ngoài nhận thưởng. | Quá khắt khe đối với người chơi hỗ trợ (Acolyte) hoặc người mới vào trận trễ. |
@@ -292,22 +296,22 @@ Bảng tổng hợp các biến số thiết kế được cấu hình qua `Data
 ## Visual/Audio Requirements
 
 ### 1. Hiệu Ứng Hình Ảnh (VFX — Niagara)
-* **Cột Khói Lửa Trại (Smoke Beacon — Niagara System):**
-  * Mỗi Lửa Trại chưa mở (Dormant) liên tục phóng một cột khói lam nhạt mảnh mai vươn cao $3000\text{ cm}$ lên bầu trời, xuyên qua lớp sương mù chiến tranh (Fog of War) để người chơi có thể định hướng tìm kiếm từ góc nhìn Isometric bao quát.
-  * Khi người chơi thắp lửa thành công: Hiệu ứng tia lửa bùng nổ (`NS_CampfireIgnite_Burst`), chuyển ngọn lửa sang sắc vàng cam ấm áp và trải một vòng hào quang ánh sáng mềm mại trên mặt đất bao phủ trọn vẹn bán kính Thánh Địa $1000\text{ cm}$.
+* **Ngọn Hải Đăng Tòa Thành (Citadel Beacon — Niagara System):**
+  * Mỗi Tòa Thành kiên cố phóng một cột hào quang ánh sáng vàng kim vươn cao $10000\text{ cm}$ lên bầu trời, giúp người chơi dễ dàng định hướng vị trí thành trì an toàn từ mọi góc nhìn trên bản đồ dã ngoại.
+  * Hiệu ứng Auto-Save (`NS_Citadel_AutoSave_Glow`): Khi người chơi bước qua cổng thành, một làn sóng ánh sáng vàng lan tỏa nhẹ dưới chân và biểu tượng [AUTO-SAVED] hiện thị xác nhận thành công.
 * **Vệt Tro Tàn (Ash Remnant VFX):**
   * Điểm chết PvE sinh ra một đốm tro tàn phát ánh sáng vàng hổ phách nhấp nháy, được bao quanh bởi một kết giới mờ biểu thị trạng thái "Khóa Chủ Sở Hữu" (Owner Lock).
   * Điểm chết của Kẻ Bị Truy Nã (Wanted Red Name) phát ra làn khói đen tà ác sủi bọt, không có kết giới bao quanh (báo hiệu cho phép nhặt tự do).
 * **Dither Occlusion Mask (Xử Lý Che Khuất Tầm Nhìn):**
-  * Khi nhân vật hoặc Lửa Trại nằm dưới tán cây cổ thụ hoặc sau vách núi đá chắn tầm nhìn camera Isometric, vật liệu môi trường tự động áp dụng hiệu ứng mờ bán phần (Dither Transparency Mask) trong bán kính $300\text{ cm}$ xung quanh nhân vật, bảo đảm tầm quan sát không bao giờ bị điểm mù.
+  * Khi nhân vật nằm dưới tán cây cổ thụ hoặc sau tường thành/mái vòm chắn tầm nhìn camera Isometric, vật liệu môi trường tự động áp dụng hiệu ứng mờ bán phần (Dither Transparency Mask) trong bán kính $300\text{ cm}$ xung quanh nhân vật, bảo đảm tầm quan sát không bao giờ bị điểm mù.
 
 ### 2. Thiết Kế Âm Thanh (SFX & Audio Stems)
-* **Âm Thanh Lửa Trại (Campfire Audio):**
-  * Tiếng quẹt đá lửa 'XOẸT! BÙNG!' đanh gọn khi tương tác thắp sáng; tiếng củi nổ lách tách ấm áp và tiếng gió rít nhẹ bên ngoài ranh giới an toàn.
-  * Ngay khi bước vào kết giới Thánh Địa, nhạc nền chiến đấu căng thẳng tự động fade-out (0.8s) nhường chỗ cho giai điệu vĩ cầm và sáo trúc mộc mạc, bình yên của chủ đề "Ốc Đảo Sinh Tồn".
+* **Âm Thanh Tòa Thành (Citadel Audio):**
+  * Tiếng kèn hiệu và chuông thành trầm hùng vang vọng khi người chơi bước qua cổng thành; tiếng búa rèn kim loại nhịp nhàng của Thợ Rèn và tiếng xì xào giao thương náo nhiệt của quảng trường.
+  * Ngay khi bước vào Safe Zone của Thành, nhạc nền chiến đấu căng thẳng tự động fade-out (0.8s) nhường chỗ cho giai điệu dàn nhạc hoành tráng, trang nghiêm và an bình của Tòa Thành.
 * **Âm Thanh Cảnh Báo Wanted & Vệ Binh:**
   * Khi một Kẻ Bị Truy Nã (Red Name) tiến vào phạm vi $2000\text{ cm}$ của người chơi, một âm thanh chuông ngân rùng rợn (`SFX_Wanted_Proximity_Warning`) vang lên cảnh báo nguy hiểm.
-  * Tiếng gươm giáo va đập và tiếng tù và thị uy đanh thép của Vệ Binh Trấn Thủ khi quái vật hoặc tội phạm áp sát cổng trấn.
+  * Tiếng gươm giáo va đập và tiếng tù và thị uy đanh thép của Vệ Binh Trấn Thủ khi quái vật hoặc tội phạm áp sát cổng thành.
 
 ---
 
@@ -315,8 +319,8 @@ Bảng tổng hợp các biến số thiết kế được cấu hình qua `Data
 
 * **Hệ Thống Bản Đồ Thế Giới & Bản Đồ Mini (World Map & Minimap):**
   * Sương mù chiến tranh (Fog of War) che phủ địa hình, tự động giải phóng trong bán kính $1500\text{ cm}$ khi người chơi thám hiểm qua.
-  * Biểu tượng Lửa Trại hiển thị trực quan: Đốm xám tro (chưa thắp sáng), Ngọn lửa vàng rực (đã kích hoạt), Ngọn lửa xanh (Lửa Trại hiện đang tĩnh dưỡng).
-  * Cho phép bấm trực tiếp vào biểu tượng Lửa Trại đã kích hoạt trên bản đồ để bắt đầu niệm Dịch Chuyển Nhanh.
+  * Biểu tượng Tòa Thành hiển thị trực quan: Pháo đài xám (chưa khám phá), Pháo đài vàng kim kiên cố (đã khám phá), Biểu tượng Ngôi sao (Tòa Thành ghé thăm gần nhất / Điểm lưu Relog).
+  * Cho phép bấm trực tiếp vào biểu tượng Tòa Thành đã khám phá trên bản đồ để bắt đầu niệm Dịch Chuyển Nhanh.
 * **Thanh Trạng Thái Danh Dự & Tên Nhân Vật (Karma HUD):**
   * Tên người chơi đổi màu động theo 5 bậc: Xanh Lá (Chính Nghĩa) $\rightarrow$ Trắng (Trung Lập) $\rightarrow$ Xám (Kẻ Tấn Công) $\rightarrow$ Cam (Tội Đồ) $\rightarrow$ Đỏ Thẫm (Kẻ Bị Truy Nã).
   * Kẻ Bị Truy Nã (Red Name) hiển thị biểu tượng Đầu Lâu Đỏ bốc cháy bên cạnh thanh máu; vị trí tọa độ vùng của họ được phát sóng (ping) định kỳ 30s một lần lên Minimap toàn server.
@@ -333,24 +337,29 @@ Bảng tổng hợp các biến số thiết kế được cấu hình qua `Data
 Mọi tiêu chí kiểm thử đều được cấu trúc theo định dạng **Given-When-Then** độc lập, cho phép đội ngũ QA kiểm thử và xác thực cơ chế mà không cần phụ thuộc vào mã nguồn:
 
 - **AC-01 (Thế Giới Mở Liền Mạch Không Rào Cản - Non-gated Streaming):**
-  - **GIVEN** nhân vật vừa tạo Cấp 1 tại Thị Trấn Tiền Trạm,
+  - **GIVEN** nhân vật vừa tạo Cấp 1 tại Thành Tiền Trạm (Verdant Bastion),
   - **WHEN** người chơi điều khiển nhân vật chạy bộ liên tục xuyên qua ranh giới Rừng Sơ Khai sang Hoang Dã Tàn Tích và tiến thẳng vào Cấm Địa Thần Tích,
   - **THEN** nhân vật di chuyển liền mạch không gặp bất kỳ tường vô hình (Invisible Wall) hay màn hình tải cắt cảnh nào; World Partition tải dữ liệu địa hình mượt mà giữ vững $\ge 60\text{ FPS}$.
 
-- **AC-02 (Ranh Giới Thánh Địa & Xóa Aggro - Sanctuary Boundary):**
+- **AC-02 (Ranh Giới Vùng An Toàn & Xóa Aggro - Citadel Safe Zone Boundary):**
   - **GIVEN** người chơi đang bị đàn quái cấp 25 rượt đuổi ngoài hoang dã,
-  - **WHEN** nhân vật lướt né bước chân qua bán kính $1000\text{ cm}$ của Lửa Trại đã kích hoạt,
-  - **THEN** toàn bộ quái vật lập tức dừng truy đuổi tại mép kết giới, nhận thẻ `State.Invulnerable` và quay đầu chạy về vị trí ban đầu; người chơi không nhận thêm bất kỳ sát thương nào.
+  - **WHEN** nhân vật lướt né bước chân qua cổng Tòa Thành (bán kính $5000\text{ cm}$ của Citadel),
+  - **THEN** toàn bộ quái vật lập tức dừng truy đuổi tại cổng thành, nhận thẻ `State.Invulnerable` và quay đầu chạy về vị trí ban đầu (Drop Aggro); người chơi không nhận thêm bất kỳ sát thương nào và vũ khí chuyển sang trạng thái Pacified.
 
-- **AC-03 (Tĩnh Dưỡng & Tái Sinh Quái - Campfire Rest):**
-  - **GIVEN** nhân vật đang còn $20\%$ HP, $0$ Mana, và đã dùng hết 3 bình dược phẩm,
-  - **WHEN** người chơi tiếp cận Lửa Trại và bấm chọn "Tĩnh Dưỡng",
-  - **THEN** HP, Mana, Stamina và toàn bộ số lần dùng của bình dược phẩm hồi phục $100\%$ ngay lập tức; đồng thời toàn bộ quái vật thường đã tiêu diệt trong vùng được tái tạo (respawn) lại hoàn toàn.
+- **AC-03 (Tự Động Lưu & Hồi Phục Khi Vào Thành - Citadel Enter Auto-Save & Recovery):**
+  - **GIVEN** nhân vật đang còn $20\%$ HP, $0$ Mana, và đã dùng hết 5 bình dược phẩm,
+  - **WHEN** người chơi bước qua cổng Tòa Thành (Safe Zone),
+  - **THEN** máy chủ tự động kích hoạt `ExecuteAutoSave()` lưu vị trí và dữ liệu người chơi; ghim Tòa Thành này làm `LastVisitedCitadel`; đồng thời HP, Mana, Stamina và 5/5 bình dược phẩm hồi phục $100\%$ ngay lập tức.
 
-- **AC-04 (Dịch Chuyển Nhanh - Fast Travel):**
-  - **GIVEN** người chơi đã thắp sáng Lửa Trại Tiền Trạm và Lửa Trại Hoang Dã,
-  - **WHEN** người chơi đứng tại Lửa Trại Tiền Trạm, chọn Lửa Trại Hoang Dã trên bản đồ và niệm chú thành công trong $2.0\text{s}$ mà không bị quái/người chơi khác tấn công,
-  - **THEN** nhân vật được dịch chuyển tức thời tới đứng cạnh Lửa Trại Hoang Dã mà không bị trừ bất kỳ chi phí Vàng hay tài nguyên nào.
+- **AC-04 (Thoát Game & Đăng Nhập Lại Về Tòa Thành Gần Nhất - Relog Return to Last Citadel):**
+  - **GIVEN** người chơi đã từng ghé thăm Pháo Đài Tro Tàn (Ashen Keep) và sau đó đi thám hiểm ngoài hoang dã rồi thoát game (Quit/Disconnect),
+  - **WHEN** người chơi đăng nhập lại vào game (Login / Relog),
+  - **THEN** máy chủ luôn luôn đưa nhân vật xuất hiện an toàn tại Pháo Đài Tro Tàn (Tòa Thành ghé thăm gần nhất) với $100\%$ máu, mana và thể lực.
+
+- **AC-05 (Dịch Chuyển Nhanh Giữa Các Tòa Thành - Citadel Fast Travel):**
+  - **GIVEN** người chơi đã khám phá Thành Tiền Trạm và Pháo Đài Tro Tàn,
+  - **WHEN** người chơi đứng tại Cổng Dịch Chuyển của Thành Tiền Trạm, chọn Pháo Đài Tro Tàn và niệm chú thành công trong $2.0\text{s}$ mà không bị gián đoạn,
+  - **THEN** nhân vật được dịch chuyển tức thời tới đứng tại quảng trường Pháo Đài Tro Tàn và kích hoạt Auto-Save tại thành mới mà không bị trừ chi phí Vàng.
 
 - **AC-05 (Ngưỡng Đóng Góp Nhận Instanced Loot - Contested Drop):**
   - **GIVEN** một Boss thế giới có $10,000$ HP đang bị 3 người chơi xa lạ cùng tấn công,

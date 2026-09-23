@@ -9,9 +9,9 @@
  * EPAZoneTier
  *
  * 3 phân vùng thế giới mở nối liền (World Partition) theo GDD zone-system.md:
- * - Tier1_VerdantFrontier: Lv 1-15, Outpost an toàn, guards Lv 50, PvP bị cấm trong trấn.
- * - Tier2_AshenWilderness: Lv 16-30, Rừng tro tàn, đầm lầy độc, quái tinh anh tuần tra 4-6 con, open PvP.
- * - Tier3_ForbiddenSanctum: Lv 31-50, Vùng cấm sương mù dày đặc, khe nứt không gian, Lò rèn Boss Soul.
+ * - Tier1_VerdantFrontier: Lv 1-15, Tòa thành Verdant Bastion, guards Lv 50, Safe Zone tuyệt đối.
+ * - Tier2_AshenWilderness: Lv 16-30, Rừng tro tàn, đầm lầy độc, quái tinh anh tuần tra 4-6 con, Pháo đài Ashen Keep.
+ * - Tier3_ForbiddenSanctum: Lv 31-50, Vùng cấm sương mù dày đặc, khe nứt không gian, Thánh điện Sanctum Fortress.
  */
 UENUM(BlueprintType)
 enum class EPAZoneTier : uint8
@@ -22,64 +22,108 @@ enum class EPAZoneTier : uint8
 };
 
 /**
- * EPACampfireState
+ * EPACitadelState
  *
- * Trạng thái của Đống Lửa (Campfire):
- * - Dormant: Chưa được thắp sáng.
- * - Active: Đã thắp sáng, cung cấp Sanctuary 1000cm và điểm lưu.
- * - Resting: Người chơi đang ngồi nghỉ (hồi phục 100% tài nguyên).
- * - FastTraveling: Đang niệm chú dịch chuyển 2.0s.
+ * Trạng thái của Tòa Thành (Citadel / Safe Zone):
+ * - Undiscovered: Chưa từng bước chân vào.
+ * - Discovered: Đã mở khóa vào danh sách thành trì đã ghé thăm.
+ * - FastTraveling: Đang niệm chú dịch chuyển giữa các thành trì (2.0s).
  */
 UENUM(BlueprintType)
-enum class EPACampfireState : uint8
+enum class EPACitadelState : uint8
 {
-	Dormant        = 0 UMETA(DisplayName = "Dormant (Unlit)"),
-	Active         = 1 UMETA(DisplayName = "Active (Lit Sanctuary)"),
-	Resting        = 2 UMETA(DisplayName = "Resting"),
-	FastTraveling  = 3 UMETA(DisplayName = "Fast Traveling (2.0s Cast)")
+	Undiscovered   = 0 UMETA(DisplayName = "Undiscovered"),
+	Discovered     = 1 UMETA(DisplayName = "Discovered & Active"),
+	FastTraveling  = 2 UMETA(DisplayName = "Fast Traveling (2.0s Cast)")
 };
 
 /**
- * FPACampfireNode
+ * FPACitadelNode
  *
- * Dữ liệu của một điểm Đống Lửa trong thế giới.
+ * Dữ liệu của một Tòa Thành (Citadel / Pháo Đài An Toàn) trong thế giới.
  */
 USTRUCT(BlueprintType)
-struct PROJECTASCENDANT_API FPACampfireNode
+struct PROJECTASCENDANT_API FPACitadelNode
 {
 	GENERATED_BODY()
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Zone|Campfire")
-	FName CampfireId;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Zone|Citadel")
+	FName CitadelId;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Zone|Campfire")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Zone|Citadel")
+	FString CitadelDisplayName;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Zone|Citadel")
 	EPAZoneTier ZoneTier = EPAZoneTier::Tier1_VerdantFrontier;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Zone|Campfire")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Zone|Citadel")
 	FVector WorldLocation = FVector::ZeroVector;
 
-	UPROPERTY(BlueprintReadOnly, Category = "Zone|Campfire")
-	bool bIsLit = false;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Zone|Citadel")
+	float SafeZoneRadius = 5000.0f; // Bán kính vùng an toàn của tòa thành
 
-	UPROPERTY(BlueprintReadOnly, Category = "Zone|Campfire")
-	bool bIsCurrentSpawnAnchor = false;
+	UPROPERTY(BlueprintReadOnly, Category = "Zone|Citadel")
+	bool bIsDiscovered = false;
 
-	FPACampfireNode() = default;
+	UPROPERTY(BlueprintReadOnly, Category = "Zone|Citadel")
+	bool bIsLastVisited = false;
+
+	FPACitadelNode() = default;
+};
+
+/**
+ * FPAAutoSaveRecord
+ *
+ * Bản ghi tự động lưu (Auto-Save) khi người chơi bước vào Tòa Thành.
+ */
+USTRUCT(BlueprintType)
+struct PROJECTASCENDANT_API FPAAutoSaveRecord
+{
+	GENERATED_BODY()
+
+	UPROPERTY(BlueprintReadOnly, Category = "Zone|Save")
+	FString PlayerId;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Zone|Save")
+	FName LastVisitedCitadelId;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Zone|Save")
+	FVector SavedSpawnLocation = FVector::ZeroVector;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Zone|Save")
+	float AutoSaveTimestamp = 0.0f;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Zone|Save")
+	bool bSavedSuccessfully = false;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Zone|Save")
+	float SavedHPPercent = 1.0f;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Zone|Save")
+	float SavedMPPercent = 1.0f;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Zone|Save")
+	float SavedStaminaPercent = 1.0f;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Zone|Save")
+	int32 SavedFlaskCharges = 5;
+
+	FPAAutoSaveRecord() = default;
 };
 
 /**
  * FPAZoneConfig
  *
- * Tham số cân chỉnh vùng và thánh địa theo GDD zone-system.md §Tuning Knobs.
+ * Tham số cân chỉnh vùng và Tòa thành an toàn theo GDD zone-system.md.
  */
 USTRUCT(BlueprintType)
 struct PROJECTASCENDANT_API FPAZoneConfig
 {
 	GENERATED_BODY()
 
-	/** Bán kính vùng an toàn Thánh địa (1000cm) */
+	/** Bán kính vùng an toàn mặc định của Tòa thành (5000cm) */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Zone|Config")
-	float SanctuaryRadius = 1000.0f;
+	float DefaultCitadelRadius = 5000.0f;
 
 	/** Cự ly tối đa quái vật được phép di chuyển khỏi vị trí sinh (2500cm) */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Zone|Config")
@@ -89,11 +133,11 @@ struct PROJECTASCENDANT_API FPAZoneConfig
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Zone|Config")
 	float LeashSpeedMultiplier = 1.50f;
 
-	/** Thời gian niệm chú dịch chuyển nhanh (2.0s) */
+	/** Thời gian niệm chú dịch chuyển nhanh giữa các thành trì (2.0s) */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Zone|Config")
 	float FastTravelCastDuration = 2.0f;
 
-	/** Số lượt dùng bình dược phẩm tối đa */
+	/** Số lượt dùng bình dược phẩm tối đa khi ở trong thành */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Zone|Config")
 	int32 MaxFlaskCharges = 5;
 };
@@ -101,8 +145,14 @@ struct PROJECTASCENDANT_API FPAZoneConfig
 /**
  * FPAZoneModel
  *
- * Pure data model quản lý danh sách Đống Lửa, kiểm tra ranh giới Sanctuary 1000cm,
- * tiến trình Fast Travel 2.0s (hủy nếu di chuyển/nhận sát thương), và AI Leash 2500cm.
+ * Pure data model quản lý:
+ * 1. Mạng lưới Tòa Thành (Citadels / Safe Cities) theo 3 phân vùng.
+ * 2. Vùng An Toàn Tuyệt Đối (Safe Zone): Cấm PvP, quái drop aggro không thể vào.
+ * 3. Cơ chế Tự Động Lưu (Auto-Save): Kích hoạt tức thì khi người chơi bước vào Tòa Thành.
+ * 4. Cơ chế Đăng Nhập Lại (Relog Return): Khi thoát game ở bất kỳ đâu ngoài hoang dã,
+ *    lúc đăng nhập vào lại người chơi luôn xuất hiện tại Tòa Thành ghé thăm gần nhất.
+ * 5. Dịch chuyển nhanh giữa các Tòa Thành (Fast Travel 2.0s cast).
+ * 6. Ranh giới xích quái AI Leash 2500cm.
  * 100% headless testable.
  */
 USTRUCT(BlueprintType)
@@ -111,13 +161,18 @@ struct PROJECTASCENDANT_API FPAZoneModel
 	GENERATED_BODY()
 
 	UPROPERTY(BlueprintReadOnly, Category = "Zone|Model")
-	TArray<FPACampfireNode> Campfires;
+	TArray<FPACitadelNode> Citadels;
+
+	/** Tòa thành người chơi bước vào gần nhất (Last Visited Citadel) */
+	UPROPERTY(BlueprintReadOnly, Category = "Zone|Model")
+	FName LastVisitedCitadelId;
+
+	/** Bản ghi tự động lưu gần nhất */
+	UPROPERTY(BlueprintReadOnly, Category = "Zone|Model")
+	FPAAutoSaveRecord LastAutoSave;
 
 	UPROPERTY(BlueprintReadOnly, Category = "Zone|Model")
-	FName CurrentSpawnAnchorId;
-
-	UPROPERTY(BlueprintReadOnly, Category = "Zone|Model")
-	EPACampfireState CurrentState = EPACampfireState::Dormant;
+	EPACitadelState CurrentState = EPACitadelState::Undiscovered;
 
 	/** Điểm đến Fast Travel đang niệm chú */
 	UPROPERTY(BlueprintReadOnly, Category = "Zone|Model")
@@ -139,78 +194,159 @@ struct PROJECTASCENDANT_API FPAZoneModel
 
 	FPAZoneModel() = default;
 
-	void RegisterCampfire(FName Id, EPAZoneTier Tier, const FVector& Location, bool bInitiallyLit = false)
+	void RegisterCitadel(FName Id, const FString& DisplayName, EPAZoneTier Tier, const FVector& Location, float SafeRadius = 5000.0f)
 	{
-		FPACampfireNode Node;
-		Node.CampfireId = Id;
+		FPACitadelNode Node;
+		Node.CitadelId = Id;
+		Node.CitadelDisplayName = DisplayName;
 		Node.ZoneTier = Tier;
 		Node.WorldLocation = Location;
-		Node.bIsLit = bInitiallyLit;
-		Node.bIsCurrentSpawnAnchor = false;
-		Campfires.Add(Node);
+		Node.SafeZoneRadius = (SafeRadius > 0.0f) ? SafeRadius : Config.DefaultCitadelRadius;
+		Node.bIsDiscovered = false;
+		Node.bIsLastVisited = false;
+		Citadels.Add(Node);
 	}
 
 	// ===========================================================
-	// Campfire Actions
+	// Citadel Safe Zone & Auto-Save Actions
 	// ===========================================================
 
-	bool LightCampfire(FName Id)
+	/**
+	 * Người chơi bước vào Tòa Thành:
+	 * - Đánh dấu Tòa Thành là Discovered.
+	 * - Cập nhật LastVisitedCitadelId thành Tòa Thành này.
+	 * - Kích hoạt Auto-Save tức thì lưu vị trí và trạng thái người chơi.
+	 * - Hồi phục trọn vẹn 100% HP, MP, Stamina và đầy 5/5 Flasks.
+	 * @return true nếu người chơi đang ở trong phạm vi một Tòa Thành và kích hoạt Auto-Save thành công.
+	 */
+	bool EnterCitadel(
+		const FString& PlayerId,
+		const FVector& PlayerLocation,
+		float CurrentSimTime,
+		FPAAutoSaveRecord& OutSaveRecord,
+		float& OutHP,
+		float& OutMP,
+		float& OutStamina,
+		int32& OutFlasks)
 	{
-		FPACampfireNode* Node = FindCampfire(Id);
+		FName FoundCitadelId = NAME_None;
+		if (!IsInsideSafeZone(PlayerLocation, FoundCitadelId))
+		{
+			return false;
+		}
+
+		FPACitadelNode* Node = FindCitadel(FoundCitadelId);
 		if (!Node)
 		{
 			return false;
 		}
 
-		Node->bIsLit = true;
-		SetSpawnAnchor(Id);
+		// Đánh dấu đã khám phá và đặt làm thành vào gần nhất
+		Node->bIsDiscovered = true;
+		SetLastVisitedCitadel(FoundCitadelId);
+
+		// Hồi phục toàn diện tài nguyên
+		OutHP = 1.0f;
+		OutMP = 1.0f;
+		OutStamina = 1.0f;
+		OutFlasks = Config.MaxFlaskCharges;
+
+		// Kích hoạt Auto-Save
+		OutSaveRecord.PlayerId = PlayerId;
+		OutSaveRecord.LastVisitedCitadelId = FoundCitadelId;
+		OutSaveRecord.SavedSpawnLocation = Node->WorldLocation;
+		OutSaveRecord.AutoSaveTimestamp = CurrentSimTime;
+		OutSaveRecord.bSavedSuccessfully = true;
+		OutSaveRecord.SavedHPPercent = OutHP;
+		OutSaveRecord.SavedMPPercent = OutMP;
+		OutSaveRecord.SavedStaminaPercent = OutStamina;
+		OutSaveRecord.SavedFlaskCharges = OutFlasks;
+
+		LastAutoSave = OutSaveRecord;
+		CurrentState = EPACitadelState::Discovered;
 		return true;
 	}
 
-	void SetSpawnAnchor(FName Id)
+	void SetLastVisitedCitadel(FName CitadelId)
 	{
-		CurrentSpawnAnchorId = Id;
-		for (FPACampfireNode& Node : Campfires)
+		LastVisitedCitadelId = CitadelId;
+		for (FPACitadelNode& Node : Citadels)
 		{
-			Node.bIsCurrentSpawnAnchor = (Node.CampfireId == Id);
+			Node.bIsLastVisited = (Node.CitadelId == CitadelId);
 		}
 	}
 
 	/**
-	 * Nghỉ ngơi tại đống lửa: Hồi 100% tài nguyên và đầy bình dược phẩm.
+	 * Xử lý khi người chơi thoát game và đăng nhập vào lại (Relog):
+	 * Luôn đưa người chơi về Tòa Thành mà họ đã ghé thăm gần nhất.
+	 * @return true nếu tìm thấy tọa độ tòa thành gần nhất; OutSpawnLocation là tọa độ xuất hiện an toàn.
 	 */
-	bool RestAtCampfire(FName Id, float& OutHP, float& OutMP, float& OutStamina, int32& OutFlasks)
+	bool GetRelogSpawnTransform(const FString& InPlayerId, FVector& OutSpawnLocation, FName& OutCitadelId) const
 	{
-		FPACampfireNode* Node = FindCampfire(Id);
-		if (!Node || !Node->bIsLit)
+		// 1. Kiểm tra bản ghi AutoSave trước
+		if (LastAutoSave.bSavedSuccessfully && !LastAutoSave.LastVisitedCitadelId.IsNone())
 		{
-			return false;
+			const FPACitadelNode* Node = FindCitadel(LastAutoSave.LastVisitedCitadelId);
+			if (Node)
+			{
+				OutSpawnLocation = Node->WorldLocation;
+				OutCitadelId = Node->CitadelId;
+				return true;
+			}
 		}
 
-		SetSpawnAnchor(Id);
-		OutHP = 1.0f; // 100%
-		OutMP = 1.0f; // 100%
-		OutStamina = 1.0f; // 100%
-		OutFlasks = Config.MaxFlaskCharges; // 5/5
-		return true;
+		// 2. Tra cứu theo LastVisitedCitadelId hiện tại
+		if (!LastVisitedCitadelId.IsNone())
+		{
+			const FPACitadelNode* Node = FindCitadel(LastVisitedCitadelId);
+			if (Node)
+			{
+				OutSpawnLocation = Node->WorldLocation;
+				OutCitadelId = Node->CitadelId;
+				return true;
+			}
+		}
+
+		// 3. Fallback: Nếu là tài khoản hoàn toàn mới chưa từng vào thành nào, đưa về Thành Tân Thủ đầu tiên (Tier 1)
+		for (const FPACitadelNode& Node : Citadels)
+		{
+			if (Node.ZoneTier == EPAZoneTier::Tier1_VerdantFrontier)
+			{
+				OutSpawnLocation = Node.WorldLocation;
+				OutCitadelId = Node.CitadelId;
+				return true;
+			}
+		}
+
+		// Fallback cuối cùng nếu chưa đăng ký thành nào
+		if (Citadels.Num() > 0)
+		{
+			OutSpawnLocation = Citadels[0].WorldLocation;
+			OutCitadelId = Citadels[0].CitadelId;
+			return true;
+		}
+
+		OutSpawnLocation = FVector::ZeroVector;
+		OutCitadelId = NAME_None;
+		return false;
 	}
 
 	// ===========================================================
-	// Fast Travel (2.0s Cast)
+	// Fast Travel Between Citadels (2.0s Cast)
 	// ===========================================================
 
-	bool StartFastTravel(FName FromId, FName ToId, bool bInCombat)
+	bool StartCitadelFastTravel(FName FromId, FName ToId, bool bInCombat)
 	{
 		if (bInCombat || bIsChannelingFastTravel)
 		{
 			return false;
 		}
 
-		const FPACampfireNode* From = FindCampfire(FromId);
-		const FPACampfireNode* To = FindCampfire(ToId);
+		const FPACitadelNode* From = FindCitadel(FromId);
+		const FPACitadelNode* To = FindCitadel(ToId);
 
-		// Cả 2 điểm phải tồn tại và đều đã được thắp sáng
-		if (!From || !To || !From->bIsLit || !To->bIsLit)
+		// Cả 2 điểm phải tồn tại và thành đích phải từng được khám phá (Discovered)
+		if (!From || !To || !To->bIsDiscovered)
 		{
 			return false;
 		}
@@ -218,7 +354,7 @@ struct PROJECTASCENDANT_API FPAZoneModel
 		bIsChannelingFastTravel = true;
 		FastTravelDestinationId = ToId;
 		FastTravelElapsed = 0.0f;
-		CurrentState = EPACampfireState::FastTraveling;
+		CurrentState = EPACitadelState::FastTraveling;
 		return true;
 	}
 
@@ -245,7 +381,7 @@ struct PROJECTASCENDANT_API FPAZoneModel
 		if (FastTravelElapsed >= Config.FastTravelCastDuration)
 		{
 			CompleteFastTravel();
-			return true; // Dịch chuyển thành công!
+			return true;
 		}
 
 		return false;
@@ -256,42 +392,39 @@ struct PROJECTASCENDANT_API FPAZoneModel
 		bIsChannelingFastTravel = false;
 		FastTravelDestinationId = NAME_None;
 		FastTravelElapsed = 0.0f;
-		CurrentState = EPACampfireState::Active;
+		CurrentState = EPACitadelState::Discovered;
 	}
 
 	void CompleteFastTravel()
 	{
 		bIsChannelingFastTravel = false;
 		FastTravelElapsed = 0.0f;
-		CurrentState = EPACampfireState::Active;
-		SetSpawnAnchor(FastTravelDestinationId);
+		CurrentState = EPACitadelState::Discovered;
+		SetLastVisitedCitadel(FastTravelDestinationId);
 	}
 
 	// ===========================================================
-	// Sanctuary & AI Leash Boundary Math
+	// Safe Zone & AI Leash Boundary Math
 	// ===========================================================
 
 	/**
-	 * Kiểm tra xem vị trí có nằm trong Thánh địa 1000cm của bất kỳ Campfire nào đã thắp sáng không.
+	 * Kiểm tra xem vị trí có nằm trong Vùng An Toàn (Safe Zone) của bất kỳ Tòa Thành nào không.
+	 * Khi ở trong Safe Zone: cấm PvP, quái bị xóa aggro và không thể bước vào.
 	 */
-	bool IsInsideSanctuary(const FVector& Location, FName& OutCampfireId) const
+	bool IsInsideSafeZone(const FVector& Location, FName& OutCitadelId) const
 	{
-		const float RadiusSq = FMath::Square(Config.SanctuaryRadius);
-
-		for (const FPACampfireNode& Node : Campfires)
+		for (const FPACitadelNode& Node : Citadels)
 		{
-			if (Node.bIsLit)
+			const float RadiusSq = FMath::Square(Node.SafeZoneRadius);
+			const float DistSq = FVector::DistSquared2D(Location, Node.WorldLocation);
+			if (DistSq <= RadiusSq)
 			{
-				const float DistSq = FVector::DistSquared2D(Location, Node.WorldLocation);
-				if (DistSq <= RadiusSq)
-				{
-					OutCampfireId = Node.CampfireId;
-					return true;
-				}
+				OutCitadelId = Node.CitadelId;
+				return true;
 			}
 		}
 
-		OutCampfireId = NAME_None;
+		OutCitadelId = NAME_None;
 		return false;
 	}
 
@@ -308,11 +441,11 @@ struct PROJECTASCENDANT_API FPAZoneModel
 	// Helpers
 	// ===========================================================
 
-	FPACampfireNode* FindCampfire(FName Id)
+	FPACitadelNode* FindCitadel(FName Id)
 	{
-		for (FPACampfireNode& Node : Campfires)
+		for (FPACitadelNode& Node : Citadels)
 		{
-			if (Node.CampfireId == Id)
+			if (Node.CitadelId == Id)
 			{
 				return &Node;
 			}
@@ -320,11 +453,11 @@ struct PROJECTASCENDANT_API FPAZoneModel
 		return nullptr;
 	}
 
-	const FPACampfireNode* FindCampfire(FName Id) const
+	const FPACitadelNode* FindCitadel(FName Id) const
 	{
-		for (const FPACampfireNode& Node : Campfires)
+		for (const FPACitadelNode& Node : Citadels)
 		{
-			if (Node.CampfireId == Id)
+			if (Node.CitadelId == Id)
 			{
 				return &Node;
 			}
