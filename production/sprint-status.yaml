@@ -51,8 +51,8 @@ stories:
     name: "Dash I-Frame, Perfect Dodge Sweet Spot & Hitstop"
     file: "production/epics/encounter-boss/story-004-dash-iframe-perfect-dodge.md"
     priority: should-have
-    status: backlog
+    status: done
     owner: "gameplay-programmer"
     estimate_days: 1.0
     blocker: ""
-    completed: ""
+    completed: "2026-09-23"
