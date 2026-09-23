@@ -1,7 +1,7 @@
 # Story 004: Dash I-Frame, Perfect Dodge Sweet Spot & Hitstop
 
 > **Epic**: Encounter & Boss Mechanics Layer  
-> **Status**: Ready  
+> **Status**: ✅ Done  
 > **Layer**: Combat / Movement  
 > **Type**: Gameplay / Mechanics  
 > **Estimate**: 8 hours (1.0 days)  
@@ -24,17 +24,17 @@
 
 ## Acceptance Criteria
 
-- [ ] **AC-1 (Dash Timeline & Absolute I-Frame)**:
+- [x] **AC-1 (Dash Timeline & Absolute I-Frame)**:
   - Tổng thời gian lướt cố định ở **0.45 giây**, tiêu tốn **25 Stamina**, quãng đường di chuyển $\approx 380\text{cm}$.
   - Trong **0.28 giây đầu tiên** ($t \in [0.00, 0.28]$): Nhân vật sở hữu thẻ bất tử `State.Invulnerable`, miễn nhiễm hoàn toàn mọi sát thương và khống chế.
   - Từ $t = 0.28\text{s} \to 0.45\text{s}$: Trở về trạng thái bình thường (hồi phục), có thể bị đánh trúng.
-- [ ] **AC-2 (Perfect Dodge Sweet Spot & Rewards)**:
+- [x] **AC-2 (Perfect Dodge Sweet Spot & Rewards)**:
   - Khi đòn đánh của kẻ địch quét trúng capsule trong khung thời gian vàng **0.05s đến 0.15s** của cú lướt:
   - Hoàn trả ngay lập tức **+15 Stamina** (chi phí thực tế giảm từ $25 \to 10$).
   - Kích hoạt **Hitstop 0.08 giây** (làm chậm thời gian môi trường/quái vật $10\times$ với TimeDilation = 0.1, người chơi giữ nguyên TimeDilation = 1.0).
   - Cấp trạng thái `State.PerfectDodgeTriggered` trong 2.0s để kích hoạt đòn phản công.
-- [ ] **AC-3 (Ledge-Fall Prevention)**: Trong suốt toàn bộ thời gian 0.45s của cú lướt, nhân vật không bao giờ bị rơi khỏi mép vực (`bCanWalkOffLedges = false`).
-- [ ] **AC-4 (Dash Attack Cancel)**: Từ mốc thời gian $t = 0.35\text{s}$, người chơi có thể nhấn nút Đánh để hủy 0.10s hồi phục còn lại và chuyển ngay lập tức sang đòn Dash Attack.
+- [x] **AC-3 (Ledge-Fall Prevention)**: Trong suốt toàn bộ thời gian 0.45s của cú lướt, nhân vật không bao giờ bị rơi khỏi mép vực (`bCanWalkOffLedges = false`).
+- [x] **AC-4 (Dash Attack Cancel)**: Từ mốc thời gian $t = 0.35\text{s}$, người chơi có thể nhấn nút Đánh để hủy 0.10s hồi phục còn lại và chuyển ngay lập tức sang đòn Dash Attack.
 
 ---
 

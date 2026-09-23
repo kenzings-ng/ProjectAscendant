@@ -3,8 +3,8 @@
 > **Layer**: Encounter / AI  
 > **GDD**: [`design/gdd/boss-ai.md`](../../design/gdd/boss-ai.md), [`design/gdd/stagger-system.md`](../../design/gdd/stagger-system.md), [`design/gdd/dash-evasion.md`](../../design/gdd/dash-evasion.md)  
 > **Architecture Module**: Combat & AI Architecture ([`docs/architecture/architecture.md`](../../docs/architecture/architecture.md))  
-> **Status**: Ready  
-> **Stories**: 4 Stories Planned  
+> **Status**: ✅ Complete  
+> **Stories**: 4/4 Stories Done  
 
 ## Overview
 
@@ -21,7 +21,7 @@ Hiện thực hóa toàn bộ vòng lặp giao chiến với Trùm (**Boss Encou
 | 001 | [`Prototype Boss AI & 4-Phase Telegraph System`](story-001-boss-ai-telegraphs.md) | AI / Combat | ✅ Done | ADR-0001, ADR-0002 |
 | 002 | [`Posture Stagger, Kneel Window & True Damage Execution`](story-002-stagger-execution.md) | Combat | ✅ Done | ADR-0001, ADR-0002 |
 | 003 | [`Anatomical Part Breaking & Skill Disabling Matrix`](story-003-part-breaking-matrix.md) | Combat / AI | ✅ Done | ADR-0001, ADR-0002 |
-| 004 | [`Dash I-Frame, Perfect Dodge Sweet Spot & Hitstop`](story-004-dash-iframe-perfect-dodge.md) | Combat / Movement | Ready | ADR-0001, ADR-0002 |
+| 004 | [`Dash I-Frame, Perfect Dodge Sweet Spot & Hitstop`](story-004-dash-iframe-perfect-dodge.md) | Combat / Movement | ✅ Done | ADR-0001, ADR-0002 |
 
 ## Definition of Done
 - [ ] 100% các Stories đạt chuẩn Acceptance Criteria.
