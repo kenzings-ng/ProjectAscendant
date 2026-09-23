@@ -58,6 +58,6 @@
 
 | Epic | Layer | System | Design Document (GDD) | Governing ADRs | Stories Status | Epic Status |
 |---|---|---|---|---|---|---|
-| [`world-zone-auth`](world-zone-auth/EPIC.md) | World / Auth | Seamless Zones, Campfire Sanctuaries, Karma, DDS & Account Auth | [`zone-system.md`](../../design/gdd/zone-system.md), [`authentication-account-system.md`](../../design/gdd/authentication-account-system.md) | ADR-0001, ADR-0003 | 4 stories | **Done** |
+| [`world-zone-auth`](world-zone-auth/EPIC.md) | World / Auth | Seamless Zones, Citadel Safe Zones, Karma, DDS & Account Auth | [`zone-system.md`](../../design/gdd/zone-system.md), [`authentication-account-system.md`](../../design/gdd/authentication-account-system.md) | ADR-0001, ADR-0003 | 4 stories | **Done** |
 
 
