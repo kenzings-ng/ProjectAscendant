@@ -27,6 +27,7 @@
 #include "Account/PAAccountSubsystem.h"
 #include "Economy/PACurrencyComponent.h"
 #include "Network/PALootDropletActor.h"
+#include "Character/PAPaperdollComponent.h"
 
 APABaseCharacter::APABaseCharacter(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
@@ -82,6 +83,7 @@ APABaseCharacter::APABaseCharacter(const FObjectInitializer& ObjectInitializer)
 	StaminaComponent = CreateDefaultSubobject<UPAStaminaComponent>(TEXT("StaminaComponent"));
 	CurrencyComponent = CreateDefaultSubobject<UPACurrencyComponent>(TEXT("CurrencyComponent"));
 	CurrencyComponent->SetIsReplicated(true);
+	PaperdollComponent = CreateDefaultSubobject<UPAPaperdollComponent>(TEXT("PaperdollComponent"));
 
 	// -------------------------------------------------------------------------
 	// Paper2D Sprite & PaperZD Animation Setup (Story pzd-002 / ADR-0002)

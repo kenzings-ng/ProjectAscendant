@@ -72,6 +72,19 @@ Gồm 6 vị trí trang bị cố định, liên kết trực tiếp với `UAsc
 
 *Quy tắc kỹ thuật GAS:* Khi gắn trang bị vào Slot, hệ thống cấp `FActiveGameplayEffectHandle` tương ứng. Khi tháo trang bị, hiệu ứng lập tức bị thu hồi (`RemoveActiveGameplayEffect`).
 
+### 3.2.1 Trực Quan Hóa Đồ Họa Đa Tầng (Modular Paperdoll Visualizer)
+- **Ngoại hình Tân thủ Mặc định (Starter Linen Cloth):** Khi mới tạo nhân vật hoặc khi chưa trang bị áo giáp thân, nhân vật luôn hiển thị trang phục vải thô sơ khai (`Visual_StarterCloth`).
+- **Xếp Chồng Lớp Đồ Họa (Sprite Layering in Paper2D/PaperZD):**
+  - **Lớp Thân Cơ Bản (`EPAPaperdollLayer::BaseBody`):** Quần áo vải thô tân thủ.
+  - **Lớp Áo Giáp Thân (`EPAPaperdollLayer::ChestArmor`):** Áo giáp sắt thép (`Visual_IronArmor`), Áo da thợ săn (`Visual_LeatherRanger`), Pháp bào ma thuật (`Visual_ArcanistRobe`). Khi trang bị, lớp giáp sẽ che phủ bộ đồ vải; khi tháo giáp, nhân vật lập tức trở lại trang phục đồ vải ban đầu.
+  - **Lớp Mũ Nón (`EPAPaperdollLayer::Helmet`):** Mũ giáp, mũ trùm.
+  - **Lớp Vũ Khí Chính (`EPAPaperdollLayer::MainhandWeapon`):** Đại kiếm, Cung tên, Trượng phép.
+  - **Lớp Vũ Khí Phụ / Khiên (`EPAPaperdollLayer::OffhandShield`):** Khiên sắt, Dao găm, Sách phép.
+- **Đồng Bộ Khung Hình Hoạt Ảnh (Frame Lockstep Synchronization):**
+  - Các lớp Flipbook đồ họa trang bị được gắn trực tiếp vào `APABaseCharacter` và điều khiển qua `UPAPaperdollComponent`.
+  - Trong mỗi chu kỳ Tick, khung hình hiển thị (`PlaybackPositionInFrames`) của các lớp trang phục được khóa cứng và đồng bộ chính xác với khung hình của `BaseSprite` (PaperZD Animation Component), loại bỏ hiện tượng trôi lệch frame giữa nhân vật và vũ khí/áo giáp khi di chuyển 8 hướng hoặc vung đòn.
+- **Tương Tác Click-to-Equip Trực Quan:** Khi người chơi nhấp chọn hoặc kéo trang bị từ túi đồ vào ô Paperdoll tương ứng, hệ thống phát thanh sự kiện `OnPaperdollVisualChanged`, vừa cập nhật thuộc tính GAS vừa lập tức tráo đổi sprite hiển thị trên mô hình nhân vật theo thời gian thực.
+
 ### 3.3 Khay Phím Tắt Nhanh (Quickbar Slots 1–4)
 - 4 ô trang bị nhanh tương ứng với các phím bấm nóng `[1]`, `[2]`, `[3]`, `[4]`.
 - Chỉ chấp nhận các vật phẩm thuộc nhóm **Tiêu Hao (Consumables)**.
