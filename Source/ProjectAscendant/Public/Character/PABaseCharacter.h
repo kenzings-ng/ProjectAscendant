@@ -18,6 +18,7 @@ class UPAStaminaComponent;
 class UPaperFlipbookComponent;
 class UPaperZDAnimationComponent;
 class UPACurrencyComponent;
+class UPAPaperdollComponent;
 
 /**
  * APABaseCharacter
@@ -197,6 +198,10 @@ public:
 	UFUNCTION(BlueprintPure, Category = "ProjectAscendant|Economy")
 	UPACurrencyComponent* GetCurrencyComponent() const { return CurrencyComponent.Get(); }
 
+	/** Trả về PaperdollComponent quản lý hiển thị trang bị đa tầng */
+	UFUNCTION(BlueprintPure, Category = "ProjectAscendant|Paperdoll")
+	UPAPaperdollComponent* GetPaperdollComponent() const { return PaperdollComponent.Get(); }
+
 protected:
 	/** Circular ring buffer lưu trữ lịch sử vị trí 200ms phục vụ Lag Compensation */
 	UPROPERTY()
@@ -267,6 +272,10 @@ protected:
 	/** Component quản lý ví song tiền tệ Vàng và Tàn Trang (Story econ-001) */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "ProjectAscendant|Economy", meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UPACurrencyComponent> CurrencyComponent;
+
+	/** Component quản lý trực quan hóa trang bị đa tầng Modular Paperdoll */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "ProjectAscendant|Paperdoll", meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UPAPaperdollComponent> PaperdollComponent;
 
 	UFUNCTION()
 	virtual void OnRep_IsExhausted();
