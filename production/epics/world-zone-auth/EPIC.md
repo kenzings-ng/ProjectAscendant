@@ -19,7 +19,7 @@ Hoàn thiện tầng Thế giới Mở & Xác thực Tài khoản (**World Integ
 | ID | Title | Type | Status | Governing ADR |
 |---|---|---|---|---|
 | 001 | [`3-Tier Seamless Zones, Campfire Sanctuaries & AI Leash`](story-001-seamless-zones-campfires.md) | World / Gameplay | ✅ Done | ADR-0001 |
-| 002 | [`Dynamic Difficulty Scaling & Contested Instanced Loot`](story-002-dynamic-difficulty-instanced-loot.md) | Combat / Netcode | Ready | ADR-0001, ADR-0003 |
+| 002 | [`Dynamic Difficulty Scaling & Contested Instanced Loot`](story-002-dynamic-difficulty-instanced-loot.md) | Combat / Netcode | ✅ Done | ADR-0001, ADR-0003 |
 | 003 | [`5-Tier Karma State Machine & Death Penalties Matrix`](story-003-karma-death-penalties.md) | Economy / Combat | Ready | ADR-0001 |
 | 004 | [`Account Subsystem, 1-Click Fast Playtest & Server Token Handshake`](story-004-account-subsystem-auth-handshake.md) | Security / Subsystem | Ready | ADR-0001 |
 
