@@ -10,7 +10,7 @@
 #   blocked        ↔  Blocked
 
 sprint: 6
-goal: "Deliver the World Integration, Sanctuaries & Account Authentication Layer for Project Ascendant — Seamless 3-Tier Zones, Campfire Sanctuaries (1000cm barrier/rest/2.0s fast travel), AI Leash Boundary (2500cm), Dynamic Difficulty Scaling (Boss HP/Posture formulas) with Instanced Loot Thresholds (>=5% HP / 10% Posture), 5-Tier Karma State Machine with PvE/PvP/Wanted Death Penalties & Labor Prison, and UPAAccountSubsystem with 1-Click Fast Playtest (<0.1s) and Server Token Handshake."
+goal: "Deliver the World Integration, Citadel Safe Zones & Account Authentication Layer for Project Ascendant — Seamless 3-Tier Zones, Citadel Safe Zones (cấm PvP/drop aggro/auto-save/relog return/2.0s fast travel), AI Leash Boundary (2500cm), Dynamic Difficulty Scaling (Boss HP/Posture formulas) with Instanced Loot Thresholds (>=5% HP / 10% Posture), 5-Tier Karma State Machine with PvE/PvP/Wanted Death Penalties & Labor Prison, and UPAAccountSubsystem with 1-Click Fast Playtest (<0.1s) and Server Token Handshake."
 start: "2026-10-17"
 end: "2026-10-31"
 generated: "2026-09-23"
@@ -18,8 +18,8 @@ updated: "2026-09-23"
 
 stories:
   - id: "zone-001"
-    name: "3-Tier Seamless Zones, Campfire Sanctuaries & AI Leash"
-    file: "production/epics/world-zone-auth/story-001-seamless-zones-campfires.md"
+    name: "3-Tier Seamless Zones, Citadel Safe Zones, Auto-Save & Relog Return"
+    file: "production/epics/world-zone-auth/story-001-seamless-zones-citadels-autosave.md"
     priority: must-have
     status: done
     owner: "world-designer"

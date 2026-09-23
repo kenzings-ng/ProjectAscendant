@@ -24,7 +24,7 @@
 | **Số lượng người chơi** | **MMO Thế Giới Mở** (Hàng trăm người chơi đồng thời trên cùng bản đồ thế giới mở phân vùng) |
 | **Quy mô Tổ đội (Party)** | Tối đa **4 người chơi / nhóm** (Tối ưu hóa bố cục giao diện và 4 vai trò cốt lõi) |
 | **Luật chiến đấu (Combat Rule)** | **Cạnh tranh thực tế (Contested / Open Tagging)**: Không có cơ chế khóa quyền sở hữu quái hay Boss. Mọi người chơi xa lạ đều có thể cùng lúc tấn công 1 mục tiêu. |
-| **Quy tắc PvP** | **Open World PvP Tự Do**: Cho phép tấn công người chơi khác ở mọi nơi ngoài các Thánh Địa An Toàn (Sanctuary / Campfires / Thị trấn), chịu sự chế tài nghiêm ngặt của Hệ thống Karma. |
+| **Quy tắc PvP** | **Open World PvP Tự Do**: Cho phép tấn công người chơi khác ở mọi nơi ngoài các Tòa Thành An Toàn (Citadel Safe Zones / Thành Trì), chịu sự chế tài nghiêm ngặt của Hệ thống Karma. |
 | **Thời lượng phiên chơi** | 20–45 phút mỗi chuyến thám hiểm / săn Boss / săn tiền thưởng |
 | **Đối tượng mục tiêu** | Người chơi yêu thích *Elden Ring, Hades, Albion Online, V Rising*, độc giả LitRPG (*Solo Leveling, Moonlight Sculptor*), chuộng tính cạnh tranh, xã hội sống động và biểu đạt kỹ năng cao |
 | **Tựa game đối trọng** | *Albion Online* (thế giới mở cạnh tranh, không khóa mục tiêu), *Hades* (nhịp độ, camera), *Elden Ring* (tự do vượt cấp, thử thách) |

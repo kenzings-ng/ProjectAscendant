@@ -153,10 +153,10 @@ stateDiagram-v2
     ClassInitialized --> GrimoireProgression: Học thêm Sách Kỹ Năng / Bí Kíp Chung
     GrimoireProgression --> MasteryMutation: Đột phá Lv 4-5 (Dùng Sách Trùng Loại hoặc Sách Vũ Khí Chung)
     
-    ClassInitialized --> CampfireRest: Dừng chân tại Lửa Trại / Checkpoint
-    CampfireRest --> ActionDeckCustomization: Hoán đổi kỹ năng trong Loadout (4 Active + 3 Passive)
-    CampfireRest --> ClassSwap: Tự do đổi sang Class Cơ Bản khác (Giữ nguyên tiến trình Grimoire)
-    CampfireRest --> InCombat: Rời lửa trại tiếp tục thám hiểm
+    ClassInitialized --> CitadelSafeZone: Trở về Tòa Thành (Vùng an toàn / Safe Zone)
+    CitadelSafeZone --> ActionDeckCustomization: Hoán đổi kỹ năng trong Loadout (4 Active + 3 Passive)
+    CitadelSafeZone --> ClassSwap: Tự do đổi sang Class Cơ Bản khác (Giữ nguyên tiến trình Grimoire)
+    CitadelSafeZone --> InCombat: Rời Tòa Thành tiếp tục thám hiểm
 ```
 
 ---
@@ -436,8 +436,8 @@ Tích hợp trực tiếp vào thanh trạng thái CommonUI của người chơi
   - **WHEN** người chơi tiến hành nâng cấp tại NPC hoặc giao diện Grimoire,
   - **THEN** chi phí Vàng và Tàn Trang Kỹ Năng từ Cấp 1 lên Cấp 3 được giảm chính xác $40\%$ so với giá quy chuẩn của Class Bậc Rare; và tại Cấp 4 $\rightarrow$ Cấp 5 (Mastery), nếu thiếu Sách Kỹ Năng Độc Quyền, người chơi có thể sử dụng hợp lệ 1 cuốn Sách Võ Học Chung cùng loại vũ khí để đột phá thành công.
 
-- [ ] **AC-7 (Campfire Respec & Class Swap Safety):**
-  - **GIVEN** người chơi đang dừng chân tại Lửa Trại / Điểm Checkpoint an toàn,
+- [ ] **AC-7 (Citadel Safe Zone Respec & Class Swap Safety):**
+  - **GIVEN** người chơi đang ở trong Tòa Thành (Vùng an toàn / Safe Zone),
   - **WHEN** thực hiện hoán đổi giữa các Class Cơ Bản hoặc thay đổi bộ kỹ năng trong Action Deck (tối đa 4 Active + 3 Passive),
   - **THEN** toàn bộ cấp độ kỹ năng và số lượng Tàn Trang đã đầu tư trong Grimoire của mọi class được giữ nguyên vẹn $100\%$, không xảy ra mất mát dữ liệu hoặc hoàn trả sai lệch.
 

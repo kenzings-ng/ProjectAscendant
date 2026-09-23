@@ -1,6 +1,6 @@
 # Sprint 6 — 2026-10-17 to 2026-10-31
 
-> **Sprint**: Sprint 6 (World Integration, Sanctuaries & Account Authentication Layer)  
+> **Sprint**: Sprint 6 (World Integration, Citadel Safe Zones & Account Authentication Layer)  
 > **Stage**: Production (Final Backend Sprint)  
 > **Review Mode**: Lean  
 > **Capacity**: 10 days (80 hours) | Buffer (20%): 2 days (16 hours) | Available: 8 days (64 hours)  
@@ -9,8 +9,8 @@
 
 ## Sprint Goal
 
-Khép lại toàn bộ Tầng Máy Chủ & Hệ Thống Thế Giới Mở (**World Integration, Sanctuaries & Account Auth Layer**) cho *Project Ascendant*, hoàn thành 100% tài liệu Game Design Documents (18/18 GDDs):
-Triển khai hệ thống 3 phân vùng thế giới mở nối liền với Thánh Địa Đống Lửa (**Campfire Sanctuary 1000cm**, hồi 100% máu/mana/thể lực, dịch chuyển nhanh Fast Travel 2.0s) và Ranh giới xích quái **AI Leash 2500cm**; Công thức co giãn độ khó động lực (**Dynamic Difficulty Scaling - DDS**) cho Boss và Ngưỡng đóng góp nhận thưởng (**Instanced Loot >= 5% HP / 10% Posture**); Máy trạng thái Danh dự 5 bậc (**Karma System**) kèm kịch bản phạt chết PvE/PvP và Nhà tù Lao Động; cùng Phân hệ Tài khoản (**UPAAccountSubsystem**), chế độ 1-Click Fast Playtest (<0.1s) và bắt tay mã Token xác thực máy chủ Dedicated Server.
+Khép lại toàn bộ Tầng Máy Chủ & Hệ Thống Thế Giới Mở (**World Integration, Citadel Safe Zones & Account Auth Layer**) cho *Project Ascendant*, hoàn thành 100% tài liệu Game Design Documents (18/18 GDDs):
+Triển khai hệ thống 3 phân vùng thế giới mở nối liền với Tòa Thành An Toàn (**Citadel Safe Zones**, cấm PvP, quái drop aggro, tự động lưu Auto-Save khi vào cổng thành, tự động đưa về Tòa Thành gần nhất khi thoát game/đăng nhập lại - Relog Return, dịch chuyển nhanh Fast Travel 2.0s) và Ranh giới xích quái **AI Leash 2500cm**; Công thức co giãn độ khó động lực (**Dynamic Difficulty Scaling - DDS**) cho Boss và Ngưỡng đóng góp nhận thưởng (**Instanced Loot >= 5% HP / 10% Posture**); Máy trạng thái Danh dự 5 bậc (**Karma System**) kèm kịch bản phạt chết PvE/PvP và Nhà tù Lao Động; cùng Phân hệ Tài khoản (**UPAAccountSubsystem**), chế độ 1-Click Fast Playtest (<0.1s) và bắt tay mã Token xác thực máy chủ Dedicated Server.
 
 ---
 
@@ -20,7 +20,7 @@ Triển khai hệ thống 3 phân vùng thế giới mở nối liền với Th�
 
 | ID | Task | Owner | Est. Days | Dependencies | Acceptance Criteria |
 |---|---|---|---|---|---|
-| `zone-001` | [3-Tier Seamless Zones, Campfire Sanctuaries & AI Leash](file:///mnt/Data/Projects/project-games/ProjectAscendant/production/epics/world-zone-auth/story-001-seamless-zones-campfires.md) | `world-designer` | 1.0 (8h) | `world-001`, `cmbt-001` | AC-1: Thánh địa 1000cm xóa cừu hận & cấm PvP; AC-2: Nghỉ ngơi hồi 100% và ghim điểm hồi sinh; AC-3: Fast travel 2.0s; AC-4: Quái vượt 2500cm bật bất tử quay về. |
+| `zone-001` | [3-Tier Seamless Zones, Citadel Safe Zones, Auto-Save & Relog Return](file:///mnt/Data/Projects/project-games/ProjectAscendant/production/epics/world-zone-auth/story-001-seamless-zones-citadels-autosave.md) | `world-designer` | 1.0 (8h) | `world-001`, `cmbt-001` | AC-1: Tòa Thành xóa cừu hận & cấm PvP; AC-2: Bước vào thành kích hoạt Auto-Save & hồi 100% máu/mana/stamina/flasks; AC-3: Thoát game ngoài hoang dã khi relog luôn về thành gần nhất; AC-4: Fast travel 2.0s giữa các thành; AC-5: Quái vượt 2500cm bật bất tử quay về. |
 | `zone-002` | [Dynamic Difficulty Scaling & Contested Instanced Loot](file:///mnt/Data/Projects/project-games/ProjectAscendant/production/epics/world-zone-auth/story-002-dynamic-difficulty-instanced-loot.md) | `gameplay-programmer` | 1.0 (8h) | `boss-001`, `stgr-001` | AC-1: Co giãn Max HP (+50%/người); AC-2: Co giãn Posture (+35%/người); AC-3: Kháng khống chế Anti-Zerg (+30%/+50%); AC-4: Ngưỡng nhận Loot >=5% HP hoặc >=10% Posture. |
 
 ### Should Have (16 hours / 2.0 days)
