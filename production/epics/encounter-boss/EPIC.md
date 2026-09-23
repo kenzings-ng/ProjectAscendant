@@ -20,7 +20,7 @@ Hiện thực hóa toàn bộ vòng lặp giao chiến với Trùm (**Boss Encou
 |---|---|---|---|---|
 | 001 | [`Prototype Boss AI & 4-Phase Telegraph System`](story-001-boss-ai-telegraphs.md) | AI / Combat | ✅ Done | ADR-0001, ADR-0002 |
 | 002 | [`Posture Stagger, Kneel Window & True Damage Execution`](story-002-stagger-execution.md) | Combat | ✅ Done | ADR-0001, ADR-0002 |
-| 003 | [`Anatomical Part Breaking & Skill Disabling Matrix`](story-003-part-breaking-matrix.md) | Combat / AI | Ready | ADR-0001, ADR-0002 |
+| 003 | [`Anatomical Part Breaking & Skill Disabling Matrix`](story-003-part-breaking-matrix.md) | Combat / AI | ✅ Done | ADR-0001, ADR-0002 |
 | 004 | [`Dash I-Frame, Perfect Dodge Sweet Spot & Hitstop`](story-004-dash-iframe-perfect-dodge.md) | Combat / Movement | Ready | ADR-0001, ADR-0002 |
 
 ## Definition of Done
