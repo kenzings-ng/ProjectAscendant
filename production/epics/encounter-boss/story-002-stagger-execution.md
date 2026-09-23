@@ -1,7 +1,7 @@
 # Story 002: Posture Stagger, Kneel Window & True Damage Execution
 
 > **Epic**: Encounter & Boss Mechanics Layer  
-> **Status**: Ready  
+> **Status**: ✅ Done  
 > **Layer**: Combat / Encounter  
 > **Type**: Gameplay / Mechanics  
 > **Estimate**: 8 hours (1.0 days)  
@@ -24,13 +24,13 @@
 
 ## Acceptance Criteria
 
-- [ ] **AC-1 (Posture Break Trigger & Kneel State)**: Khi Posture của mục tiêu đạt $100\%$ ($Posture \ge MaxPosture$), mục tiêu lập tức bị hủy toàn bộ hoạt ảnh, quỳ gối rơi vào trạng thái `State.Staggered` trong đúng **3.00 giây**.
-- [ ] **AC-2 (25% True Damage Execution)**: Khi người chơi ở trong phạm vi $\le 250\text{cm}$ và kích hoạt lệnh kết liễu:
+- [x] **AC-1 (Posture Break Trigger & Kneel State)**: Khi Posture của mục tiêu đạt $100\%$ ($Posture \ge MaxPosture$), mục tiêu lập tức bị hủy toàn bộ hoạt ảnh, quỳ gối rơi vào trạng thái `State.Staggered` trong đúng **3.00 giây**.
+- [x] **AC-2 (25% True Damage Execution)**: Khi người chơi ở trong phạm vi $\le 250\text{cm}$ và kích hoạt lệnh kết liễu:
   - Gây chính xác **25% Max HP của Trùm** dưới dạng **True Damage** (bỏ qua mọi chỉ số giáp/kháng).
   - Cấp trạng thái bất tử `State.Invulnerable` cho người chơi trong **1.20 giây**.
   - Sau khi kết liễu thành công, trùm nhận **2.00s Miễn nhiễm Posture** (`State.PostureImmune`) để tránh bị lặp vô tận (stagger-lock).
-- [ ] **AC-3 (Posture Decay Logic)**: Nếu mục tiêu không phải nhận bất kỳ sát thương nào trong **4.00 giây** (`PostureDecayDelay`), Posture sẽ tự suy giảm với tốc độ **20 điểm/giây** (`PostureDecayRate`). Bất kỳ đòn đánh nào trúng đích đều reset lại bộ đếm delay về 0.
-- [ ] **AC-4 (Missed Window Recovery Shockwave)**: Nếu hết thời gian 3.0s mà không có ai thực hiện đòn kết liễu, trùm tự đứng dậy phát sóng xung kích hất văng người chơi trong bán kính 300cm, và hoàn lại **50% Posture** (thay vì về 0).
+- [x] **AC-3 (Posture Decay Logic)**: Nếu mục tiêu không phải nhận bất kỳ sát thương nào trong **4.00 giây** (`PostureDecayDelay`), Posture sẽ tự suy giảm với tốc độ **20 điểm/giây** (`PostureDecayRate`). Bất kỳ đòn đánh nào trúng đích đều reset lại bộ đếm delay về 0.
+- [x] **AC-4 (Missed Window Recovery Shockwave)**: Nếu hết thời gian 3.0s mà không có ai thực hiện đòn kết liễu, trùm tự đứng dậy phát sóng xung kích hất văng người chơi trong bán kính 300cm, và hoàn lại **50% Posture** (thay vì về 0).
 
 ---
 
