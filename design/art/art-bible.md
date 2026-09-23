@@ -103,21 +103,58 @@ Mọi màu sắc mang tính cảnh báo sống còn **tuyệt đối không đư
 ---
 
 ## 5. Character Design Direction
-*(To be detailed in Production Phase)*
+- **Tỷ Lệ Cơ Thể**: 3.2 - 3.5 Đầu (Heroic Chibi tỉ lệ vàng phong cách *Stardew Valley* x *Octopath Traveler*), cao 86px trên lưới bản vẽ gốc.
+- **Hệ Thống Modular Paperdoll**: Phân tách 7 lớp đồ họa độc lập (Thân trần, Đồ vải tân thủ, Giáp thân, Mũ nón, Vũ khí chính, Vũ khí phụ/khiên, VFX). Khóa cứng tọa độ mốc giải phẫu: Trục mắt `Y=44`, Thắt lưng `Y=80`, Khớp cầm tay `(X:96, Y:76)` để hoán đổi trang bị liền mạch theo thời gian thực.
+- **Động Lực Học (Line of Action)**: Cấm cột sống thẳng đứng $90^\circ$. Bắt buộc dáng đứng nghiêng góc uốn lượn chữ S hoặc C, trọng tâm chân chịu lực 80/20 (Contrapposto).
+- *Chi tiết quy chuẩn*: Xem tài liệu chi tiết tại [`design/art/pixel-asset-specifications.md#2-quy-chuẩn-kỹ-thuật-hệ-thống-nhân-vật--modular-paperdoll`](pixel-asset-specifications.md#2-quy-chuẩn-kỹ-thuật-hệ-thống-nhân-vật--modular-paperdoll).
+
+---
 
 ## 6. Environment Design Language
-*(To be detailed in Production Phase)*
+- **Hệ Tọa Độ 2.5D Isometric Diamond ($128 \times 64$)**: Góc camera nghiêng $-45^\circ$ Pitch, $45^\circ$ Yaw.
+- **Gạch Địa Hình Chuyển Tiếp (Dual-Grid Autotiling 4x4)**: Atlas 16 ô gạch Blob/Wang chuyển tiếp tự nhiên giữa Cỏ - Đá, Đất - Nước, Tro tàn - Nham thạch.
+- **Ánh Sáng Khối Thể Tích (Volumetric Grounding)**: Sử dụng Lumen và sương mù thể tích (Volumetric Fog) để tạo độ sâu thăm thẳm cho các hầm ngục và phế tích u tối.
 
-## 7. UI/HUD Visual Direction
-*(To be detailed in Production Phase)*
+---
+
+## 7. UI/HUD Visual Direction & Item Icons
+- **Quy Cách Icon Vật Phẩm (Chunky Micro-Pixel Style)**:
+  - Bản vẽ gốc: $32 \times 32$ pixel (Vũ khí/Trang bị/Nguyên liệu/Potion) hoặc $40 \times 40$ pixel (Đại kiếm/Trượng lớn).
+  - Xuất xưởng UI Engine: $256 \times 256$ pixel (phóng to thuật toán Nearest Neighbor $8\times$ sắc nét từng hạt điểm ảnh, tuyệt đối không làm mờ nội suy).
+- **Góc Đặt Thẩm Mỹ Chuẩn Mực**:
+  - Vũ khí cận chiến & Cung trượng: Đặt chéo góc cố định $45^\circ$ từ góc dưới-trái lên góc trên-phải (chuẩn *Stardew Valley*).
+  - Potion & Trang bị mặc: Đặt thẳng đứng $90^\circ$ chính diện.
+- **Khung Viền Phân Hạng 5 Bậc Hiếm (5-Tier Rarity)**:
+  - Normal (Xám `#4B5563`), Rare (Lam `#2563EB`), Legendary (Cam `#D97706`), Immortal (Đỏ `#DC2626`), Divine (Hoàng Kim `#F59E0B` + Tím `#7C3AED`).
+- *Chi tiết quy chuẩn*: Xem tài liệu chi tiết tại [`design/art/pixel-asset-specifications.md#3-quy-chuẩn-kỹ-thuật-vật-phẩm-vũ-khí--nguyên-liệu-items--gear`](pixel-asset-specifications.md#3-quy-chuẩn-kỹ-thuật-vật-phẩm-vũ-khí--nguyên-liệu-items--gear).
+
+---
 
 ## 8. Asset Standards & Pipeline (Pixel HD-2D)
 - **Pixel Density (PPU)**: 32 pixels per Unreal Unit (100 units = 1 meter).
 - **Texture Filtering**: Nearest Neighbor (Strictly NO Mipmapping).
 - **Atlas Resolution**: Max $2048 \times 2048$ per character flipbook set.
+- **Frame Pivot Point**: Ghim đáy giữa `(X: 64, Y: 114)` trên canvas $128 \times 128$ đồng bộ với chân Capsule trong UE 5.7.
 - **Lighting Shader**: Custom unlit/lit hybrid sprite material receiving directional sun + local point lights with custom normal mapping.
 
-## 9. Style Prohibitions
-- Không sử dụng hiệu ứng làm mờ vân ảnh (Bilinear / Trilinear filtering).
-- Không vẽ đổ bóng giả lập (baking flat shadow) trên sprite nhân vật; bóng phải do Lumen tính toán thời gian thực.
-- Không sử dụng màu Neon quá gắt ngoài nhóm kỹ năng phép thuật chuyên biệt.
+---
+
+## 9. Style Prohibitions (Điều Răn Cấm Kỵ)
+- **CẤM Pillow Shading**: Đánh bóng viền đều mờ mịt làm mất khối kim loại cứng.
+- **CẤM Dải màu bẩn (Color Bleed)**: Pha đen/xám để tạo bóng; bắt buộc dùng kỹ thuật Hue-shifting (bóng đổ ngả tím/navy).
+- **CẤM Hoa văn rác AI (Ornate Greeble)**: Giữ vững tỷ lệ 70% bề mặt phẳng nghỉ mắt, 20% chi tiết chức năng, 10% điểm nhấn tiêu điểm.
+- **CẤM Mixels & Jaggies**: Trộn pixel to nhỏ bất nhất hoặc đường gấp khúc pixel răng cưa dị tật.
+- **CẤM Cắt Cụt Biên (Border Bleeding)**: Không để pixel chạm sát mép biên canvas làm cụt chuôi kiếm hay mũi tên.
+
+---
+
+## 10. Hợp Đồng Sản Xuất & Nghiệm Thu Chất Lượng (Production Contract & Gate Check)
+Mọi asset đồ họa pixel trong game bắt buộc phải vượt qua 6 bài kiểm tra nghiệm thu khắt khe trước khi được chấp thuận:
+1. `Blackout Silhouette Test` (Nhận diện vật thể khi đổ đen 100%).
+2. `Zero Border Bleed Test` (Đảm bảo alpha=0 tại 4 cạnh biên, không cụt góc).
+3. `Color Budget Audit` (Tối đa 24-32 màu độc nhất cho mỗi icon $32 \times 32$).
+4. `Mixel-Free Audit` (Đồng nhất tỷ lệ hạt pixel 1:1 giữa nhân vật và vật phẩm).
+5. `Landmark Lockstep Test` (Khớp tuyệt đối 100% khi ghép trang phục Paperdoll).
+6. `HD-2D Lighting Test` (Khối phản xạ ánh sáng chân thực dưới đèn thời gian thực).
+
+> Toàn văn hợp đồng kỹ thuật xem tại: [`design/art/pixel-asset-specifications.md`](pixel-asset-specifications.md).
