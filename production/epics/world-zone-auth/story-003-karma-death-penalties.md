@@ -1,7 +1,7 @@
 # Story 003: 5-Tier Karma State Machine & Death Penalties Matrix
 
 > **Epic**: World Integration, Sanctuaries & Account Authentication Layer  
-> **Status**: Ready  
+> **Status**: ✅ Done  
 > **Layer**: Economy / Combat  
 > **Type**: Gameplay / Systems  
 > **Estimate**: 8 hours (1.0 days)  
@@ -23,20 +23,20 @@
 
 ## Acceptance Criteria
 
-- [ ] **AC-1 (5-Tier Karma State Machine)**: Giá trị Karma từ $[-100, +100]$ điều khiển 5 bậc danh dự:
+- [x] **AC-1 (5-Tier Karma State Machine)**: Giá trị Karma từ $[-100, +100]$ điều khiển 5 bậc danh dự:
   - **Righteous (+50 to +100)**: Tên xanh lục, giảm 10% phí sửa đồ, thưởng danh vọng khi săn kẻ Wanted.
   - **Neutral (0 to +49)**: Tên trắng, trạng thái mặc định được pháp luật bảo hộ.
-  - **Aggressor (Tạm thời 120s)**: Tên xám khi tấn công người vô tội trước, bị cấm vào thị trấn trong thời gian đếm ngược.
+  - **Aggressor (Tạm thời 120s)**: Tên xám khi tấn công người vô tộc trước, bị cấm vào thị trấn trong thời gian đếm ngược.
   - **Criminal (-1 to -49)**: Tên cam, lính gác từ chối phục vụ.
   - **Wanted Outlaw (-50 to -100)**: Tên đỏ kèm biểu tượng đầu lâu, bị lính gác tấn công ngay khi gặp, bị phát sóng tọa độ toàn server mỗi 30s.
-- [ ] **AC-2 (PvE Death Penalty - Ash Remnant)**: Khi chết do quái vật/môi trường (PvE):
+- [x] **AC-2 (PvE Death Penalty - Ash Remnant)**: Khi chết do quái vật/môi trường (PvE):
   - Rơi **50% số Vàng hiện có** và **100% Tàn Trang (Skill Shards)** thành một Tàn Tích Tro (Ash Remnant) tại tọa độ tử vong.
   - Khóa quyền nhặt trong 30 phút cho chính chủ. Trang bị đang mặc được bảo toàn 100%.
-- [ ] **AC-3 (Innocent PvP Victim Protection)**: Khi người vô tội ($\text{Karma} \ge 0$) bị PK chết:
+- [x] **AC-3 (Innocent PvP Victim Protection)**: Khi người vô tội ($\text{Karma} \ge 0$) bị PK chết:
   - Chỉ mất **25% Vàng** (chuyển thẳng cho kẻ sát nhân làm tiền thưởng).
   - Bảo toàn 100% Tàn Trang và Trang bị đang mặc; không tạo Tàn tích Tro (tránh ức chế bị phạt kép).
   - Kẻ sát nhân bị trừ ngay lập tức **-30 điểm Karma**.
-- [ ] **AC-4 (Wanted Outlaw Death & Labor Prison)**: Khi kẻ có lệnh truy nã ($\text{Karma} < -50$) bị tiêu diệt:
+- [x] **AC-4 (Wanted Outlaw Death & Labor Prison)**: Khi kẻ có lệnh truy nã ($\text{Karma} < -50$) bị tiêu diệt:
   - Rơi toàn bộ **100% Vàng** và **100% Tàn Trang** (ai cũng có thể nhặt tự do).
   - Có 15% tỷ lệ rơi 1 vật phẩm ngẫu nhiên trong túi đồ.
   - Bị tống vào **Nhà tù Lao Động (Labor Prison)** trong 5 phút thời gian thực HOẶC đào đủ 20 khối quặng để được trả tự do sớm. Khi ra tù, Karma được ấn định lại ở mức $-49$.
