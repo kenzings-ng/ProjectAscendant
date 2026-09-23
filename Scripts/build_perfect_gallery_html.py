@@ -18,6 +18,22 @@ def build_html():
     # -------------------------------------------------------------
     categories = [
         {
+            "id": "tab_contract_v2",
+            "title": "🌟 Test Hợp Đồng Mới (Contract V2 - Stardew 16x16)",
+            "folder": "06_Contract_V2_Tests",
+            "summary": "Bộ tài nguyên thử nghiệm được sản xuất và kiểm định 100% theo Hợp đồng Kỹ thuật mới (SPEC-ART-2026-09-23-V2 & game-art-studio): Chuẩn xác 16x16 Chunky Pixel Art kiểu Stardew Valley, góc nghiêng 45°, ngân sách màu nghiêm ngặt ≤ 16 màu, đóng khung viền 5 bậc hiếm và đã vượt qua toàn bộ 6 bài kiểm tra QA Gate Check.",
+            "items": [
+                ("Tempered_Galaxy_Sword_256x256_framed_legendary.png", "Thần Binh Thiên Hà (Tempered Galaxy Sword)", "16x16 Chunky Pixel Art chuẩn Stardew Valley. Lưỡi kiếm tinh thể cosmic nguyên khối, viền neon phát quang ngược #F193FF, lõi tím sẫm #5D269B, chuôi xanh navy #000053. Khung viền Legendary Hoàng Kim 2px.", "Hợp Đồng V2", ["Stardew Valley", "16x16 Native", "Legendary", "QA Passed"]),
+                ("Runic_Frost_Broadsword_256x256_framed_rare.png", "Băng Kiếm Cổ Ngữ (Runic Frost Broadsword)", "16x16 Chunky Pixel Art góc chéo 45 độ chuẩn mực. Thép xanh cobalt, viền sáng cyan-white, đổ bóng navy sâu, 8 màu độc nhất, không dải màu nhòe. Khung viền Rare Lam Ngọc 2px.", "Hợp Đồng V2", ["Stardew Valley", "16x16 Native", "Rare", "QA Passed"]),
+                ("Crimson_Health_Elixir_256x256_framed_uncommon.png", "Bình Dược Sinh Mệnh (Crimson Health Elixir)", "16x16 Chunky Pixel Art góc đứng 90 độ chính diện. Bình thủy tinh nút bấc, dung dịch đỏ mận, vệt sáng phản quang trắng 1px chéo qua thân. Khung viền Uncommon Ngọc Lục 2px.", "Hợp Đồng V2", ["Stardew Valley", "16x16 Native", "Uncommon", "QA Passed"]),
+                ("Faceted_Gold_Ingot_256x256_framed_epic.png", "Thỏi Vàng Đúc Khối (Faceted Gold Ingot)", "16x16 Chunky Pixel Art khối 3D Isometry. Vát 3 mặt diện rõ rệt, nấc màu 4 bậc: Highlight vàng chanh #FEF08A -> Bóng nâu hổ phách #92400E. Khung viền Epic Tím Huyền Bí 2px.", "Hợp Đồng V2", ["Stardew Valley", "16x16 Native", "Epic", "QA Passed"]),
+                ("Tempered_Galaxy_Sword_64x64_ingame.png", "Galaxy Sword (64x64 In-game Native Scale)", "Tỷ lệ chuẩn 4x Nearest Neighbor khi hiển thị trong kho đồ lưới 6x5 hoặc thanh Quickbar.", "In-Game Sprite", ["64x64", "4x Scale"]),
+                ("Runic_Frost_Broadsword_64x64_ingame.png", "Frost Broadsword (64x64 In-game Native Scale)", "Tỷ lệ chuẩn 4x Nearest Neighbor sắc nét từng hạt pixel.", "In-Game Sprite", ["64x64", "4x Scale"]),
+                ("Crimson_Health_Elixir_64x64_ingame.png", "Crimson Elixir (64x64 In-game Native Scale)", "Tỷ lệ chuẩn 4x Nearest Neighbor sắc nét từng hạt pixel.", "In-Game Sprite", ["64x64", "4x Scale"]),
+                ("Faceted_Gold_Ingot_64x64_ingame.png", "Gold Ingot (64x64 In-game Native Scale)", "Tỷ lệ chuẩn 4x Nearest Neighbor sắc nét từng hạt pixel.", "In-Game Sprite", ["64x64", "4x Scale"]),
+            ]
+        },
+        {
             "id": "tab_female",
             "title": "👩 Nhân Vật Nữ (Female Paperdoll)",
             "folder": "02_Modular_Paperdoll_Female",
