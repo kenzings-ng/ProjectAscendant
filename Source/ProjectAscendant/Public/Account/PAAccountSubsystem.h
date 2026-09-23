@@ -177,6 +177,10 @@ public:
 	UFUNCTION(BlueprintPure, Category = "Ascendant|Account|Validation")
 	static FString GenerateAuthToken(const FString& AccountId);
 
+	/** Xác thực tính hợp lệ của Join Token trên Dedicated Server trước khi cho phép spawn */
+	UFUNCTION(BlueprintPure, Category = "Ascendant|Account|Validation")
+	static bool ValidateJoinToken(const FString& InToken, const FString& ExpectedAccountId);
+
 public:
 	/** Sự kiện phát đi khi trạng thái đăng nhập thay đổi */
 	UPROPERTY(BlueprintAssignable, Category = "Ascendant|Account|Events")
