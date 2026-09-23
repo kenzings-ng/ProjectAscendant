@@ -1,7 +1,7 @@
 # Story 001: 3-Tier Seamless Zones, Campfire Sanctuaries & AI Leash
 
 > **Epic**: World Integration, Sanctuaries & Account Authentication Layer  
-> **Status**: Ready  
+> **Status**: ✅ Done  
 > **Layer**: World / Gameplay  
 > **Type**: World / Gameplay  
 > **Estimate**: 8 hours (1.0 days)  
@@ -23,18 +23,18 @@
 
 ## Acceptance Criteria
 
-- [ ] **AC-1 (Campfire Sanctuary Boundary - 1000cm)**: Mỗi Đống Lửa (Campfire) kích hoạt một vùng Thánh Địa bán kính **1000cm**:
+- [x] **AC-1 (Campfire Sanctuary Boundary - 1000cm)**: Mỗi Đống Lửa (Campfire) kích hoạt một vùng Thánh Địa bán kính **1000cm**:
   - Khi người chơi bước vào: Xóa sạch cừu hận của toàn bộ quái vật đang đuổi theo.
   - Quái vật không thể tiến vào trong bán kính 1000cm (bị chặn bởi rào chắn vô hình).
   - Vô hiệu hóa mọi hành vi PvP bên trong (`State.Pacified`).
-- [ ] **AC-2 (Rest & Restoration)**: Tương tác nghỉ ngơi tại Đống Lửa:
+- [x] **AC-2 (Rest & Restoration)**: Tương tác nghỉ ngơi tại Đống Lửa:
   - Hồi phục tức thời **100% HP, Mana, Stamina** và đầy bình Dược phẩm (Flask charges).
   - Đặt lại điểm hồi sinh (Spawn Anchor) về vị trí Đống Lửa này.
   - Làm hồi sinh lại toàn bộ quái thường trong phân vùng (trừ Boss/Miniboss).
-- [ ] **AC-3 (Fast Travel Teleportation - 2.0s)**: Cho phép dịch chuyển tức thời giữa 2 Đống Lửa đã kích hoạt:
+- [x] **AC-3 (Fast Travel Teleportation - 2.0s)**: Cho phép dịch chuyển tức thời giữa 2 Đống Lửa đã kích hoạt:
   - Thời gian niệm chú cố định **2.00 giây** (không tốn vàng).
   - Niệm chú bị hủy ngay lập tức nếu người chơi di chuyển hoặc nhận sát thương.
-- [ ] **AC-4 (AI Leash Boundary - 2500cm)**: Quái vật khi bị người chơi dụ cách xa vị trí xuất phát quá **2500cm** (hoặc khi chạm ranh giới Thánh địa 1000cm):
+- [x] **AC-4 (AI Leash Boundary - 2500cm)**: Quái vật khi bị người chơi dụ cách xa vị trí xuất phát quá **2500cm** (hoặc khi chạm ranh giới Thánh địa 1000cm):
   - Lập tức nhận trạng thái bất tử `State.Invulnerable`, xóa sổ bảng cừu hận.
   - Tự động quay về vị trí ban đầu với tốc độ tăng $+50\%$.
   - Hồi phục đầy đủ 100% HP và Posture ngay khi về đến tổ.
