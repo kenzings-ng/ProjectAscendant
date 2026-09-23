@@ -1,0 +1,1415 @@
+# Game World Entity Registry
+#
+# PURPOSE: Single source of truth for all named game-world facts that appear
+# in more than one document. Skills check this before writing new content to
+# detect cross-doc inconsistencies at authoring time.
+#
+# RULES:
+#   - Only register facts that cross system boundaries. Internal-only facts
+#     (a formula used in one GDD only) do NOT need to be registered.
+#   - Never delete entries — set status: deprecated instead.
+#   - When a value changes: update the value, set revised: to today's date,
+#     and add a comment with the old value and which GDD changed it.
+#   - source: is the authoritative GDD — the one that "owns" this fact.
+#     Other GDDs that reference it list themselves in referenced_by.
+#   - When a new GDD references an existing entry, append its path to
+#     referenced_by. Do not create a duplicate entry.
+#
+# WRITTEN BY: /design-system (Phase 5 — after GDD sections are approved)
+#             /consistency-check (when resolving conflicts)
+# READ BY:    /design-system (Phase 2 — before authoring begins, and after
+#               Section C/D writes to conflict-check new entities/formulas)
+#             /consistency-check (primary input — grep-first, GDD-second)
+#             /review-all-gdds (Phase 1 — baseline for Phase 2 checks)
+#             /architecture-review (data structure and interface validation)
+#
+# SEARCH PATTERNS (for skills using Grep):
+#   All entity names:        Grep pattern="^  - name:" path="design/registry/entities.yaml"
+#   Specific entity:         Grep pattern="  - name: goblin" path="design/registry/entities.yaml"
+#   All items:               Grep pattern="^  - name:" path="design/registry/entities.yaml" (items section)
+#   What combat.md owns:     Grep pattern="source: design/gdd/combat.md"
+#   What inventory.md uses:  Grep pattern="referenced_by.*inventory"
+#   All gold values:          Grep pattern="value_gold:"
+#   Deprecated entries:      Grep pattern="status: deprecated"
+#
+# FORMAT: YAML. Consistent indentation is critical for grep reliability.
+#   Sections: entities | items | formulas | constants
+#   Each entry: name, status, source, referenced_by[], attributes{}, added, revised
+
+version: 1
+last_updated: ""
+
+# ─── ENTITIES ────────────────────────────────────────────────────────────────
+# Named game-world objects: enemies, NPCs, characters, factions, bosses.
+# Register an entity here when it appears in more than one GDD — e.g., an
+# enemy defined in combat.md that also drops items listed in inventory.md.
+#
+# Required fields: name, status, source, referenced_by, added
+# Attribute fields: any key stats that could appear in another GDD
+#   (health, damage, drops, faction, etc.)
+
+entities:
+  # ─── TẦNG 1: CLASS CƠ BẢN (NORMAL) ──────────────────────────────
+  - name: class_vanguard
+    display_name: "Chiến Binh (Vanguard)"
+    tier: "Normal"
+    status: active
+    source: design/gdd/game-concept.md
+    referenced_by:
+      - design/gdd/game-concept.md
+      - design/gdd/foundational-classes.md
+    weapon: "Kiếm & Khiên / Đại Kiếm"
+    role: "Parry & Frontline Defense"
+    added: 2026-09-14
+
+  - name: class_ranger
+    display_name: "Du Hiệp (Ranger)"
+    tier: "Normal"
+    status: active
+    source: design/gdd/game-concept.md
+    referenced_by:
+      - design/gdd/game-concept.md
+      - design/gdd/foundational-classes.md
+    weapon: "Cung Tên / Song Đao"
+    role: "Ranged Mobility & Traps"
+    added: 2026-09-14
+
+  - name: class_arcanist
+    display_name: "Thuật Sĩ (Arcanist)"
+    tier: "Normal"
+    status: active
+    source: design/gdd/game-concept.md
+    referenced_by:
+      - design/gdd/game-concept.md
+      - design/gdd/foundational-classes.md
+    weapon: "Trượng Phép / Cổ Thư"
+    role: "AoE Crowd Control & Elemental Burst"
+    added: 2026-09-14
+
+  - name: class_acolyte
+    display_name: "Tu Sĩ (Acolyte)"
+    tier: "Normal"
+    status: active
+    source: design/gdd/game-concept.md
+    referenced_by:
+      - design/gdd/game-concept.md
+      - design/gdd/foundational-classes.md
+    weapon: "Chùy Chiến / Tràng Hạt Khí"
+    role: "Support, Shields & Stamina Regen"
+    added: 2026-09-14
+
+  # ─── TẦNG 2: CLASS HIẾM (RARE) ──────────────────────────────────
+  - name: class_berserker
+    display_name: "Cuồng Chiến Sĩ (Berserker)"
+    tier: "Rare"
+    status: active
+    source: design/gdd/game-concept.md
+    referenced_by:
+      - design/gdd/game-concept.md
+      - design/gdd/advanced-classes.md
+    weapon: "Song Rìu / Búa Tạ"
+    role: "High-Risk High-Reward & Hyper-Armor"
+    added: 2026-09-14
+
+  - name: class_shadowblade
+    display_name: "Ảo Ảnh Thích Khách (Shadowblade)"
+    tier: "Rare"
+    status: active
+    source: design/gdd/game-concept.md
+    referenced_by:
+      - design/gdd/game-concept.md
+      - design/gdd/advanced-classes.md
+    weapon: "Song Đoản Kiếm / Phi Tiêu"
+    role: "Stealth, Clones & Backstab Burst"
+    added: 2026-09-14
+
+  - name: class_elementalist
+    display_name: "Nguyên Tố Sư (Elementalist)"
+    tier: "Rare"
+    status: active
+    source: design/gdd/game-concept.md
+    referenced_by:
+      - design/gdd/game-concept.md
+      - design/gdd/advanced-classes.md
+    weapon: "Cầu Phép (Orb)"
+    role: "Triple Element Fusion & Status Reaction"
+    added: 2026-09-14
+
+  - name: class_templar
+    display_name: "Thánh Hiệp Sĩ (Templar)"
+    tier: "Rare"
+    status: active
+    source: design/gdd/game-concept.md
+    referenced_by:
+      - design/gdd/game-concept.md
+      - design/gdd/advanced-classes.md
+    weapon: "Chiến Chùy & Đại Thuẫn"
+    role: "Aggro Tank & Radiant Retaliation"
+    added: 2026-09-14
+
+  # ─── TẦNG 3: CLASS CAO CẤP (EPIC) ──────────────────────────────
+  - name: class_void_blade
+    display_name: "Hư Không Kiếm Sư (Void Blade)"
+    tier: "Epic"
+    status: active
+    source: design/gdd/game-concept.md
+    referenced_by:
+      - design/gdd/game-concept.md
+      - design/gdd/advanced-classes.md
+    weapon: "Kiếm Katana Hư Không"
+    role: "Blink Dash & Dimensional Slashes"
+    added: 2026-09-14
+
+  - name: class_chronomancer
+    display_name: "Thời Gian Ma Đạo (Chronomancer)"
+    tier: "Epic"
+    status: active
+    source: design/gdd/game-concept.md
+    referenced_by:
+      - design/gdd/game-concept.md
+      - design/gdd/advanced-classes.md
+    weapon: "Đồng Hồ Cát Ma Thuật"
+    role: "Time-Dilation & Damage Rewind"
+    added: 2026-09-14
+
+  - name: class_dragon_knight
+    display_name: "Long Kỵ Sĩ (Dragon Knight)"
+    tier: "Epic"
+    status: active
+    source: design/gdd/game-concept.md
+    referenced_by:
+      - design/gdd/game-concept.md
+      - design/gdd/advanced-classes.md
+    weapon: "Thương Dài (Halberd)"
+    role: "Aerial Dive & Massive Posture Break"
+    added: 2026-09-14
+
+  # ─── TẦNG 4: CLASS ẨN (MYTHIC) ──────────────────────────────────
+  - name: class_god_slayer
+    display_name: "Thí Thần Giả (God Slayer)"
+    tier: "Mythic"
+    status: active
+    source: design/gdd/game-concept.md
+    referenced_by:
+      - design/gdd/game-concept.md
+      - design/gdd/hidden-classes.md
+    weapon: "Thần Binh Tự Biến Hình (Morphing Relic)"
+    role: "Time Freeze on Perfect Dodge & Boss Skill Mimic"
+    added: 2026-09-14
+
+# Example (remove when first real entry is added):
+#
+# entities:
+#   - name: goblin
+#     status: active              # active | deprecated
+#     source: design/gdd/combat.md
+#     referenced_by:
+#       - design/gdd/combat.md
+#       - design/gdd/inventory.md
+#     health: 40
+#     damage: 8
+#     drops:
+#       - item: goblin_arm        # must match an entry in items section
+#         qty: 1
+#         drop_rate: 0.8          # 0.0–1.0
+#     added: 2026-03-26
+#     revised: ""
+
+
+# ─── ITEMS ───────────────────────────────────────────────────────────────────
+# Named collectables, equipment, consumables, crafting materials, currency.
+# Register an item when its name or value appears in more than one GDD.
+#
+# Required fields: name, status, source, referenced_by, added
+# Attribute fields: value_gold, weight, stackable, category, and any stat
+#   modifiers that another system (e.g., economy, crafting) might reference.
+
+items:
+  - name: item_skill_book
+    display_name: "Sách Kỹ Năng (Skill Book)"
+    status: active
+    source: design/gdd/skill-progression-system.md
+    referenced_by:
+      - design/gdd/skill-progression-system.md
+      - design/gdd/inventory-system.md
+    category: consumable_learnable
+    stackable: false
+    salvageable: true
+    attributes:
+      class_lock: true
+      weapon_lock: true
+      rarity_tiers:
+        - Normal
+        - Rare
+        - Epic
+        - Mythic
+      grants_ability: true
+    added: 2026-09-15
+    revised: ""
+
+  - name: item_skill_shard
+    display_name: "Tàn Trang Kỹ Năng (Skill Shard)"
+    status: active
+    source: design/gdd/skill-progression-system.md
+    referenced_by:
+      - design/gdd/skill-progression-system.md
+      - design/gdd/inventory-system.md
+    category: crafting_material
+    stackable: true
+    max_stack: 999
+    salvage_source: "Phân rã Sách Kỹ Năng khác Class tại NPC"
+    added: 2026-09-15
+    revised: ""
+
+  - name: item_blacksmith_ward
+    display_name: "Đá Bảo Hộ Cổ Xưa (Blacksmith Ward)"
+    status: active
+    source: design/gdd/blacksmithing-system.md
+    referenced_by:
+      - design/gdd/blacksmithing-system.md
+      - design/gdd/inventory-system.md
+    category: crafting_protection
+    stackable: true
+    max_stack: 99
+    attributes:
+      prevents_enhancement_level_drop: true
+    added: 2026-09-15
+    revised: ""
+
+  - name: item_boss_soul_generic
+    display_name: "Linh Hồn Lãnh Chúa (Boss Soul)"
+    status: active
+    source: design/gdd/blacksmithing-system.md
+    referenced_by:
+      - design/gdd/blacksmithing-system.md
+      - design/gdd/stagger-system.md
+      - design/gdd/inventory-system.md
+    category: boss_soul
+    stackable: true
+    max_stack: 10
+    attributes:
+      used_for_divine_crafting: true
+    added: 2026-09-15
+    revised: ""
+
+
+# Example:
+#
+# items:
+#   - name: goblin_arm
+#     status: active
+#     source: design/gdd/combat.md   # drop defined in combat GDD
+#     referenced_by:
+#       - design/gdd/combat.md
+#       - design/gdd/inventory.md    # inventory GDD lists its weight/stack rules
+#       - design/gdd/economy.md      # economy GDD references its sell price
+#     value_gold: 5
+#     weight: 1
+#     stackable: true
+#     category: crafting_material
+#     added: 2026-03-26
+#     revised: ""
+
+
+# ─── FORMULAS ────────────────────────────────────────────────────────────────
+# Named calculations with defined variables and output ranges.
+# Register a formula when its output feeds into another system's input,
+# or when another GDD references it by name.
+#
+# Required fields: name, status, source, referenced_by, variables[],
+#   output_range[min, max], added
+# Optional: expression (the actual formula), notes
+
+formulas:
+  - name: foundational_upgrade_cost
+    status: active
+    source: design/gdd/foundational-classes.md
+    referenced_by:
+      - design/gdd/foundational-classes.md
+      - design/gdd/skill-progression-system.md
+    variables:
+      - target_level
+      - base_gold
+      - base_shards
+      - foundational_discount
+    output_range: [60, 300]
+    expression: "round(base_gold * (1.0 - 0.40))"
+    added: 2026-09-15
+    revised: ""
+
+  - name: vanguard_parry_reflection
+    status: active
+    source: design/gdd/foundational-classes.md
+    referenced_by:
+      - design/gdd/foundational-classes.md
+      - design/gdd/combat-system.md
+      - design/gdd/stagger-system.md
+    variables:
+      - base_parry_posture
+      - shield_tier
+    output_range: [40.0, 56.0]
+    expression: "base_parry_posture * (1.0 + 0.10 * (shield_tier - 1))"
+    added: 2026-09-15
+    revised: ""
+
+  - name: ranger_acrobatic_dash
+    status: active
+    source: design/gdd/foundational-classes.md
+    referenced_by:
+      - design/gdd/foundational-classes.md
+      - design/gdd/dash-evasion.md
+    variables:
+      - base_dash_stamina
+      - stamina_reduction
+      - base_dash_duration
+      - duration_reduction
+    output_range: [20.0, 20.0]
+    expression: "base_dash_stamina - 5.0"
+    added: 2026-09-15
+    revised: ""
+
+  - name: enhancement_stat_scaling
+    status: active
+    source: design/gdd/blacksmithing-system.md
+    referenced_by:
+      - design/gdd/blacksmithing-system.md
+      - design/gdd/attributes-system.md
+    variables:
+      - base_attack
+      - enhancement_level
+    output_range: [20.0, 400.0]
+    expression: "round(base_attack * (1.0 + 0.05 * level))"
+    added: 2026-09-15
+    revised: ""
+
+  - name: repair_cost_formula
+    status: active
+    source: design/gdd/blacksmithing-system.md
+    referenced_by:
+      - design/gdd/blacksmithing-system.md
+      - design/gdd/inventory-system.md
+      - design/gdd/merchant-economy.md
+    variables:
+      - base_price
+      - durability_pct
+    output_range: [1, 500]
+    expression: "ceil(base_price * 0.25 * (1.0 - durability_pct))"
+    added: 2026-09-15
+    revised: ""
+
+  - name: boss_dynamic_hp_scaling
+    status: active
+    source: design/gdd/zone-system.md
+    referenced_by:
+      - design/gdd/zone-system.md
+      - docs/architecture/adr-0001-open-world-mmo-combat-networking.md
+      - design/gdd/world-bosses.md
+    variables:
+      - base_max_hp
+      - hp_scale_coefficient
+      - combatant_count
+    output_range: [5000, 1325000]
+    expression: "round(base_max_hp * (1.0 + hp_scale_coefficient * max(0, combatant_count - 1)))"
+    added: 2026-09-15
+    revised: ""
+
+  - name: boss_dynamic_posture_scaling
+    status: active
+    source: design/gdd/zone-system.md
+    referenced_by:
+      - design/gdd/zone-system.md
+      - docs/architecture/adr-0001-open-world-mmo-combat-networking.md
+      - design/gdd/stagger-system.md
+    variables:
+      - base_max_posture
+      - posture_scale_coefficient
+      - combatant_count
+    output_range: [400.0, 18150.0]
+    expression: "round(base_max_posture * (1.0 + posture_scale_coefficient * max(0, combatant_count - 1)))"
+    added: 2026-09-15
+    revised: ""
+
+  - name: party_exp_share
+    status: active
+    source: design/gdd/zone-system.md
+    referenced_by:
+      - design/gdd/zone-system.md
+      - docs/architecture/adr-0001-open-world-mmo-combat-networking.md
+      - design/gdd/multiplayer-coop.md
+    variables:
+      - base_monster_exp
+      - morale_bonus
+      - valid_party_member_count
+    output_range: [13, 57500]
+    expression: "round((base_monster_exp * (1.0 + morale_bonus)) / valid_party_member_count)"
+    added: 2026-09-15
+    revised: ""
+
+  - name: pve_death_gold_loss
+    status: active
+    source: design/gdd/zone-system.md
+    referenced_by:
+      - design/gdd/zone-system.md
+      - docs/architecture/adr-0001-open-world-mmo-combat-networking.md
+      - design/gdd/inventory-system.md
+    variables:
+      - current_gold
+      - pve_gold_loss_ratio
+    output_range: [0, 4999999]
+    expression: "floor(current_gold * pve_gold_loss_ratio)"
+    added: 2026-09-15
+    revised: ""
+
+  - name: pvp_victim_gold_loss
+    status: active
+    source: design/gdd/zone-system.md
+    referenced_by:
+      - design/gdd/zone-system.md
+      - docs/architecture/adr-0001-open-world-mmo-combat-networking.md
+      - design/gdd/inventory-system.md
+    variables:
+      - victim_current_gold
+      - pvp_gold_steal_ratio
+    output_range: [0, 2499999]
+    expression: "floor(victim_current_gold * pvp_gold_steal_ratio)"
+    added: 2026-09-15
+    revised: ""
+
+  - name: karma_bailout_cost
+    status: active
+    source: design/gdd/merchant-economy.md
+    referenced_by:
+      - design/gdd/merchant-economy.md
+      - design/gdd/zone-system.md
+    variables:
+      - current_karma
+      - karma_bailout_gold_per_point
+    output_range: [50, 500000]
+    expression: "abs(current_karma) * karma_bailout_gold_per_point"
+    added: 2026-09-16
+    revised: ""
+
+  - name: vendor_sell_price
+    status: active
+    source: design/gdd/merchant-economy.md
+    referenced_by:
+      - design/gdd/merchant-economy.md
+      - design/gdd/inventory-system.md
+    variables:
+      - item_base_price
+      - vendor_sell_penalty
+    output_range: [1, 2999999]
+    expression: "floor(item_base_price * vendor_sell_penalty)"
+    added: 2026-09-16
+    revised: ""
+
+  - name: wanted_surcharge_price
+    status: active
+    source: design/gdd/merchant-economy.md
+    referenced_by:
+      - design/gdd/merchant-economy.md
+    variables:
+      - item_base_price
+      - wanted_surcharge_ratio
+    output_range: [1, 11999999]
+    expression: "ceil(item_base_price * (1.0 + wanted_surcharge_ratio))"
+    added: 2026-09-16
+    revised: ""
+
+  - name: threat_score_calculation
+    status: active
+    source: design/gdd/multiplayer-coop.md
+    referenced_by:
+      - design/gdd/multiplayer-coop.md
+      - design/gdd/boss-ai.md
+    variables:
+      - damage_hp
+      - damage_posture
+      - healing_done
+      - is_taunt_active
+    output_range: [0, 9999999]
+    expression: "(damage_hp * 1.0) + (damage_posture * 2.5) + (healing_done * 0.5) * (is_taunt_active ? 5.0 : 1.0)"
+    added: 2026-09-16
+    revised: ""
+
+  - name: threat_retarget_check
+    status: active
+    source: design/gdd/multiplayer-coop.md
+    referenced_by:
+      - design/gdd/multiplayer-coop.md
+      - design/gdd/boss-ai.md
+    variables:
+      - candidate_threat
+      - current_target_threat
+      - threat_retarget_ratio
+    output_range: [0, 1]
+    expression: "candidate_threat >= (current_target_threat * 1.30)"
+    added: 2026-09-16
+    revised: ""
+
+
+
+
+# Example:
+#
+# formulas:
+#   - name: damage_formula
+#     status: active
+#     source: design/gdd/combat.md
+#     referenced_by:
+#       - design/gdd/combat.md
+#       - design/gdd/progression.md   # progression GDD scales attack variable
+#     variables:
+#       - attack
+#       - defense
+#       - crit_chance
+#       - crit_multiplier
+#     output_range: [0, 999]
+#     expression: "max(0, attack - defense) * (1 + crit_chance * crit_multiplier)"
+#     notes: "Output feeds into health-system damage intake. Min is 0 (armour
+#       can absorb all damage). Max is uncapped in formula but tuning knob
+#       damage_cap in combat.md clamps at 999."
+#     added: 2026-03-26
+#     revised: ""
+
+
+# ─── CONSTANTS ───────────────────────────────────────────────────────────────
+# Named numerical values referenced across multiple systems.
+# Register a constant when it is defined in one GDD but another GDD must
+# agree with it (e.g., gold carry limit defined in economy but checked in
+# inventory, or base inventory slots defined in inventory but displayed in HUD).
+#
+# Required fields: name, status, source, referenced_by, value, unit, added
+
+constants:
+  - name: stamina_cost_dash
+    status: active
+    source: design/gdd/attributes-system.md
+    referenced_by:
+      - design/gdd/attributes-system.md
+      - design/gdd/dash-evasion.md
+    value: 25.0
+    unit: points
+    added: 2026-09-14
+    revised: ""
+
+  - name: iframe_duration
+    status: active
+    source: design/gdd/attributes-system.md
+    referenced_by:
+      - design/gdd/attributes-system.md
+      - design/gdd/dash-evasion.md
+      - design/gdd/combat-system.md
+    value: 0.28
+    unit: seconds
+    added: 2026-09-14
+    revised: ""
+
+  - name: stagger_execution_hp_pct
+    status: active
+    source: design/gdd/attributes-system.md
+    referenced_by:
+      - design/gdd/attributes-system.md
+      - design/gdd/stagger-system.md
+      - design/gdd/combat-system.md
+    value: 0.25
+    unit: percentage
+    added: 2026-09-14
+    revised: ""
+
+  - name: camera_arm_length
+    status: active
+    source: design/gdd/isometric-controller.md
+    referenced_by:
+      - design/gdd/isometric-controller.md
+    value: 1200.0
+    unit: cm
+    added: 2026-09-15
+    revised: ""
+
+  - name: max_lookahead_distance
+    status: active
+    source: design/gdd/isometric-controller.md
+    referenced_by:
+      - design/gdd/isometric-controller.md
+    value: 250.0
+    unit: cm
+    added: 2026-09-15
+    revised: ""
+
+  - name: dash_total_duration
+    status: active
+    source: design/gdd/dash-evasion.md
+    referenced_by:
+      - design/gdd/dash-evasion.md
+      - design/gdd/combat-system.md
+    value: 0.45
+    unit: seconds
+    added: 2026-09-15
+    revised: ""
+
+  - name: perfect_dodge_stamina_refund
+    status: active
+    source: design/gdd/dash-evasion.md
+    referenced_by:
+      - design/gdd/dash-evasion.md
+      - design/gdd/attributes-system.md
+    value: 15.0
+    unit: points
+    added: 2026-09-15
+    revised: ""
+
+  - name: heavy_charge_stamina_cost
+    status: active
+    source: design/gdd/combat-system.md
+    referenced_by:
+      - design/gdd/combat-system.md
+      - design/gdd/attributes-system.md
+    value: 20.0
+    unit: points
+    added: 2026-09-15
+    revised: ""
+
+  - name: heavy_charged_posture_damage
+    status: active
+    source: design/gdd/combat-system.md
+    referenced_by:
+      - design/gdd/combat-system.md
+      - design/gdd/stagger-system.md
+    value: 60.0
+    unit: points
+    added: 2026-09-15
+    revised: ""
+
+  - name: stagger_duration
+    status: active
+    source: design/gdd/stagger-system.md
+    referenced_by:
+      - design/gdd/stagger-system.md
+      - design/gdd/boss-ai.md
+      - design/gdd/combat-hud.md
+    value: 3.0
+    unit: seconds
+    added: 2026-09-15
+    revised: ""
+
+  - name: posture_decay_delay
+    status: active
+    source: design/gdd/stagger-system.md
+    referenced_by:
+      - design/gdd/stagger-system.md
+      - design/gdd/attributes-system.md
+      - design/gdd/combat-hud.md
+    value: 4.0
+    unit: seconds
+    added: 2026-09-15
+    revised: ""
+
+  - name: posture_decay_rate
+    status: active
+    source: design/gdd/stagger-system.md
+    referenced_by:
+      - design/gdd/stagger-system.md
+      - design/gdd/attributes-system.md
+    value: 20.0
+    unit: points/second
+    added: 2026-09-15
+    revised: ""
+
+  - name: telegraph_flash_cue_duration
+    status: active
+    source: design/gdd/boss-ai.md
+    referenced_by:
+      - design/gdd/boss-ai.md
+      - design/gdd/combat-hud.md
+    value: 0.10
+    unit: seconds
+    added: 2026-09-15
+    revised: ""
+
+  - name: wall_crash_stun_duration
+    status: active
+    source: design/gdd/boss-ai.md
+    referenced_by:
+      - design/gdd/boss-ai.md
+      - design/gdd/combat-system.md
+    value: 1.8
+    unit: seconds
+    added: 2026-09-15
+    revised: ""
+
+  - name: low_health_threshold
+    status: active
+    source: design/gdd/combat-hud.md
+    referenced_by:
+      - design/gdd/combat-hud.md
+      - design/gdd/attributes-system.md
+    value: 0.20
+    unit: percentage
+    added: 2026-09-15
+    revised: ""
+
+  - name: base_inventory_slots
+    status: active
+    source: design/gdd/inventory-system.md
+    referenced_by:
+      - design/gdd/inventory-system.md
+    value: 30
+    unit: slots
+    added: 2026-09-15
+    revised: ""
+
+  - name: max_inventory_slots
+    status: active
+    source: design/gdd/inventory-system.md
+    referenced_by:
+      - design/gdd/inventory-system.md
+      - design/gdd/blacksmithing-system.md
+    value: 60
+    unit: slots
+    added: 2026-09-15
+    revised: ""
+
+  - name: max_quickbar_slots
+    status: active
+    source: design/gdd/inventory-system.md
+    referenced_by:
+      - design/gdd/inventory-system.md
+      - design/gdd/combat-hud.md
+    value: 4
+    unit: slots
+    added: 2026-09-15
+    revised: ""
+
+  - name: max_consumable_stack
+    status: active
+    source: design/gdd/inventory-system.md
+    referenced_by:
+      - design/gdd/inventory-system.md
+    value: 20
+    unit: items
+    added: 2026-09-15
+    revised: ""
+
+  - name: max_material_stack
+    status: active
+    source: design/gdd/inventory-system.md
+    referenced_by:
+      - design/gdd/inventory-system.md
+      - design/gdd/skill-progression-system.md
+    value: 999
+    unit: items
+    added: 2026-09-15
+    revised: ""
+
+  - name: overflow_stash_limit
+    status: active
+    source: design/gdd/inventory-system.md
+    referenced_by:
+      - design/gdd/inventory-system.md
+    value: 20
+    unit: slots
+    added: 2026-09-15
+    revised: ""
+
+  - name: potion_use_duration
+    status: active
+    source: design/gdd/inventory-system.md
+    referenced_by:
+      - design/gdd/inventory-system.md
+      - design/gdd/combat-system.md
+    value: 0.8
+    unit: seconds
+    added: 2026-09-15
+    revised: ""
+
+  - name: vendor_sell_penalty
+    status: active
+    source: design/gdd/inventory-system.md
+    referenced_by:
+      - design/gdd/inventory-system.md
+      - design/gdd/merchant-economy.md
+    value: 0.30
+    unit: ratio
+    added: 2026-09-15
+    revised: ""
+
+  - name: foundational_upgrade_discount
+    status: active
+    source: design/gdd/foundational-classes.md
+    referenced_by:
+      - design/gdd/foundational-classes.md
+      - design/gdd/skill-progression-system.md
+    value: 0.40
+    unit: ratio
+    added: 2026-09-15
+    revised: ""
+
+  - name: vanguard_parry_window
+    status: active
+    source: design/gdd/foundational-classes.md
+    referenced_by:
+      - design/gdd/foundational-classes.md
+      - design/gdd/combat-system.md
+    value: 0.15
+    unit: seconds
+    added: 2026-09-15
+    revised: ""
+
+  - name: vanguard_parry_posture_reflect
+    status: active
+    source: design/gdd/foundational-classes.md
+    referenced_by:
+      - design/gdd/foundational-classes.md
+      - design/gdd/stagger-system.md
+    value: 40.0
+    unit: points
+    added: 2026-09-15
+    revised: ""
+
+  - name: ranger_dash_stamina_cost
+    status: active
+    source: design/gdd/foundational-classes.md
+    referenced_by:
+      - design/gdd/foundational-classes.md
+      - design/gdd/dash-evasion.md
+    value: 20.0
+    unit: points
+    added: 2026-09-15
+    revised: ""
+
+  - name: ranger_dash_duration
+    status: active
+    source: design/gdd/foundational-classes.md
+    referenced_by:
+      - design/gdd/foundational-classes.md
+      - design/gdd/dash-evasion.md
+    value: 0.40
+    unit: seconds
+    added: 2026-09-15
+    revised: ""
+
+  - name: arcanist_surge_mana_refund
+    status: active
+    source: design/gdd/foundational-classes.md
+    referenced_by:
+      - design/gdd/foundational-classes.md
+      - design/gdd/attributes-system.md
+    value: 20.0
+    unit: points
+    added: 2026-09-15
+    revised: ""
+
+  - name: acolyte_aegis_stamina_threshold
+    status: active
+    source: design/gdd/foundational-classes.md
+    referenced_by:
+      - design/gdd/foundational-classes.md
+      - design/gdd/attributes-system.md
+    value: 0.30
+    unit: ratio
+    added: 2026-09-15
+    revised: ""
+
+  - name: acolyte_aegis_icd
+    status: active
+    source: design/gdd/foundational-classes.md
+    referenced_by:
+      - design/gdd/foundational-classes.md
+    value: 20.0
+    unit: seconds
+    added: 2026-09-15
+    revised: ""
+
+  - name: acolyte_aegis_stamina_refund
+    status: active
+    source: design/gdd/foundational-classes.md
+    referenced_by:
+      - design/gdd/foundational-classes.md
+      - design/gdd/attributes-system.md
+    value: 30.0
+    unit: points
+    added: 2026-09-15
+    revised: ""
+
+  - name: arcanist_drain_radius
+    status: active
+    source: design/gdd/foundational-classes.md
+    referenced_by:
+      - design/gdd/foundational-classes.md
+    value: 350.0
+    unit: cm
+    added: 2026-09-15
+    revised: ""
+
+  - name: ranger_arrow_rain_radius
+    status: active
+    source: design/gdd/foundational-classes.md
+    referenced_by:
+      - design/gdd/foundational-classes.md
+    value: 400.0
+    unit: cm
+    added: 2026-09-15
+    revised: ""
+
+  - name: arcanist_laser_length
+    status: active
+    source: design/gdd/foundational-classes.md
+    referenced_by:
+      - design/gdd/foundational-classes.md
+    value: 1200.0
+    unit: cm
+    added: 2026-09-15
+    revised: ""
+
+  - name: weapon_enhance_attack_per_level
+    status: active
+    source: design/gdd/blacksmithing-system.md
+    referenced_by:
+      - design/gdd/blacksmithing-system.md
+      - design/gdd/attributes-system.md
+    value: 0.05
+    unit: ratio
+    added: 2026-09-15
+    revised: ""
+
+  - name: weapon_enhance_mastery_bonus
+    status: active
+    source: design/gdd/blacksmithing-system.md
+    referenced_by:
+      - design/gdd/blacksmithing-system.md
+      - design/gdd/attributes-system.md
+    value: 0.10
+    unit: ratio
+    added: 2026-09-15
+    revised: ""
+
+  - name: armor_enhance_defense_per_level
+    status: active
+    source: design/gdd/blacksmithing-system.md
+    referenced_by:
+      - design/gdd/blacksmithing-system.md
+      - design/gdd/attributes-system.md
+    value: 0.06
+    unit: ratio
+    added: 2026-09-15
+    revised: ""
+
+  - name: gem_unsocket_fee
+    status: active
+    source: design/gdd/blacksmithing-system.md
+    referenced_by:
+      - design/gdd/blacksmithing-system.md
+      - design/gdd/merchant-economy.md
+    value: 100
+    unit: gold
+    added: 2026-09-15
+    revised: ""
+
+  - name: max_gem_sockets_tier2
+    status: active
+    source: design/gdd/blacksmithing-system.md
+    referenced_by:
+      - design/gdd/blacksmithing-system.md
+      - design/gdd/inventory-system.md
+    value: 2
+    unit: sockets
+    added: 2026-09-15
+    revised: ""
+
+  - name: max_gem_sockets_tier3
+    status: active
+    source: design/gdd/blacksmithing-system.md
+    referenced_by:
+      - design/gdd/blacksmithing-system.md
+      - design/gdd/inventory-system.md
+    value: 3
+    unit: sockets
+    added: 2026-09-15
+    revised: ""
+
+  - name: campfire_sanctuary_radius
+    status: active
+    source: design/gdd/zone-system.md
+    referenced_by:
+      - design/gdd/zone-system.md
+      - docs/architecture/adr-0001-open-world-mmo-combat-networking.md
+    value: 1000.0
+    unit: cm
+    added: 2026-09-15
+    revised: ""
+
+  - name: fast_travel_cast_time
+    status: active
+    source: design/gdd/zone-system.md
+    referenced_by:
+      - design/gdd/zone-system.md
+    value: 2.0
+    unit: seconds
+    added: 2026-09-15
+    revised: ""
+
+  - name: ai_leash_max_distance
+    status: active
+    source: design/gdd/zone-system.md
+    referenced_by:
+      - design/gdd/zone-system.md
+      - docs/architecture/adr-0001-open-world-mmo-combat-networking.md
+    value: 2500.0
+    unit: cm
+    added: 2026-09-15
+    revised: ""
+
+  - name: combat_disconnect_ghost_duration
+    status: active
+    source: design/gdd/zone-system.md
+    referenced_by:
+      - design/gdd/zone-system.md
+      - docs/architecture/adr-0001-open-world-mmo-combat-networking.md
+    value: 15.0
+    unit: seconds
+    added: 2026-09-15
+    revised: ""
+
+  - name: boss_loot_contribution_hp
+    status: active
+    source: design/gdd/zone-system.md
+    referenced_by:
+      - design/gdd/zone-system.md
+      - docs/architecture/adr-0001-open-world-mmo-combat-networking.md
+      - design/gdd/inventory-system.md
+    value: 0.05
+    unit: ratio
+    added: 2026-09-15
+    revised: ""
+
+  - name: boss_finisher_exclusive_window
+    status: active
+    source: design/gdd/zone-system.md
+    referenced_by:
+      - design/gdd/zone-system.md
+      - docs/architecture/adr-0001-open-world-mmo-combat-networking.md
+      - design/gdd/stagger-system.md
+    value: 1.5
+    unit: seconds
+    added: 2026-09-15
+    revised: ""
+
+  - name: wanted_prison_duration_seconds
+    status: active
+    source: design/gdd/zone-system.md
+    referenced_by:
+      - design/gdd/zone-system.md
+      - docs/architecture/adr-0001-open-world-mmo-combat-networking.md
+    value: 300
+    unit: seconds
+    added: 2026-09-15
+    revised: ""
+
+  - name: wanted_prison_mine_ore_target
+    status: active
+    source: design/gdd/zone-system.md
+    referenced_by:
+      - design/gdd/zone-system.md
+      - docs/architecture/adr-0001-open-world-mmo-combat-networking.md
+    value: 20
+    unit: blocks
+    added: 2026-09-15
+    revised: ""
+
+  - name: ash_remnant_owner_lock_duration
+    status: active
+    source: design/gdd/zone-system.md
+    referenced_by:
+      - design/gdd/zone-system.md
+      - docs/architecture/adr-0001-open-world-mmo-combat-networking.md
+      - design/gdd/inventory-system.md
+    value: 1800
+    unit: seconds
+    added: 2026-09-15
+    revised: ""
+
+  # ─── MERCHANT ECONOMY CONSTANTS ────────────────────────────────
+  - name: vendor_sell_penalty_tier3
+    status: active
+    source: design/gdd/merchant-economy.md
+    referenced_by:
+      - design/gdd/merchant-economy.md
+    value: 0.25
+    unit: ratio
+    added: 2026-09-16
+    revised: ""
+
+  - name: wanted_surcharge_ratio
+    status: active
+    source: design/gdd/merchant-economy.md
+    referenced_by:
+      - design/gdd/merchant-economy.md
+    value: 0.20
+    unit: ratio
+    added: 2026-09-16
+    revised: ""
+
+  - name: karma_bailout_gold_per_point
+    status: active
+    source: design/gdd/merchant-economy.md
+    referenced_by:
+      - design/gdd/merchant-economy.md
+      - design/gdd/zone-system.md
+    value: 50
+    unit: gold
+    added: 2026-09-16
+    revised: ""
+
+  - name: restock_timer_tier1
+    status: active
+    source: design/gdd/merchant-economy.md
+    referenced_by:
+      - design/gdd/merchant-economy.md
+    value: 1800
+    unit: seconds
+    added: 2026-09-16
+    revised: ""
+
+  - name: restock_timer_tier2
+    status: active
+    source: design/gdd/merchant-economy.md
+    referenced_by:
+      - design/gdd/merchant-economy.md
+    value: 3600
+    unit: seconds
+    added: 2026-09-16
+    revised: ""
+
+  - name: restock_timer_tier3
+    status: active
+    source: design/gdd/merchant-economy.md
+    referenced_by:
+      - design/gdd/merchant-economy.md
+    value: 5400
+    unit: seconds
+    added: 2026-09-16
+    revised: ""
+
+  - name: buyback_max_slots
+    status: active
+    source: design/gdd/merchant-economy.md
+    referenced_by:
+      - design/gdd/merchant-economy.md
+    value: 10
+    unit: slots
+    added: 2026-09-16
+    revised: ""
+
+  - name: transaction_rate_limit
+    status: active
+    source: design/gdd/merchant-economy.md
+    referenced_by:
+      - design/gdd/merchant-economy.md
+    value: 2
+    unit: per_second_per_player
+    added: 2026-09-16
+    revised: ""
+
+  - name: merchant_interaction_distance
+    status: active
+    source: design/gdd/merchant-economy.md
+    referenced_by:
+      - design/gdd/merchant-economy.md
+    value: 300.0
+    unit: cm
+    added: 2026-09-16
+    revised: ""
+
+  - name: shop_auto_close_distance
+    status: active
+    source: design/gdd/merchant-economy.md
+    referenced_by:
+      - design/gdd/merchant-economy.md
+    value: 500.0
+    unit: cm
+    added: 2026-09-16
+    revised: ""
+
+  - name: gold_carry_limit
+    status: active
+    source: design/gdd/merchant-economy.md
+    referenced_by:
+      - design/gdd/merchant-economy.md
+      - design/gdd/inventory-system.md
+    value: 9999999
+    unit: gold
+    added: 2026-09-16
+    revised: ""
+
+  - name: ash_shards_carry_limit
+    status: active
+    source: design/gdd/merchant-economy.md
+    referenced_by:
+      - design/gdd/merchant-economy.md
+    value: 99999
+    unit: shards
+    added: 2026-09-16
+    revised: ""
+
+  # ─── MULTIPLAYER NETCODE & AGGRO CONSTANTS ─────────────────────
+  - name: threat_retarget_ratio
+    status: active
+    source: design/gdd/multiplayer-coop.md
+    referenced_by:
+      - design/gdd/multiplayer-coop.md
+      - design/gdd/boss-ai.md
+    value: 1.30
+    unit: ratio
+    added: 2026-09-16
+    revised: ""
+
+  - name: threat_decay_delay
+    status: active
+    source: design/gdd/multiplayer-coop.md
+    referenced_by:
+      - design/gdd/multiplayer-coop.md
+    value: 3.0
+    unit: seconds
+    added: 2026-09-16
+    revised: ""
+
+  - name: threat_decay_rate
+    status: active
+    source: design/gdd/multiplayer-coop.md
+    referenced_by:
+      - design/gdd/multiplayer-coop.md
+    value: 0.10
+    unit: ratio_per_second
+    added: 2026-09-16
+    revised: ""
+
+  - name: taunt_multiplier
+    status: active
+    source: design/gdd/multiplayer-coop.md
+    referenced_by:
+      - design/gdd/multiplayer-coop.md
+      - design/gdd/foundational-classes.md
+    value: 5.0
+    unit: multiplier
+    added: 2026-09-16
+    revised: ""
+
+  - name: posture_threat_multiplier
+    status: active
+    source: design/gdd/multiplayer-coop.md
+    referenced_by:
+      - design/gdd/multiplayer-coop.md
+      - design/gdd/stagger-system.md
+    value: 2.5
+    unit: multiplier
+    added: 2026-09-16
+    revised: ""
+
+  - name: healing_threat_multiplier
+    status: active
+    source: design/gdd/multiplayer-coop.md
+    referenced_by:
+      - design/gdd/multiplayer-coop.md
+      - design/gdd/foundational-classes.md
+    value: 0.5
+    unit: multiplier
+    added: 2026-09-16
+    revised: ""
+
+  - name: party_max_members
+    status: active
+    source: design/gdd/multiplayer-coop.md
+    referenced_by:
+      - design/gdd/multiplayer-coop.md
+      - docs/architecture/adr-0001-open-world-mmo-combat-networking.md
+    value: 4
+    unit: players
+    added: 2026-09-16
+    revised: ""
+
+  - name: party_exp_radius
+    status: active
+    source: design/gdd/multiplayer-coop.md
+    referenced_by:
+      - design/gdd/multiplayer-coop.md
+      - design/gdd/zone-system.md
+    value: 3000.0
+    unit: cm
+    added: 2026-09-16
+    revised: ""
+
+  - name: iris_tier1_radius
+    status: active
+    source: design/gdd/multiplayer-coop.md
+    referenced_by:
+      - design/gdd/multiplayer-coop.md
+      - docs/architecture/adr-0001-open-world-mmo-combat-networking.md
+    value: 1500.0
+    unit: cm
+    added: 2026-09-16
+    revised: ""
+
+  - name: iris_tier2_radius
+    status: active
+    source: design/gdd/multiplayer-coop.md
+    referenced_by:
+      - design/gdd/multiplayer-coop.md
+      - docs/architecture/adr-0001-open-world-mmo-combat-networking.md
+    value: 3500.0
+    unit: cm
+    added: 2026-09-16
+    revised: ""
+
+  - name: server_max_lag_compensation
+    status: active
+    source: design/gdd/multiplayer-coop.md
+    referenced_by:
+      - design/gdd/multiplayer-coop.md
+      - design/gdd/combat-system.md
+      - docs/architecture/adr-0001-open-world-mmo-combat-networking.md
+    value: 0.20
+    unit: seconds
+    added: 2026-09-16
+    revised: ""
+
+  - name: boss_loot_contribution_posture
+    status: active
+    source: design/gdd/multiplayer-coop.md
+    referenced_by:
+      - design/gdd/multiplayer-coop.md
+      - design/gdd/stagger-system.md
+      - docs/architecture/adr-0001-open-world-mmo-combat-networking.md
+    value: 0.10
+    unit: ratio
+    added: 2026-09-16
+    revised: ""
+
+
+
+
+# Example:
+#
+# constants:
+#   - name: gold_carry_limit
+#     status: active
+#     source: design/gdd/economy.md
+#     referenced_by:
+#       - design/gdd/economy.md
+#       - design/gdd/inventory.md   # inventory enforces the carry limit
+#       - design/gdd/ui.md          # HUD displays current gold vs limit
+#     value: 9999
+#     unit: gold
+#     added: 2026-03-26
+#     revised: ""
+#
+#   - name: base_inventory_slots
+#     status: active
+#     source: design/gdd/inventory.md
+#     referenced_by:
+#       - design/gdd/inventory.md
+#       - design/gdd/progression.md  # progression unlocks additional slots
+#     value: 20
+#     unit: slots
+#     added: 2026-03-26
+#     revised: ""

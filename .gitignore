@@ -1,0 +1,58 @@
+# =============================================================================
+# Project Ascendant — UE5 .gitignore
+# =============================================================================
+
+# === Unreal Engine Build Artifacts ===
+Binaries/
+DerivedDataCache/
+Intermediate/
+Saved/
+Build/
+
+# === Content — use Git LFS or separate repo for large binary assets ===
+# Uncomment the line below to ignore ALL Content (if managing assets separately)
+# Content/
+
+# === IDE and Editor ===
+.vs/
+.vscode/settings.json
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# === Agent / Assistant Workspace Meta ===
+.agent
+.agents/
+.claude/
+.codebase-memory/
+skills-lock.json
+AGENTS.md
+GEMINI.md
+
+# === Claude Code Local ===
+.claude/settings.local.json
+CLAUDE.local.md
+
+# === Production Session State (local only) ===
+production/session-state/
+production/session-logs/
+production/review-mode.txt
+
+# === Eval Tooling ===
+marrow/
+CCGS Skill Testing Framework/
+
+# === Runtime Artifacts (auto-generated) ===
+docs/consistency-failures.md
+
+# === Expansions (internal planning) ===
+expansions/
+
+# === OS Generated ===
+*.log
+*.bak
+*.tmp

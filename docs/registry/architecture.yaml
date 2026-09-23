@@ -1,0 +1,209 @@
+# Architecture Decision Registry
+#
+# PURPOSE: Single source of truth for key architectural stances that all ADRs
+# must agree on. Skills check this before writing new ADRs to detect conflicts
+# at authoring time — before stories are created against contradictory decisions.
+#
+# RULES:
+#   - Register a stance when it constrains how OTHER systems must be built.
+#     An internal implementation detail that affects only one ADR does not need
+#     to be registered.
+#   - Never delete entries — set status: superseded_by: ADR-NNNN instead.
+#   - When a stance changes: update the entry, set revised: to today's date,
+#     add a comment with the old value, and run /architecture-review to check
+#     what ADRs are now invalidated.
+#   - adr: is the authoritative source. All other ADRs that depend on this
+#     stance list themselves in referenced_by.
+#
+# WRITTEN BY: /architecture-decision (Phase 5 — after ADR is approved)
+# READ BY:    /architecture-decision (Step 2 — before authoring begins)
+#             /architecture-review (Phase 4 — cross-ADR conflict baseline)
+#             /create-stories (to embed architectural constraints in stories)
+#             /dev-story (to check implementation against accepted stances)
+#
+# SEARCH PATTERNS (for skills using Grep):
+#   All state owners:       Grep pattern="^  - state:" path="docs/registry/architecture.yaml"
+#   Who owns player_health: Grep pattern="state: player_health"
+#   All signal contracts:   Grep pattern="pattern: signal"
+#   Budget for combat:      Grep pattern="system: combat"
+#   All forbidden patterns: Grep pattern="^  - pattern:" (forbidden_patterns section)
+#   Superseded entries:     Grep pattern="status: superseded"
+
+version: 1
+last_updated: "2026-09-16"
+
+# ─── STATE OWNERSHIP ─────────────────────────────────────────────────────────
+state_ownership:
+  - state: boss_posture
+    status: active
+    owner_system: stagger-system
+    adr: docs/architecture/adr-0001-open-world-mmo-combat-networking.md
+    interface: "UAscendantAttributeSet.BossPosture (Server-Authoritative float, dynamically scaled by combatant count)"
+    write_access: server-authority-only
+    referenced_by:
+      - docs/architecture/adr-0001-open-world-mmo-combat-networking.md
+      - design/gdd/stagger-system.md
+      - design/gdd/combat-system.md
+    added: 2026-09-15
+    revised: ""
+
+  - state: player_karma
+    status: active
+    owner_system: zone-system
+    adr: docs/architecture/adr-0001-open-world-mmo-combat-networking.md
+    interface: "UKarmaComponent.KarmaPoints (Server-Authoritative int32, range -100 to +100)"
+    write_access: server-authority-only
+    referenced_by:
+      - docs/architecture/adr-0001-open-world-mmo-combat-networking.md
+      - design/gdd/zone-system.md
+    added: 2026-09-15
+    revised: ""
+
+# ─── INTERFACE CONTRACTS ──────────────────────────────────────────────────────
+interfaces:
+  - contract: contested_combat_loot_generation
+    status: active
+    pattern: rpc
+    producer: combat-system
+    consumers:
+      - inventory-system
+      - progression-system
+    adr: docs/architecture/adr-0001-open-world-mmo-combat-networking.md
+    notes: "Server evaluates per-player/party contribution threshold (>=5% HP or >=10% Posture), generating independent instanced loot."
+    referenced_by:
+      - docs/architecture/adr-0001-open-world-mmo-combat-networking.md
+      - design/gdd/inventory-system.md
+    added: 2026-09-15
+    revised: ""
+
+  - contract: priority_stagger_execution
+    status: active
+    pattern: rpc
+    producer: stagger-system
+    consumers:
+      - combat-system
+      - combat-hud
+    adr: docs/architecture/adr-0001-open-world-mmo-combat-networking.md
+    notes: "Server grants exclusive execution RPC to Posture Break Finisher for 1.5s, then broadcasts open execution RPC for remaining 1.5s."
+    referenced_by:
+      - docs/architecture/adr-0001-open-world-mmo-combat-networking.md
+      - design/gdd/stagger-system.md
+      - design/gdd/combat-hud.md
+    added: 2026-09-15
+    revised: ""
+
+  - contract: paperzd_gas_anim_notify_bridge
+    status: active
+    pattern: event_task
+    producer: paperzd-animation-component
+    consumers:
+      - ability-system-component
+      - combat-system
+    adr: docs/architecture/adr-0002-gas-integration-paperzd-pixel-sprites.md
+    notes: "PaperZD AnimNotifyState sends GameplayEventTag to ASC; UAbilityTask_PlayPaperZDAnimAndWait synchronizes ability lifecycle."
+    referenced_by:
+      - docs/architecture/adr-0002-gas-integration-paperzd-pixel-sprites.md
+      - design/gdd/combat-system.md
+      - design/gdd/dash-evasion.md
+    added: 2026-09-16
+    revised: ""
+
+  - contract: grid_inventory_fast_array_replication
+    status: active
+    pattern: serializer_delta
+    producer: inventory-component
+    consumers:
+      - inventory-ui
+      - persistence-pipeline
+    adr: docs/architecture/adr-0003-server-authoritative-grid-inventory-fast-array.md
+    notes: "FInventoryFastArray replicates single dirty struct deltas on slot modification, triggering PostReplicatedChange on client."
+    referenced_by:
+      - docs/architecture/adr-0003-server-authoritative-grid-inventory-fast-array.md
+      - design/gdd/inventory-system.md
+      - design/gdd/blacksmithing-system.md
+    added: 2026-09-16
+    revised: ""
+
+# ─── PERFORMANCE BUDGETS ──────────────────────────────────────────────────────
+performance_budgets:
+  - target_fps: 60
+    total_frame_budget_ms: 16.6
+    platform: PC
+    adr: docs/architecture/adr-0001-open-world-mmo-combat-networking.md
+    added: 2026-09-15
+    revised: ""
+
+  - system: networking_iris_replication
+    status: active
+    budget_ms: 3.0
+    adr: docs/architecture/adr-0001-open-world-mmo-combat-networking.md
+    notes: "UE 5.7 Iris replication budget for 50 active combatants in same zone grid."
+    referenced_by:
+      - docs/architecture/adr-0001-open-world-mmo-combat-networking.md
+    added: 2026-09-15
+    revised: ""
+
+# ─── API DECISIONS ───────────────────────────────────────────────────────────
+api_decisions:
+  - purpose: netcode_replication_system
+    status: active
+    api: "UE 5.7 Iris Replication System"
+    not: "Legacy Replication Graph / Direct RPC Spam"
+    adr: docs/architecture/adr-0001-open-world-mmo-combat-networking.md
+    reason: "Iris provides massive scalability for high player counts in open world contested combat."
+    referenced_by:
+      - docs/architecture/adr-0001-open-world-mmo-combat-networking.md
+    added: 2026-09-15
+    revised: ""
+
+  - purpose: 2d_sprite_gas_montage_pipeline
+    status: active
+    api: "UAbilityTask_PlayPaperZDAnimAndWait + UPaperZDAnimNotifyState"
+    not: "Invisible 3D Skeletal Mesh Proxy / Pure Timer DataTables"
+    adr: docs/architecture/adr-0002-gas-integration-paperzd-pixel-sprites.md
+    reason: "Zero-overhead headless server execution with exact pixel-frame hitbox synchronization."
+    referenced_by:
+      - docs/architecture/adr-0002-gas-integration-paperzd-pixel-sprites.md
+    added: 2026-09-16
+    revised: ""
+
+  - purpose: inventory_replication_architecture
+    status: active
+    api: "FFastArraySerializer + UItemDataAsset"
+    not: "UObject Subobjects / TArray<FItemData> Full Replication"
+    adr: docs/architecture/adr-0003-server-authoritative-grid-inventory-fast-array.md
+    reason: "Massively reduces bandwidth and eliminates UObject GC overhead for 3,000 active inventory slots per server shard."
+    referenced_by:
+      - docs/architecture/adr-0003-server-authoritative-grid-inventory-fast-array.md
+    added: 2026-09-16
+    revised: ""
+
+# ─── FORBIDDEN PATTERNS ──────────────────────────────────────────────────────
+forbidden_patterns:
+  - pattern: client_authoritative_hit_detection
+    status: active
+    description: "Clients must never report confirmed hits or damage amounts to the server."
+    why: "Prevents cheat modifications, damage multiplying, and false hit registrations in an MMO environment."
+    adr: docs/architecture/adr-0001-open-world-mmo-combat-networking.md
+    added: 2026-09-15
+
+  - pattern: physical_shared_loot_race
+    status: active
+    description: "Systems must never spawn free-for-all physical loot piles dropped on ground from bosses."
+    why: "Creates toxic ninja-looting and biases towards high-mobility/close-range players; instanced contribution loot is required."
+    adr: docs/architecture/adr-0001-open-world-mmo-combat-networking.md
+    added: 2026-09-15
+
+  - pattern: invisible_3d_skeletal_proxy_for_2d_sprites
+    status: active
+    description: "Never spawn invisible 3D skeletal meshes to run traditional 3D montages for 2D pixel characters."
+    why: "Doubles component overhead and wastes CPU/RAM on Dedicated Server running 100 combatants."
+    adr: docs/architecture/adr-0002-gas-integration-paperzd-pixel-sprites.md
+    added: 2026-09-16
+
+  - pattern: client_side_inventory_mutation
+    status: active
+    description: "Clients must never mutate item slots or quantities locally prior to Server confirmation."
+    why: "Prevents item duplication exploits (duping) and desynchronization in contested multiplayer trading."
+    adr: docs/architecture/adr-0003-server-authoritative-grid-inventory-fast-array.md
+    added: 2026-09-16

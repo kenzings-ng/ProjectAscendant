@@ -1,0 +1,438 @@
+# Technical Requirement ID Registry
+#
+# PURPOSE: Persistent, stable IDs for every GDD technical requirement.
+# Prevents TR-ID renumbering across /architecture-review runs, which would
+# break story references.
+#
+# RULES:
+#   - IDs are PERMANENT. Never renumber, never delete (use status: deprecated).
+#   - Add new entries only at the END of each system's list.
+#   - When a GDD requirement is reworded (same intent): update `requirement`
+#     text and add a `revised` date. The ID stays the same.
+#   - When a requirement is removed from the GDD: set status: deprecated.
+#   - When a requirement is split or replaced: set status: superseded-by with
+#     the new TR-ID(s).
+
+version: 1
+last_updated: "2026-09-16"
+
+requirements:
+  # =========================================================================
+  # 1. Attributes System (design/gdd/attributes-system.md)
+  # =========================================================================
+  - id: TR-attr-001
+    system: attributes
+    gdd: design/gdd/attributes-system.md
+    requirement: "Character stats (Health, Mana, Stamina, Posture) implemented via GAS UAttributeSet with Iris network replication"
+    layer: Foundation
+    created: 2026-09-16
+    revised: ""
+    status: active
+
+  - id: TR-attr-002
+    system: attributes
+    gdd: design/gdd/attributes-system.md
+    requirement: "Stat calculation pipelines using UGameplayEffectExecutionCalculation for non-linear defense and resistance scaling"
+    layer: Foundation
+    created: 2026-09-16
+    revised: ""
+    status: active
+
+  - id: TR-attr-003
+    system: attributes
+    gdd: design/gdd/attributes-system.md
+    requirement: "Client-side optimistic resource prediction with server-authoritative reconciliation on mispredicted depletion"
+    layer: Foundation
+    created: 2026-09-16
+    revised: ""
+    status: active
+
+  # =========================================================================
+  # 2. Isometric Controller (design/gdd/isometric-controller.md)
+  # =========================================================================
+  - id: TR-ctrl-001
+    system: controller
+    gdd: design/gdd/isometric-controller.md
+    requirement: "Screen-to-world de-projection from cursor coordinates onto an isometric ground collision plane at fixed angle"
+    layer: Foundation
+    created: 2026-09-16
+    revised: ""
+    status: active
+
+  - id: TR-ctrl-002
+    system: controller
+    gdd: design/gdd/isometric-controller.md
+    requirement: "8-way directional character locomotion using Enhanced Input IMC with smooth acceleration and decel curves"
+    layer: Foundation
+    created: 2026-09-16
+    revised: ""
+    status: active
+
+  - id: TR-ctrl-003
+    system: controller
+    gdd: design/gdd/isometric-controller.md
+    requirement: "Occluding 3D geometry dither-fade transparency shader when blocking character or enemy line of sight"
+    layer: Presentation
+    created: 2026-09-16
+    revised: ""
+    status: active
+
+  # =========================================================================
+  # 3. Dash & Evasion (design/gdd/dash-evasion.md)
+  # =========================================================================
+  - id: TR-dash-001
+    system: dash
+    gdd: design/gdd/dash-evasion.md
+    requirement: "Server-validated 0.25s invulnerability window (I-frame) applying GameplayTag.State.Invulnerable during roll"
+    layer: Core
+    created: 2026-09-16
+    revised: ""
+    status: active
+
+  - id: TR-dash-002
+    system: dash
+    gdd: design/gdd/dash-evasion.md
+    requirement: "Stamina cost deduction via GameplayEffect with immediate client prediction and server cooldown enforcement"
+    layer: Core
+    created: 2026-09-16
+    revised: ""
+    status: active
+
+  - id: TR-dash-003
+    system: dash
+    gdd: design/gdd/dash-evasion.md
+    requirement: "Sprite rotation lock along dash trajectory while allowing camera and aim reticle independence"
+    layer: Core
+    created: 2026-09-16
+    revised: ""
+    status: active
+
+  # =========================================================================
+  # 4. Core Combat (design/gdd/combat-system.md)
+  # =========================================================================
+  - id: TR-combat-001
+    system: combat
+    gdd: design/gdd/combat-system.md
+    requirement: "Server-authoritative 3D capsule sweep hit detection triggered by PaperZD animation notifies"
+    layer: Core
+    created: 2026-09-16
+    revised: ""
+    status: active
+
+  - id: TR-combat-002
+    system: combat
+    gdd: design/gdd/combat-system.md
+    requirement: "Multi-hit combo state machine with 250ms input buffer queue and recovery cancel windows"
+    layer: Core
+    created: 2026-09-16
+    revised: ""
+    status: active
+
+  - id: TR-combat-003
+    system: combat
+    gdd: design/gdd/combat-system.md
+    requirement: "Damage mitigation formula calculation: Clamped((RawAttack - TargetDefense) * Multiplier) executed server-side"
+    layer: Core
+    created: 2026-09-16
+    revised: ""
+    status: active
+
+  # =========================================================================
+  # 5. Stagger & Part Breaking (design/gdd/stagger-system.md)
+  # =========================================================================
+  - id: TR-stagger-001
+    system: stagger
+    gdd: design/gdd/stagger-system.md
+    requirement: "Accumulative posture break attribute with exponential decay if unhit for 4.0 seconds"
+    layer: Core
+    created: 2026-09-16
+    revised: ""
+    status: active
+
+  - id: TR-stagger-002
+    system: stagger
+    gdd: design/gdd/stagger-system.md
+    requirement: "Vulnerable state transition applying GameplayTag.State.Staggered granting 200% critical damage multiplier"
+    layer: Core
+    created: 2026-09-16
+    revised: ""
+    status: active
+
+  - id: TR-stagger-003
+    system: stagger
+    gdd: design/gdd/stagger-system.md
+    requirement: "Part-breaking threshold trigger disabling specific boss ability tags and spawning severance particle VFX"
+    layer: Core
+    created: 2026-09-16
+    revised: ""
+    status: active
+
+  # =========================================================================
+  # 6. Boss AI & Telegraphs (design/gdd/boss-ai.md)
+  # =========================================================================
+  - id: TR-boss-001
+    system: boss_ai
+    gdd: design/gdd/boss-ai.md
+    requirement: "Unreal Engine 5.7 StateTree hierarchical decision making with phase transition triggers at 75%, 50%, 25% HP"
+    layer: Feature
+    created: 2026-09-16
+    revised: ""
+    status: active
+
+  - id: TR-boss-002
+    system: boss_ai
+    gdd: design/gdd/boss-ai.md
+    requirement: "Ground telegraph decal and Niagara projection matching damage volume 0.8s prior to active damage frame"
+    layer: Feature
+    created: 2026-09-16
+    revised: ""
+    status: active
+
+  - id: TR-boss-003
+    system: boss_ai
+    gdd: design/gdd/boss-ai.md
+    requirement: "Threat calculation table evaluating damage aggregate, healer output, and spatial proximity"
+    layer: Feature
+    created: 2026-09-16
+    revised: ""
+    status: active
+
+  # =========================================================================
+  # 7. Combat HUD & Feedback (design/gdd/combat-hud.md)
+  # =========================================================================
+  - id: TR-hud-001
+    system: combat_hud
+    gdd: design/gdd/combat-hud.md
+    requirement: "CommonUI widget hierarchy separating Player Frame, Boss Frame, Ability Action Bar, and Status Tray"
+    layer: Presentation
+    created: 2026-09-16
+    revised: ""
+    status: active
+
+  - id: TR-hud-002
+    system: combat_hud
+    gdd: design/gdd/combat-hud.md
+    requirement: "Ghosting damage bar with 0.4s catch-up interpolation for HP and Stagger meters"
+    layer: Presentation
+    created: 2026-09-16
+    revised: ""
+    status: active
+
+  - id: TR-hud-003
+    system: combat_hud
+    gdd: design/gdd/combat-hud.md
+    requirement: "Object-pooled floating combat damage text rendering up to 64 concurrent numbers with parabolic arc"
+    layer: Presentation
+    created: 2026-09-16
+    revised: ""
+    status: active
+
+  # =========================================================================
+  # 8. Skill Progression (design/gdd/skill-progression-system.md)
+  # =========================================================================
+  - id: TR-skill-001
+    system: skill_progression
+    gdd: design/gdd/skill-progression-system.md
+    requirement: "Server-validated Skill Book consumption granting ability GameplayAbilitySpec to player AbilitySystemComponent"
+    layer: Feature
+    created: 2026-09-16
+    revised: ""
+    status: active
+
+  - id: TR-skill-002
+    system: skill_progression
+    gdd: design/gdd/skill-progression-system.md
+    requirement: "Skill tree prerequisite dependency graph validation prior to skill node unlocking"
+    layer: Feature
+    created: 2026-09-16
+    revised: ""
+    status: active
+
+  - id: TR-skill-003
+    system: skill_progression
+    gdd: design/gdd/skill-progression-system.md
+    requirement: "Dynamic ability slot assignment serializing hotbar configuration to persistent player profile"
+    layer: Feature
+    created: 2026-09-16
+    revised: ""
+    status: active
+
+  # =========================================================================
+  # 9. Inventory System (design/gdd/inventory-system.md)
+  # =========================================================================
+  - id: TR-inv-001
+    system: inventory
+    gdd: design/gdd/inventory-system.md
+    requirement: "Server-authoritative 30-slot grid inventory replicating item entries via FFastArraySerializer"
+    layer: Foundation
+    created: 2026-09-16
+    revised: ""
+    status: active
+
+  - id: TR-inv-002
+    system: inventory
+    gdd: design/gdd/inventory-system.md
+    requirement: "Item instance data structure (UID, DataAsset ID, Rarity, Durability, Suffixes) serialized to JSON/Binary"
+    layer: Foundation
+    created: 2026-09-16
+    revised: ""
+    status: active
+
+  - id: TR-inv-003
+    system: inventory
+    gdd: design/gdd/inventory-system.md
+    requirement: "Transaction validation with atomic item transfers preventing item duplication under network packet loss"
+    layer: Foundation
+    created: 2026-09-16
+    revised: ""
+    status: active
+
+  # =========================================================================
+  # 10. Foundational Classes (design/gdd/foundational-classes.md)
+  # =========================================================================
+  - id: TR-class-001
+    system: classes
+    gdd: design/gdd/foundational-classes.md
+    requirement: "Base archetype class traits and starting GAS abilities for Vanguard, Ranger, Arcanist, and Acolyte"
+    layer: Feature
+    created: 2026-09-16
+    revised: ""
+    status: active
+
+  - id: TR-class-002
+    system: classes
+    gdd: design/gdd/foundational-classes.md
+    requirement: "Weapon proficiency scaling matrices linking primary weapon types to attribute multipliers"
+    layer: Feature
+    created: 2026-09-16
+    revised: ""
+    status: active
+
+  - id: TR-class-003
+    system: classes
+    gdd: design/gdd/foundational-classes.md
+    requirement: "Class-specific PaperZD animation blueprint templates with standardized Notify timing tracks"
+    layer: Feature
+    created: 2026-09-16
+    revised: ""
+    status: active
+
+  # =========================================================================
+  # 11. Blacksmithing System (design/gdd/blacksmithing-system.md)
+  # =========================================================================
+  - id: TR-blacksmith-001
+    system: blacksmithing
+    gdd: design/gdd/blacksmithing-system.md
+    requirement: "Server-authoritative upgrade probability roll with pity counter and tier gating (+1 to +10)"
+    layer: Feature
+    created: 2026-09-16
+    revised: ""
+    status: active
+
+  - id: TR-blacksmith-002
+    system: blacksmithing
+    gdd: design/gdd/blacksmithing-system.md
+    requirement: "Dynamic affix rolling injecting stat modifiers directly into item instance data structure"
+    layer: Feature
+    created: 2026-09-16
+    revised: ""
+    status: active
+
+  - id: TR-blacksmith-003
+    system: blacksmithing
+    gdd: design/gdd/blacksmithing-system.md
+    requirement: "Zone forge proximity check validating player interaction radius to designated blacksmith station"
+    layer: Feature
+    created: 2026-09-16
+    revised: ""
+    status: active
+
+  # =========================================================================
+  # 12. Zone System (design/gdd/zone-system.md)
+  # =========================================================================
+  - id: TR-zone-001
+    system: zones
+    gdd: design/gdd/zone-system.md
+    requirement: "Seamless non-gated level streaming utilizing Unreal World Partition and data layers"
+    layer: Core
+    created: 2026-09-16
+    revised: ""
+    status: active
+
+  - id: TR-zone-002
+    system: zones
+    gdd: design/gdd/zone-system.md
+    requirement: "Checkpoint and shrine respawn state persistence synchronizing activated shrines with server database"
+    layer: Core
+    created: 2026-09-16
+    revised: ""
+    status: active
+
+  - id: TR-zone-003
+    system: zones
+    gdd: design/gdd/zone-system.md
+    requirement: "Zone border transition triggers managing dynamic Iris replication spatial priorities"
+    layer: Core
+    created: 2026-09-16
+    revised: ""
+    status: active
+
+  # =========================================================================
+  # 13. Merchant Economy (design/gdd/merchant-economy.md)
+  # =========================================================================
+  - id: TR-econ-001
+    system: economy
+    gdd: design/gdd/merchant-economy.md
+    requirement: "Server-authoritative currency balance checks and atomic transaction commits for buy/sell operations"
+    layer: Feature
+    created: 2026-09-16
+    revised: ""
+    status: active
+
+  - id: TR-econ-002
+    system: economy
+    gdd: design/gdd/merchant-economy.md
+    requirement: "Vendor limited stock inventory synchronization with timed restock intervals"
+    layer: Feature
+    created: 2026-09-16
+    revised: ""
+    status: active
+
+  - id: TR-econ-003
+    system: economy
+    gdd: design/gdd/merchant-economy.md
+    requirement: "Gold sink mechanics (repair costs, respec fees, forge taxation) balancing economic inflation"
+    layer: Feature
+    created: 2026-09-16
+    revised: ""
+    status: active
+
+  # =========================================================================
+  # 14. Multiplayer & Co-op Netcode (design/gdd/multiplayer-coop.md)
+  # =========================================================================
+  - id: TR-net-001
+    system: networking
+    gdd: design/gdd/multiplayer-coop.md
+    requirement: "Dedicated server architecture with client prediction for locomotion and server rollback validation for combat"
+    layer: Foundation
+    created: 2026-09-16
+    revised: ""
+    status: active
+
+  - id: TR-net-002
+    system: networking
+    gdd: design/gdd/multiplayer-coop.md
+    requirement: "Iris Replication system configuration with bandwidth throttling and dynamic spatial prioritization"
+    layer: Foundation
+    created: 2026-09-16
+    revised: ""
+    status: active
+
+  - id: TR-net-003
+    system: networking
+    gdd: design/gdd/multiplayer-coop.md
+    requirement: "Contested open-world mob and boss aggro synchronization across up to 32 players in single zone"
+    layer: Foundation
+    created: 2026-09-16
+    revised: ""
+    status: active

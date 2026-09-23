@@ -1,0 +1,33 @@
+name: Automated Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    name: Run UE Automation Tests
+    runs-on: self-hosted  # UE requires a runner with Unreal Engine 5.8.2 installed
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Run Unreal Engine Automation Tests
+        run: |
+          "${UE_EDITOR_PATH:-/mnt/Data/Engine/Binaries/Linux/UnrealEditor}" "${{ github.workspace }}/ProjectAscendant/ProjectAscendant.uproject" \
+            -nullrhi -nosound -unattended \
+            -ExecCmds="Automation RunTests ProjectAscendant.; Quit" \
+            -log=AutomationTest.log
+        shell: bash
+
+      - name: Upload Test Logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-logs
+          path: Saved/Logs/
