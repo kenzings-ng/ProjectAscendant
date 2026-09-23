@@ -174,21 +174,58 @@ RARITY_COLORS = {
 
 ---
 
-## 7. Quy Tắc Soạn Thảo Prompt: "Chống Mùi AI"
+## 7. Kiến Trúc Biến Thể & Đột Biến Trực Quan Động (Living Equipment Mutation System)
 
-### 7.1 Từ Điển Đen Tuyệt Đối Cấm (Negative Blacklist)
+> 🔮 **QUY CHUẨN THIẾT KẾ ĐỘT PHÁ**: *"Một trang bị trong Project Ascendant không bao giờ là một bức ảnh tĩnh bất biến. Một cây kiếm có thể sở hữu hàng trăm biến thể trực quan dựa trên hành trình nâng cấp, khảm ngọc nguyên tố, trạng thái tác chiến và môi trường của người chơi."*  
+> *(Kế thừa trọn vẹn từ module Consistent Upgrades & Variants trong `game-art-studio/references/ui-and-image-editing.md`).*
+
+### 7.1 Ma Trận 4 Cấp Độ Đột Biến Cường Hóa (4-Tier Evolution Mutation Matrix)
+
+Mọi dòng vũ khí và áo giáp đều khởi đầu từ một **Khung Hình Học Cơ Sở (Base Archetype Silhouette)** và tiến hóa hình ảnh qua 4 nấc rèn đúc tại Thợ rèn ([`blacksmithing-system.md`](file:///mnt/Data/Projects/project-games/design/gdd/blacksmithing-system.md)):
+
+```
+[ LEVEL 0: SẮT THÔ (+0) ]  ──►  [ LEVEL 1: THÉP BÉN (+1..+3) ]  ──►  [ LEVEL 2: CỔ NGỮ & NGỌC (+4..+6) ]  ──►  [ LEVEL 3: THẦN BINH (+7..+10) ]
+• Sắt xỉn màu, vết sứt mẻ       • Mài vát lưỡi sáng loáng             • Khắc rãnh cổ ngữ (Runes)             • Tinh thể thần thánh/plasma
+• Chuôi quấn vải thô sờn        • Nẹp đinh tán thép bóng bẩy          • Khảm ngọc nguyên tố (Ruby/Sapphire) • Phát quang hào quang vũ trụ
+• 0 hiệu ứng ánh sáng           • Phản xạ ánh nắng mặt cắt             • Khói lửa/sương tuyết nhấp nháy       • Cải biến toàn bộ cơ chế chiêu
+```
+
+### 7.2 Hệ Thống Đổi Màu Nguyên Tố Động (Elemental Palette Swaps)
+Thay vì tạo file ảnh rác, hệ thống sử dụng bảng tra màu động (Palette LUT) của `game-art-studio`:
+* **Hỏa Diệm (Fire / Ruby)**: Tráo mảng màu lưỡi kiếm sang dải nhiệt lượng: Vàng chanh (`#FEF08A`) $\rightarrow$ Cam hổ phách (`#F59E0B`) $\rightarrow$ Đỏ máu (`#DC2626`).
+* **Băng Tuyết (Ice / Sapphire)**: Tráo sang dải tinh thể lạnh: Trắng xanh tuyết (`#E0FBFC`) $\rightarrow$ Lam cyan (`#00F5D4`) $\rightarrow$ Xanh navy sẫm (`#1D3557`).
+* **Hư Không & Độc (Void / Amethyst)**: Tráo sang dải độc dược: Oải hương sáng (`#E9D5FF`) $\rightarrow$ Tím ma mị (`#A855F7`) $\rightarrow$ Tím than hắc thạch (`#181124`).
+* **Thánh Quang (Holy / Diamond)**: Tráo sang dải bạch kim: Trắng ngà (`#FFFFFF`) $\rightarrow$ Hoàng kim ánh kim (`#EAB308`) $\rightarrow$ Đồng đỏ (`#78350F`).
+
+### 7.3 Lớp Phủ Tác Chiến Thời Gian Thực (Dynamic Combat & Action Overlays)
+Sprite trang bị có khả năng hiển thị các lớp phủ (Overlays) tương tác với hành động của người chơi:
+1. **Lớp Vấy Máu Chiến Trường (Blood Splatter Decal)**:
+   - Kích hoạt khi người chơi thực hiện Combo 3-Hit tiêu diệt quái vật.
+   - Thân kiếm xuất hiện các đốm pixel đỏ tươi `#9E1A1A` loang lổ, tự động mờ dần sau 15 giây hoặc khi người chơi tra kiếm vào bao.
+2. **Lớp Rạn Nứt Độ Bền (Low Durability Fracture Decal)**:
+   - Kích hoạt khi độ bền trang bị tụt xuống dưới $20\%$.
+   - Lưỡi kiếm xuất hiện các đường răng cưa nứt vỡ 1px màu đen than `#18181B`, nhắc nhở người chơi cần ghé thợ rèn sửa chữa.
+3. **Lớp Tương Tác Môi Trường (Zone Reactive Shading)**:
+   - Trong hang nham thạch: Toàn bộ vũ khí kim loại tự động nhận ánh sáng ấm, ửng hồng mép thép.
+   - Trong đầm lầy u tối: Thân kiếm phủ một lớp rêu phong xỉn màu.
+
+---
+
+## 8. Quy Tắc Soạn Thảo Prompt: "Chống Mùi AI"
+
+### 8.1 Từ Điển Đen Tuyệt Đối Cấm (Negative Blacklist)
 > ❌ **CẤM SỬ DỤNG CÁC TỪ KHÓA SAU**:
 > `masterpiece`, `hyperdetailed`, `ultra-realistic 8k`, `intricate filigree`, `unreal engine render`, `octane render`, `cinematic lighting`, `volumetric fog`, `diffuse bloom`, `ambient occlusion`, `trending on artstation`, `photorealistic`.
 > *(Các từ khóa này kích hoạt thuật toán nội suy tạo hạt mịn, làm nhòe viền và sinh ra hoa văn rác vàng kim đặc trưng của AI slop).*
 
-### 7.2 Từ Điển Vàng Thủ Công (Positive Craft Keywords)
+### 8.2 Từ Điển Vàng Thủ Công (Positive Craft Keywords)
 > ✅ **BẮT BUỘC SỬ DỤNG**:
 > - **Pixel Art**: `16-bit arcade sprite, authentic Stardew Valley chunky pixel grid, Capcom CPS2 aesthetic, strict 4-tone color ramp, dynamic S-curve line of action, hue-shifted cool violet shadows, crisp 1px dark charcoal contour, no pillow shading, flat solid background #FF00FF`.
 > - **HD 2D / Icons**: `Clean 32-bit RPG inventory icon, angled diagonally at 45 degrees, readable chunky silhouette, hard-edged cel-shaded facets, limited 12-color palette, solid dark charcoal border, flat solid background #FF00FF, perfectly pixelated with zero anti-aliasing`.
 
 ---
 
-## 8. Ví Dụ Đối Chiếu Mẫu: Dở vs Xuất Sắc
+## 9. Ví Dụ Đối Chiếu Mẫu: Dở vs Xuất Sắc
 
 ### Ví Dụ 1: Sprite Nhân Vật Chiến Binh Lao Đánh (Combat Sprite)
 
@@ -219,7 +256,7 @@ RARITY_COLORS = {
 
 ---
 
-## 9. Pipeline Tự Động Hóa Xuất Xưởng Engine (CLI Commands)
+## 10. Pipeline Tự Động Hóa Xuất Xưởng Engine (CLI Commands)
 
 Tất cả các script trong bộ kỹ năng `game-art-studio` được gọi theo đúng cú pháp CLI chuẩn hóa:
 
@@ -261,7 +298,7 @@ python3 /home/kenzings/.gemini/config/skills/game-art-studio/scripts/assemble_fl
 
 ---
 
-## 10. Bảng Kiểm Tra Nghiệm Thu Chất Lượng (QA Gate Check Checklist)
+## 11. Bảng Kiểm Tra Nghiệm Thu Chất Lượng (QA Gate Check Checklist)
 
 Trước khi bất kỳ file đồ họa nào được chấp thuận đưa vào game, kiểm tra viên (Art QA) phải tích đủ 6 tiêu chí:
 

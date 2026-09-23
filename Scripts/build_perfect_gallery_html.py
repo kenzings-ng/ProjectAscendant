@@ -18,6 +18,20 @@ def build_html():
     # -------------------------------------------------------------
     categories = [
         {
+            "id": "tab_mutation_matrix",
+            "title": "⚔️ Ma Trận Đột Biến Vũ Khí (Living Equipment — 6 Biến Thể)",
+            "folder": "08_Weapon_Mutation_Matrix",
+            "summary": "Minh chứng cho kiến trúc trang bị sống động theo yêu cầu của bạn và module Consistent Upgrades & Variants trong game-art-studio: Cùng 1 thanh Trường Kiếm cơ sở (Broadsword 32x32) nhưng sản sinh ra 6 biến thể trực quan hoàn toàn khác biệt dựa trên Cấp độ rèn (+0 đến +10), Khảm ngọc nguyên tố (Ruby/Sapphire), và Lớp phủ tác chiến động (Vấy máu khi chém quái).",
+            "items": [
+                ("01_Broadsword_Tier0_RustedIron_256x256_framed_common.png", "Kiếm Sắt Thô Sứt Mẻ (+0)", "Cấp 0 (Thường): Vũ khí khởi đầu chưa qua tôi luyện, lưỡi mẻ răng cưa, hoen rỉ ố màu, chuôi vải thô sờn rách.", "Cấp +0", ["Tier 0", "Rusted", "Common", "Base"]),
+                ("02_Broadsword_Tier1_SharpSteel_256x256_framed_uncommon.png", "Thép Mài Sắc Bén (+3)", "Cấp 1 (Cường Hóa +3): Qua thợ rèn tiền trạm, lưỡi mài vát phẳng sáng loáng phản xạ ánh kim, chuôi nẹp da bò mới.", "Cấp +3", ["Tier 1", "Sharp Steel", "Uncommon", "Forged"]),
+                ("03_Broadsword_Tier2_RunicFlame_256x256_framed_rare.png", "Hỏa Diệm Rực Lửa (+6 Khảm Ruby)", "Cấp 2 (Nguyên Tố Hỏa): Khảm ngọc Ruby tại thợ rèn dã ngoại. Lưỡi kiếm rực nhiệt lượng, rãnh cổ ngữ khắc dọc thân bốc khói than hồng.", "Khảm Hỏa", ["Tier 2", "Flame", "Rare", "Ruby Socket"]),
+                ("04_Broadsword_Tier2_GlacialIce_256x256_framed_rare.png", "Băng Tinh Sương Lạnh (+6 Khảm Sapphire)", "Cấp 2 (Nguyên Tố Băng): Khảm ngọc Sapphire. Thép xanh cobalt đóng băng tinh thể ngọc, cổ ngữ cyan phát quang rực rỡ.", "Khảm Băng", ["Tier 2", "Frost", "Rare", "Sapphire Socket"]),
+                ("05_Broadsword_Tier3_DivineAscendant_256x256_framed_legendary.png", "Thần Binh Tối Thượng (+10 Divine)", "Cấp 3 (Thần Binh +10): Đúc từ Linh hồn Lãnh chúa tại Lò Rèn Cấm Địa. Lưỡi kiếm chuyển hóa thành tinh thể cosmic phát quang plasma tím-vàng.", "Thần Binh +10", ["Tier 3", "Divine", "Legendary", "Boss Soul"]),
+                ("06_Broadsword_Combat_Bloodied_256x256_framed_uncommon.png", "Chiến Trường Nhuốm Máu (Blood Decal)", "Trạng Thái Tác Chiến Động: Tự động kích hoạt sau chuỗi Combo 3-Hit chém gục quái. Vết máu tươi vấy loang lổ trên lưỡi kiếm.", "Combat Overlay", ["Action State", "Blood Splatter", "Decal", "Dynamic"]),
+            ]
+        },
+        {
             "id": "tab_contract_v3",
             "title": "🔥 Hợp Đồng V3 (32x32 HD-2D & Zone-Adaptive)",
             "folder": "07_Contract_V3_32x32_Tests",
