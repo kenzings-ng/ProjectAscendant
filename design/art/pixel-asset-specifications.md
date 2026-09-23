@@ -41,30 +41,27 @@ flowchart TD
 
 ## 2. Các Bộ Hợp Đồng Định Sẵn (Asset Contract Presets)
 
-### Preset A: *Stardew Valley* & *Terraria* (Chunky Micro-Pixel Style)
+### Preset A: *Project Ascendant HD-2D* (Chunky 32×32 Pixel Standard — Kế Thừa Tinh Hoa Stardew & Octopath)
 * **Hệ quy chiếu lưới pixel**:
-  * **Kích thước bản vẽ gốc (Native Grid)**: Chuẩn xác **$16 \times 16$ pixel** (vũ khí lớn/trượng đại pháp sư: **$24 \times 24$ pixel**).
-  * **Kích thước xuất xưởng cho UI (Export Canvas)**: Phóng to thuật toán **Nearest Neighbor $4\times$ thành $64 \times 64$** hoặc **$8\times$ thành $256 \times 256$ pixel** để nhập vào CommonUI của Unreal Engine.
-  * **Kích thước hạt pixel**: Siêu thô (Chunky Micro-pixel), mỗi điểm màu là một khối vuông đanh thép, tuyệt đối không có hạt mờ lơ lửng.
+  * **Kích thước bản vẽ gốc (Native Grid)**: Chuẩn hóa **$32 \times 32$ pixel** (Vũ khí tiêu chuẩn, khiên, dược phẩm, quặng khoáng sản) và **$40 \times 40$ pixel** (Đại kiếm 2 tay, trượng đại pháp sư).
+  * **Kích thước xuất xưởng cho UI (Export Canvas)**: Phóng to thuật toán **Nearest Neighbor $8\times$ thành $256 \times 256$ pixel** (hoặc $2\times$ thành $64 \times 64$ trong kho đồ dạng lưới).
+  * **Kích thước hạt pixel**: Đạt tỷ lệ vàng giữa độ dày dặn cổ điển (Chunky) và độ sắc nét chi tiết của game HD-2D, thể hiện rõ từng vết xước thép, góc vát giác ngọc và cổ ngữ ma thuật.
 * **Ngân sách màu (Color Budget)**:
-  * Giới hạn nghiêm ngặt **từ 8 đến 16 màu độc nhất** cho toàn bộ icon.
-  * Không dùng dải chuyển màu mịn (Smooth Gradients). Mỗi bước chuyển độ sáng là một nấc màu dứt khoát.
-* **Góc đặt vật phẩm**:
-  * Cố định **$45^\circ$ đường chéo**, chạy từ góc dưới-trái `(X:2, Y:14)` lên góc trên-phải `(X:14, Y:2)`.
-  * Chiếm trọn $85-90\%$ không gian ô để người chơi nhận diện rõ mồn một trong khay Quickbar 4 phím tắt.
-* **Vũ khí dòng Thiên Hà & Thần Binh (Galaxy / Divine Equipment)**:
-  * **Chất liệu**: Tinh thể vũ trụ nguyên khối (Monolithic Cosmic Crystal), không tách chuôi kim loại vàng rườm rà.
-  * **Đổ sáng phát quang ngược (Inverted Neon Glow)**: Viền ngoài cùng của lưỡi kiếm là màu hồng tím neon rực sáng nhất (`#F193FF`), lòng kiếm màu tím sẫm (`#5D269B`), chuôi kiếm và lõi bóng đổ là xanh navy/tím than vũ trụ (`#000053`, `#310074`).
+  * Giới hạn từ **16 đến 24 màu độc nhất** cho mỗi icon $32 \times 32$.
+  * Phân bậc màu dứt khoát: Mỗi vật liệu tuân thủ **4 nấc sắc độ (4-Tone Color Ramp)** không dùng gradient mờ.
 
-### Preset B: *Capcom CPS2* / *NeoGeo* (16-bit & 32-bit Arcade Fighting)
-* **Hệ quy chiếu lưới pixel**:
-  * **Kích thước bản vẽ gốc**: $64 \times 64$ đến $128 \times 128$ pixel.
-* **Ngân sách bảng màu**:
-  * Giới hạn 16 đến 32 màu độc nhất. Mỗi chất liệu dùng **4 bậc sắc độ dứt khoát** (Highlight, Midtone, Core Shadow, Dark Crease).
-* **Đặc trưng mỹ thuật**:
-  * Viền bao ngoài (Outer Contour) màu đen than sẫm `#121316` dày đúng 1px dứt khoát.
-  * Chuyển nhiệt độ màu gắt (Hue Shifting): Da đón nắng vàng ấm đổ bóng sang tím mận; giáp thép xám đổ bóng sang xanh navy.
-  * Khối mảng hình học phẳng phân diện sắc bén (Hard Cel-Shading).
+### Quy Chuẩn Màu Sắc Linh Hoạt Theo Môi Trường (Zone-Adaptive & Dynamic Lighting)
+> 💡 **NGUYÊN TẮC THIẾT KẾ CỐT LÕI**: *"Không đóng khung trò chơi vào một màu u tối duy nhất. Màu sắc của vật phẩm phản ánh bản chất nguyên tố, còn độ sáng và đổ bóng sẽ biến đổi động học theo từng khu vực."*
+
+1. **Bản Vẽ Gốc (Base Albedo / Pure Element)**:
+   - Tài nguyên gốc thể hiện trọn vẹn màu sắc tự nhiên, rực rỡ của nguyên tố: Lửa đỏ cam ấm áp, Băng tinh thể xanh ngọc trong trẻo, Thánh quang hoàng kim rạng ngời, Hư không tím thẫm ma mị.
+2. **Biến Đổi Theo 4 Phân Vùng Môi Trường (Zone Ambient Adaptability)**:
+   - **Khu An Toàn / Lò Rèn (Sanctuary / Forge)**: Hưởng ánh sáng vàng hổ phách ấm áp (~2200K), màu sắc tươi sáng, rực rỡ, độ bão hòa cao, mang lại cảm giác bình yên và giàu sức sống.
+   - **Dã Ngoại & Rừng Sâu (Wilderness Exploration)**: Ánh sáng trăng lạnh (~6500K) kết hợp sương mù thể tích, bóng đổ ngả sắc chàm tím, rêu lân tinh le lói.
+   - **Đấu Trường Boss (Boss Arena)**: Nền đất tối đen (Obsidian), tương phản cực độ (High Contrast), tôn vinh ánh sáng phát quang rực lửa của đòn đánh.
+   - **Vùng Đất Tha Hóa (Contested / Void Domain)**: Tông màu u uất, ánh tím hư không (`#6A1B9A`), khử bão hòa nhẹ để thể hiện sự suy tàn chết chóc.
+3. **Tương Tác Với Unreal Engine Lumen**:
+   - Sprite nhân vật và vũ khí nhận ánh sáng trực tiếp từ nguồn sáng điểm (Point Lights) và đèn định hướng (Directional Sun) trong Unreal Engine 5.7, tự động đổ bóng xiên thời gian thực xuống địa hình 3D.
 
 ---
 

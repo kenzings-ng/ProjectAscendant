@@ -18,8 +18,24 @@ def build_html():
     # -------------------------------------------------------------
     categories = [
         {
+            "id": "tab_contract_v3",
+            "title": "🔥 Hợp Đồng V3 (32x32 HD-2D & Zone-Adaptive)",
+            "folder": "07_Contract_V3_32x32_Tests",
+            "summary": "Bộ tài nguyên HD-2D nâng cấp theo ý kiến chỉ đạo: Lưới chuẩn 32x32 px (chi tiết vết xước kim loại, cổ ngữ phát quang) kết hợp bảng màu linh hoạt theo Phân Vùng Môi Trường (Zone-Adaptive). Không bị bó hẹp trong 1 tông màu u tối, mà biến đổi từ ánh lửa vàng rực rỡ vùng Sanctuary/Lò rèn, lam ngọc băng tuyết dã ngoại, đến tím ma mị vùng đất tha hóa.",
+            "items": [
+                ("Solar_Fire_Greatsword_32px_256x256_framed_legendary.png", "Thánh Quang Hỏa Diệm Đại Kiếm (32x32)", "Đại kiếm rực rỡ vùng Lò Rèn/Sanctuary: Tông màu ấm áp, highlight vàng chanh #FEF08A, lõi hổ phách #F59E0B, viền thép đỏ rực. Khung viền Legendary Hoàng Kim.", "Sanctuary / Lửa", ["32x32 Native", "Solar Flame", "Legendary", "QA Passed"]),
+                ("Glacial_Runic_Blade_32px_256x256_framed_rare.png", "Băng Tinh Kiếm Cổ Ngữ (32x32)", "Vũ khí vùng Núi Băng/Wilderness: Sắc lạnh trong trẻo, lưỡi thép xanh cobalt #3A86FF xen kẽ ngọc cyan #00F5D4 phát quang, đổ bóng navy sâu. Khung viền Rare Lam Ngọc.", "Wilderness / Băng", ["32x32 Native", "Glacial Runic", "Rare", "QA Passed"]),
+                ("Void_Corrupted_Staff_32px_256x256_framed_epic.png", "Hư Không Ma Trượng (32x32)", "Pháp bảo vùng Đất Chết Tha Hóa (Contested): Thân gỗ mun hắc thạch, đầu trượng pha lê tím hư không #6A1B9A u tối ma mị, hoa văn bạc cổ xưa. Khung viền Epic Tím Huyền Bí.", "Contested / Hư Không", ["32x32 Native", "Void Corrupted", "Epic", "QA Passed"]),
+                ("Sacred_Amber_Phial_32px_256x256_framed_uncommon.png", "Bình Thánh Thủy Hổ Phách (32x32)", "Dược phẩm Tiệm Giả Kim Sanctuary: Lọ thủy tinh đa diện sáng rực mật ong vàng, nút bấc vàng đồng, vệt sáng phản quang thủy tinh 1px trắng sắc sảo. Khung viền Uncommon Ngọc Lục.", "Sanctuary / Dược Phẩm", ["32x32 Native", "Sacred Amber", "Uncommon", "QA Passed"]),
+                ("Solar_Fire_Greatsword_32px_64x64_ingame.png", "Solar Greatsword (64x64 In-game Scale)", "Tỷ lệ chuẩn 2x Nearest Neighbor khi đặt trong ô túi đồ kho đồ.", "In-Game Sprite", ["64x64", "2x Scale"]),
+                ("Glacial_Runic_Blade_32px_64x64_ingame.png", "Glacial Blade (64x64 In-game Scale)", "Tỷ lệ chuẩn 2x Nearest Neighbor hiển thị sắc nét từng hạt pixel.", "In-Game Sprite", ["64x64", "2x Scale"]),
+                ("Void_Corrupted_Staff_32px_64x64_ingame.png", "Void Staff (64x64 In-game Scale)", "Tỷ lệ chuẩn 2x Nearest Neighbor hiển thị sắc nét từng hạt pixel.", "In-Game Sprite", ["64x64", "2x Scale"]),
+                ("Sacred_Amber_Phial_32px_64x64_ingame.png", "Sacred Phial (64x64 In-game Scale)", "Tỷ lệ chuẩn 2x Nearest Neighbor hiển thị sắc nét từng hạt pixel.", "In-Game Sprite", ["64x64", "2x Scale"]),
+            ]
+        },
+        {
             "id": "tab_contract_v2",
-            "title": "🌟 Test Hợp Đồng Mới (Contract V2 - Stardew 16x16)",
+            "title": "🌟 Test Hợp Đồng V2 (Stardew 16x16)",
             "folder": "06_Contract_V2_Tests",
             "summary": "Bộ tài nguyên thử nghiệm được sản xuất và kiểm định 100% theo Hợp đồng Kỹ thuật mới (SPEC-ART-2026-09-23-V2 & game-art-studio): Chuẩn xác 16x16 Chunky Pixel Art kiểu Stardew Valley, góc nghiêng 45°, ngân sách màu nghiêm ngặt ≤ 16 màu, đóng khung viền 5 bậc hiếm và đã vượt qua toàn bộ 6 bài kiểm tra QA Gate Check.",
             "items": [
