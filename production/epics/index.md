@@ -42,6 +42,14 @@
 
 | Epic | Layer | System | Design Document (GDD) | Governing ADRs | Stories Status | Epic Status |
 |---|---|---|---|---|---|---|
-| [`presentation-ui`](presentation-ui/EPIC.md) | Presentation | Combat HUD, Boss Vitals & Interactive Windows | [`combat-hud.md`](../../design/gdd/combat-hud.md) | ADR-0001, ADR-0002, ADR-0003 | 4 stories | **Ready** |
+| [`presentation-ui`](presentation-ui/EPIC.md) | Presentation | Combat HUD, Boss Vitals & Interactive Windows | [`combat-hud.md`](../../design/gdd/combat-hud.md) | ADR-0001, ADR-0002, ADR-0003 | 4 stories | **Done** |
+
+---
+
+## Encounter Layer Epics (Sprint 5 - Production Active)
+
+| Epic | Layer | System | Design Document (GDD) | Governing ADRs | Stories Status | Epic Status |
+|---|---|---|---|---|---|---|
+| [`encounter-boss`](encounter-boss/EPIC.md) | Encounter | Boss AI, Stagger & Execution, Part Breaking & Perfect Evasion | [`boss-ai.md`](../../design/gdd/boss-ai.md), [`stagger-system.md`](../../design/gdd/stagger-system.md), [`dash-evasion.md`](../../design/gdd/dash-evasion.md) | ADR-0001, ADR-0002 | 4 stories | **Ready** |
 
 
