@@ -259,3 +259,19 @@ FString UPAAccountSubsystem::GenerateAuthToken(const FString& AccountId)
 	const FString RandomSecret = FGuid::NewGuid().ToString(EGuidFormats::Short);
 	return FString::Printf(TEXT("PA-TOKEN-%s-%lld-%s"), *AccountId, UnixTimestamp, *RandomSecret);
 }
+
+bool UPAAccountSubsystem::ValidateJoinToken(const FString& InToken, const FString& ExpectedAccountId)
+{
+	if (InToken.IsEmpty() || ExpectedAccountId.IsEmpty())
+	{
+		return false;
+	}
+
+	if (!InToken.StartsWith(TEXT("PA-TOKEN-")))
+	{
+		return false;
+	}
+
+	const FString ExpectedPrefix = FString::Printf(TEXT("PA-TOKEN-%s-"), *ExpectedAccountId);
+	return InToken.StartsWith(ExpectedPrefix);
+}

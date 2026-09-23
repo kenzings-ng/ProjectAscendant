@@ -3,8 +3,8 @@
 > **Layer**: World / Auth  
 > **GDD**: [`design/gdd/zone-system.md`](../../design/gdd/zone-system.md), [`design/gdd/authentication-account-system.md`](../../design/gdd/authentication-account-system.md)  
 > **Architecture Module**: World Partition, Netcode & Security Architecture ([`docs/architecture/architecture.md`](../../docs/architecture/architecture.md))  
-> **Status**: Ready  
-> **Stories**: 4 Stories Planned  
+> **Status**: ✅ Complete  
+> **Stories**: 4/4 Stories Done  
 
 ## Overview
 
@@ -21,7 +21,7 @@ Hoàn thiện tầng Thế giới Mở & Xác thực Tài khoản (**World Integ
 | 001 | [`3-Tier Seamless Zones, Campfire Sanctuaries & AI Leash`](story-001-seamless-zones-campfires.md) | World / Gameplay | ✅ Done | ADR-0001 |
 | 002 | [`Dynamic Difficulty Scaling & Contested Instanced Loot`](story-002-dynamic-difficulty-instanced-loot.md) | Combat / Netcode | ✅ Done | ADR-0001, ADR-0003 |
 | 003 | [`5-Tier Karma State Machine & Death Penalties Matrix`](story-003-karma-death-penalties.md) | Economy / Combat | ✅ Done | ADR-0001 |
-| 004 | [`Account Subsystem, 1-Click Fast Playtest & Server Token Handshake`](story-004-account-subsystem-auth-handshake.md) | Security / Subsystem | Ready | ADR-0001 |
+| 004 | [`Account Subsystem, 1-Click Fast Playtest & Server Token Handshake`](story-004-account-subsystem-auth-handshake.md) | Security / Subsystem | ✅ Done | ADR-0001 |
 
 ## Definition of Done
 - [ ] 100% các Stories đạt chuẩn Acceptance Criteria.

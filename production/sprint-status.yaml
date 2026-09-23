@@ -51,8 +51,8 @@ stories:
     name: "Account Subsystem, 1-Click Fast Playtest & Server Token Handshake"
     file: "production/epics/world-zone-auth/story-004-account-subsystem-auth-handshake.md"
     priority: should-have
-    status: backlog
+    status: done
     owner: "backend-engineer"
     estimate_days: 1.0
     blocker: ""
-    completed: ""
+    completed: "2026-09-23"
