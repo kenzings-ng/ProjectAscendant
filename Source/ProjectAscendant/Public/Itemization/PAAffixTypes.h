@@ -78,7 +78,7 @@ struct PROJECTASCENDANT_API FPASocketSlot
 	{
 	}
 
-	FPASocketSlot(EPASocketType InType, bool bInUnlocked = true)
+	FPASocketSlot(EPASocketType InType, bool bInUnlocked = false)
 		: SocketType(InType)
 		, SocketedGemId(NAME_None)
 		, bIsUnlocked(bInUnlocked)
