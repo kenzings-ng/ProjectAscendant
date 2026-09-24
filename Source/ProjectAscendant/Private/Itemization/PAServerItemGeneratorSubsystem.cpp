@@ -5,6 +5,7 @@
 #include "HAL/IConsoleManager.h"
 #include "Engine/Engine.h"
 #include "Engine/World.h"
+#include "GameplayTagsManager.h"
 
 UPAServerItemGeneratorSubsystem::UPAServerItemGeneratorSubsystem()
 {
@@ -302,6 +303,18 @@ int32 UPAServerItemGeneratorSubsystem::GetAffixTierFromItemLevel(int32 ItemLevel
 
 FGameplayTag UPAServerItemGeneratorSubsystem::GetRarityTag(EPAItemRarity Rarity)
 {
+	static bool bTagsRegistered = false;
+	if (!bTagsRegistered)
+	{
+		UGameplayTagsManager& Manager = UGameplayTagsManager::Get();
+		Manager.AddNativeGameplayTag(FName("Item.Rarity.Common"));
+		Manager.AddNativeGameplayTag(FName("Item.Rarity.Uncommon"));
+		Manager.AddNativeGameplayTag(FName("Item.Rarity.Rare"));
+		Manager.AddNativeGameplayTag(FName("Item.Rarity.Epic"));
+		Manager.AddNativeGameplayTag(FName("Item.Rarity.Legendary"));
+		bTagsRegistered = true;
+	}
+
 	switch (Rarity)
 	{
 	case EPAItemRarity::Common:
