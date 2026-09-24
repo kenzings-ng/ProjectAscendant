@@ -197,6 +197,70 @@ entities:
     role: "Time Freeze on Perfect Dodge & Boss Skill Mimic"
     added: 2026-09-14
 
+  # ─── 3 FORGE FACILITIES (BLACKSMITHING & ITEMIZATION) ───────────
+  - name: facility_forge_tier1_outpost
+    display_name: "Thợ Rèn Tiền Trạm (Outpost Forge)"
+    status: active
+    source: design/gdd/blacksmithing-system.md
+    referenced_by:
+      - design/gdd/blacksmithing-system.md
+      - design/gdd/itemization.md
+      - design/gdd/zone-system.md
+    category: facility_blacksmith
+    attributes:
+      forge_tier: 1
+      canonical_name: "Outpost Forge"
+      zone: "Verdant Frontier"
+      location: "Verdant Bastion"
+      max_enhance: 3
+      allowed_rarities: ["Common", "Uncommon", "Rare"]
+      max_gem_sockets: 0
+    added: 2026-09-24
+    revised: ""
+
+  - name: facility_forge_tier2_field
+    display_name: "Thợ Rèn Dã Ngoại (Field Forge)"
+    status: active
+    source: design/gdd/blacksmithing-system.md
+    referenced_by:
+      - design/gdd/blacksmithing-system.md
+      - design/gdd/itemization.md
+      - design/gdd/zone-system.md
+    category: facility_blacksmith
+    attributes:
+      forge_tier: 2
+      canonical_name: "Field Forge"
+      alias: ["Wilderness Forge"]
+      zone: "Ashen Wilderness"
+      location: "Ashen Keep"
+      max_enhance: 6
+      allowed_rarities: ["Common", "Uncommon", "Rare", "Epic"]
+      max_gem_sockets: 2
+    added: 2026-09-24
+    revised: "2026-09-24"
+
+  - name: facility_forge_tier3_forbidden
+    display_name: "Lò Rèn Cấm Địa (Forbidden Forge)"
+    status: active
+    source: design/gdd/blacksmithing-system.md
+    referenced_by:
+      - design/gdd/blacksmithing-system.md
+      - design/gdd/itemization.md
+      - design/gdd/zone-system.md
+    category: facility_blacksmith
+    attributes:
+      forge_tier: 3
+      canonical_name: "Forbidden Forge"
+      alias: ["Ancient Sanctuary Forge", "Sanctum Forge"]
+      zone: "Forbidden Sanctum"
+      location: "Sanctum Fortress"
+      max_enhance: 10
+      allowed_rarities: ["Common", "Uncommon", "Rare", "Epic", "Legendary"]
+      max_gem_sockets: 3
+      special_services: ["Boss Soul Forging", "Prismatic Socketing"]
+    added: 2026-09-24
+    revised: ""
+
 # Example (remove when first real entry is added):
 #
 # entities:
@@ -366,7 +430,7 @@ items:
     revised: ""
 
   - name: weapon_family_twin_daggers
-    display_name: "Dòng Song Đoản Kiếm (Twin Daggers)"
+    display_name: "Dòng Song Đoản Kiếm / Song Đao Ám Sát (Twin Light Blades / Twin Daggers)"
     status: active
     source: design/gdd/itemization.md
     referenced_by:
@@ -377,11 +441,12 @@ items:
     stackable: false
     attributes:
       archetype: "Weapon.Dual.Daggers"
+      alias: ["Twin Light Blades", "Twin Daggers"]
       classes: ["Shadowblade", "Ranger"]
       base_speed: 2.20
       crit_multiplier: 1.50
     added: 2026-09-24
-    revised: ""
+    revised: "2026-09-24"
 
   - name: weapon_family_staves
     display_name: "Dòng Trượng Ma Thuật (Magic Staves)"
@@ -468,6 +533,555 @@ items:
       classes: ["Arcanist", "Elementalist", "Chronomancer", "Acolyte"]
       damage_reduction_magic: 0.30
       mana_regen_bonus: 0.25
+    added: 2026-09-24
+    revised: ""
+
+  # ─── 12 ITEM AFFIXES (ITEMIZATION) ─────────────────────────────
+  - name: prefix_phys_flat
+    display_name: "Tiền Tố: Sát Thương Sắt Thép (Flat Phys Damage)"
+    status: active
+    source: design/gdd/itemization.md
+    referenced_by:
+      - design/gdd/itemization.md
+      - design/gdd/attributes-system.md
+    category: item_affix
+    attributes:
+      affix_type: prefix
+      target_stat: "PhysicalAttack"
+      tiers:
+        T1: [3, 6]
+        T2: [8, 14]
+        T3: [18, 26]
+        T4: [32, 45]
+    added: 2026-09-24
+    revised: ""
+
+  - name: prefix_phys_pct
+    display_name: "Tiền Tố: Tàn Bạo Tăng Cường (% Phys Damage)"
+    status: active
+    source: design/gdd/itemization.md
+    referenced_by:
+      - design/gdd/itemization.md
+      - design/gdd/attributes-system.md
+    category: item_affix
+    attributes:
+      affix_type: prefix
+      target_stat: "PhysicalDamagePct"
+      tiers:
+        T1: [4, 7]
+        T2: [8, 13]
+        T3: [15, 22]
+        T4: [25, 35]
+    added: 2026-09-24
+    revised: ""
+
+  - name: prefix_elemental_fire
+    display_name: "Tiền Tố: Hỏa Diệm Tôi Luyện (Fire Damage)"
+    status: active
+    source: design/gdd/itemization.md
+    referenced_by:
+      - design/gdd/itemization.md
+      - design/gdd/combat-system.md
+    category: item_affix
+    attributes:
+      affix_type: prefix
+      target_stat: "ElementalDamageFire"
+      tiers:
+        T1: [4, 7]
+        T2: [9, 16]
+        T3: [20, 30]
+        T4: [35, 50]
+    added: 2026-09-24
+    revised: ""
+
+  - name: prefix_elemental_ice
+    display_name: "Tiền Tố: Sương Băng Giá Lạnh (Ice Damage)"
+    status: active
+    source: design/gdd/itemization.md
+    referenced_by:
+      - design/gdd/itemization.md
+      - design/gdd/combat-system.md
+    category: item_affix
+    attributes:
+      affix_type: prefix
+      target_stat: "ElementalDamageIce"
+      tiers:
+        T1: [3, 6]
+        T2: [8, 14]
+        T3: [18, 26]
+        T4: [30, 44]
+    added: 2026-09-24
+    revised: ""
+
+  - name: prefix_posture_dmg
+    display_name: "Tiền Tố: Trọng Lực Phá Khớp (% Posture Break Damage)"
+    status: active
+    source: design/gdd/itemization.md
+    referenced_by:
+      - design/gdd/itemization.md
+      - design/gdd/stagger-system.md
+      - design/gdd/attributes-system.md
+    category: item_affix
+    attributes:
+      affix_type: prefix
+      target_stat: "PostureDamagePct"
+      hard_cap_pct: 35
+      tiers:
+        T1: [5, 8]
+        T2: [10, 16]
+        T3: [18, 25]
+        T4: [28, 35]
+    added: 2026-09-24
+    revised: ""
+
+  - name: prefix_armor_flat
+    display_name: "Tiền Tố: Vảy Thép Kiên Cố (Flat Armor)"
+    status: active
+    source: design/gdd/itemization.md
+    referenced_by:
+      - design/gdd/itemization.md
+      - design/gdd/attributes-system.md
+    category: item_affix
+    attributes:
+      affix_type: prefix
+      target_stat: "Defense"
+      tiers:
+        T1: [8, 15]
+        T2: [20, 35]
+        T3: [45, 70]
+        T4: [85, 120]
+    added: 2026-09-24
+    revised: ""
+
+  - name: suffix_max_hp
+    display_name: "Hậu Tố: Sinh Lực Dồi Dào (Flat Max HP)"
+    status: active
+    source: design/gdd/itemization.md
+    referenced_by:
+      - design/gdd/itemization.md
+      - design/gdd/attributes-system.md
+    category: item_affix
+    attributes:
+      affix_type: suffix
+      target_stat: "MaxHealth"
+      tiers:
+        T1: [15, 25]
+        T2: [35, 55]
+        T3: [70, 110]
+        T4: [130, 180]
+    added: 2026-09-24
+    revised: ""
+
+  - name: suffix_stamina_regen
+    display_name: "Hậu Tố: Tật Phong Hồi Thể (% Stamina Regen Rate)"
+    status: active
+    source: design/gdd/itemization.md
+    referenced_by:
+      - design/gdd/itemization.md
+      - design/gdd/attributes-system.md
+    category: item_affix
+    attributes:
+      affix_type: suffix
+      target_stat: "StaminaRegenRatePct"
+      tiers:
+        T1: [5, 8]
+        T2: [10, 15]
+        T3: [18, 25]
+        T4: [28, 38]
+    added: 2026-09-24
+    revised: ""
+
+  - name: suffix_parry_window
+    display_name: "Hậu Tố: Phản Xạ Thần Tốc (Parry Window Extension)"
+    status: active
+    source: design/gdd/itemization.md
+    referenced_by:
+      - design/gdd/itemization.md
+      - design/gdd/combat-system.md
+    category: item_affix
+    attributes:
+      affix_type: suffix
+      target_stat: "ParryWindowDuration"
+      tiers:
+        T1: [0.01, 0.01]
+        T2: [0.02, 0.02]
+        T3: [0.03, 0.03]
+        T4: [0.04, 0.04]
+    added: 2026-09-24
+    revised: ""
+
+  - name: suffix_move_speed
+    display_name: "Hậu Tố: Bước Chân Lữ Hành (Movement Speed Flat)"
+    status: active
+    source: design/gdd/itemization.md
+    referenced_by:
+      - design/gdd/itemization.md
+      - design/gdd/attributes-system.md
+    category: item_affix
+    attributes:
+      affix_type: suffix
+      target_stat: "MovementSpeed"
+      tiers:
+        T1: [10, 18]
+        T2: [22, 35]
+        T3: [40, 60]
+        T4: [70, 95]
+    added: 2026-09-24
+    revised: ""
+
+  - name: suffix_crit_chance
+    display_name: "Hậu Tố: Tử Huyệt Chuẩn Xác (% Crit Chance)"
+    status: active
+    source: design/gdd/itemization.md
+    referenced_by:
+      - design/gdd/itemization.md
+      - design/gdd/attributes-system.md
+    category: item_affix
+    attributes:
+      affix_type: suffix
+      target_stat: "CritChance"
+      tiers:
+        T1: [2.0, 3.5]
+        T2: [4.0, 6.5]
+        T3: [7.0, 10.0]
+        T4: [11.0, 15.0]
+    added: 2026-09-24
+    revised: ""
+
+  - name: suffix_cooldown_red
+    display_name: "Hậu Tố: Dòng Chảy Ma Lực (% Cooldown Reduction)"
+    status: active
+    source: design/gdd/itemization.md
+    referenced_by:
+      - design/gdd/itemization.md
+      - design/gdd/attributes-system.md
+    category: item_affix
+    attributes:
+      affix_type: suffix
+      target_stat: "CooldownReduction"
+      tiers:
+        T1: [2, 4]
+        T2: [5, 8]
+        T3: [9, 13]
+        T4: [14, 20]
+    added: 2026-09-24
+    revised: ""
+
+  # ─── 16 PROGRESSIVE AFFIXES (EXPANDED CONTENT POOL) ────────────
+  # BẬC 1: TIỀN TRẠM (OUTPOST FORGE BRACKET - ILVL 1-20)
+  - name: prefix_elemental_lightning
+    display_name: "Tiền Tố: Lôi Điện Hoang Dã (Flat Lightning DMG)"
+    status: active
+    source: design/gdd/itemization.md
+    referenced_by:
+      - design/gdd/itemization.md
+      - design/gdd/combat-system.md
+    category: item_affix
+    attributes:
+      affix_type: prefix
+      min_forge_tier: 1
+      target_stat: "LightningDamage"
+      tiers:
+        T1: [4, 7]
+        T2: [9, 16]
+        T3: [20, 30]
+        T4: [35, 50]
+    added: 2026-09-24
+    revised: ""
+
+  - name: prefix_mana_flat
+    display_name: "Tiền Tố: Ma Lực Tinh Khiết (Flat Max Mana)"
+    status: active
+    source: design/gdd/itemization.md
+    referenced_by:
+      - design/gdd/itemization.md
+      - design/gdd/attributes-system.md
+    category: item_affix
+    attributes:
+      affix_type: prefix
+      min_forge_tier: 1
+      target_stat: "MaxMana"
+      tiers:
+        T1: [15, 25]
+        T2: [35, 55]
+        T3: [70, 100]
+        T4: [120, 160]
+    added: 2026-09-24
+    revised: ""
+
+  - name: suffix_max_stamina
+    display_name: "Hậu Tố: Bền Bỉ Trường Kỳ (Flat Max Stamina)"
+    status: active
+    source: design/gdd/itemization.md
+    referenced_by:
+      - design/gdd/itemization.md
+      - design/gdd/attributes-system.md
+    category: item_affix
+    attributes:
+      affix_type: suffix
+      min_forge_tier: 1
+      target_stat: "MaxStamina"
+      tiers:
+        T1: [8, 12]
+        T2: [15, 22]
+        T3: [28, 38]
+        T4: [45, 60]
+    added: 2026-09-24
+    revised: ""
+
+  - name: suffix_poise_flat
+    display_name: "Hậu Tố: Thế Đứng Kiên Định (Flat Max Posture Poise)"
+    status: active
+    source: design/gdd/itemization.md
+    referenced_by:
+      - design/gdd/itemization.md
+      - design/gdd/attributes-system.md
+    category: item_affix
+    attributes:
+      affix_type: suffix
+      min_forge_tier: 1
+      target_stat: "MaxPosture"
+      tiers:
+        T1: [10, 18]
+        T2: [25, 40]
+        T3: [50, 75]
+        T4: [90, 120]
+    added: 2026-09-24
+    revised: ""
+
+  # BẬC 2: DÃ NGOẠI (FIELD FORGE BRACKET - ILVL 21-35)
+  - name: prefix_armor_pen_pct
+    display_name: "Tiền Tố: Xuyên Giáp Xương Tủy (% Armor Penetration)"
+    status: active
+    source: design/gdd/itemization.md
+    referenced_by:
+      - design/gdd/itemization.md
+      - design/gdd/attributes-system.md
+    category: item_affix
+    attributes:
+      affix_type: prefix
+      min_forge_tier: 2
+      target_stat: "ArmorPenetration"
+      tiers:
+        T2: [6, 10]
+        T3: [12, 18]
+        T4: [20, 28]
+    added: 2026-09-24
+    revised: ""
+
+  - name: prefix_dot_bleed
+    display_name: "Tiền Tố: Lưỡi Cưa Rách Thịt (Bleed DoT DMG/s)"
+    status: active
+    source: design/gdd/itemization.md
+    referenced_by:
+      - design/gdd/itemization.md
+      - design/gdd/combat-system.md
+    category: item_affix
+    attributes:
+      affix_type: prefix
+      min_forge_tier: 2
+      target_stat: "BleedDamageBonus"
+      stacking_rule: "Personal Outgoing (Max 3 stacks per player, Global Cap 10 players on Boss, Grace Period 2.0s, 100% damage ledger retained)"
+      tiers:
+        T2: [15, 20]
+        T3: [21, 25]
+        T4: [26, 32]
+    added: 2026-09-24
+    revised: ""
+
+  - name: prefix_stagger_duration
+    display_name: "Tiền Tố: Chấn Động Kéo Dài (Stagger Duration Seconds)"
+    status: active
+    source: design/gdd/itemization.md
+    referenced_by:
+      - design/gdd/itemization.md
+      - design/gdd/stagger-system.md
+    category: item_affix
+    attributes:
+      affix_type: prefix
+      min_forge_tier: 2
+      target_stat: "StaggerDurationExtension"
+      stacking_rule: "Max Rule (Non-additive across players, Hard Cap +0.5s, Max Boss Stagger 3.5s)"
+      tiers:
+        T2: [0.2, 0.3]
+        T3: [0.3, 0.4]
+        T4: [0.4, 0.5]
+    added: 2026-09-24
+    revised: ""
+
+  - name: suffix_crit_mult
+    display_name: "Hậu Tố: Tàn Khốc Bạo Liệt (% Crit Multiplier)"
+    status: active
+    source: design/gdd/itemization.md
+    referenced_by:
+      - design/gdd/itemization.md
+      - design/gdd/attributes-system.md
+    category: item_affix
+    attributes:
+      affix_type: suffix
+      min_forge_tier: 2
+      target_stat: "CritMultiplier"
+      tiers:
+        T2: [12, 18]
+        T3: [20, 30]
+        T4: [35, 50]
+    added: 2026-09-24
+    revised: ""
+
+  - name: suffix_dash_stamina_cost
+    display_name: "Hậu Tố: Khinh Thân Tật Bộ (Dash Stamina Cost Reduction)"
+    status: active
+    source: design/gdd/itemization.md
+    referenced_by:
+      - design/gdd/itemization.md
+      - design/gdd/dash-evasion.md
+      - design/gdd/attributes-system.md
+    category: item_affix
+    attributes:
+      affix_type: suffix
+      min_forge_tier: 2
+      target_stat: "DashStaminaCostMod"
+      tiers:
+        T2: [2, 3]
+        T3: [4, 6]
+        T4: [7, 10]
+    added: 2026-09-24
+    revised: ""
+
+  - name: suffix_cc_resist
+    display_name: "Hậu Tố: Ý Chí Bất Khuất (% Crowd Control Resistance)"
+    status: active
+    source: design/gdd/itemization.md
+    referenced_by:
+      - design/gdd/itemization.md
+      - design/gdd/attributes-system.md
+    category: item_affix
+    attributes:
+      affix_type: suffix
+      min_forge_tier: 2
+      target_stat: "CrowdControlResistance"
+      tiers:
+        T2: [10, 15]
+        T3: [18, 25]
+        T4: [30, 40]
+    added: 2026-09-24
+    revised: ""
+
+  # BẬC 3: CẤM ĐỊA (FORBIDDEN FORGE BRACKET - ILVL 36-50)
+  - name: prefix_execution_dmg_pct
+    display_name: "Tiền Tố: Trảm Quyết Tử Thần (% Execution True DMG Amp)"
+    status: active
+    source: design/gdd/itemization.md
+    referenced_by:
+      - design/gdd/itemization.md
+      - design/gdd/stagger-system.md
+      - design/gdd/attributes-system.md
+    category: item_affix
+    attributes:
+      affix_type: prefix
+      min_forge_tier: 3
+      target_stat: "ExecutionDamageBonus"
+      stacking_rule: "Single Instigator Calculation (Exclusive to executing player at Socket_Execution, does not stack from other players)"
+      tiers:
+        T3: [12, 18]
+        T4: [20, 25]
+    added: 2026-09-24
+    revised: ""
+
+  - name: prefix_staggered_target_dmg
+    display_name: "Tiền Tố: Áp Chế Trọng Thương (% DMG to Staggered Targets)"
+    status: active
+    source: design/gdd/itemization.md
+    referenced_by:
+      - design/gdd/itemization.md
+      - design/gdd/combat-system.md
+      - design/gdd/attributes-system.md
+    category: item_affix
+    attributes:
+      affix_type: prefix
+      min_forge_tier: 3
+      target_stat: "StaggeredTargetDamageBonus"
+      stacking_rule: "Personal Outgoing (Evaluated per individual attack, no cross-buffing)"
+      tiers:
+        T3: [12, 18]
+        T4: [20, 28]
+    added: 2026-09-24
+    revised: ""
+
+  - name: prefix_all_ele_pct
+    display_name: "Tiền Tố: Hỗn Nguyên Nguyên Tố (% All Elemental DMG)"
+    status: active
+    source: design/gdd/itemization.md
+    referenced_by:
+      - design/gdd/itemization.md
+      - design/gdd/combat-system.md
+    category: item_affix
+    attributes:
+      affix_type: prefix
+      min_forge_tier: 3
+      target_stat: "AllElementalDamageBonus"
+      tiers:
+        T3: [10, 16]
+        T4: [18, 26]
+    added: 2026-09-24
+    revised: ""
+
+  - name: suffix_parry_posture_reflect
+    display_name: "Hậu Tố: Kình Lực Nghịch Chuyển (% Parry Posture Reflect)"
+    status: active
+    source: design/gdd/itemization.md
+    referenced_by:
+      - design/gdd/itemization.md
+      - design/gdd/combat-system.md
+      - design/gdd/attributes-system.md
+    category: item_affix
+    attributes:
+      affix_type: suffix
+      min_forge_tier: 3
+      target_stat: "ParryPostureReflectBonus"
+      stacking_rule: "Event-Driven with Diminishing Returns (100% -> 50% -> 25% on simultaneous parries within 1.0s)"
+      tiers:
+        T3: [8, 15]
+        T4: [16, 25]
+    added: 2026-09-24
+    revised: ""
+
+  - name: suffix_perfect_dodge_buff
+    display_name: "Hậu Tố: Ảo Ảnh Phản Kích (% Next Attack Buff after Perfect Dodge)"
+    status: active
+    source: design/gdd/itemization.md
+    referenced_by:
+      - design/gdd/itemization.md
+      - design/gdd/dash-evasion.md
+      - design/gdd/combat-system.md
+    category: item_affix
+    attributes:
+      affix_type: suffix
+      min_forge_tier: 3
+      target_stat: "PerfectDodgeEmpowerPct"
+      tiers:
+        T3: [10, 16]
+        T4: [18, 25]
+    added: 2026-09-24
+    revised: ""
+
+  - name: suffix_leech_on_stagger
+    display_name: "Hậu Tố: Huyết Tế Đoạt Hồn (% HP/Mana Leech on Execution)"
+    status: active
+    source: design/gdd/itemization.md
+    referenced_by:
+      - design/gdd/itemization.md
+      - design/gdd/stagger-system.md
+      - design/gdd/attributes-system.md
+    category: item_affix
+    attributes:
+      affix_type: suffix
+      min_forge_tier: 3
+      target_stat: "LeechOnExecutionPct"
+      stacking_rule: "Single Instigator Calculation (Restores HP/Mana exclusively to the executing player)"
+      tiers:
+        T3: [8, 12]
+        T4: [14, 20]
     added: 2026-09-24
     revised: ""
 

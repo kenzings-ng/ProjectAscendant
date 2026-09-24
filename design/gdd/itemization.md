@@ -71,25 +71,41 @@ Các dòng Affix **KHÔNG** cố định mà được xúc xắc ngẫu nhiên t
 
 $$\text{AffixValue} = \text{RandomRound}(\text{MinVal}_{T}, \text{MaxVal}_{T})$$
 
-#### Bảng Phân Bổ Tiền Tố (Prefix Pool — Thiên về Tấn Công):
-| Mã Định Danh Prefix | Tên Hiển Thị | T1 ($iLvl$ 1–15) | T2 ($iLvl$ 16–30) | T3 ($iLvl$ 31–45) | T4 ($iLvl$ 46–50) |
-| :--- | :--- | :---: | :---: | :---: | :---: |
-| `prefix_phys_flat` | Sát Thương Sắt Thép | +3–6 DMG | +8–14 DMG | +18–26 DMG | +32–45 DMG |
-| `prefix_phys_pct` | Tàn Bạo Tăng Cường | +4–7% Phys | +8–13% Phys | +15–22% Phys | +25–35% Phys |
-| `prefix_elemental_fire` | Hỏa Diệm Tôi Luyện | +4–7 Hỏa | +9–16 Hỏa | +20–30 Hỏa | +35–50 Hỏa |
-| `prefix_elemental_ice` | Sương Băng Giá Lạnh | +3–6 Băng | +8–14 Băng | +18–26 Băng | +30–44 Băng |
-| `prefix_posture_dmg` | Trọng Lực Phá Khớp | +5–8% Posture | +10–16% Posture | +18–25% Posture | +28–40% Posture |
-| `prefix_armor_flat` | Vảy Thép Kiên Cố | +8–15 Giáp | +20–35 Giáp | +45–70 Giáp | +85–120 Giáp |
+#### Bảng Phân Bổ Tiền Tố (Prefix Pool — 14 Tiền Tố Lũy Tiến Theo Bậc Lò Rèn):
+| Mã Định Danh Prefix | Tên Hiển Thị | Bậc Lò Rèn Mở Khóa | T1 ($iLvl$ 1–15) | T2 ($iLvl$ 16–30) | T3 ($iLvl$ 31–45) | T4 ($iLvl$ 46–50) |
+| :--- | :--- | :---: | :---: | :---: | :---: | :---: |
+| `prefix_phys_flat` | Sát Thương Sắt Thép | Outpost (T1) | +3–6 DMG | +8–14 DMG | +18–26 DMG | +32–45 DMG |
+| `prefix_phys_pct` | Tàn Bạo Tăng Cường | Outpost (T1) | +4–7% Phys | +8–13% Phys | +15–22% Phys | +25–35% Phys |
+| `prefix_elemental_fire` | Hỏa Diệm Tôi Luyện | Outpost (T1) | +4–7 Hỏa | +9–16 Hỏa | +20–30 Hỏa | +35–50 Hỏa |
+| `prefix_elemental_ice` | Sương Băng Giá Lạnh | Outpost (T1) | +3–6 Băng | +8–14 Băng | +18–26 Băng | +30–44 Băng |
+| `prefix_elemental_lightning` | Lôi Điện Hoang Dã | Outpost (T1) | +4–7 Lôi | +9–16 Lôi | +20–30 Lôi | +35–50 Lôi |
+| `prefix_mana_flat` | Ma Lực Tinh Khiết | Outpost (T1) | +15–25 Mana | +35–55 Mana | +70–100 Mana | +120–160 Mana |
+| `prefix_posture_dmg` | Trọng Lực Phá Khớp | Outpost (T1) | +5–8% Posture | +10–16% Posture | +18–25% Posture | +28–35% Posture *(Cap 35%)* |
+| `prefix_armor_flat` | Vảy Thép Kiên Cố | Outpost (T1) | +8–15 Giáp | +20–35 Giáp | +45–70 Giáp | +85–120 Giáp |
+| `prefix_armor_pen_pct` | Xuyên Giáp Xương Tủy | Field (T2) | — | +6–10% Pen | +12–18% Pen | +20–28% Pen |
+| `prefix_dot_bleed` | Lưỡi Cưa Rách Thịt | Field (T2) | — | 15–20 DMG/s | 21–25 DMG/s | 26–32 DMG/s |
+| `prefix_stagger_duration` | Chấn Động Kéo Dài | Field (T2) | — | +0.2–0.3s | +0.3–0.4s | +0.4–0.5s *(Cap 3.5s)* |
+| `prefix_execution_dmg_pct` | Trảm Quyết Tử Thần | Forbidden (T3) | — | — | +12–18% True | +20–25% True |
+| `prefix_staggered_target_dmg` | Áp Chế Trọng Thương | Forbidden (T3) | — | — | +12–18% DMG | +20–28% DMG |
+| `prefix_all_ele_pct` | Hỗn Nguyên Nguyên Tố | Forbidden (T3) | — | — | +10–16% Ele | +18–26% Ele |
 
-#### Bảng Phân Bổ Hậu Tố (Suffix Pool — Thiên về Phòng Thủ & Cơ Động):
-| Mã Định Danh Suffix | Tên Hiển Thị | T1 ($iLvl$ 1–15) | T2 ($iLvl$ 16–30) | T3 ($iLvl$ 31–45) | T4 ($iLvl$ 46–50) |
-| :--- | :--- | :---: | :---: | :---: | :---: |
-| `suffix_max_hp` | Sinh Lực Dồi Dào | +15–25 HP | +35–55 HP | +70–110 HP | +130–180 HP |
-| `suffix_stamina_regen`| Tật Phong Hồi Thể | +5–8% StaRegen| +10–15% StaRegen| +18–25% StaRegen| +28–38% StaRegen|
-| `suffix_parry_window` | Phản Xạ Thần Tốc | +0.01s Parry | +0.02s Parry | +0.03s Parry | +0.04s Parry |
-| `suffix_move_speed` | Bước Chân Lữ Hành | +10–18 cm/s | +22–35 cm/s | +40–60 cm/s | +70–95 cm/s |
-| `suffix_crit_chance` | Tử Huyệt Chuẩn Xác | +2.0–3.5% Crit | +4.0–6.5% Crit | +7.0–10.0% Crit | +11.0–15.0% Crit|
-| `suffix_cooldown_red` | Dòng Chảy Ma Lực | +2–4% CDR | +5–8% CDR | +9–13% CDR | +14–20% CDR |
+#### Bảng Phân Bổ Hậu Tố (Suffix Pool — 14 Hậu Tố Lũy Tiến Theo Bậc Lò Rèn):
+| Mã Định Danh Suffix | Tên Hiển Thị | Bậc Lò Rèn Mở Khóa | T1 ($iLvl$ 1–15) | T2 ($iLvl$ 16–30) | T3 ($iLvl$ 31–45) | T4 ($iLvl$ 46–50) |
+| :--- | :--- | :---: | :---: | :---: | :---: | :---: |
+| `suffix_max_hp` | Sinh Lực Dồi Dào | Outpost (T1) | +15–25 HP | +35–55 HP | +70–110 HP | +130–180 HP |
+| `suffix_max_stamina` | Bền Bỉ Trường Kỳ | Outpost (T1) | +8–12 Sta | +15–22 Sta | +28–38 Sta | +45–60 Sta |
+| `suffix_stamina_regen`| Tật Phong Hồi Thể | Outpost (T1) | +5–8% StaRegen| +10–15% StaRegen| +18–25% StaRegen| +28–38% StaRegen|
+| `suffix_poise_flat` | Thế Đứng Kiên Định | Outpost (T1) | +10–18 Poise | +25–40 Poise | +50–75 Poise | +90–120 Poise |
+| `suffix_parry_window` | Phản Xạ Thần Tốc | Outpost (T1) | +0.01s Parry | +0.02s Parry | +0.03s Parry | +0.04s Parry |
+| `suffix_move_speed` | Bước Chân Lữ Hành | Outpost (T1) | +10–18 cm/s | +22–35 cm/s | +40–60 cm/s | +70–95 cm/s |
+| `suffix_crit_chance` | Tử Huyệt Chuẩn Xác | Outpost (T1) | +2.0–3.5% Crit | +4.0–6.5% Crit | +7.0–10.0% Crit | +11.0–15.0% Crit|
+| `suffix_cooldown_red` | Dòng Chảy Ma Lực | Outpost (T1) | +2–4% CDR | +5–8% CDR | +9–13% CDR | +14–20% CDR |
+| `suffix_crit_mult` | Tàn Khốc Bạo Liệt | Field (T2) | — | +12–18% Mult | +20–30% Mult | +35–50% Mult |
+| `suffix_dash_stamina_cost` | Khinh Thân Tật Bộ | Field (T2) | — | -2–3 Sta Cost | -4–6 Sta Cost | -7–10 Sta Cost |
+| `suffix_cc_resist` | Ý Chí Bất Khuất | Field (T2) | — | +10–15% Res | +18–25% Res | +30–40% Res |
+| `suffix_parry_posture_reflect` | Kình Lực Nghịch Chuyển | Forbidden (T3) | — | — | +8–15% Reflect | +16–25% Reflect |
+| `suffix_perfect_dodge_buff` | Ảo Ảnh Phản Kích | Forbidden (T3) | — | — | +10–16% Buff | +18–25% Buff |
+| `suffix_leech_on_stagger` | Huyết Tế Đoạt Hồn | Forbidden (T3) | — | — | +8–12% Leech | +14–20% Leech |
 
 ### 2.3 Dòng Đặc Quyền Huyền Thoại (Legendary Combat Perks)
 Chỉ xuất hiện trên trang bị Bậc Legendary. Thay vì chỉ tăng số liệu thuần túy, dòng này can thiệp và biến đổi cơ chế chiêu thức của Gameplay Ability System (GAS):
@@ -97,6 +113,26 @@ Chỉ xuất hiện trên trang bị Bậc Legendary. Thay vì chỉ tăng số 
 - **Cung Phong Bão Cổ Thụ (Ranger):** Phát bắn *Piercing Shot* khi xuyên qua kẻ địch thứ 2 sẽ tự động tách thành 3 mũi tên phụ.
 - **Pháp Trượng Hư Không Cấm Thuật (Arcanist):** Kỹ năng *Gravity Pull* tăng 40% bán kính hút và làm câm lặng quái nhỏ trong 1.5 giây.
 - **Chiến Chùy Thái Dương (Acolyte):** Đòn giáng *Smite* tạo kết giới hồi 10 điểm Thể Lực mỗi giây cho mọi đồng minh đứng trong vòng tròn.
+
+### 2.4 Quy Tắc Xử Lý Stacking Khi Đánh Boss Đa Người Chơi (Multiplayer Raid Stacking & Contested PvE Rules)
+Để ngăn chặn tình trạng lạm phát chỉ số khi 50 người chơi cùng vây đánh 1 World Boss, toàn bộ 28 Affix tuân thủ nghiêm ngặt 4 quy tắc mạng Server-Authoritative:
+
+1. **RULE 1: MAX RULE (Lấy Giá Trị Cao Nhất — Không Cộng Dồn)**:
+   - Áp dụng cho: `prefix_stagger_duration`.
+   - Khi Boss vỡ thế, Server chỉ áp dụng giá trị kéo dài thời gian lớn nhất từ người tung đòn bẻ khớp (`Posture Finisher`). Thời gian choáng của Boss bị **khóa cứng trần tối đa ở 3.5 giây** (Base 3.0s + Max 0.5s).
+2. **RULE 2: INSTIGATOR ONLY (Độc Quyền Người Kích Hoạt)**:
+   - Áp dụng cho: `prefix_execution_dmg_pct` và `suffix_leech_on_stagger`.
+   - Căn cứ theo [`attributes-system.md`](file:///mnt/Data/Projects/project-games/design/gdd/attributes-system.md), chỉ duy nhất **1 người chơi tương tác với tử huyệt (`Socket_Execution`)** thực hiện hoạt ảnh kết liễu `AM_Execute_Boss`. Sát thương kết liễu ($25\% \times (1.0 + \text{Bonus})$) và bùa hồi phục chỉ tính toán trên thuộc tính của Executor. Nhịp độ 3.0s quỳ gối và 1.2s hoạt ảnh bất tử được bảo toàn nguyên vẹn 100%.
+3. **RULE 3: PERSONAL OUTGOING (Cá Nhân Hóa Đòn Đánh & Trần DoT Toàn Raid)**:
+   - Áp dụng cho: `prefix_staggered_target_dmg`, `prefix_armor_pen_pct`, `prefix_all_ele_pct`, và `prefix_dot_bleed`.
+   - **Quy chuẩn Chảy Máu (`prefix_dot_bleed` / `GE_Debuff_Bleed`) trong Contested PvE**:
+     - *Giới hạn cá nhân*: Tối đa **3 stacks/người chơi** (`AggregateBySource`). Các đòn chém liên hoàn tiếp theo chỉ **làm mới thời lượng về 3.0s (Refresh Duration)**, không cộng dồn thêm stack.
+     - *Trần toàn cục (Global Raid Ceiling)*: World Boss chỉ cho phép tối đa **10 nguồn Bleed độc lập** từ 10 người chơi có DPS cao nhất tick đồng thời. Tổng sát thương Bleed toàn raid bị khóa ở **$600\text{ DPS}$ (Base $20\text{ DMG/s}$) $\rightarrow 750\text{ DPS}$ (God-roll $25\text{ DMG/s}$)**, chiếm $<3\%$ tổng DPS của raid 50 người.
+     - *Thời gian bảo hộ (Grace Period = 2.0s)*: Mọi instance Bleed khi lọt vào Top-10 trên Boss đều được cấp quyền miễn trừ bị thay thế trong ít nhất 2.0 giây đầu tiên, đảm bảo người chơi **chắc chắn hưởng ít nhất 2 nhịp tick sát thương** ($40\text{--}50\text{ DMG}$), loại bỏ hoàn toàn hiện tượng DoT Ghosting và rung lắc giao diện (UI Fluttering).
+     - *Bảo lưu công trạng nhặt đồ (Atomic Damage Ledger)*: Toàn bộ sát thương Bleed đã tick trong quá khứ được **Server lưu trữ vĩnh viễn $100\%$** vào bảng công trạng cá nhân, bảo đảm quyền lợi xét thưởng nhặt đồ ($\ge 5\%$ Boss Max HP theo [`ADR-0001`](file:///mnt/Data/Projects/project-games/docs/architecture/adr-0001-open-world-mmo-combat-networking.md)) kể cả khi hiệu ứng sau đó bị thay thế.
+4. **RULE 4: EVENT DR (Suy Giảm Theo Sự Kiện Đồng Thời)**:
+   - Áp dụng cho: `suffix_parry_posture_reflect`.
+   - Kích hoạt theo từng cú Perfect Parry riêng lẻ. Nếu nhiều người chơi cùng phản đòn 1 đòn quét diện rộng (AoE) của Boss trong cùng cửa sổ 1.0s, sát thương phản Posture suy giảm theo tỷ lệ: $100\% \rightarrow 50\% \rightarrow 25\%$ cho các đòn tiếp theo, chống việc Boss bị vỡ thế tức thì.
 
 ---
 
@@ -178,9 +214,9 @@ Trang bị chỉ thay đổi model/silhouette khi được rèn hoặc nâng c�
 
 1. **Cấp 1: Tiền Trạm (Outpost Forge — $iLvl$ 1–20):**
    - *Phong cách:* Thép thô mộc, da thuộc xỉn màu, lưỡi kiếm mài phẳng cơ bản, vải bố thô, nẹp đinh tán đơn giản. Đậm chất trang bị dã chiến của lính đánh thuê.
-2. **Cấp 2: Dã Ngoại (Wilderness Forge — $iLvl$ 21–35):**
+2. **Cấp 2: Dã Ngoại (Field Forge — $iLvl$ 21–35):**
    - *Phong cách:* Thép đen tôi luyện (Dark Iron), nẹp ngọc nguyên tố phát quang nhẹ, khớp giáp đa tầng linh hoạt, da thú cường lực có lông thú giữ ấm, hoa văn khắc sâu dọc thân kiếm.
-3. **Cấp 3: Cấm Địa (Ancient Forbidden Forge — $iLvl$ 36–50):**
+3. **Cấp 3: Cấm Địa (Forbidden Forge — $iLvl$ 36–50):**
    - *Phong cách:* Tinh thể rèn từ Linh hồn Lãnh chúa (Boss Soul), kim loại hắc thạch vũ trụ, rãnh plasma phát sáng rực rỡ, gai nhọn phong ấn, tà áo choàng hư không uốn lượn.
 
 ### 4.2 Ngân Sách 9–12 Bộ Giáp Cơ Sở (Armor Base Matrix)

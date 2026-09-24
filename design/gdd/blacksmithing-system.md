@@ -10,7 +10,7 @@
 
 ## Overview
 
-Hệ thống Thợ Rèn Phân Vùng (Zone-tiered Blacksmithing System) là trụ cột kinh tế chế tác và cường hóa trang bị cốt lõi trong Project Ascendant, kết nối trực tiếp tài nguyên thu thập từ quái vật, mảnh vỡ bộ phận Boss ([`stagger-system.md`](file:///mnt/Data/Projects/project-games/design/gdd/stagger-system.md)) và trang bị trong kho đồ ([`inventory-system.md`](file:///mnt/Data/Projects/project-games/design/gdd/inventory-system.md)) với động lực khám phá thế giới mở. Khác với các tựa game nhập vai truyền thống vốn tập trung mọi dịch vụ thợ rèn tại khu an toàn trung tâm, hệ thống phân bổ các lò rèn thành **3 cấp độ dã ngoại phân vùng**—từ *Thợ Rèn Tiền Trạm* tại khu an toàn (chuyên sửa chữa và rèn đồ Normal/Rare), *Thợ Rèn Dã Ngoại* nơi rừng sâu nguy hiểm (mở khóa đồ Legendary và đục lỗ khảm ngọc), cho đến *Lò Rèn Cấm Địa* ẩn sâu trong lãnh địa Lãnh Chúa (nơi duy nhất đúc được Thần Binh Immortal & Divine từ Linh Hồn Boss).
+Hệ thống Thợ Rèn Phân Vùng (Zone-tiered Blacksmithing System) là trụ cột kinh tế chế tác và cường hóa trang bị cốt lõi trong Project Ascendant, kết nối trực tiếp tài nguyên thu thập từ quái vật, mảnh vỡ bộ phận Boss ([`stagger-system.md`](file:///mnt/Data/Projects/project-games/design/gdd/stagger-system.md)) và trang bị trong kho đồ ([`inventory-system.md`](file:///mnt/Data/Projects/project-games/design/gdd/inventory-system.md)) với động lực khám phá thế giới mở. Khác với các tựa game nhập vai truyền thống vốn tập trung mọi dịch vụ thợ rèn tại khu an toàn trung tâm, hệ thống phân bổ các lò rèn thành **3 cấp độ dã ngoại phân vùng**—từ *Thợ Rèn Tiền Trạm* tại khu an toàn (chuyên sửa chữa và rèn đồ Common/Uncommon/Rare, giới hạn +3), *Thợ Rèn Dã Ngoại* nơi rừng sâu nguy hiểm (mở khóa trang bị Epic, giới hạn +6 và đục 2 lỗ khảm ngọc), cho đến *Lò Rèn Cấm Địa* ẩn sâu trong lãnh địa Lãnh Chúa (nơi duy nhất đúc được Thần Binh Legendary từ Linh Hồn Boss, giới hạn +10 và mở khóa ô khảm Prismatic thứ 3).
 
 Được xây dựng trên triết lý **"Rủi ro cao - Phần thưởng xứng đáng" (High-Risk High-Reward)** và thế giới mở không rào chắn cấp độ nhân vật (Non-gated Open World), hệ thống trao quyền cho những người chơi có kỹ năng phản xạ và né tránh thượng thừa khả năng mạo hiểm tiến sâu vào các vùng cấm địa nguy hiểm từ sớm để rèn đúc những món trang bị tối thượng vượt bậc. Hệ thống cung cấp các tính năng: Đúc Trang Bị Mới (Crafting), Cường Hóa Chỉ Số (Enhancement +1 đến +10), Khảm Ngọc (Gem Sockets), Đúc Thần Binh từ Linh Hồn Boss (Boss Soul Forging), Phân Rã Sách Kỹ Năng thừa thành Tàn Trang (`item_skill_shard`), và Nâng cấp mở rộng sức chứa túi đồ (30 đến 60 ô).
 
@@ -26,7 +26,7 @@ Hệ thống Thợ Rèn Phân Vùng mang đến trải nghiệm cảm xúc trự
 > 
 > *'KENG! KENG! KENG!'*
 > 
-> *Tia lửa thần thánh bắn tung tóe xé toạc màn đêm hang động. Khi làn khói lam tan biến, trên mặt đe là thanh Thần Binh Bậc 5 phát ra hào quang rực rỡ, làm biến đổi hoàn toàn cơ chế chiêu thức của bạn. Cảm giác đánh cược mạng sống để tự tay tạo nên vũ khí tối thượng ngay tại sào huyệt kẻ thù đem lại khoái cảm kiêu hãnh tột bực—bạn đã chinh phục trò chơi bằng chính lòng quả cảm và kỹ năng cơ học của mình."*
+> *Tia lửa thần thánh bắn tung tóe xé toạc màn đêm hang động. Khi làn khói lam tan biến, trên mặt đe là thanh Thần Binh Bậc 5 (Legendary) phát ra hào quang rực rỡ, làm biến đổi hoàn toàn cơ chế chiêu thức của bạn. Cảm giác đánh cược mạng sống để tự tay tạo nên vũ khí tối thượng ngay tại sào huyệt kẻ thù đem lại khoái cảm kiêu hãnh tột bực—bạn đã chinh phục trò chơi bằng chính lòng quả cảm và kỹ năng cơ học của mình."*
 
 ---
 
@@ -39,9 +39,9 @@ Khác biệt hoàn toàn với các tựa game MMORPG gom mọi dịch vụ vào
 
 | Bậc Lò Rèn | Tên Cơ Sở Rèn | Vị Trí Địa Lý & Mức Nguy Hiểm | Bậc Trang Bị Cho Phép Rèn | Giới Hạn Cường Hóa | Dịch Vụ Đặc Thù |
 | :---: | :--- | :--- | :---: | :---: | :--- |
-| **Tier 1** | **Thợ Rèn Tiền Trạm** *(Outpost Forge)* | Khu an toàn thành trấn, Tiền trạm ban đầu (Vùng an toàn). | **Normal & Rare** (Tier 1 & 2) | Tối đa **+3** | • Sửa chữa độ bền trang bị.<br>• Phân rã Sách thừa ra Tàn Trang Kỹ Năng.<br>• Nâng cấp túi đồ Bậc 1 (30 $\rightarrow$ 40 ô). |
-| **Tier 2** | **Thợ Rèn Dã Ngoại** *(Wilderness Forge)* | Rừng sâu, hẻm núi hiểm trở (Vùng quái Cấp 20+). | Mở khóa **Legendary** (Tier 3) | Tối đa **+6** | • Đục tối đa 2 Lỗ Khảm Ngọc (Gem Sockets).<br>• Rèn trang bị từ mảnh vỡ Boss sơ cấp.<br>• Nâng cấp túi đồ Bậc 2 (40 $\rightarrow$ 50 ô). |
-| **Tier 3** | **Lò Rèn Cấm Địa** *(Ancient Sanctuary Forge)* | Ẩn sâu trong lòng hang nham thạch của Lãnh Chúa (Cấp 35+). | Độc quyền **Immortal & Divine** (Tier 4 & 5) | Đỉnh phong **+10** | • Đúc Thần Binh từ Linh Hồn Lãnh Chúa (Boss Soul).<br>• Đục Lỗ Khảm thứ 3 (Prismatic Socket).<br>• Nâng cấp túi đồ Bậc 3 (50 $\rightarrow$ 60 ô tối đa). |
+| **Tier 1** | **Thợ Rèn Tiền Trạm** *(Outpost Forge)* | Khu an toàn thành trấn, Tiền trạm ban đầu (Vùng an toàn). | **Common, Uncommon & Rare** (Tier 1 & 2) | Tối đa **+3** | • Sửa chữa độ bền trang bị.<br>• Phân rã Sách thừa ra Tàn Trang Kỹ Năng.<br>• Nâng cấp túi đồ Bậc 1 (30 $\rightarrow$ 40 ô). |
+| **Tier 2** | **Thợ Rèn Dã Ngoại** *(Field Forge)* | Rừng sâu, hẻm núi hiểm trở (Vùng quái Cấp 20+). | Mở khóa **Epic** (Tier 3) | Tối đa **+6** | • Đục tối đa 2 Lỗ Khảm Ngọc (Gem Sockets).<br>• Rèn trang bị từ mảnh vỡ Boss sơ cấp.<br>• Nâng cấp túi đồ Bậc 2 (40 $\rightarrow$ 50 ô). |
+| **Tier 3** | **Lò Rèn Cấm Địa** *(Forbidden Forge)* | Ẩn sâu trong lòng hang nham thạch của Lãnh Chúa (Cấp 35+). | Độc quyền **Legendary (Thần Binh Boss)** (Tier 4 & 5) | Đỉnh phong **+10** | • Đúc Thần Binh từ Linh Hồn Lãnh Chúa (Boss Soul).<br>• Đục Lỗ Khảm thứ 3 (Prismatic Socket).<br>• Nâng cấp túi đồ Bậc 3 (50 $\rightarrow$ 60 ô tối đa). |
 
 ---
 
@@ -74,15 +74,15 @@ Chỉ có thể thực hiện tại **Lò Rèn Cấm Địa**. Công thức rèn
   - 1 $\times$ Linh Hồn Lãnh Chúa (`item_boss_soul_*`) thu được khi diệt Boss.
   - 4 $\times$ Bộ phận rách/chặt từ Boss qua cơ chế Part Breaking ([`stagger-system.md`](file:///mnt/Data/Projects/project-games/design/gdd/stagger-system.md)): Sừng, Vảy Đuôi, Giáp Ngực, Cánh.
   - 5 $\times$ Quặng Hư Không Cổ Đại.
-- **Đặc tính Thần Binh (Tier 5 Divine):**
+- **Đặc tính Thần Binh (Tier 5 Legendary - Boss Soul Forging):**
   - Cải biến cơ chế chiêu thức của Class (Ví dụ: Cú chém *Blade Arc* của Vanguard phóng thêm sóng xung kích lửa; mũi tên *Piercing Shot* của Ranger để lại vệt nổ liên hoàn).
 
 ---
 
 ##### C. Hệ Thống Đục Lỗ & Khảm Ngọc (Gem Sockets)
 - **Cơ chế:** Thợ rèn dùng đe ma thuật để khai mở lỗ ngọc trên trang bị từ Bậc Rare trở lên:
-  - *Tier 2 Blacksmith:* Đục tối đa 2 lỗ ngọc thường trên trang bị Bậc Rare và Legendary.
-  - *Tier 3 Blacksmith:* Đục lỗ ngọc thứ 3 (Lỗ Đa Sắc - Prismatic Socket) cho trang bị Bậc Immortal và Divine.
+  - *Tier 2 Blacksmith:* Đục tối đa 2 lỗ ngọc thường trên trang bị Bậc Rare và Epic.
+  - *Tier 3 Blacksmith:* Đục lỗ ngọc thứ 3 (Lỗ Đa Sắc - Prismatic Socket) cho trang bị Bậc Legendary.
 - **Loại ngọc khảm tiêu biểu:**
   - *Hồng Ngọc (Ruby):* Tăng +15% Sát thương Posture khi đánh Boss.
   - *Lam Ngọc (Sapphire):* Tăng +20% Tốc độ hồi phục Mana tự nhiên.
@@ -202,11 +202,11 @@ The `enhancement_gold_cost` formula is defined as:
 **Variables:**
 | Variable | Symbol | Type | Range | Description |
 |---|:---:|:---:|:---:|---|
-| Base Forge Fee | $\text{BaseFee}$ | int | $50 - 500$ | Phí rèn cơ sở theo Tier: Normal (50), Rare (100), Legendary (200), Immortal (350), Divine (500). |
+| Base Forge Fee | $\text{BaseFee}$ | int | $50 - 500$ | Phí rèn cơ sở theo Bậc Hiếm: Common (50), Uncommon (100), Rare (200), Epic (350), Legendary (500). |
 | Current Level | $\text{Level}$ | int | $0 - 9$ | Cấp độ hiện tại của món đồ trước khi đập lên cấp kế tiếp. |
 
 **Output Range:** $50 - 5,200$ Vàng mỗi lần thử nghiệm rèn.  
-**Example:** Đập đồ Legendary Bậc 3 ($\text{BaseFee} = 200$ Vàng):
+**Example:** Đập đồ Rare ($\text{BaseFee} = 200$ Vàng):
 - Lên $+1$ ($\text{Level} = 0$): Chi phí $= 200 \times 1.0 = \mathbf{200}$ Vàng.
 - Lên $+7$ ($\text{Level} = 6$): Chi phí $= 200 \times (1 + 0.35 \times 6^{1.4}) = 200 \times (1 + 0.35 \times 12.29) = 200 \times 5.30 = \mathbf{1,060}$ Vàng.
 
@@ -252,18 +252,18 @@ The `salvage_yield_formula` is defined as:
 `OreYield = 2 + (EnhancementLevel >= 5 ? 1 : 0) + (EnhancementLevel >= 9 ? 1 : 0)`
 
 - **Loại quặng thu hồi tương ứng với Bậc:**
-  - Normal $\rightarrow$ Quặng Đồng.
-  - Rare $\rightarrow$ Quặng Sắt.
-  - Legendary $\rightarrow$ Quặng Sắt Đen + 1 Tinh Thể Ma Pháp.
-  - Immortal $\rightarrow$ Quặng Hư Không.
-  - Divine $\rightarrow$ Quặng Hư Không + 1 Mảnh Vỡ Thần Thánh.
+  - Common $\rightarrow$ Quặng Đồng.
+  - Uncommon $\rightarrow$ Quặng Sắt.
+  - Rare $\rightarrow$ Quặng Sắt Đen.
+  - Epic $\rightarrow$ Quặng Sắt Đen + 1 Tinh Thể Ma Pháp.
+  - Legendary $\rightarrow$ Quặng Hư Không + 1 Mảnh Vỡ Thần Thánh.
 - *(Lưu ý: Phân rã Sách Kỹ Năng tuân thủ nghiêm ngặt tỷ lệ $1, 3, 8, 25$ Tàn Trang Kỹ Năng đã khóa trong `skill-progression-system.md`)*.
 
 ---
 
 ## Edge Cases
 
-1. **If người chơi mang trang bị Bậc Cao (Bậc 3 Legendary, Bậc 4 Immortal, Bậc 5 Divine) đến Thợ Rèn Tiền Trạm (Tier 1 Blacksmith)**:
+1. **If người chơi mang trang bị Bậc Cao (Bậc 4 Epic, Bậc 5 Legendary) đến Thợ Rèn Tiền Trạm (Tier 1 Blacksmith)**:
    - Thợ rèn Tier 1 không thể cường hóa vượt quá mốc $+3$ và không thể đục lỗ khảm ngọc cho các trang bị này.
    - Giao diện hiển thị thông báo từ chối: *"Ngọn lửa tiền trạm quá yếu, không thể tôi luyện thần binh này. Hãy tìm đến Thợ Rèn Dã Ngoại hoặc Lò Rèn Cấm Địa!"*.
    - *Quy tắc cứu hộ:* Thợ rèn Tier 1 vẫn được phép sửa chữa độ bền trang bị với chi phí vàng quy chuẩn, đảm bảo người chơi không bao giờ bị kẹt với món đồ hỏng khi quay về thành.
@@ -299,7 +299,7 @@ The `salvage_yield_formula` is defined as:
 | Hệ Thống Thượng Nguồn | Bản Tả Thiết Kế (GDD) | Bản Chất Phụ Thuộc | Giao Diện Dữ Liệu Trao Đổi (Interface Contract) |
 | :--- | :--- | :---: | :--- |
 | **Inventory & Item Database** | [`inventory-system.md`](file:///mnt/Data/Projects/project-games/design/gdd/inventory-system.md) | **Bắt Buộc (Hard)** | Đọc danh mục trang bị, quặng rèn, đá quý; trừ tài nguyên khi rèn; cập nhật cấp độ $+N$, số lỗ ngọc (`GemSockets`) và trạng thái độ bền; quản lý 3 mốc mở rộng ô đồ (30 $\rightarrow$ 60 ô). |
-| **Stagger & Part Breaking** | [`stagger-system.md`](file:///mnt/Data/Projects/project-games/design/gdd/stagger-system.md) | **Bắt Buộc (Hard)** | Tiếp nhận 4 mảnh vỡ bộ phận rơi từ Boss (Sừng, Vảy Đuôi, Giáp Ngực, Cánh) cùng Linh Hồn Lãnh Chúa (`item_boss_soul_*`) làm nguyên liệu chế tác đồ Bậc 3 Legendary và Bậc 5 Divine. |
+| **Stagger & Part Breaking** | [`stagger-system.md`](file:///mnt/Data/Projects/project-games/design/gdd/stagger-system.md) | **Bắt Buộc (Hard)** | Tiếp nhận 4 mảnh vỡ bộ phận rơi từ Boss (Sừng, Vảy Đuôi, Giáp Ngực, Cánh) cùng Linh Hồn Lãnh Chúa (`item_boss_soul_*`) làm nguyên liệu chế tác đồ Bậc Epic và Thần Binh Legendary (Boss Soul). |
 | **Attributes Engine (GAS)** | [`attributes-system.md`](file:///mnt/Data/Projects/project-games/design/gdd/attributes-system.md) | **Bắt Buộc (Hard)** | Cập nhật các giá trị bổ trợ (Attributes Modifiers) khi nhân vật trang bị vũ khí/giáp đã cường hóa hoặc khảm ngọc vào `UAscendantAttributeSet`. |
 
 ---
@@ -401,8 +401,8 @@ Bảng tổng hợp các biến số cân bằng kinh tế và rèn đúc dành 
 
 - [ ] **AC-5 (Boss Soul Crafting & Class Mutation):**
   - **GIVEN** người chơi mang $1\times$ Linh Hồn Lãnh Chúa, $4\times$ mảnh vỡ bộ phận Boss và $5\times$ Quặng Hư Không đến Lò Rèn Cấm Địa,
-  - **WHEN** kích hoạt đúc Thần Binh Bậc 5 (Divine),
-  - **THEN** toàn bộ nguyên liệu bị trừ, trang bị Bậc 5 xuất hiện trong kho đồ mang theo dòng bổ trợ cải biến cơ chế kỹ năng của Class tương ứng.
+  - **WHEN** kích hoạt đúc Thần Binh Bậc 5 (Legendary Boss Soul),
+  - **THEN** toàn bộ nguyên liệu bị trừ, trang bị Bậc 5 (Legendary) xuất hiện trong kho đồ mang theo dòng bổ trợ cải biến cơ chế kỹ năng của Class tương ứng.
 
 - [ ] **AC-6 (Gem Socketing & Safe Unsocketing):**
   - **GIVEN** một trang bị Bậc Rare có 1 lỗ ngọc trống và người chơi có 1 viên Hồng Ngọc (Ruby),
