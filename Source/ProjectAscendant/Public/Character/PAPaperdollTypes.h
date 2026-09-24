@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Inventory/PAInventoryTypes.h"
 #include "Controller/PAIsometricMovementMath.h"
+#include "GameplayTagContainer.h"
 #include "PAPaperdollTypes.generated.h"
 
 /**
@@ -57,6 +58,58 @@ public:
 	static bool IsMirroredDirection(EPAAimDirection8Way Direction);
 	static int32 GetSortPriorityForSlot(EPAPaperdollSlot Slot, EPAAimDirection8Way Direction);
 	static FName GetSocketNameForSlot(EPAPaperdollSlot Slot);
+};
+
+/**
+ * FPARarityMaterialPreset
+ *
+ * Cấu hình Static Material Instance cho 5 bậc hiếm (Story item-005, EPIC-ITEMIZATION-001):
+ * - Common: Emissive = 0.0f, Tint = #E8ECEB
+ * - Uncommon: Emissive = 0.5f, Tint = #10B981 (Electric Emerald)
+ * - Rare: Emissive = 1.8f, Tint = #3B82F6 (Cobalt Sapphire)
+ * - Epic: Emissive = 3.5f, Tint = #A855F7 (Astral Violet)
+ * - Legendary: Emissive = 7.0f, Tint = #F59E0B (Solar Amber Gold)
+ */
+USTRUCT(BlueprintType)
+struct PROJECTASCENDANT_API FPARarityMaterialPreset
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Itemization|Material")
+	FGameplayTag RarityTag;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Itemization|Material")
+	EPAItemRarity Rarity = EPAItemRarity::Common;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Itemization|Material")
+	float EmissiveIntensity = 0.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Itemization|Material")
+	FLinearColor TintColor = FLinearColor::White;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Itemization|Material")
+	FName MaterialPresetName = NAME_None;
+
+	FPARarityMaterialPreset()
+		: EmissiveIntensity(0.0f)
+		, TintColor(FLinearColor::White)
+		, MaterialPresetName(NAME_None)
+	{
+	}
+
+	FPARarityMaterialPreset(
+		FGameplayTag InTag,
+		EPAItemRarity InRarity,
+		float InEmissive,
+		const FLinearColor& InTint,
+		FName InName)
+		: RarityTag(InTag)
+		, Rarity(InRarity)
+		, EmissiveIntensity(InEmissive)
+		, TintColor(InTint)
+		, MaterialPresetName(InName)
+	{
+	}
 };
 
 /**

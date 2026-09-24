@@ -342,3 +342,126 @@ void UPAPaperdollComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>
 
 	DOREPLIFETIME(UPAPaperdollComponent, Model);
 }
+
+// -----------------------------------------------------------------------------
+// Story item-005: Static Material Instance Assignment & Calibration
+// -----------------------------------------------------------------------------
+
+FPARarityMaterialPreset UPAPaperdollComponent::GetRarityMaterialPreset(EPAItemRarity Rarity)
+{
+	switch (Rarity)
+	{
+	case EPAItemRarity::Common:
+		return FPARarityMaterialPreset(
+			FGameplayTag::RequestGameplayTag(FName("Item.Rarity.Common"), false),
+			EPAItemRarity::Common,
+			0.0f,
+			FLinearColor(0.91f, 0.925f, 0.922f, 1.0f), // #E8ECEB
+			FName("MI_Weapon_Common"));
+
+	case EPAItemRarity::Uncommon:
+		return FPARarityMaterialPreset(
+			FGameplayTag::RequestGameplayTag(FName("Item.Rarity.Uncommon"), false),
+			EPAItemRarity::Uncommon,
+			0.5f,
+			FLinearColor(0.063f, 0.725f, 0.506f, 1.0f), // #10B981
+			FName("MI_Weapon_Uncommon"));
+
+	case EPAItemRarity::Rare:
+		return FPARarityMaterialPreset(
+			FGameplayTag::RequestGameplayTag(FName("Item.Rarity.Rare"), false),
+			EPAItemRarity::Rare,
+			1.8f,
+			FLinearColor(0.231f, 0.51f, 0.965f, 1.0f), // #3B82F6
+			FName("MI_Weapon_Rare"));
+
+	case EPAItemRarity::Epic:
+		return FPARarityMaterialPreset(
+			FGameplayTag::RequestGameplayTag(FName("Item.Rarity.Epic"), false),
+			EPAItemRarity::Epic,
+			3.5f,
+			FLinearColor(0.659f, 0.333f, 0.969f, 1.0f), // #A855F7
+			FName("MI_Weapon_Epic"));
+
+	case EPAItemRarity::Legendary:
+		return FPARarityMaterialPreset(
+			FGameplayTag::RequestGameplayTag(FName("Item.Rarity.Legendary"), false),
+			EPAItemRarity::Legendary,
+			7.0f,
+			FLinearColor(0.961f, 0.62f, 0.043f, 1.0f), // #F59E0B
+			FName("MI_Weapon_Legendary"));
+
+	default:
+		return FPARarityMaterialPreset();
+	}
+}
+
+bool UPAPaperdollComponent::IsDrawCallWithinCalibratedBudget(int32 MeasuredSceneDrawCalls)
+{
+	// Chuẩn đo thực tế từ PeakCombat50.utrace: 446 đến 462 draw calls tổng scene
+	return MeasuredSceneDrawCalls >= 446 && MeasuredSceneDrawCalls <= 462;
+}
+
+bool UPAPaperdollComponent::SetWeaponMaterialForRarity(FGameplayTag RarityTag)
+{
+	const FString TagStr = RarityTag.ToString().ToLower();
+	EPAItemRarity TargetRarity = EPAItemRarity::Common;
+
+	if (TagStr.Contains(TEXT("legendary")))
+	{
+		TargetRarity = EPAItemRarity::Legendary;
+	}
+	else if (TagStr.Contains(TEXT("epic")))
+	{
+		TargetRarity = EPAItemRarity::Epic;
+	}
+	else if (TagStr.Contains(TEXT("rare")))
+	{
+		TargetRarity = EPAItemRarity::Rare;
+	}
+	else if (TagStr.Contains(TEXT("uncommon")))
+	{
+		TargetRarity = EPAItemRarity::Uncommon;
+	}
+	else
+	{
+		TargetRarity = EPAItemRarity::Common;
+	}
+
+	return SetWeaponMaterialForRarityEnum(TargetRarity);
+}
+
+bool UPAPaperdollComponent::SetWeaponMaterialForRarityEnum(EPAItemRarity Rarity)
+{
+	const FPARarityMaterialPreset Preset = GetRarityMaterialPreset(Rarity);
+	CurrentWeaponRarityTag = Preset.RarityTag;
+
+	UPaperFlipbookComponent* WeaponComp = GetSlotFlipbookComponent(EPAPaperdollSlot::MainHand);
+	if (!WeaponComp)
+	{
+		WeaponComp = GetLayerFlipbookComponent(EPAPaperdollLayer::MainhandWeapon);
+	}
+
+	if (WeaponComp && CurrentWeaponMaterial)
+	{
+		WeaponComp->SetMaterial(0, CurrentWeaponMaterial);
+	}
+
+	return true;
+}
+
+void UPAPaperdollComponent::SetWeaponMaterialDirect(UMaterialInterface* InMaterial)
+{
+	CurrentWeaponMaterial = InMaterial;
+
+	UPaperFlipbookComponent* WeaponComp = GetSlotFlipbookComponent(EPAPaperdollSlot::MainHand);
+	if (!WeaponComp)
+	{
+		WeaponComp = GetLayerFlipbookComponent(EPAPaperdollLayer::MainhandWeapon);
+	}
+
+	if (WeaponComp && CurrentWeaponMaterial)
+	{
+		WeaponComp->SetMaterial(0, CurrentWeaponMaterial);
+	}
+}

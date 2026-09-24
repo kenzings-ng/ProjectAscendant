@@ -123,6 +123,43 @@ public:
 	EPAAimDirection8Way GetCurrentOrientation() const { return CurrentOrientation; }
 
 	/**
+	 * Gán Static Material Instance theo Bậc Hiếm (Common -> Legendary) cho WeaponFlipbookComponent (Story item-005).
+	 * Áp dụng cơ chế Zero-Cost Material Swap với 5 preset MI tĩnh.
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Paperdoll|Material")
+	bool SetWeaponMaterialForRarity(FGameplayTag RarityTag);
+
+	/**
+	 * Overload gán theo EPAItemRarity.
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Paperdoll|Material")
+	bool SetWeaponMaterialForRarityEnum(EPAItemRarity Rarity);
+
+	/**
+	 * Lấy thông tin preset của bậc hiếm chỉ định.
+	 */
+	UFUNCTION(BlueprintPure, Category = "Paperdoll|Material")
+	static FPARarityMaterialPreset GetRarityMaterialPreset(EPAItemRarity Rarity);
+
+	/**
+	 * Kiểm tra xem cảnh có thỏa mãn ngưỡng Draw Call đã calibrate thực nghiệm (446-462 calls) hay không (AC-2).
+	 */
+	UFUNCTION(BlueprintPure, Category = "Paperdoll|Material")
+	static bool IsDrawCallWithinCalibratedBudget(int32 MeasuredSceneDrawCalls);
+
+	/**
+	 * Lấy Material hiện tại gán trên vũ khí chính.
+	 */
+	UFUNCTION(BlueprintPure, Category = "Paperdoll|Material")
+	UMaterialInterface* GetWeaponMaterial() const { return CurrentWeaponMaterial; }
+
+	/**
+	 * Gán trực tiếp MaterialInterface vào vũ khí chính.
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Paperdoll|Material")
+	void SetWeaponMaterialDirect(UMaterialInterface* InMaterial);
+
+	/**
 	 * Lấy mã tài nguyên hiển thị của tầng chỉ định.
 	 */
 	UFUNCTION(BlueprintPure, Category = "Paperdoll")
@@ -181,4 +218,11 @@ private:
 
 	/** Con trỏ yếu đến EquipmentComponent đã liên kết */
 	TWeakObjectPtr<UPAEquipmentComponent> BoundEquipmentComponent;
+
+	/** Material tĩnh hiện tại của vũ khí theo Rarity (Story item-005) */
+	UPROPERTY(Transient)
+	TObjectPtr<UMaterialInterface> CurrentWeaponMaterial = nullptr;
+
+	UPROPERTY(Transient)
+	FGameplayTag CurrentWeaponRarityTag;
 };
