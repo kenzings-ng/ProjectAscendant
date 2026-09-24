@@ -4,6 +4,8 @@
 #include "Combat/AscendantAttributeSet.h"
 #include "AbilitySystemComponent.h"
 #include "GameFramework/Actor.h"
+#include "Economy/PACurrencyComponent.h"
+#include "Itemization/PAServerItemGeneratorSubsystem.h"
 
 UPABlacksmithSubsystem::UPABlacksmithSubsystem()
 {
@@ -466,3 +468,273 @@ bool UPABlacksmithSubsystem::ApplyGemBonusToAttributeSet(
 
 	return false;
 }
+
+// -------------------------------------------------------------------------
+// Dual-Currency Server Transactions (Story item-007, EPIC-ITEMIZATION-001)
+// -------------------------------------------------------------------------
+
+bool UPABlacksmithSubsystem::ServerRepairItem(
+	FPASavedItemInstance& Item,
+	UPACurrencyComponent* Wallet,
+	int32 CostGold,
+	EPACraftingError& OutError)
+{
+	OutError = EPACraftingError::None;
+
+	if (!Wallet)
+	{
+		OutError = EPACraftingError::ServerRejected;
+		return false;
+	}
+
+	if (Item.CurrentDurability >= Item.MaxDurability)
+	{
+		OutError = EPACraftingError::MaxDurabilityAlready;
+		return false;
+	}
+
+	int32 ActualCost = CostGold;
+	if (ActualCost <= 0)
+	{
+		ActualCost = FPABlacksmithFormulas::CalculateRepairCost(200, Item.CurrentDurability, Item.MaxDurability);
+	}
+
+	// Kiểm tra số dư vàng nguyên tử TRƯỚC khi khấu trừ
+	if (Wallet->GetGold() < ActualCost)
+	{
+		OutError = EPACraftingError::InsufficientGold;
+		return false;
+	}
+
+	// Thực hiện khấu trừ vàng
+	EPACurrencyTransactionError CurrErr = EPACurrencyTransactionError::None;
+	if (!Wallet->DeductCurrency(EPACurrencyType::Gold, ActualCost, CurrErr))
+	{
+		OutError = EPACraftingError::InsufficientGold;
+		return false;
+	}
+
+	// Cập nhật trạng thái độ bền vật phẩm
+	Item.CurrentDurability = Item.MaxDurability;
+	return true;
+}
+
+bool UPABlacksmithSubsystem::ServerReforgeAffix(
+	FPASavedItemInstance& Item,
+	int32 AffixIndex,
+	int32 CostGold,
+	int32 CostShards,
+	EPAForgeTier ForgeTier,
+	UPACurrencyComponent* Wallet,
+	UPAServerItemGeneratorSubsystem* ItemGenerator,
+	EPACraftingError& OutError)
+{
+	OutError = EPACraftingError::None;
+
+	if (!Wallet || !ItemGenerator)
+	{
+		OutError = EPACraftingError::ServerRejected;
+		return false;
+	}
+
+	if (!Item.ActiveAffixes.IsValidIndex(AffixIndex))
+	{
+		OutError = EPACraftingError::InvalidItemType;
+		return false;
+	}
+
+	const int32 RequiredGold = (CostGold > 0) ? CostGold : 2000;
+	const int32 RequiredShards = (CostShards > 0) ? CostShards : 5;
+
+	// Kiểm tra số dư song tiền tệ nguyên tử TRƯỚC khi chạm vào ví
+	if (Wallet->GetGold() < RequiredGold)
+	{
+		OutError = EPACraftingError::InsufficientGold;
+		return false;
+	}
+
+	if (Wallet->GetAshShards() < RequiredShards)
+	{
+		OutError = EPACraftingError::InsufficientSkillShards;
+		return false;
+	}
+
+	// Lưu bản sao affix cũ để hoàn trả nếu xúc xắc thất bại
+	const FPAAffixInstance OldAffix = Item.ActiveAffixes[AffixIndex];
+	const bool bRerollSuccess = ItemGenerator->RerollAffix(Item, AffixIndex, ForgeTier);
+	if (!bRerollSuccess)
+	{
+		OutError = EPACraftingError::ServerRejected;
+		return false;
+	}
+
+	// Khấu trừ Vàng
+	EPACurrencyTransactionError CurrErr = EPACurrencyTransactionError::None;
+	if (!Wallet->DeductCurrency(EPACurrencyType::Gold, RequiredGold, CurrErr))
+	{
+		Item.ActiveAffixes[AffixIndex] = OldAffix;
+		OutError = EPACraftingError::InsufficientGold;
+		return false;
+	}
+
+	// Khấu trừ Tàn Trang (Ash Shards)
+	if (!Wallet->DeductCurrency(EPACurrencyType::AshShards, RequiredShards, CurrErr))
+	{
+		// Rollback vàng và khôi phục affix cũ
+		Wallet->AddCurrency(EPACurrencyType::Gold, RequiredGold, CurrErr);
+		Item.ActiveAffixes[AffixIndex] = OldAffix;
+		OutError = EPACraftingError::InsufficientSkillShards;
+		return false;
+	}
+
+	return true;
+}
+
+bool UPABlacksmithSubsystem::ServerAddSocket(
+	FPASavedItemInstance& Item,
+	int32 CostGold,
+	int32 CostShards,
+	EPAForgeTier ForgeTier,
+	UPACurrencyComponent* Wallet,
+	EPACraftingError& OutError)
+{
+	OutError = EPACraftingError::None;
+
+	if (!Wallet)
+	{
+		OutError = EPACraftingError::ServerRejected;
+		return false;
+	}
+
+	// 1. Kiểm tra tính hợp lệ của việc đục lỗ theo ForgeTier qua CanAddSocket
+	int32 TargetIndex = INDEX_NONE;
+	if (!CanAddSocket(Item, ForgeTier, TargetIndex, OutError))
+	{
+		return false;
+	}
+
+	// 2. Xác định chi phí theo từng slot (GDD §7.2) nếu không truyền vào cố định
+	int32 RequiredGold = CostGold;
+	int32 RequiredShards = CostShards;
+	if (RequiredGold <= 0 || RequiredShards <= 0)
+	{
+		if (TargetIndex == 0)
+		{
+			RequiredGold = (RequiredGold <= 0) ? 1000 : RequiredGold;
+			RequiredShards = (RequiredShards <= 0) ? 3 : RequiredShards;
+		}
+		else if (TargetIndex == 1)
+		{
+			RequiredGold = (RequiredGold <= 0) ? 3000 : RequiredGold;
+			RequiredShards = (RequiredShards <= 0) ? 8 : RequiredShards;
+		}
+		else // TargetIndex >= 2: Lỗ Prismatic thứ 3
+		{
+			RequiredGold = (RequiredGold <= 0) ? 15000 : RequiredGold;
+			RequiredShards = (RequiredShards <= 0) ? 20 : RequiredShards;
+		}
+	}
+
+	// 3. Kiểm tra số dư song tiền tệ TRƯỚC khi khấu trừ
+	if (Wallet->GetGold() < RequiredGold)
+	{
+		OutError = EPACraftingError::InsufficientGold;
+		return false;
+	}
+
+	if (Wallet->GetAshShards() < RequiredShards)
+	{
+		OutError = EPACraftingError::InsufficientSkillShards;
+		return false;
+	}
+
+	// 4. Khấu trừ Vàng
+	EPACurrencyTransactionError CurrErr = EPACurrencyTransactionError::None;
+	if (!Wallet->DeductCurrency(EPACurrencyType::Gold, RequiredGold, CurrErr))
+	{
+		OutError = EPACraftingError::InsufficientGold;
+		return false;
+	}
+
+	// 5. Khấu trừ Tàn Trang
+	if (!Wallet->DeductCurrency(EPACurrencyType::AshShards, RequiredShards, CurrErr))
+	{
+		Wallet->AddCurrency(EPACurrencyType::Gold, RequiredGold, CurrErr);
+		OutError = EPACraftingError::InsufficientSkillShards;
+		return false;
+	}
+
+	// 6. Mở khóa ô socket
+	if (!UnlockSocketAtIndex(Item, ForgeTier, TargetIndex, OutError))
+	{
+		Wallet->AddCurrency(EPACurrencyType::Gold, RequiredGold, CurrErr);
+		Wallet->AddCurrency(EPACurrencyType::AshShards, RequiredShards, CurrErr);
+		return false;
+	}
+
+	return true;
+}
+
+bool UPABlacksmithSubsystem::ServerRepairItemByUID(
+	TArray<FPASavedItemInstance>& InventoryItems,
+	const FGuid& ItemUID,
+	UPACurrencyComponent* Wallet,
+	int32 CostGold,
+	EPACraftingError& OutError)
+{
+	for (FPASavedItemInstance& Item : InventoryItems)
+	{
+		if (Item.ItemInstanceUID == ItemUID)
+		{
+			return ServerRepairItem(Item, Wallet, CostGold, OutError);
+		}
+	}
+
+	OutError = EPACraftingError::ItemNotFound;
+	return false;
+}
+
+bool UPABlacksmithSubsystem::ServerReforgeAffixByUID(
+	TArray<FPASavedItemInstance>& InventoryItems,
+	const FGuid& ItemUID,
+	int32 AffixIndex,
+	int32 CostGold,
+	int32 CostShards,
+	EPAForgeTier ForgeTier,
+	UPACurrencyComponent* Wallet,
+	UPAServerItemGeneratorSubsystem* ItemGenerator,
+	EPACraftingError& OutError)
+{
+	for (FPASavedItemInstance& Item : InventoryItems)
+	{
+		if (Item.ItemInstanceUID == ItemUID)
+		{
+			return ServerReforgeAffix(Item, AffixIndex, CostGold, CostShards, ForgeTier, Wallet, ItemGenerator, OutError);
+		}
+	}
+
+	OutError = EPACraftingError::ItemNotFound;
+	return false;
+}
+
+bool UPABlacksmithSubsystem::ServerAddSocketByUID(
+	TArray<FPASavedItemInstance>& InventoryItems,
+	const FGuid& ItemUID,
+	int32 CostGold,
+	int32 CostShards,
+	EPAForgeTier ForgeTier,
+	UPACurrencyComponent* Wallet,
+	EPACraftingError& OutError)
+{
+	for (FPASavedItemInstance& Item : InventoryItems)
+	{
+		if (Item.ItemInstanceUID == ItemUID)
+		{
+			return ServerAddSocket(Item, CostGold, CostShards, ForgeTier, Wallet, OutError);
+		}
+	}
+
+	OutError = EPACraftingError::ItemNotFound;
+	return false;
+}
+

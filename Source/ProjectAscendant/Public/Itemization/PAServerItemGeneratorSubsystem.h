@@ -64,6 +64,18 @@ public:
 		EPAForgeTier ForgeTier = EPAForgeTier::None
 	);
 
+	/**
+	 * Tẩy lại một dòng Affix cụ thể tại AffixIndex (Story item-007, GDD §7.2).
+	 * Giữ nguyên loại (Prefix / Suffix) theo affix hợp lệ trong ForgeTier hiện tại,
+	 * không sinh trùng tên với các affix đang có trên trang bị, áp dụng trần cứng HardCapPct.
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Itemization|Generator")
+	bool RerollAffix(
+		UPARAM(ref) FPASavedItemInstance& Item,
+		int32 AffixIndex,
+		EPAForgeTier ForgeTier = EPAForgeTier::None
+	);
+
 	/** Xác định bậc lò rèn mặc định dựa trên cấp độ trang bị (iLvl) */
 	UFUNCTION(BlueprintPure, Category = "Itemization|Generator")
 	static EPAForgeTier GetForgeTierFromItemLevel(int32 ItemLevel);

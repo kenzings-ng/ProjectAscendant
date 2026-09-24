@@ -51,7 +51,8 @@ enum class EPACraftingError : uint8
 	InventoryFull         = 17 UMETA(DisplayName = "Inventory Full"),
 	NoWardItem            = 18 UMETA(DisplayName = "No Blacksmith Ward Item In Inventory"),
 	MaxBackpackCapacity   = 19 UMETA(DisplayName = "Maximum Backpack Capacity Reached (60 Slots)"),
-	BackpackSequenceMismatch = 20 UMETA(DisplayName = "Backpack Must Be Upgraded Sequentially (40 -> 50 -> 60)")
+	BackpackSequenceMismatch = 20 UMETA(DisplayName = "Backpack Must Be Upgraded Sequentially (40 -> 50 -> 60)"),
+	InsufficientSkillShards  = 21 UMETA(DisplayName = "Insufficient Skill Shards")
 };
 
 /**

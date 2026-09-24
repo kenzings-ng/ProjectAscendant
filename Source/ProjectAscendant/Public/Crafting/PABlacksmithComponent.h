@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "Crafting/PABlacksmithTypes.h"
+#include "Itemization/PAAffixTypes.h"
+#include "Itemization/PASavedItemInstance.h"
 #include "PABlacksmithComponent.generated.h"
 
 class UPAInventoryComponent;
@@ -173,6 +175,24 @@ public:
 	UFUNCTION(Server, Reliable, WithValidation, Category = "ProjectAscendant|Crafting")
 	void Server_RequestExpandBackpack(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet);
 
+	// -------------------------------------------------------------------------
+	// Dual-Currency Server RPCs (Story item-007, EPIC-ITEMIZATION-001)
+	// -------------------------------------------------------------------------
+
+	void BindSavedItemInventory(TArray<FPASavedItemInstance>* InItems, UPACurrencyComponent* InWallet);
+
+	/** AC-1: Server RPC sửa chữa vật phẩm bằng ItemUID */
+	UFUNCTION(Server, Reliable, WithValidation, Category = "ProjectAscendant|Itemization")
+	void Server_RepairItem(const FGuid& ItemInstanceUID, int32 CostGold);
+
+	/** AC-2: Server RPC tẩy dòng Affix bằng ItemUID */
+	UFUNCTION(Server, Reliable, WithValidation, Category = "ProjectAscendant|Itemization")
+	void Server_ReforgeAffix(const FGuid& ItemInstanceUID, int32 AffixIndex, int32 CostGold, int32 CostShards);
+
+	/** AC-3: Server RPC đục lỗ khảm ngọc bằng ItemUID */
+	UFUNCTION(Server, Reliable, WithValidation, Category = "ProjectAscendant|Itemization")
+	void Server_AddSocket(const FGuid& ItemInstanceUID, int32 CostGold, int32 CostShards, EPAForgeTier InForgeTier);
+
 public:
 	UPROPERTY(BlueprintAssignable, Category = "ProjectAscendant|Crafting")
 	FPAOnItemRepaired OnItemRepaired;
@@ -209,4 +229,7 @@ protected:
 
 	/** Biến đè tỷ lệ tung xúc xắc ngẫu nhiên cho TDD Automation Tests */
 	float TestRollOverride = -1.0f;
+
+	TArray<FPASavedItemInstance>* BoundSavedItems = nullptr;
+	TWeakObjectPtr<UPACurrencyComponent> BoundWallet = nullptr;
 };

@@ -4,6 +4,10 @@
 #include "Inventory/PAInventoryComponent.h"
 #include "Inventory/PAItemStaticDataAsset.h"
 #include "Economy/PACurrencyComponent.h"
+#include "Crafting/PABlacksmithSubsystem.h"
+#include "Itemization/PAServerItemGeneratorSubsystem.h"
+#include "Engine/World.h"
+#include "Engine/GameInstance.h"
 #include "GameFramework/Actor.h"
 
 UPABlacksmithComponent::UPABlacksmithComponent()
@@ -833,3 +837,165 @@ void UPABlacksmithComponent::Server_RequestExpandBackpack_Implementation(UPAInve
 	EPACraftingError Err = EPACraftingError::None;
 	ExpandBackpackCapacity(Inventory, Wallet, Err);
 }
+
+void UPABlacksmithComponent::BindSavedItemInventory(TArray<FPASavedItemInstance>* InItems, UPACurrencyComponent* InWallet)
+{
+	BoundSavedItems = InItems;
+	BoundWallet = InWallet;
+}
+
+bool UPABlacksmithComponent::Server_RepairItem_Validate(const FGuid& ItemInstanceUID, int32 CostGold)
+{
+	return ItemInstanceUID.IsValid() && CostGold >= 0;
+}
+
+void UPABlacksmithComponent::Server_RepairItem_Implementation(const FGuid& ItemInstanceUID, int32 CostGold)
+{
+	if (!BoundSavedItems || !BoundWallet.IsValid())
+	{
+		OnCraftingFailed.Broadcast(EPACraftingError::ServerRejected);
+		return;
+	}
+
+	UPABlacksmithSubsystem* Subsystem = nullptr;
+	if (const UWorld* World = GetWorld())
+	{
+		if (const UGameInstance* GI = World->GetGameInstance())
+		{
+			Subsystem = GI->GetSubsystem<UPABlacksmithSubsystem>();
+		}
+	}
+
+	EPACraftingError Err = EPACraftingError::None;
+	if (Subsystem)
+	{
+		Subsystem->ServerRepairItemByUID(*BoundSavedItems, ItemInstanceUID, BoundWallet.Get(), CostGold, Err);
+	}
+	else
+	{
+		for (FPASavedItemInstance& Item : *BoundSavedItems)
+		{
+			if (Item.ItemInstanceUID == ItemInstanceUID)
+			{
+				if (Item.CurrentDurability >= Item.MaxDurability)
+				{
+					Err = EPACraftingError::MaxDurabilityAlready;
+					break;
+				}
+				if (BoundWallet->GetGold() < CostGold)
+				{
+					Err = EPACraftingError::InsufficientGold;
+					break;
+				}
+				EPACurrencyTransactionError CurrErr;
+				if (BoundWallet->DeductCurrency(EPACurrencyType::Gold, CostGold, CurrErr))
+				{
+					Item.CurrentDurability = Item.MaxDurability;
+				}
+				else
+				{
+					Err = EPACraftingError::InsufficientGold;
+				}
+				break;
+			}
+		}
+	}
+
+	if (Err != EPACraftingError::None)
+	{
+		OnCraftingFailed.Broadcast(Err);
+	}
+}
+
+bool UPABlacksmithComponent::Server_ReforgeAffix_Validate(const FGuid& ItemInstanceUID, int32 AffixIndex, int32 CostGold, int32 CostShards)
+{
+	return ItemInstanceUID.IsValid() && AffixIndex >= 0 && CostGold >= 0 && CostShards >= 0;
+}
+
+void UPABlacksmithComponent::Server_ReforgeAffix_Implementation(const FGuid& ItemInstanceUID, int32 AffixIndex, int32 CostGold, int32 CostShards)
+{
+	if (!BoundSavedItems || !BoundWallet.IsValid())
+	{
+		OnCraftingFailed.Broadcast(EPACraftingError::ServerRejected);
+		return;
+	}
+
+	UPABlacksmithSubsystem* BlacksmithSubsystem = nullptr;
+	UPAServerItemGeneratorSubsystem* GeneratorSubsystem = nullptr;
+	if (const UWorld* World = GetWorld())
+	{
+		if (const UGameInstance* GI = World->GetGameInstance())
+		{
+			BlacksmithSubsystem = GI->GetSubsystem<UPABlacksmithSubsystem>();
+			GeneratorSubsystem = GI->GetSubsystem<UPAServerItemGeneratorSubsystem>();
+		}
+	}
+
+	EPACraftingError Err = EPACraftingError::None;
+	if (BlacksmithSubsystem && GeneratorSubsystem)
+	{
+		EPAForgeTier ForgeTierConverted = EPAForgeTier::Tier1_Outpost;
+		switch (ForgeTier)
+		{
+		case EPABlacksmithTier::Tier2_Wilderness:
+			ForgeTierConverted = EPAForgeTier::Tier2_Field;
+			break;
+		case EPABlacksmithTier::Tier3_Sanctuary:
+			ForgeTierConverted = EPAForgeTier::Tier3_Forbidden;
+			break;
+		default:
+			ForgeTierConverted = EPAForgeTier::Tier1_Outpost;
+			break;
+		}
+
+		BlacksmithSubsystem->ServerReforgeAffixByUID(*BoundSavedItems, ItemInstanceUID, AffixIndex, CostGold, CostShards, ForgeTierConverted, BoundWallet.Get(), GeneratorSubsystem, Err);
+	}
+	else
+	{
+		Err = EPACraftingError::ServerRejected;
+	}
+
+	if (Err != EPACraftingError::None)
+	{
+		OnCraftingFailed.Broadcast(Err);
+	}
+}
+
+bool UPABlacksmithComponent::Server_AddSocket_Validate(const FGuid& ItemInstanceUID, int32 CostGold, int32 CostShards, EPAForgeTier InForgeTier)
+{
+	return ItemInstanceUID.IsValid() && CostGold >= 0 && CostShards >= 0;
+}
+
+void UPABlacksmithComponent::Server_AddSocket_Implementation(const FGuid& ItemInstanceUID, int32 CostGold, int32 CostShards, EPAForgeTier InForgeTier)
+{
+	if (!BoundSavedItems || !BoundWallet.IsValid())
+	{
+		OnCraftingFailed.Broadcast(EPACraftingError::ServerRejected);
+		return;
+	}
+
+	UPABlacksmithSubsystem* BlacksmithSubsystem = nullptr;
+	if (const UWorld* World = GetWorld())
+	{
+		if (const UGameInstance* GI = World->GetGameInstance())
+		{
+			BlacksmithSubsystem = GI->GetSubsystem<UPABlacksmithSubsystem>();
+		}
+	}
+
+	EPACraftingError Err = EPACraftingError::None;
+	if (BlacksmithSubsystem)
+	{
+		BlacksmithSubsystem->ServerAddSocketByUID(*BoundSavedItems, ItemInstanceUID, CostGold, CostShards, InForgeTier, BoundWallet.Get(), Err);
+	}
+	else
+	{
+		Err = EPACraftingError::ServerRejected;
+	}
+
+	if (Err != EPACraftingError::None)
+	{
+		OnCraftingFailed.Broadcast(Err);
+	}
+}
+

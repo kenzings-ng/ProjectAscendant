@@ -10,6 +10,8 @@
 #include "PABlacksmithSubsystem.generated.h"
 
 class UAscendantAttributeSet;
+class UPACurrencyComponent;
+class UPAServerItemGeneratorSubsystem;
 
 /**
  * UPABlacksmithSubsystem
@@ -146,4 +148,79 @@ public:
 		FName GemId,
 		UAscendantAttributeSet* AttributeSet,
 		bool bApply = true);
+
+	// -------------------------------------------------------------------------
+	// Dual-Currency Server Transactions (Story item-007, EPIC-ITEMIZATION-001)
+	// -------------------------------------------------------------------------
+
+	/**
+	 * AC-1 (item-007): Sửa chữa độ bền trang bị về 100% bằng giao dịch nguyên tử (Server-Authoritative).
+	 * Kiểm tra số dư Gold của Wallet. Nếu không đủ: trả về InsufficientGold, giữ nguyên số dư và độ bền.
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Itemization|Blacksmith")
+	bool ServerRepairItem(
+		UPARAM(ref) FPASavedItemInstance& Item,
+		UPACurrencyComponent* Wallet,
+		int32 CostGold,
+		EPACraftingError& OutError);
+
+	/**
+	 * AC-2 (item-007): Tẩy lại 1 dòng Affix trên trang bị tiêu hao 2,000 Gold + 5 Skill Shards (Ash Shards) (GDD §7.2).
+	 * Kiểm tra số dư song tiền tệ nguyên tử. Nếu thiếu bất kỳ loại nào: trả về mã lỗi tương ứng, rollback 100%, affixes giữ nguyên.
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Itemization|Blacksmith")
+	bool ServerReforgeAffix(
+		UPARAM(ref) FPASavedItemInstance& Item,
+		int32 AffixIndex,
+		int32 CostGold,
+		int32 CostShards,
+		EPAForgeTier ForgeTier,
+		UPACurrencyComponent* Wallet,
+		UPAServerItemGeneratorSubsystem* ItemGenerator,
+		EPACraftingError& OutError);
+
+	/**
+	 * AC-3 (item-007): Đục lỗ khảm ngọc trên trang bị theo Bậc Lò Rèn tiêu hao Gold + Shards (GDD §7.2).
+	 * Chi phí tự động xác định nếu CostGold/CostShards <= 0:
+	 * - Socket 1: 1,000 Gold + 3 Shards
+	 * - Socket 2: 3,000 Gold + 8 Shards
+	 * - Socket 3 (Prismatic): 15,000 Gold + 20 Shards
+	 * Kiểm tra điều kiện lò rèn và song tiền tệ. Nếu không đủ: giữ nguyên trạng thái socket (locked) và số dư.
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Itemization|Blacksmith")
+	bool ServerAddSocket(
+		UPARAM(ref) FPASavedItemInstance& Item,
+		int32 CostGold,
+		int32 CostShards,
+		EPAForgeTier ForgeTier,
+		UPACurrencyComponent* Wallet,
+		EPACraftingError& OutError);
+
+	/** Overloads thao tác tìm kiếm theo ItemUID trong danh sách hành trang */
+	bool ServerRepairItemByUID(
+		TArray<FPASavedItemInstance>& InventoryItems,
+		const FGuid& ItemUID,
+		UPACurrencyComponent* Wallet,
+		int32 CostGold,
+		EPACraftingError& OutError);
+
+	bool ServerReforgeAffixByUID(
+		TArray<FPASavedItemInstance>& InventoryItems,
+		const FGuid& ItemUID,
+		int32 AffixIndex,
+		int32 CostGold,
+		int32 CostShards,
+		EPAForgeTier ForgeTier,
+		UPACurrencyComponent* Wallet,
+		UPAServerItemGeneratorSubsystem* ItemGenerator,
+		EPACraftingError& OutError);
+
+	bool ServerAddSocketByUID(
+		TArray<FPASavedItemInstance>& InventoryItems,
+		const FGuid& ItemUID,
+		int32 CostGold,
+		int32 CostShards,
+		EPAForgeTier ForgeTier,
+		UPACurrencyComponent* Wallet,
+		EPACraftingError& OutError);
 };

@@ -479,3 +479,90 @@ bool UPAServerItemGeneratorSubsystem::ExecuteCheatGenerateItem(
 
 	return true;
 }
+
+bool UPAServerItemGeneratorSubsystem::RerollAffix(
+	FPASavedItemInstance& Item,
+	int32 AffixIndex,
+	EPAForgeTier ForgeTier)
+{
+	if (!Item.ActiveAffixes.IsValidIndex(AffixIndex))
+	{
+		return false;
+	}
+
+	if (CachedAffixDefinitions.Num() == 0)
+	{
+		InitializeAffixDefinitions(nullptr);
+	}
+
+	const EPAForgeTier EffectiveForgeTier = (ForgeTier != EPAForgeTier::None)
+		? ForgeTier
+		: GetForgeTierFromItemLevel(Item.ItemLevel);
+	const int32 AffixTier = GetAffixTierFromItemLevel(Item.ItemLevel);
+
+	const FPAAffixInstance OldAffix = Item.ActiveAffixes[AffixIndex];
+	const EPAAffixType TargetType = OldAffix.AffixType;
+
+	// Lọc danh sách candidate cùng loại (Prefix/Suffix), đã mở khóa tại EffectiveForgeTier,
+	// và không trùng tên với các affix khác đang có trên item
+	TArray<const FPAAffixDefinitionRow*> Candidates;
+	for (const FPAAffixDefinitionRow& Row : CachedAffixDefinitions)
+	{
+		if (Row.AffixType == TargetType && Row.IsUnlockedAtForgeTier(EffectiveForgeTier))
+		{
+			bool bAlreadyOnItem = false;
+			for (int32 i = 0; i < Item.ActiveAffixes.Num(); ++i)
+			{
+				if (i != AffixIndex && Item.ActiveAffixes[i].AffixId == Row.AffixName)
+				{
+					bAlreadyOnItem = true;
+					break;
+				}
+			}
+			if (!bAlreadyOnItem)
+			{
+				Candidates.Add(&Row);
+			}
+		}
+	}
+
+	if (Candidates.Num() == 0)
+	{
+		return false;
+	}
+
+	const int32 PickIdx = FMath::RandRange(0, Candidates.Num() - 1);
+	const FPAAffixDefinitionRow* Row = Candidates[PickIdx];
+
+	float MinVal = 0.0f;
+	float MaxVal = 0.0f;
+	if (!Row->GetTierRange(AffixTier, MinVal, MaxVal))
+	{
+		for (int32 FallbackTier = 1; FallbackTier <= 4; ++FallbackTier)
+		{
+			if (Row->GetTierRange(FallbackTier, MinVal, MaxVal))
+			{
+				break;
+			}
+		}
+	}
+
+	float RolledVal = FMath::FRandRange(MinVal, MaxVal);
+	if (MaxVal <= 1.0f)
+	{
+		RolledVal = FMath::RoundToFloat(RolledVal * 100.0f) / 100.0f;
+	}
+	else
+	{
+		RolledVal = FMath::RoundToFloat(RolledVal * 10.0f) / 10.0f;
+	}
+
+	if (Row->HardCapPct > 0.0f && RolledVal > Row->HardCapPct)
+	{
+		RolledVal = Row->HardCapPct;
+	}
+
+	Item.ActiveAffixes[AffixIndex] = FPAAffixInstance(Row->AffixName, Row->AffixType, RolledVal, AffixTier);
+	return true;
+}
+
