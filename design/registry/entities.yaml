@@ -292,6 +292,185 @@ items:
     added: 2026-09-15
     revised: ""
 
+  # ─── 7 WEAPON FAMILIES (ITEMIZATION) ───────────────────────────
+  - name: weapon_family_1h_blades
+    display_name: "Dòng Kiếm 1 Tay (1H Blades)"
+    status: active
+    source: design/gdd/itemization.md
+    referenced_by:
+      - design/gdd/itemization.md
+      - design/gdd/foundational-classes.md
+      - design/gdd/advanced-classes.md
+    category: equipment_weapon
+    stackable: false
+    attributes:
+      archetype: "Weapon.1H.Blade"
+      classes: ["Vanguard", "Templar", "Void Blade", "God Slayer"]
+      base_speed: 1.10
+      hitbox_arc: 120
+    added: 2026-09-24
+    revised: ""
+
+  - name: weapon_family_2h_heavy
+    display_name: "Dòng Đại Khí Hạng Nặng (2H Heavy)"
+    status: active
+    source: design/gdd/itemization.md
+    referenced_by:
+      - design/gdd/itemization.md
+      - design/gdd/foundational-classes.md
+      - design/gdd/advanced-classes.md
+    category: equipment_weapon
+    stackable: false
+    attributes:
+      archetype: "Weapon.2H.Heavy"
+      classes: ["Berserker", "Vanguard", "Dragon Knight"]
+      base_speed: 0.75
+      hitbox_arc: 160
+      hyper_armor: true
+    added: 2026-09-24
+    revised: ""
+
+  - name: weapon_family_polearms
+    display_name: "Dòng Thương & Kích (Polearms)"
+    status: active
+    source: design/gdd/itemization.md
+    referenced_by:
+      - design/gdd/itemization.md
+      - design/gdd/advanced-classes.md
+      - design/gdd/hidden-classes.md
+    category: equipment_weapon
+    stackable: false
+    attributes:
+      archetype: "Weapon.2H.Polearm"
+      classes: ["Dragon Knight", "God Slayer"]
+      base_speed: 0.85
+      range_cm: 400
+    added: 2026-09-24
+    revised: ""
+
+  - name: weapon_family_bows
+    display_name: "Dòng Cung Xạ Kích (Ranged Bows)"
+    status: active
+    source: design/gdd/itemization.md
+    referenced_by:
+      - design/gdd/itemization.md
+      - design/gdd/foundational-classes.md
+    category: equipment_weapon
+    stackable: false
+    attributes:
+      archetype: "Weapon.2H.Bow"
+      classes: ["Ranger"]
+      base_speed: 0.90
+      range_cm: 1400
+    added: 2026-09-24
+    revised: ""
+
+  - name: weapon_family_twin_daggers
+    display_name: "Dòng Song Đoản Kiếm (Twin Daggers)"
+    status: active
+    source: design/gdd/itemization.md
+    referenced_by:
+      - design/gdd/itemization.md
+      - design/gdd/foundational-classes.md
+      - design/gdd/advanced-classes.md
+    category: equipment_weapon
+    stackable: false
+    attributes:
+      archetype: "Weapon.Dual.Daggers"
+      classes: ["Shadowblade", "Ranger"]
+      base_speed: 2.20
+      crit_multiplier: 1.50
+    added: 2026-09-24
+    revised: ""
+
+  - name: weapon_family_staves
+    display_name: "Dòng Trượng Ma Thuật (Magic Staves)"
+    status: active
+    source: design/gdd/itemization.md
+    referenced_by:
+      - design/gdd/itemization.md
+      - design/gdd/foundational-classes.md
+      - design/gdd/advanced-classes.md
+    category: equipment_weapon
+    stackable: false
+    attributes:
+      archetype: "Weapon.2H.Staff"
+      classes: ["Arcanist", "Elementalist"]
+      base_speed: 0.95
+      magic_scaling: true
+    added: 2026-09-24
+    revised: ""
+
+  - name: weapon_family_maces_relics
+    display_name: "Dòng Chùy & Pháp Bảo (Maces & Relics)"
+    status: active
+    source: design/gdd/itemization.md
+    referenced_by:
+      - design/gdd/itemization.md
+      - design/gdd/foundational-classes.md
+      - design/gdd/advanced-classes.md
+    category: equipment_weapon
+    stackable: false
+    attributes:
+      archetype: "Weapon.1H.Mace"
+      classes: ["Acolyte", "Templar", "Chronomancer"]
+      base_speed: 1.00
+      posture_stagger_bonus: 0.25
+    added: 2026-09-24
+    revised: ""
+
+  # ─── 3 ARMOR WEIGHTS (ITEMIZATION) ─────────────────────────────
+  - name: armor_base_heavy_plate
+    display_name: "Giáp Trụ Hạng Nặng (Heavy Plate Base)"
+    status: active
+    source: design/gdd/itemization.md
+    referenced_by:
+      - design/gdd/itemization.md
+      - design/gdd/foundational-classes.md
+    category: equipment_armor
+    stackable: false
+    attributes:
+      weight_class: "Heavy"
+      classes: ["Vanguard", "Templar", "Berserker", "Dragon Knight"]
+      damage_reduction_phys: 0.35
+      stamina_penalty: 0.15
+    added: 2026-09-24
+    revised: ""
+
+  - name: armor_base_medium_leather
+    display_name: "Giáp Da Hạng Vừa (Medium Leather Base)"
+    status: active
+    source: design/gdd/itemization.md
+    referenced_by:
+      - design/gdd/itemization.md
+      - design/gdd/foundational-classes.md
+    category: equipment_armor
+    stackable: false
+    attributes:
+      weight_class: "Medium"
+      classes: ["Ranger", "Shadowblade", "God Slayer"]
+      damage_reduction_phys: 0.20
+      dash_stamina_bonus: 0.10
+    added: 2026-09-24
+    revised: ""
+
+  - name: armor_base_light_cloth
+    display_name: "Pháp Y Hạng Nhẹ (Light Cloth Base)"
+    status: active
+    source: design/gdd/itemization.md
+    referenced_by:
+      - design/gdd/itemization.md
+      - design/gdd/foundational-classes.md
+    category: equipment_armor
+    stackable: false
+    attributes:
+      weight_class: "Light"
+      classes: ["Arcanist", "Elementalist", "Chronomancer", "Acolyte"]
+      damage_reduction_magic: 0.30
+      mana_regen_bonus: 0.25
+    added: 2026-09-24
+    revised: ""
+
 
 # Example:
 #
@@ -380,6 +559,20 @@ formulas:
     output_range: [20.0, 400.0]
     expression: "round(base_attack * (1.0 + 0.05 * level))"
     added: 2026-09-15
+    revised: ""
+
+  - name: item_level_base_damage_scaling
+    status: active
+    source: design/gdd/itemization.md
+    referenced_by:
+      - design/gdd/itemization.md
+      - design/gdd/blacksmithing-system.md
+    variables:
+      - base_damage
+      - item_level
+    output_range: [20.0, 150.0]
+    expression: "base_damage * (1.0 + 0.075 * (item_level - 1))"
+    added: 2026-09-24
     revised: ""
 
   - name: repair_cost_formula
