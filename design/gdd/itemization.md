@@ -531,3 +531,130 @@ Các thực thể mới được đăng ký chính thức vào [`design/registry
       base_speed: 1.00
       posture_stagger_bonus: 0.25
 ```
+
+---
+
+## 10. Quy Chuẩn Nhận Diện Thị Giác (Visual Identification Rules)
+
+> **Phụ trách**: Lead Technical Art Director  
+> **Tham chiếu**: [`design/art/art-bible.md`](file:///mnt/Data/Projects/project-games/ProjectAscendant/design/art/art-bible.md) (Mục 1, 2, 4) & [`references/anti-ai-craft-guide.md`](file:///home/kenzings/.gemini/config/skills/game-art-studio/references/anti-ai-craft-guide.md)  
+> **Mục tiêu**: Thiết lập hệ thống mã màu, hiệu ứng hạt Niagara, và cơ chế chuyển đổi Palette LUT cho 5 Bậc Hiếm (Common $\rightarrow$ Legendary) đảm bảo tính thẩm mỹ HD-2D, chống nhầm lẫn với cơ chế chiến đấu, tối ưu hóa hiệu năng MMO, và hỗ trợ người chơi mù màu (Colorblind Accessibility).
+
+---
+
+### 10.1 Biên Bản Đệ Trình & Phân Xử Xung Đột (Creative Director Conflict-Resolution Protocol)
+
+| Vấn Đề Xung Đột Hệ Thống (Cross-System Conflict) | Hệ Thống Bị Ảnh Hưởng | Rủi Ro Gameplay Trong Thực Tế | Phán Quyết Của Ban Giám Đốc Sáng Tạo (Creative Director Ruling) |
+| :--- | :--- | :--- | :--- |
+| **Xung đột tín hiệu Đỏ Thẫm giữa Rarity và Wanted PK System** | • `itemization.md` (Độ hiếm trang bị)<br>• `pvp-wanted-system.md` (Đánh dấu đồ tể)<br>• `combat-system.md` (Decal đòn đánh Boss) | Trong combat nhịp độ cao (Isometric $-45^\circ$, 12–14m), nếu trang bị bậc cao dùng màu Đỏ (như Immortal/Mythic ở các game ARPG truyền thống), người chơi sẽ **nhầm lẫn cột sáng loot với hào quang sát khí của kẻ PK (Red-Name PK)** hoặc **vùng báo động đòn quét tử thần của Boss (Telegraph Decal)** $\rightarrow$ Gây hoảng loạn né nhầm hoặc target sai mục tiêu. | 🛑 **QUYẾT ĐỊNH CÁCH LY MÀU ĐỎ (STRICT COLOR QUARANTINE):**<br>1. **Màu Đỏ Thẫm (`#9E1A1A` / `#EF4444`) được phong tỏa độc quyền** cho tín hiệu: Sát khí PK Wanted, Vạch máu quái vật, và Decal cảnh báo đòn Boss.<br>2. **Hệ thống Itemization TUYỆT ĐỐI KHÔNG DÙNG MÀU ĐỎ** cho bất kỳ bậc hiếm nào. Bậc cao nhất (Legendary) được chốt cứng ở sắc **Hoàng Kim Hổ Phách (`#F59E0B` / `#E6A122`)** kết hợp lõi trắng sáng. |
+
+---
+
+### 10.2 Bảng Mã Màu 5 Bậc Hiếm & Giải Pháp Tương Phản 3 Vùng Thế Giới
+
+Để các vật phẩm rơi ngoài thế giới (Loot Drops) và icon giao diện không bị "chìm màu" hay hòa lẫn vào bối cảnh của 3 đại địa khu (Verdant Frontier, Ashen Wilderness, Forbidden Sanctum):
+
+```
+BẢNG MÃ MÀU CHUẨN HÓA CHO 5 BẬC HIẾM:
+[Common]    #E8ECEB (Sacred Bone White) / #9CA3AF (Slate) ── Tương phản cao trên đá xỉn
+[Uncommon]  #10B981 (Electric Emerald)                    ── Tươi sáng, rực rỡ hơn cỏ xanh
+[Rare]      #3B82F6 (Cobalt Sapphire)                     ── Sắc xanh dương đậm, tách biệt tuyệt đối
+[Epic]      #A855F7 (Astral Violet)                       ── Tím phát quang ma mị
+[Legendary] #F59E0B (Solar Amber Gold)                    ── Vàng hổ phách viền plasma cyan
+```
+
+#### Ma Trận Xử Lý Tương Phản Đa Bối Cảnh (Multi-Biome Contrast Matrix):
+
+| Bậc Hiếm | Mã Hex Chuẩn | Thử Thách Bối Cảnh (Biome Stress Test) | Giải Pháp Xử Lý Đồ Họa Của Studio (Art Direction Fix) |
+| :--- | :---: | :--- | :--- |
+| **Common** | `#E8ECEB` | **Ashen Wilderness:** Bụi tro xám và đá đen dễ nuốt chửng màu xám thường `#9CA3AF`. | Không dùng màu xám đục. Dùng **Trắng Xương Khô (`#E8ECEB`)** có độ sáng Value $V \ge 90\%$ kết hợp viền ngoài than chì 1px `#121316`. |
+| **Uncommon** | `#10B981` | **Verdant Frontier:** Cỏ cây xanh tươi làm chìm màu xanh lá cây tiêu chuẩn `#22C55E`. | Nâng quang phổ sang **Ngọc Lục Bảo Điện Tử (Electric Mint `#10B981`)** có độ bão hòa cao, pha thêm hạt lân tinh trắng ở tâm icon. |
+| **Rare** | `#3B82F6` | An toàn trên cả 3 bối cảnh. | Duy trì sắc xanh **Cobalt Sapphire**, viền đổ bóng xanh navy đậm `#1E3A8A`. |
+| **Epic** | `#A855F7` | An toàn trên nền xanh và xám; cần chú ý nền đá tím tha hóa. | Dùng màu **Tím Thạch Anh Sáng (`#A855F7`)**, bổ sung viền phát quang ánh bạc (Silver Specular Edge). |
+| **Legendary** | `#F59E0B` | **Forbidden Sanctum:** Dòng dung nham cam-đỏ và đá núi lửa dễ làm lẫn cột sáng vàng cam. | **Hiệu Ứng Viền Lạnh Nghịch Sắc (Chromatic Inversion Rim):** Lõi cột sáng là Hoàng Kim `#F59E0B`, nhưng **viền ngoài (Outer Rim) được bọc luồng hào quang Xanh Thiên Thanh / Tím Cyan (`#818CF8`)** $\rightarrow$ Cắt ngọt qua nền nham thạch nóng bỏng. |
+
+---
+
+### 10.3 Kiểm Soát Hiệu Năng Hạt Niagara Trong Trận Đánh World Boss (Crowded Loot Drop)
+
+Khi 20–50 người chơi hạ gục một World Boss, lượng vật phẩm rơi ra đất cùng lúc có thể đạt từ **150 đến 250 items**. Nếu mỗi item đều sở hữu hệ thống hạt Niagara độc lập kèm Point Light và va chạm vật lý, GPU sẽ bị nghẽn Overdraw dẫn đến tụt tụt khung hình thảm hại.
+
+#### Kiến Trúc Cắt Giảm Ngân Sách Hạt Theo Phân Cấp (Particle Budget Hierarchy):
+
+```
+HỆ THỐNG CỘT SÁNG & HẠT RƠI NGOÀI THẾ GIỚI:
+├── Common & Uncommon : 0 Hạt Niagara. Decal phẳng 2D dưới đất (Static Unlit Shader).
+├── Rare              : 0 Hạt Niagara. Vòng tròn sóng xung kích 2D nhấp nháy mờ (Material Panner).
+├── Epic              : Mesh Cột Sáng (Unlit Cylinder) + Tối đa 12 hạt khói tím (GPU Sprites, No Light).
+└── Legendary         : Mesh Cột Sáng Đa Tầng + 16 hạt tàn tro vàng kim + 1 Point Light CỤC BỘ (Chỉ sáng cho người sở hữu).
+```
+
+1. **Thay thế Particle Beam bằng Emissive Cylinder Mesh:** Cột sáng bốc lên trời của đồ Epic và Legendary **KHÔNG PHẢI** là hạt Niagara bắn liên tục, mà là một **khối trụ 3D (Cylinder Static Mesh)** áp vật liệu cuộn UV phát sáng (Emissive Scrolling Shader). Chi phí render gần như bằng 0.
+2. **Cơ Chế Phân Luồng Loot Riêng Tư (Instanced Client-Side Culling):**
+   - Server quản lý quyền nhặt đồ.
+   - Client của người chơi **CHỈ RENDER** cột sáng và hiệu ứng phát quang cho những món đồ thuộc về chính người chơi đó (Private Instanced Loot).
+   - Với những món đồ tự do nhặt chung (Contested FFA Loot), hệ thống gộp toàn bộ hạt vào một `UNiagaraDataChannel` duy nhất chạy chung cho toàn màn chơi.
+3. **Cắt Giảm Khoảng Cách (Distance-Based LOD):**
+   - Cự ly $> 25\text{m}$: Tắt toàn bộ hạt lơ lửng, chỉ giữ lại icon 2D trên minimap.
+   - Cự ly $12\text{m} - 25\text{m}$: Giảm 70% mật độ hạt tàn tro.
+
+---
+
+### 10.4 Thiết Kế Đa Kênh Cho Người Mù Màu (Colorblind Accessibility Framework)
+
+Tuân thủ nghiêm ngặt nguyên tắc của Art Bible: *"Màu sắc không bao giờ đứng đơn độc trong cơ chế gameplay cốt lõi."* Người chơi mắc các chứng mù màu (Protanopia, Deuteranopia, Tritanopia) hoặc nhìn màn hình đen trắng đều nhận diện được độ hiếm nhờ **4 kênh hỗ trợ độc lập**:
+
+```
+ĐA KÊNH NHẬN DIỆN VẬT PHẨM:
+[Kênh 1: Màu Sắc]    ──> [Kênh 2: Hình Học Pip] ──> [Kênh 3: Ký Hiệu La Mã] ──> [Kênh 4: Âm Thanh Stinger]
+```
+
+1. **Hệ Thống Ký Hiệu Hình Học Bất Biến (Geometric Pip Badges):**
+   Mỗi thẻ trang bị trên UI và biểu tượng nổi trên đầu vật phẩm rơi dưới đất đều gắn một biểu tượng hình học riêng biệt:
+   - **Common (Tier 1):** Hình Tròn Đơn `●` *(Circle)*.
+   - **Uncommon (Tier 2):** Hình Quả Trám Đôi `◆` *(Diamond)*.
+   - **Rare (Tier 3):** Hình Tam Giác Hướng Lên `▲` *(Chevron Triangle)*.
+   - **Epic (Tier 4):** Hình Đa Giác Ngũ Giác `⬟` *(Faceted Pentagon)*.
+   - **Legendary (Tier 5):** Vương Miện / Ngôi Sao Thái Dương `★` *(Sunburst Crown)*.
+2. **Tiền Tố Chữ Số La Mã Bắt Buộc (Roman Numeral Tag):**
+   Tên vật phẩm và Tooltip luôn hiển thị kèm tiền tố cấp bậc: `[I] Kiếm Sắt`, `[II] Thép Mài`, `[III] Băng Tinh`, `[IV] Hư Không Trượng`, `[V] Thần Binh Tối Thượng`.
+3. **Âm Thanh Rơi Đồ Phân Tầng (Acoustic Stinger Hierarchy):**
+   Mỗi khi trang bị chạm đất, hệ thống phát ra một âm thanh vang đặc trưng (Audio Cue) với tần số cao dần:
+   - Common/Uncommon: Tiếng kim loại va chạm đá khô khốc (Wood/Metal click, $250\text{Hz}$).
+   - Rare: Hợp âm đơn thanh thoát ($520\text{Hz}$, Sound of Glass/Steel).
+   - Epic: Hợp âm vang dội kéo dài $1.5\text{s}$ ($880\text{Hz}$ có tiếng chuông ngân ma thuật).
+   - Legendary: Tiếng chuông thánh ca bùng nổ kết hợp tiếng rít thiên thạch xé gió ($1500\text{Hz}$ dội vang toàn đấu trường).
+
+---
+
+### 10.5 Đề Xuất 3 Phương Án Áp Dụng Palette LUT Swap Lên Sprite Nhân Vật
+
+Về câu hỏi: *"Cơ chế LUT Swap áp dụng lên sprite: chỉ đổi màu viền/icon UI, hay đổi cả tint trên sprite equipped ngoài world?"*
+
+Dưới đây là 3 phương án được Art Director phân tích kèm ưu/nhược điểm:
+
+```
+SO SÁNH 3 PHƯƠNG ÁN ÁP DỤNG BẢNG MÀU LÊN THỰC THỂ:
+├── Phương án 1: Tách Biệt Tuyệt Đối (UI Only) ── An toàn kỹ thuật, bảo toàn silhouette class.
+├── Phương án 2: Kép Lưỡng Tầng (Dual-Layer: UI + Weapon Edge Emissive) ── ⭐ ĐỀ XUẤT CHÍNH THỨC.
+└── Phương án 3: Phủ Toàn Thân (Global Sprite Tint) ── Phô trương nhưng phá hủy mỹ thuật.
+```
+
+#### Bảng Đánh Giá Chi Tiết 3 Phương Án:
+
+| Tiêu Chí Đánh Giá | Phương Án 1: Tách Biệt Tuyệt Đối (UI Only) | Phương Án 2: Kép Lưỡng Tầng (Dual-Layer: UI + Weapon Emissive Edge)<br>⭐ *(Khuyên Dùng)* | Phương Án 3: Phủ Toàn Thân (Global Sprite Tint) |
+| :--- | :--- | :--- | :--- |
+| **Mô tả kỹ thuật** | • Độ hiếm **chỉ đổi màu viền, card và icon UI**.<br>• Sprite nhân vật và vũ khí ngoài world **giữ nguyên 100% màu vẽ tay theo Forge Tier** (Outpost/Field/Forbidden). | • UI đổi đầy đủ màu viền và card.<br>• **Giáp nhân vật giữ nguyên** theo Forge Tier (bảo vệ nhận diện Class).<br>• **Riêng lưỡi vũ khí (Weapon Blade)** được shader tráo dải màu rãnh sáng (Emissive Runic Fuller) và phát vệt chém (Trail VFX) theo Rarity. | • Toàn bộ sprite nhân vật (cả giáp lẫn người) bị áp một lớp color-tint toàn thân (Xanh lục / Xanh lam / Tím / Vàng) tương ứng với món đồ cao nhất đang mặc. |
+| **Ưu điểm** | • Tuyệt đối không làm biến dạng nét vẽ pixel thủ công.<br>• Chi phí shader rẻ nhất, không cần viết custom material cho PaperZD flipbooks.<br>• 0% nguy cơ nhầm lẫn màu với cơ chế Wanted PK. | • **Cân bằng hoàn hảo**: Người chơi thấy vũ khí của mình rực sáng hoàng kim ngoài thế giới để "khoe đồ", trong khi giáp trụ vẫn giữ đúng chất lính đánh thuê u tối.<br>• Nhận diện class từ xa không bị suy giảm.<br>• Không bao giờ nhầm với hào quang đỏ thẫm của Wanted PK. | • Rất nổi bật, nhìn lướt qua từ xa là biết ngay người chơi "đầy mình đồ Legendary". |
+| **Nhược điểm** | • Người chơi nhặt được kiếm Legendary đắt giá nhưng cầm ngoài thế giới nhìn vẫn giống cây kiếm Common (nếu cùng Forge Tier), gây giảm hưng phấn sở hữu. | • Cần thiết lập Material Instance động trên PaperZD Flipbook Component của lớp Weapon Sprite (thêm 1 texture mask rãnh lưỡi kiếm). | • **Phá hủy ngôn ngữ mỹ thuật**: Nhân vật trông như "kẹo dẻo đổ màu", làm mất hết chất retro pixel art chân thực.<br>• Xung đột nghiêm trọng với màu phe phái và màu cờ PvP. |
+| **Đánh giá của Art Director** | Khả thi cho bản Prototype ban đầu. | 🏆 **KHUYẾN NGHỊ LỰA CHỌN CHO BẢN CHÍNH THỨC (PRODUCTION)**. | ❌ **BÁC BỎ HOÀN TOÀN (REJECTED)**. |
+
+---
+
+### 10.6 Kết Luận & Quyết Định Triển Khai (Actionable Directive)
+
+1. **Chốt Bảng Màu Rarity:** Tuyệt đối cấm sử dụng sắc đỏ. Cố định 5 mã màu: `#E8ECEB` (Trắng Xương), `#10B981` (Ngọc Lục), `#3B82F6` (Lam Ngọc), `#A855F7` (Tím Huyền), và `#F59E0B` (Hoàng Kim viền Cyan).
+2. **Chốt Kiến Trúc Niagara:** Toàn bộ cột sáng loot drop ngoài world dùng Emissive Cylinder Mesh + Client-Side Instanced Culling. Zero hạt Niagara cho đồ Common/Uncommon để bảo vệ FPS trong trận đánh World Boss 50 người.
+3. **Chốt Áp Dụng Phương Án 2 (Dual-Layer):** Lớp Giáp Paperdoll giữ nguyên màu theo Forge Tier; chỉ áp dụng tráo màu rãnh sáng và vệt chém phát quang lên lớp Vũ Khí (Weapon Layer).
+4. **Chốt Bộ Ký Hiệu Hình Học:** Tích hợp bộ biểu tượng hình học (`●`, `◆`, `▲`, `⬟`, `★`) và tiền tố La Mã `[I]` đến `[V]` vào CommonUI Tooltip và Billboard Loot Indicator.
+
