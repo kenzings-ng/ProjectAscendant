@@ -28,7 +28,7 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(
 namespace
 {
 	/** Sai số tương đối cho phép ở phép so sánh dấu phẩy động */
-	constexpr float kTolerance = 0.01f;
+	constexpr float kVitalsTolerance = 0.01f;
 
 	/** Giả lập nhiều tick liên tục cho Model.Update() */
 	void SimulateTicks(FPAVitalsModel& Model, float TotalTime, float StepSize = 0.016f)
@@ -57,25 +57,25 @@ bool FPAPlayerVitalsTests::RunTest(const FString& Parameters)
 
 		// QA Test 1: MaxHealth 100, Health 80 → 0.80
 		Model.SetHealth(80.0f, 100.0f);
-		TestNearlyEqual(TEXT("AC1: HealthPercent 80/100 = 0.80"), Model.GetHealthPercent(), 0.80f, kTolerance);
+		TestNearlyEqual(TEXT("AC1: HealthPercent 80/100 = 0.80"), Model.GetHealthPercent(), 0.80f, kVitalsTolerance);
 
 		// Stamina 60/200 → 0.30
 		Model.SetStamina(60.0f, 200.0f);
-		TestNearlyEqual(TEXT("AC1: StaminaPercent 60/200 = 0.30"), Model.GetStaminaPercent(), 0.30f, kTolerance);
+		TestNearlyEqual(TEXT("AC1: StaminaPercent 60/200 = 0.30"), Model.GetStaminaPercent(), 0.30f, kVitalsTolerance);
 
 		// Mana 0/100 → 0.0
 		Model.SetMana(0.0f, 100.0f);
-		TestNearlyEqual(TEXT("AC1: ManaPercent 0/100 = 0.0"), Model.GetManaPercent(), 0.0f, kTolerance);
+		TestNearlyEqual(TEXT("AC1: ManaPercent 0/100 = 0.0"), Model.GetManaPercent(), 0.0f, kVitalsTolerance);
 
 		// Edge: MaxHealth = 0 → phòng chia 0 → 0.0
 		Model.SetHealth(50.0f, 0.0f);
 		// MaxHealth clamped to 1.0f, so 50/1 → clamped to 1.0
 		// Actually: SetHealth clamps MaxHealth = Max(1, 0) = 1, CurrentHealth = Clamp(50, 0, 1) = 1.0
-		TestNearlyEqual(TEXT("AC1: MaxHealth=0 guard → percent 1.0"), Model.GetHealthPercent(), 1.0f, kTolerance);
+		TestNearlyEqual(TEXT("AC1: MaxHealth=0 guard → percent 1.0"), Model.GetHealthPercent(), 1.0f, kVitalsTolerance);
 
 		// Full health → 1.0
 		Model.SetHealth(100.0f, 100.0f);
-		TestNearlyEqual(TEXT("AC1: Full health → 1.0"), Model.GetHealthPercent(), 1.0f, kTolerance);
+		TestNearlyEqual(TEXT("AC1: Full health → 1.0"), Model.GetHealthPercent(), 1.0f, kVitalsTolerance);
 	}
 
 	// ===========================================================
@@ -87,12 +87,12 @@ bool FPAPlayerVitalsTests::RunTest(const FString& Parameters)
 
 		// --- Mất máu: ghost giữ vị trí cũ trong 0.40s ---
 		Model.SetHealth(50.0f, 100.0f);
-		TestNearlyEqual(TEXT("AC2: Health drops immediately to 0.50"), Model.GetHealthPercent(), 0.50f, kTolerance);
-		TestNearlyEqual(TEXT("AC2: Ghost retains old position 1.0"), Model.GetGhostHealthPercent(), 1.0f, kTolerance);
+		TestNearlyEqual(TEXT("AC2: Health drops immediately to 0.50"), Model.GetHealthPercent(), 0.50f, kVitalsTolerance);
+		TestNearlyEqual(TEXT("AC2: Ghost retains old position 1.0"), Model.GetGhostHealthPercent(), 1.0f, kVitalsTolerance);
 
 		// QA Test 2: Tại t = 0.20s ghost vẫn giữ nguyên (delay 0.40s chưa hết)
 		SimulateTicks(Model, 0.20f);
-		TestNearlyEqual(TEXT("AC2: Ghost at t=0.20s still ~1.0 (delay)"), Model.GetGhostHealthPercent(), 1.0f, kTolerance);
+		TestNearlyEqual(TEXT("AC2: Ghost at t=0.20s still ~1.0 (delay)"), Model.GetGhostHealthPercent(), 1.0f, kVitalsTolerance);
 
 		// Tại t = 0.40s delay vừa hết, ghost bắt đầu di chuyển nhưng chưa xa
 		SimulateTicks(Model, 0.20f);
@@ -112,7 +112,7 @@ bool FPAPlayerVitalsTests::RunTest(const FString& Parameters)
 
 		// --- Hồi máu: ghost bám sát ngay lập tức ---
 		Model.SetHealth(80.0f, 100.0f);
-		TestNearlyEqual(TEXT("AC2: Healing → ghost matches immediately"), Model.GetGhostHealthPercent(), 0.80f, kTolerance);
+		TestNearlyEqual(TEXT("AC2: Healing → ghost matches immediately"), Model.GetGhostHealthPercent(), 0.80f, kVitalsTolerance);
 	}
 
 	// ===========================================================
@@ -127,7 +127,7 @@ bool FPAPlayerVitalsTests::RunTest(const FString& Parameters)
 		TestEqual(TEXT("AC3: PerfectDodge → GoldenFlash state"), Model.StaminaState, EPAStaminaBarState::GoldenFlash);
 
 		// Stamina refund +15 → 65/100
-		TestNearlyEqual(TEXT("AC3: Stamina refunded to 65"), Model.CurrentStamina, 65.0f, kTolerance);
+		TestNearlyEqual(TEXT("AC3: Stamina refunded to 65"), Model.CurrentStamina, 65.0f, kVitalsTolerance);
 
 		// Sau 0.10s flash vẫn đang chạy
 		SimulateTicks(Model, 0.10f);
@@ -141,7 +141,7 @@ bool FPAPlayerVitalsTests::RunTest(const FString& Parameters)
 		FPAVitalsModel Model2;
 		Model2.SetStamina(95.0f, 100.0f);
 		Model2.TriggerPerfectDodge();
-		TestNearlyEqual(TEXT("AC3: Stamina refund clamped at max"), Model2.CurrentStamina, 100.0f, kTolerance);
+		TestNearlyEqual(TEXT("AC3: Stamina refund clamped at max"), Model2.CurrentStamina, 100.0f, kVitalsTolerance);
 
 		// --- QA Test 5: Exhaustion Tag ---
 		FPAVitalsModel ModelExh;
@@ -153,7 +153,7 @@ bool FPAPlayerVitalsTests::RunTest(const FString& Parameters)
 		ModelExh.SetStamina(50.0f, 100.0f);
 		ModelExh.TriggerPerfectDodge();
 		TestEqual(TEXT("AC3: PerfectDodge blocked during Exhausted"), ModelExh.StaminaState, EPAStaminaBarState::Exhausted);
-		TestNearlyEqual(TEXT("AC3: No stamina refund during Exhausted"), ModelExh.CurrentStamina, 50.0f, kTolerance);
+		TestNearlyEqual(TEXT("AC3: No stamina refund during Exhausted"), ModelExh.CurrentStamina, 50.0f, kVitalsTolerance);
 
 		// Hết kiệt sức → Normal
 		ModelExh.SetExhausted(false);
@@ -177,7 +177,7 @@ bool FPAPlayerVitalsTests::RunTest(const FString& Parameters)
 		// Máu đầy → không vignette
 		Model.SetHealth(100.0f, 100.0f);
 		TestFalse(TEXT("AC4: Full health → no vignette"), Model.bLowHealthVignetteActive);
-		TestNearlyEqual(TEXT("AC4: Full health → BPM 0"), Model.CurrentHeartbeatBPM, 0.0f, kTolerance);
+		TestNearlyEqual(TEXT("AC4: Full health → BPM 0"), Model.CurrentHeartbeatBPM, 0.0f, kVitalsTolerance);
 
 		// Tại ngưỡng 20% → vừa trên ngưỡng → không kích hoạt (>=20%)
 		Model.SetHealth(20.0f, 100.0f);
@@ -187,25 +187,25 @@ bool FPAPlayerVitalsTests::RunTest(const FString& Parameters)
 		// BPM = 60 + 40 * (1 - 10 / (0.20 * 100)) = 60 + 40 * (1 - 0.50) = 60 + 20 = 80
 		Model.SetHealth(10.0f, 100.0f);
 		TestTrue(TEXT("AC4: 10% health → vignette active"), Model.bLowHealthVignetteActive);
-		TestNearlyEqual(TEXT("AC4: BPM at 10% health = 80"), Model.CurrentHeartbeatBPM, 80.0f, kTolerance);
+		TestNearlyEqual(TEXT("AC4: BPM at 10% health = 80"), Model.CurrentHeartbeatBPM, 80.0f, kVitalsTolerance);
 
 		// Máu 1/100 = 1% → BPM gần max
 		// BPM = 60 + 40 * (1 - 1/20) = 60 + 40 * 0.95 = 98
 		Model.SetHealth(1.0f, 100.0f);
 		TestTrue(TEXT("AC4: 1% health → vignette active"), Model.bLowHealthVignetteActive);
-		TestNearlyEqual(TEXT("AC4: BPM at 1% health = 98"), Model.CurrentHeartbeatBPM, 98.0f, kTolerance);
+		TestNearlyEqual(TEXT("AC4: BPM at 1% health = 98"), Model.CurrentHeartbeatBPM, 98.0f, kVitalsTolerance);
 
 		// Máu 0/100 = 0% → vignette tắt (chết, không cần nhịp tim)
 		Model.SetHealth(0.0f, 100.0f);
 		TestFalse(TEXT("AC4: 0% health → vignette off (dead)"), Model.bLowHealthVignetteActive);
-		TestNearlyEqual(TEXT("AC4: BPM at 0% = 0 (dead)"), Model.CurrentHeartbeatBPM, 0.0f, kTolerance);
+		TestNearlyEqual(TEXT("AC4: BPM at 0% = 0 (dead)"), Model.CurrentHeartbeatBPM, 0.0f, kVitalsTolerance);
 
 		// Hồi máu vượt ngưỡng → vignette tắt
 		Model.SetHealth(5.0f, 100.0f);
 		TestTrue(TEXT("AC4: Low health → vignette on"), Model.bLowHealthVignetteActive);
 		Model.SetHealth(30.0f, 100.0f);
 		TestFalse(TEXT("AC4: Healed above 20% → vignette off"), Model.bLowHealthVignetteActive);
-		TestNearlyEqual(TEXT("AC4: Healed → BPM 0"), Model.CurrentHeartbeatBPM, 0.0f, kTolerance);
+		TestNearlyEqual(TEXT("AC4: Healed → BPM 0"), Model.CurrentHeartbeatBPM, 0.0f, kVitalsTolerance);
 	}
 
 	return true;

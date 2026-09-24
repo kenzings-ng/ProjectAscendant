@@ -186,7 +186,7 @@ bool FPAWanderingSmugglerTests::RunTest(const FString& Parameters)
 			// ExecuteRestock broadcasts OnRestocked and updates NextRestockServerTime.
 			// In unit tests we verify the delegate fires (no timer machinery).
 			bool bRestockFired = false;
-			Restock->OnRestocked.AddLambda([&bRestockFired](float /*Time*/)
+			Restock->OnRestockedNative.AddLambda([&bRestockFired](float /*Time*/)
 			{
 				bRestockFired = true;
 			});

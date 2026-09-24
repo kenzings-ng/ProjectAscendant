@@ -215,9 +215,9 @@ bool FPABossHUDTests::RunTest(const FString& Parameters)
 		TestTrue(TEXT("AC4: Reticle visible during stagger"), Model.bExecutionReticleVisible);
 
 		// Cập nhật vị trí reticle
-		Model.UpdateReticleScreenPosition(FVector2D(960.0f, 540.0f));
-		TestNearlyEqual(TEXT("AC4: Reticle X = 960"), Model.ReticleScreenPosition.X, 960.0f, kTolerance);
-		TestNearlyEqual(TEXT("AC4: Reticle Y = 540"), Model.ReticleScreenPosition.Y, 540.0f, kTolerance);
+		Model.UpdateReticleScreenPosition(FVector2D(960.0, 540.0));
+		TestNearlyEqual(TEXT("AC4: Reticle X = 960"), (double)Model.ReticleScreenPosition.X, 960.0, (double)kTolerance);
+		TestNearlyEqual(TEXT("AC4: Reticle Y = 540"), (double)Model.ReticleScreenPosition.Y, 540.0, (double)kTolerance);
 
 		// Stagger hết → reticle ẩn
 		SimulateBossTicks(Model, 3.1f);

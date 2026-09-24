@@ -27,7 +27,7 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(
 
 namespace
 {
-	constexpr float kTolerance = 0.02f;
+	constexpr float kDashTolerance = 0.02f;
 
 	void AdvanceDashTime(FPADashModel& Model, float Duration, float StepSize = 0.016f)
 	{
@@ -58,7 +58,7 @@ bool FPADashTests::RunTest(const FString& Parameters)
 		// Khởi động lướt: tốn 25 thể lực (100 -> 75)
 		bool bStarted = Model.StartDash(Stamina, StaminaRemaining);
 		TestTrue(TEXT("AC1: Dash started successfully"), bStarted);
-		TestNearlyEqual(TEXT("AC1: Stamina deducted by 25 (100 -> 75)"), StaminaRemaining, 75.0f, kTolerance);
+		TestNearlyEqual(TEXT("AC1: Stamina deducted by 25 (100 -> 75)"), StaminaRemaining, 75.0f, kDashTolerance);
 		TestTrue(TEXT("AC1: IsDashing is true"), Model.bIsDashing);
 		TestTrue(TEXT("AC1: Invulnerable is true at start"), Model.bInvulnerable);
 		TestEqual(TEXT("AC1: Phase is IFramePeak"), Model.CurrentPhase, EPADashPhase::IFramePeak);
@@ -76,7 +76,7 @@ bool FPADashTests::RunTest(const FString& Parameters)
 		// Đòn đánh trúng người tại t = 0.30s (ngoài I-Frame) -> Nhận sát thương đầy đủ
 		FPAIncomingHitResult LateHit = Model.ProcessIncomingHit(100.0f);
 		TestFalse(TEXT("AC1: Late hit is not avoided"), LateHit.bAvoidedWithIFrame);
-		TestNearlyEqual(TEXT("AC1: Full 100 damage taken"), LateHit.DamageTaken, 100.0f, kTolerance);
+		TestNearlyEqual(TEXT("AC1: Full 100 damage taken"), LateHit.DamageTaken, 100.0f, kDashTolerance);
 		TestFalse(TEXT("AC1: No perfect dodge on late hit"), LateHit.bTriggeredPerfectDodge);
 
 		// Tiến hết 0.45s -> Hoàn tất lướt
@@ -101,12 +101,12 @@ bool FPADashTests::RunTest(const FString& Parameters)
 			// Đòn đánh quét trúng
 			FPAIncomingHitResult SweetSpotHit = Model.ProcessIncomingHit(150.0f);
 			TestTrue(TEXT("AC2: Hit avoided with I-Frame"), SweetSpotHit.bAvoidedWithIFrame);
-			TestNearlyEqual(TEXT("AC2: Zero damage taken"), SweetSpotHit.DamageTaken, 0.0f, kTolerance);
+			TestNearlyEqual(TEXT("AC2: Zero damage taken"), SweetSpotHit.DamageTaken, 0.0f, kDashTolerance);
 			TestTrue(TEXT("AC2: Perfect Dodge triggered in 0.05-0.15s sweet spot"), SweetSpotHit.bTriggeredPerfectDodge);
-			TestNearlyEqual(TEXT("AC2: Refunds +15 Stamina"), SweetSpotHit.StaminaRefunded, 15.0f, kTolerance);
-			TestNearlyEqual(TEXT("AC2: Grants 0.08s Hitstop"), SweetSpotHit.HitstopDuration, 0.08f, kTolerance);
+			TestNearlyEqual(TEXT("AC2: Refunds +15 Stamina"), SweetSpotHit.StaminaRefunded, 15.0f, kDashTolerance);
+			TestNearlyEqual(TEXT("AC2: Grants 0.08s Hitstop"), SweetSpotHit.HitstopDuration, 0.08f, kDashTolerance);
 			TestTrue(TEXT("AC2: Model flag bPerfectDodgeTriggered is true"), Model.bPerfectDodgeTriggered);
-			TestNearlyEqual(TEXT("AC2: Hitstop remaining is 0.08s"), Model.HitstopRemaining, 0.08f, kTolerance);
+			TestNearlyEqual(TEXT("AC2: Hitstop remaining is 0.08s"), Model.HitstopRemaining, 0.08f, kDashTolerance);
 		}
 
 		// QA Test 2b: Bị đánh trúng ở t = 0.22s (trong I-Frame < 0.28s nhưng ngoài sweet-spot > 0.15s)
@@ -119,10 +119,10 @@ bool FPADashTests::RunTest(const FString& Parameters)
 
 			FPAIncomingHitResult NonSweetSpotHit = Model.ProcessIncomingHit(150.0f);
 			TestTrue(TEXT("AC2: Hit avoided with I-Frame"), NonSweetSpotHit.bAvoidedWithIFrame);
-			TestNearlyEqual(TEXT("AC2: Zero damage taken"), NonSweetSpotHit.DamageTaken, 0.0f, kTolerance);
+			TestNearlyEqual(TEXT("AC2: Zero damage taken"), NonSweetSpotHit.DamageTaken, 0.0f, kDashTolerance);
 			TestFalse(TEXT("AC2: No Perfect Dodge reward outside sweet-spot (t=0.22s)"), NonSweetSpotHit.bTriggeredPerfectDodge);
-			TestNearlyEqual(TEXT("AC2: Zero stamina refund"), NonSweetSpotHit.StaminaRefunded, 0.0f, kTolerance);
-			TestNearlyEqual(TEXT("AC2: Zero hitstop"), NonSweetSpotHit.HitstopDuration, 0.0f, kTolerance);
+			TestNearlyEqual(TEXT("AC2: Zero stamina refund"), NonSweetSpotHit.StaminaRefunded, 0.0f, kDashTolerance);
+			TestNearlyEqual(TEXT("AC2: Zero hitstop"), NonSweetSpotHit.HitstopDuration, 0.0f, kDashTolerance);
 		}
 	}
 
@@ -185,7 +185,7 @@ bool FPADashTests::RunTest(const FString& Parameters)
 		// Chỉ có 15 stamina (< 25)
 		bool bFailed = Model.StartDash(15.0f, StaminaRem);
 		TestFalse(TEXT("Edge: Cannot start dash with insufficient stamina (< 25)"), bFailed);
-		TestNearlyEqual(TEXT("Edge: Stamina unchanged"), StaminaRem, 15.0f, kTolerance);
+		TestNearlyEqual(TEXT("Edge: Stamina unchanged"), StaminaRem, 15.0f, kDashTolerance);
 		TestFalse(TEXT("Edge: Not dashing"), Model.bIsDashing);
 	}
 

@@ -27,7 +27,7 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(
 
 namespace
 {
-	constexpr float kTolerance = 0.01f;
+	constexpr float kShopForgeTolerance = 0.01f;
 
 	/** Tạo shop model với catalog mẫu */
 	FPAShopUIModel CreateSampleShopModel()
@@ -214,7 +214,7 @@ bool FPAShopForgeUITests::RunTest(const FString& Parameters)
 		Preview.StatName = TEXT("Attack");
 		Preview.CurrentValue = 50.0f;
 		Preview.NewValue = 58.0f;
-		TestNearlyEqual(TEXT("AC2: Stat delta = +8"), Preview.GetDelta(), 8.0f, kTolerance);
+		TestNearlyEqual(TEXT("AC2: Stat delta = +8"), Preview.GetDelta(), 8.0f, kShopForgeTolerance);
 
 		FString PreviewText = Preview.GetPreviewText();
 		TestTrue(TEXT("AC2: Preview contains 'Attack'"), PreviewText.Contains(TEXT("Attack")));
@@ -255,7 +255,7 @@ bool FPAShopForgeUITests::RunTest(const FString& Parameters)
 
 		// Release before 0.8s → cancels
 		Model.UpdateHoldProgress(Step, false);
-		TestNearlyEqual(TEXT("AC3: Release → progress reset to 0"), Model.HoldProgress, 0.0f, kTolerance);
+		TestNearlyEqual(TEXT("AC3: Release → progress reset to 0"), Model.HoldProgress, 0.0f, kShopForgeTolerance);
 		TestFalse(TEXT("AC3: Release → not completed"), Model.bHoldCompleted);
 
 		// Hold full 0.8s+
@@ -270,7 +270,7 @@ bool FPAShopForgeUITests::RunTest(const FString& Parameters)
 
 		TestTrue(TEXT("AC3: Hold >= 0.8s → triggered"), bTriggered);
 		TestTrue(TEXT("AC3: Hold completed"), Model.bHoldCompleted);
-		TestNearlyEqual(TEXT("AC3: Progress = 1.0"), Model.HoldProgress, 1.0f, kTolerance);
+		TestNearlyEqual(TEXT("AC3: Progress = 1.0"), Model.HoldProgress, 1.0f, kShopForgeTolerance);
 
 		// Giữ tiếp không trigger lại
 		bTriggered = Model.UpdateHoldProgress(Step, true);

@@ -44,6 +44,8 @@ public:
 	UFUNCTION(BlueprintPure, Category = "ProjectAscendant|Merchant")
 	int32 GetCatalogCount() const { return Catalog.Num(); }
 
+	const TArray<FPAMerchantCatalogEntry>& GetCatalog() const { return Catalog; }
+
 	const FPAMerchantCatalogEntry* GetCatalogEntry(int32 Index) const;
 
 	// -------------------------------------------------------------------------

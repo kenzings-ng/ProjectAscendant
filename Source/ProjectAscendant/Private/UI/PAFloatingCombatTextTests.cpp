@@ -27,8 +27,8 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(
 
 namespace
 {
-	constexpr float kTolerance = 1.0f; // Sai số vị trí cho phép (cm)
-	constexpr float kSmallTolerance = 0.01f;
+	constexpr float kCombatTextTolerance = 1.0f; // Sai số vị trí cho phép (cm)
+	constexpr float kCombatTextSmallTolerance = 0.01f;
 
 	void SimulatePoolTicks(FPACombatTextPool& Pool, float TotalTime, float StepSize = 0.016f)
 	{
@@ -58,20 +58,20 @@ bool FPAFloatingCombatTextTests::RunTest(const FString& Parameters)
 		const FVector SpawnPos(100.0f, 200.0f, 300.0f);
 		int32 NormalIdx = Pool.SpawnCombatText(SpawnPos, 150.0f, EPACombatTextType::NormalDamage);
 		TestNotEqual(TEXT("AC1: Normal spawned"), NormalIdx, (int32)INDEX_NONE);
-		TestNearlyEqual(TEXT("AC1: Normal scale = 1.0"), Pool.Instances[NormalIdx].Scale, 1.0f, kSmallTolerance);
+		TestNearlyEqual(TEXT("AC1: Normal scale = 1.0"), Pool.Instances[NormalIdx].Scale, 1.0f, kCombatTextSmallTolerance);
 		TestEqual(TEXT("AC1: Normal text = '150'"), Pool.Instances[NormalIdx].Text, FString(TEXT("150")));
 		TestEqual(TEXT("AC1: Normal type"), Pool.Instances[NormalIdx].Type, EPACombatTextType::NormalDamage);
-		TestNearlyEqual(TEXT("AC1: Normal lifetime = 0.60s"), Pool.Instances[NormalIdx].MaxLifetime, 0.60f, kSmallTolerance);
+		TestNearlyEqual(TEXT("AC1: Normal lifetime = 0.60s"), Pool.Instances[NormalIdx].MaxLifetime, 0.60f, kCombatTextSmallTolerance);
 
 		// QA Test 1: Critical damage → scale 1.5, orange
 		int32 CritIdx = Pool.SpawnCombatText(SpawnPos, 300.0f, EPACombatTextType::CriticalDamage);
-		TestNearlyEqual(TEXT("AC1: Crit scale = 1.5"), Pool.Instances[CritIdx].Scale, 1.5f, kSmallTolerance);
+		TestNearlyEqual(TEXT("AC1: Crit scale = 1.5"), Pool.Instances[CritIdx].Scale, 1.5f, kCombatTextSmallTolerance);
 		TestEqual(TEXT("AC1: Crit text = '300'"), Pool.Instances[CritIdx].Text, FString(TEXT("300")));
 		TestEqual(TEXT("AC1: Crit type"), Pool.Instances[CritIdx].Type, EPACombatTextType::CriticalDamage);
 
 		// Posture damage → scale 0.85
 		int32 PostureIdx = Pool.SpawnCombatText(SpawnPos, 45.0f, EPACombatTextType::PostureDamage);
-		TestNearlyEqual(TEXT("AC1: Posture scale = 0.85"), Pool.Instances[PostureIdx].Scale, 0.85f, kSmallTolerance);
+		TestNearlyEqual(TEXT("AC1: Posture scale = 0.85"), Pool.Instances[PostureIdx].Scale, 0.85f, kCombatTextSmallTolerance);
 		TestEqual(TEXT("AC1: Posture text = '45'"), Pool.Instances[PostureIdx].Text, FString(TEXT("45")));
 	}
 
@@ -86,23 +86,23 @@ bool FPAFloatingCombatTextTests::RunTest(const FString& Parameters)
 		const FPACombatTextInstance& Inst = Pool.Instances[Idx];
 
 		// Vận tốc ban đầu Z = 180 cm/s (GDD)
-		TestNearlyEqual(TEXT("AC2: InitialVelocity.Z = 180"), Inst.InitialVelocity.Z, 180.0f, kSmallTolerance);
+		TestNearlyEqual(TEXT("AC2: InitialVelocity.Z = 180"), (float)Inst.InitialVelocity.Z, 180.0f, kCombatTextSmallTolerance);
 
 		// QA Test 2: Vị trí tại t = 0.3s theo công thức đạn đạo
 		// P(0.3) = P0 + V0 * 0.3 + 0.5 * g * 0.3²
 		// Z: 100 + 180*0.3 + 0.5*(-300)*0.09 = 100 + 54 - 13.5 = 140.5
 		const float t = 0.3f;
-		const float ExpectedZ = SpawnPos.Z + Inst.InitialVelocity.Z * t + 0.5f * Pool.Config.GravityZ * t * t;
+		const float ExpectedZ = (float)(SpawnPos.Z + Inst.InitialVelocity.Z * t + 0.5f * Pool.Config.GravityZ * t * t);
 
 		// Giả lập chính xác 0.3s (dùng step nhỏ)
 		SimulatePoolTicks(Pool, 0.3f, 0.001f);
 
-		TestNearlyEqual(TEXT("AC2: Z at t=0.3s follows ballistic"), Pool.Instances[Idx].WorldPosition.Z, ExpectedZ, kTolerance);
+		TestNearlyEqual(TEXT("AC2: Z at t=0.3s follows ballistic"), (float)Pool.Instances[Idx].WorldPosition.Z, ExpectedZ, kCombatTextTolerance);
 
 		// Kiểm tra vận tốc hiện tại: V(0.3) = V0 + g*0.3
 		// Vz: 180 + (-300)*0.3 = 180 - 90 = 90 cm/s (vẫn đang bay lên)
-		const float ExpectedVz = Inst.InitialVelocity.Z + Pool.Config.GravityZ * t;
-		TestNearlyEqual(TEXT("AC2: Vz at t=0.3s"), Pool.Instances[Idx].Velocity.Z, ExpectedVz, kTolerance);
+		const float ExpectedVz = (float)(Inst.InitialVelocity.Z + Pool.Config.GravityZ * t);
+		TestNearlyEqual(TEXT("AC2: Vz at t=0.3s"), (float)Pool.Instances[Idx].Velocity.Z, ExpectedVz, kCombatTextTolerance);
 
 		// QA Test 3: Radial offset — spawn 3 số tại cùng vị trí → vận tốc X,Y khác nhau
 		FPACombatTextPool Pool2;
@@ -133,7 +133,7 @@ bool FPAFloatingCombatTextTests::RunTest(const FString& Parameters)
 		{
 			TestNearlyEqual(
 				*FString::Printf(TEXT("AC2: Vel[%d].Z = 180"), i),
-				InitialVelocities[i].Z, 180.0f, kSmallTolerance);
+				(float)InitialVelocities[i].Z, 180.0f, kCombatTextSmallTolerance);
 		}
 	}
 
@@ -150,11 +150,11 @@ bool FPAFloatingCombatTextTests::RunTest(const FString& Parameters)
 		const FPACombatTextInstance& Inst = Pool.Instances[Idx];
 		TestEqual(TEXT("AC3: Text = 'PERFECT!'"), Inst.Text, FString(TEXT("PERFECT!")));
 		TestEqual(TEXT("AC3: Type = PerfectDodgeCallout"), Inst.Type, EPACombatTextType::PerfectDodgeCallout);
-		TestNearlyEqual(TEXT("AC3: Lifetime = 0.50s"), Inst.MaxLifetime, 0.50f, kSmallTolerance);
-		TestNearlyEqual(TEXT("AC3: Scale = 1.2"), Inst.Scale, 1.2f, kSmallTolerance);
+		TestNearlyEqual(TEXT("AC3: Lifetime = 0.50s"), Inst.MaxLifetime, 0.50f, kCombatTextSmallTolerance);
+		TestNearlyEqual(TEXT("AC3: Scale = 1.2"), Inst.Scale, 1.2f, kCombatTextSmallTolerance);
 
 		// Spawn position nổi lên 60cm phía trên nhân vật
-		TestNearlyEqual(TEXT("AC3: SpawnPos.Z = CharPos.Z + 60"), Inst.SpawnPosition.Z, 60.0f, kSmallTolerance);
+		TestNearlyEqual(TEXT("AC3: SpawnPos.Z = CharPos.Z + 60"), (float)Inst.SpawnPosition.Z, 60.0f, kCombatTextSmallTolerance);
 
 		// Sau 0.50s+ callout hết hạn
 		SimulatePoolTicks(Pool, 0.51f);
@@ -206,7 +206,7 @@ bool FPAFloatingCombatTextTests::RunTest(const FString& Parameters)
 		int32 Idx = Pool.SpawnCombatText(FVector::ZeroVector, 100.0f, EPACombatTextType::NormalDamage);
 
 		// Opacity bắt đầu = 1.0
-		TestNearlyEqual(TEXT("Edge: Initial opacity = 1.0"), Pool.Instances[Idx].Opacity, 1.0f, kSmallTolerance);
+		TestNearlyEqual(TEXT("Edge: Initial opacity = 1.0"), Pool.Instances[Idx].Opacity, 1.0f, kCombatTextSmallTolerance);
 
 		// Tại nửa đời (0.30s / 0.60s) → opacity ~ 0.50
 		SimulatePoolTicks(Pool, 0.30f, 0.001f);
@@ -214,7 +214,7 @@ bool FPAFloatingCombatTextTests::RunTest(const FString& Parameters)
 
 		// Hết đời → opacity = 0
 		SimulatePoolTicks(Pool, 0.31f);
-		TestNearlyEqual(TEXT("Edge: Opacity at expiry = 0"), Pool.Instances[Idx].Opacity, 0.0f, kSmallTolerance);
+		TestNearlyEqual(TEXT("Edge: Opacity at expiry = 0"), Pool.Instances[Idx].Opacity, 0.0f, kCombatTextSmallTolerance);
 	}
 
 	return true;

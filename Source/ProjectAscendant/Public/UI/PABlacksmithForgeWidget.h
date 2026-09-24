@@ -100,4 +100,6 @@ protected:
 
 	/** Cache DeltaTime cho hold update */
 	float CachedDeltaTime = 0.0f;
+
+	int32 TargetSlotIndex = INDEX_NONE;
 };

@@ -56,6 +56,7 @@ enum class EPABossAttackType : uint8
 UENUM(BlueprintType)
 enum class EPABossCombatPhase : uint8
 {
+	None              = 0 UMETA(DisplayName = "None / Inactive"),
 	Phase1_Normal     = 1 UMETA(DisplayName = "Phase 1: Normal (100%->75%)"),
 	Phase2_Combos     = 2 UMETA(DisplayName = "Phase 2: Combos (75%->25%)"),
 	Phase3_Enraged    = 3 UMETA(DisplayName = "Phase 3: Enraged (<25%)")

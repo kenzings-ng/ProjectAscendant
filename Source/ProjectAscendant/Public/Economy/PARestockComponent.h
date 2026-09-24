@@ -9,6 +9,7 @@
 class UPAMerchantComponent;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FPAOnRestocked, float, RestockServerTime);
+DECLARE_MULTICAST_DELEGATE_OneParam(FPAOnRestockedNative, float);
 
 /**
  * UPARestockComponent
@@ -87,6 +88,8 @@ public:
 	/** Phát tín hiệu khi hàng xoay vòng được làm mới. */
 	UPROPERTY(BlueprintAssignable, Category = "ProjectAscendant|Restock")
 	FPAOnRestocked OnRestocked;
+
+	FPAOnRestockedNative OnRestockedNative;
 
 protected:
 	UPROPERTY()

@@ -28,7 +28,7 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(
 
 namespace
 {
-	constexpr float kTolerance = 0.02f;
+	constexpr float kZoneTolerance = 0.02f;
 }
 
 // ---------------------------------------------------------------------------
@@ -103,12 +103,12 @@ bool FPAZoneTests::RunTest(const FString& Parameters)
 		TestTrue(TEXT("AC2: SaveRecord marked bSavedSuccessfully"), SaveRecord.bSavedSuccessfully);
 		TestEqual(TEXT("AC2: SaveRecord PlayerId matches"), SaveRecord.PlayerId, PlayerId);
 		TestEqual(TEXT("AC2: SaveRecord LastVisitedCitadelId is VerdantBastion"), SaveRecord.LastVisitedCitadelId, FName("Citadel_VerdantBastion"));
-		TestNearlyEqual(TEXT("AC2: SaveRecord Timestamp matches"), SaveRecord.AutoSaveTimestamp, 120.5f, kTolerance);
+		TestNearlyEqual(TEXT("AC2: SaveRecord Timestamp matches"), SaveRecord.AutoSaveTimestamp, 120.5f, kZoneTolerance);
 
 		// Kiểm tra hồi phục trọn vẹn 100% tài nguyên
-		TestNearlyEqual(TEXT("AC2: HP restored to 100%"), HP, 1.0f, kTolerance);
-		TestNearlyEqual(TEXT("AC2: MP restored to 100%"), MP, 1.0f, kTolerance);
-		TestNearlyEqual(TEXT("AC2: Stamina restored to 100%"), Stamina, 1.0f, kTolerance);
+		TestNearlyEqual(TEXT("AC2: HP restored to 100%"), HP, 1.0f, kZoneTolerance);
+		TestNearlyEqual(TEXT("AC2: MP restored to 100%"), MP, 1.0f, kZoneTolerance);
+		TestNearlyEqual(TEXT("AC2: Stamina restored to 100%"), Stamina, 1.0f, kZoneTolerance);
 		TestEqual(TEXT("AC2: Flasks refilled to 5/5"), Flasks, 5);
 
 		// Kiểm tra trạng thái Model
@@ -154,8 +154,8 @@ bool FPAZoneTests::RunTest(const FString& Parameters)
 
 		TestTrue(TEXT("AC3: GetRelogSpawnTransform returns true"), bGotSpawn);
 		TestEqual(TEXT("AC3: Spawn Citadel is Citadel_AshenKeep (most recently entered)"), SpawnCitadelId, FName("Citadel_AshenKeep"));
-		TestNearlyEqual(TEXT("AC3: Spawn location X matches Ashen Keep"), RelogSpawnLoc.X, AshenKeepLoc.X, kTolerance);
-		TestNearlyEqual(TEXT("AC3: Spawn location Y matches Ashen Keep"), RelogSpawnLoc.Y, AshenKeepLoc.Y, kTolerance);
+		TestNearlyEqual(TEXT("AC3: Spawn location X matches Ashen Keep"), (float)RelogSpawnLoc.X, (float)AshenKeepLoc.X, kZoneTolerance);
+		TestNearlyEqual(TEXT("AC3: Spawn location Y matches Ashen Keep"), (float)RelogSpawnLoc.Y, (float)AshenKeepLoc.Y, kZoneTolerance);
 	}
 
 	// ===========================================================

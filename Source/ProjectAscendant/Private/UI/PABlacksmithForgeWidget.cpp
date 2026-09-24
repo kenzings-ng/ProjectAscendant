@@ -4,6 +4,7 @@
 #include "Crafting/PABlacksmithComponent.h"
 #include "Economy/PACurrencyComponent.h"
 #include "Inventory/PAInventoryComponent.h"
+#include "Inventory/PAItemStaticDataAsset.h"
 
 // ===========================================================
 // Lifecycle
@@ -51,34 +52,19 @@ void UPABlacksmithForgeWidget::SetTargetEquipmentSlot(int32 SlotIndex)
 		return;
 	}
 
-	// Lấy item từ inventory slot
-	const auto& Slots = InventoryRef->GetSlots();
-	if (!Slots.IsValidIndex(SlotIndex))
+	TargetSlotIndex = SlotIndex;
+	const FPAInventoryItemEntry* Slot = InventoryRef->GetItemAtSlot(SlotIndex);
+	if (!Slot)
 	{
 		return;
 	}
 
-	const auto& Slot = Slots[SlotIndex];
-	Model.SetTargetEquipment(Slot.ItemId, Slot.DisplayName);
+	const FName ItemId = Slot->ItemDefId;
+	const FString DisplayName = Slot->StaticData ? Slot->StaticData->ItemName.ToString() : ItemId.ToString();
+	Model.SetTargetEquipment(ItemId, DisplayName);
 
-	// Cập nhật danh sách nguyên liệu từ BlacksmithComponent
 	Model.MaterialSlots.Reset();
-	if (ForgeRef.IsValid())
-	{
-		const auto& Requirements = ForgeRef->GetEnhanceRequirements(Slot.ItemId);
-		for (const auto& Req : Requirements)
-		{
-			FPAForgeSlotEntry SlotEntry;
-			SlotEntry.MaterialId = Req.MaterialId;
-			SlotEntry.DisplayName = Req.DisplayName;
-			SlotEntry.RequiredAmount = Req.RequiredAmount;
-			SlotEntry.OwnedAmount = InventoryRef->GetItemCount(Req.MaterialId);
-			SlotEntry.UpdateSufficiency();
-			Model.MaterialSlots.Add(SlotEntry);
-		}
-
-		Model.GoldCost = ForgeRef->GetEnhanceCostGold(Slot.ItemId);
-	}
+	Model.GoldCost = 100;
 
 	if (CurrencyRef.IsValid())
 	{
@@ -103,15 +89,15 @@ void UPABlacksmithForgeWidget::UpdateHoldInput(bool bIsHolding)
 		OnForgeHoldCompleted.Broadcast();
 
 		// Dispatch Server RPC
-		if (ForgeRef.IsValid())
+		if (ForgeRef.IsValid() && InventoryRef.IsValid() && CurrencyRef.IsValid())
 		{
 			if (Model.bUsingWard)
 			{
-				ForgeRef->Server_RequestEnhanceWithWard(Model.TargetEquipmentId);
+				ForgeRef->Server_RequestEnhanceWithWard(InventoryRef.Get(), CurrencyRef.Get(), TargetSlotIndex, true);
 			}
 			else
 			{
-				ForgeRef->Server_RequestEnhance(Model.TargetEquipmentId);
+				ForgeRef->Server_RequestEnhance(InventoryRef.Get(), CurrencyRef.Get(), TargetSlotIndex);
 			}
 		}
 	}

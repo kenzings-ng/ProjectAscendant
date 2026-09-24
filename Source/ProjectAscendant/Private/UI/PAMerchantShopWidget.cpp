@@ -5,6 +5,7 @@
 #include "Economy/PAMerchantTypes.h"
 #include "Economy/PACurrencyComponent.h"
 #include "Inventory/PAInventoryComponent.h"
+#include "Inventory/PAItemStaticDataAsset.h"
 
 // ===========================================================
 // Lifecycle
@@ -37,15 +38,18 @@ void UPAMerchantShopWidget::InitializeShop(
 
 	// Populate catalog từ MerchantComponent
 	Model.CatalogItems.Reset();
-	const TArray<FPACatalogItemEntry>& Catalog = MerchantComp->GetCatalog();
-	for (const FPACatalogItemEntry& Entry : Catalog)
+	const TArray<FPAMerchantCatalogEntry>& Catalog = MerchantComp->GetCatalog();
+	for (const FPAMerchantCatalogEntry& Entry : Catalog)
 	{
 		FPAShopItemEntry ShopEntry;
-		ShopEntry.ItemId = Entry.ItemId;
-		ShopEntry.DisplayName = Entry.DisplayName;
-		ShopEntry.Quantity = Entry.StockQuantity;
-		ShopEntry.PriceGold = Entry.BasePriceGold;
-		ShopEntry.FinalPrice = Entry.BasePriceGold;
+		if (Entry.ItemData)
+		{
+			ShopEntry.ItemId = Entry.ItemData->ItemId;
+			ShopEntry.DisplayName = Entry.ItemData->ItemName.ToString();
+		}
+		ShopEntry.Quantity = Entry.AvailableStock;
+		ShopEntry.PriceGold = Entry.PriceGold;
+		ShopEntry.FinalPrice = Entry.PriceGold;
 		Model.CatalogItems.Add(ShopEntry);
 	}
 
@@ -107,13 +111,13 @@ void UPAMerchantShopWidget::ExecuteBuy()
 	}
 
 	// Delegate mua hàng đến MerchantComponent (Server RPC)
-	MerchantRef->Server_RequestBuyItem(Model.SelectedCatalogIndex);
+	MerchantRef->Server_RequestBuyItem(InventoryRef.Get(), CurrencyRef.Get(), Model.SelectedCatalogIndex, 1);
 	OnTransactionCompleted.Broadcast();
 }
 
 void UPAMerchantShopWidget::ExecuteSell()
 {
-	if (!MerchantRef.IsValid() || !InventoryRef.IsValid())
+	if (!MerchantRef.IsValid() || !InventoryRef.IsValid() || !CurrencyRef.IsValid())
 	{
 		return;
 	}
@@ -129,7 +133,7 @@ void UPAMerchantShopWidget::ExecuteSell()
 	Model.AddBuybackEntry(Item);
 
 	// Delegate bán hàng đến MerchantComponent (Server RPC)
-	MerchantRef->Server_RequestSellItem(Model.SelectedInventoryIndex);
+	MerchantRef->Server_RequestSellItem(InventoryRef.Get(), CurrencyRef.Get(), Model.SelectedInventoryIndex, 1);
 	OnTransactionCompleted.Broadcast();
 }
 

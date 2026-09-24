@@ -84,6 +84,7 @@ void UPARestockComponent::ExecuteRestock(UPAMerchantComponent* MerchantComp)
 	}
 
 	OnRestocked.Broadcast(CurrentTime);
+	OnRestockedNative.Broadcast(CurrentTime);
 }
 
 float UPARestockComponent::GetSecondsUntilNextRestock() const

@@ -27,7 +27,7 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(
 
 namespace
 {
-	constexpr float kTolerance = 0.5f;
+	constexpr float kKarmaTolerance = 0.5f;
 }
 
 // ---------------------------------------------------------------------------
@@ -62,7 +62,7 @@ bool FPAKarmaTests::RunTest(const FString& Parameters)
 
 		Model.TriggerAggressor();
 		TestEqual(TEXT("AC1: Triggered Aggressor tier"), Model.GetKarmaTier(), EPAKarmaTier::Aggressor);
-		TestNearlyEqual(TEXT("AC1: Aggressor countdown is 120s"), Model.AggressorTimeRemaining, 120.0f, kTolerance);
+		TestNearlyEqual(TEXT("AC1: Aggressor countdown is 120s"), Model.AggressorTimeRemaining, 120.0f, kKarmaTolerance);
 
 		// Trôi qua 120s -> Hết Aggressor, quay về bậc Karma gốc (Neutral)
 		Model.Update(121.0f);
@@ -79,8 +79,8 @@ bool FPAKarmaTests::RunTest(const FString& Parameters)
 		// Người chơi có 1000 Vàng, 250 Shards bị quái đánh chết
 		FPADeathPenaltyResult Result = Model.ResolveDeath(EPADeathScenario::PvE, 1000.0f, 250.0f);
 
-		TestNearlyEqual(TEXT("AC2: Lost 50% Gold (500)"), Result.GoldLost, 500.0f, kTolerance);
-		TestNearlyEqual(TEXT("AC2: Lost 100% Shards (250)"), Result.ShardsLost, 250.0f, kTolerance);
+		TestNearlyEqual(TEXT("AC2: Lost 50% Gold (500)"), Result.GoldLost, 500.0f, kKarmaTolerance);
+		TestNearlyEqual(TEXT("AC2: Lost 100% Shards (250)"), Result.ShardsLost, 250.0f, kKarmaTolerance);
 		TestTrue(TEXT("AC2: Ash Remnant created"), Result.bAshRemnantCreated);
 		TestFalse(TEXT("AC2: Not sent to prison for PvE death"), Result.bSentToPrison);
 		TestFalse(TEXT("AC2: Equipped gear not dropped"), Result.bDropInventoryItem);
@@ -99,14 +99,14 @@ bool FPAKarmaTests::RunTest(const FString& Parameters)
 		// Nạn nhân có 1000 Vàng, 250 Shards bị PK chết
 		FPADeathPenaltyResult VictimResult = VictimModel.ResolveDeath(EPADeathScenario::PvPVictim, 1000.0f, 250.0f);
 
-		TestNearlyEqual(TEXT("AC3: Victim loses 25% Gold (250)"), VictimResult.GoldLost, 250.0f, kTolerance);
-		TestNearlyEqual(TEXT("AC3: 250 Gold transferred to killer"), VictimResult.GoldToKiller, 250.0f, kTolerance);
-		TestNearlyEqual(TEXT("AC3: Victim preserves 100% Shards (0 lost)"), VictimResult.ShardsLost, 0.0f, kTolerance);
+		TestNearlyEqual(TEXT("AC3: Victim loses 25% Gold (250)"), VictimResult.GoldLost, 250.0f, kKarmaTolerance);
+		TestNearlyEqual(TEXT("AC3: 250 Gold transferred to killer"), VictimResult.GoldToKiller, 250.0f, kKarmaTolerance);
+		TestNearlyEqual(TEXT("AC3: Victim preserves 100% Shards (0 lost)"), VictimResult.ShardsLost, 0.0f, kKarmaTolerance);
 		TestFalse(TEXT("AC3: No Ash Remnant created for PvP victim"), VictimResult.bAshRemnantCreated);
 
 		// Sát nhân bị trừ -30 Karma
 		KillerModel.AddKarma(-30.0f);
-		TestNearlyEqual(TEXT("AC3: Killer Karma reduced by 30 (-30)"), KillerModel.CurrentKarma, -30.0f, kTolerance);
+		TestNearlyEqual(TEXT("AC3: Killer Karma reduced by 30 (-30)"), KillerModel.CurrentKarma, -30.0f, kKarmaTolerance);
 		TestEqual(TEXT("AC3: Killer becomes Criminal"), KillerModel.GetKarmaTier(), EPAKarmaTier::Criminal);
 	}
 
@@ -121,12 +121,12 @@ bool FPAKarmaTests::RunTest(const FString& Parameters)
 		// Kẻ Wanted bị tiêu diệt: có 2000 Gold, 500 Shards
 		FPADeathPenaltyResult OutlawDeath = WantedModel.ResolveDeath(EPADeathScenario::WantedOutlaw, 2000.0f, 500.0f, 0.10f); // Roll 10% <= 15%
 
-		TestNearlyEqual(TEXT("AC4: Drops 100% Gold (2000)"), OutlawDeath.GoldLost, 2000.0f, kTolerance);
-		TestNearlyEqual(TEXT("AC4: Drops 100% Shards (500)"), OutlawDeath.ShardsLost, 500.0f, kTolerance);
+		TestNearlyEqual(TEXT("AC4: Drops 100% Gold (2000)"), OutlawDeath.GoldLost, 2000.0f, kKarmaTolerance);
+		TestNearlyEqual(TEXT("AC4: Drops 100% Shards (500)"), OutlawDeath.ShardsLost, 500.0f, kKarmaTolerance);
 		TestTrue(TEXT("AC4: Sent to Labor Prison"), OutlawDeath.bSentToPrison);
 		TestTrue(TEXT("AC4: 15% drop item triggered at roll 0.10"), OutlawDeath.bDropInventoryItem);
 		TestTrue(TEXT("AC4: Model flag bInLaborPrison is true"), WantedModel.bInLaborPrison);
-		TestNearlyEqual(TEXT("AC4: Prison sentence is 300s (5m)"), WantedModel.PrisonTimeRemaining, 300.0f, kTolerance);
+		TestNearlyEqual(TEXT("AC4: Prison sentence is 300s (5m)"), WantedModel.PrisonTimeRemaining, 300.0f, kKarmaTolerance);
 
 		// Đào 10 quặng (chưa đủ 20 quặng) -> Vẫn ở trong tù
 		bool bReleasedEarly = WantedModel.MineOreInPrison(10);
@@ -139,7 +139,7 @@ bool FPAKarmaTests::RunTest(const FString& Parameters)
 		TestFalse(TEXT("AC4: No longer in prison"), WantedModel.bInLaborPrison);
 
 		// Sau khi ra tù: Karma được ấn định lại ở -49 (thoát khỏi mức Wanted)
-		TestNearlyEqual(TEXT("AC4: Karma reset to -49 upon release"), WantedModel.CurrentKarma, -49.0f, kTolerance);
+		TestNearlyEqual(TEXT("AC4: Karma reset to -49 upon release"), WantedModel.CurrentKarma, -49.0f, kKarmaTolerance);
 		TestEqual(TEXT("AC4: Tier transitions from WantedOutlaw to Criminal"), WantedModel.GetKarmaTier(), EPAKarmaTier::Criminal);
 	}
 

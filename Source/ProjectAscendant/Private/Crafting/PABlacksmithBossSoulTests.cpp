@@ -45,8 +45,8 @@ bool FPABlacksmithBossSoulTests::RunTest(const FString& Parameters)
 			UItemStaticDataAsset* DivineSword = NewObject<UItemStaticDataAsset>();
 			DivineSword->ItemId = FName("item_divine_dragon_slayer");
 			DivineSword->Category = EPAItemCategory::Equipment;
-			DivineSword->RarityTier = EPAItemRarity::Divine;
-			DivineSword->EquipmentSlot = EPAEquipmentSlot::Mainhand;
+			DivineSword->RarityTier = EPAItemRarity::Legendary;
+			DivineSword->AllowedEquipmentSlot = EPAEquipmentSlot::Mainhand;
 			DivineSword->BaseSellPrice = 5000;
 
 			// Ingredients Assets

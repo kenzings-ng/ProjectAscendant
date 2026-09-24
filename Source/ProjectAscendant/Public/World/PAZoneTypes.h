@@ -16,6 +16,7 @@
 UENUM(BlueprintType)
 enum class EPAZoneTier : uint8
 {
+	None                    = 0 UMETA(DisplayName = "None / Unassigned"),
 	Tier1_VerdantFrontier   = 1 UMETA(DisplayName = "Tier 1: Verdant Frontier (Lv 1-15)"),
 	Tier2_AshenWilderness   = 2 UMETA(DisplayName = "Tier 2: Ashen Wilderness (Lv 16-30)"),
 	Tier3_ForbiddenSanctum  = 3 UMETA(DisplayName = "Tier 3: Forbidden Sanctum (Lv 31-50)")

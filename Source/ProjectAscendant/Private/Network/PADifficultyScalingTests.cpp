@@ -27,7 +27,7 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(
 
 namespace
 {
-	constexpr float kTolerance = 0.5f;
+	constexpr float kDiffTolerance = 0.5f;
 }
 
 // ---------------------------------------------------------------------------
@@ -45,7 +45,7 @@ bool FPADifficultyScalingTests::RunTest(const FString& Parameters)
 
 		// 1 người chơi: 10,000 HP
 		Model.RegisterCombatant(TEXT("Player_1"));
-		TestNearlyEqual(TEXT("AC1: 1 combatant -> 10,000 HP"), Model.ComputeScaledMaxHP(), 10000.0f, kTolerance);
+		TestNearlyEqual(TEXT("AC1: 1 combatant -> 10,000 HP"), Model.ComputeScaledMaxHP(), 10000.0f, kDiffTolerance);
 
 		// Thêm người chơi 2, 3, 4 (Tổng 4 người)
 		Model.RegisterCombatant(TEXT("Player_2"));
@@ -54,7 +54,7 @@ bool FPADifficultyScalingTests::RunTest(const FString& Parameters)
 
 		// 4 người chơi: 10,000 * (1.0 + 0.50 * 3) = 10,000 * 2.5 = 25,000 HP
 		TestEqual(TEXT("AC1: 4 combatants registered"), Model.GetCombatantCount(), 4);
-		TestNearlyEqual(TEXT("AC1: 4 combatants -> 25,000 HP"), Model.ComputeScaledMaxHP(), 25000.0f, kTolerance);
+		TestNearlyEqual(TEXT("AC1: 4 combatants -> 25,000 HP"), Model.ComputeScaledMaxHP(), 25000.0f, kDiffTolerance);
 	}
 
 	// ===========================================================
@@ -66,13 +66,13 @@ bool FPADifficultyScalingTests::RunTest(const FString& Parameters)
 
 		// 1 người chơi: 800 Posture
 		Model.RegisterCombatant(TEXT("Player_1"));
-		TestNearlyEqual(TEXT("AC2: 1 combatant -> 800 Posture"), Model.ComputeScaledMaxPosture(), 800.0f, kTolerance);
+		TestNearlyEqual(TEXT("AC2: 1 combatant -> 800 Posture"), Model.ComputeScaledMaxPosture(), 800.0f, kDiffTolerance);
 
 		// 4 người chơi: 800 * (1.0 + 0.35 * 3) = 800 * 2.05 = 1,640 Posture
 		Model.RegisterCombatant(TEXT("Player_2"));
 		Model.RegisterCombatant(TEXT("Player_3"));
 		Model.RegisterCombatant(TEXT("Player_4"));
-		TestNearlyEqual(TEXT("AC2: 4 combatants -> 1,640 Posture"), Model.ComputeScaledMaxPosture(), 1640.0f, kTolerance);
+		TestNearlyEqual(TEXT("AC2: 4 combatants -> 1,640 Posture"), Model.ComputeScaledMaxPosture(), 1640.0f, kDiffTolerance);
 	}
 
 	// ===========================================================

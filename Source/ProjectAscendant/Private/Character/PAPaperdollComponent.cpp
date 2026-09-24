@@ -48,7 +48,7 @@ void UPAPaperdollComponent::TickComponent(float DeltaTime, ELevelTick TickType, 
 				{
 					if (Pair.Value->GetPlaybackPositionInFrames() != CurrentFrame)
 					{
-						Pair.Value->SetPlaybackPositionInFrames(CurrentFrame);
+						Pair.Value->SetPlaybackPositionInFrames(CurrentFrame, false);
 					}
 				}
 			}
