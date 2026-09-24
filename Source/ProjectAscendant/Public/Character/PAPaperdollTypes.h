@@ -37,6 +37,52 @@ enum class EPAPaperdollSlot : uint8
 	Count       = 9 UMETA(Hidden)
 };
 
+/**
+ * EPAMasterRig
+ *
+ * 4 Master Animation Rigs cốt lõi (Story visual-001, EPIC-CHARACTER-VISUAL-001, Sprint 7):
+ * - HeavyTank: Vanguard, Berserker, Templar, Dragon Knight (Chân bước đầm chắc, tấn thấp, chìm trọng tâm).
+ * - Agility: Ranger, Shadowblade, Void Blade, God Slayer (Kiễng mũi chân, bước sải nhanh, cơ động).
+ * - Caster: Arcanist, Elementalist, Chronomancer (Dáng đứng thẳng đĩnh đạc, tà váy buông, lướt nhẹ).
+ * - Monk: Acolyte (Thế tấn mã bộ tĩnh, chuyển động ổn định cân bằng).
+ */
+UENUM(BlueprintType)
+enum class EPAMasterRig : uint8
+{
+	HeavyTank = 0 UMETA(DisplayName = "Hạng Nặng (Heavy Tank)"),
+	Agility   = 1 UMETA(DisplayName = "Linh Hoạt (Agility)"),
+	Caster    = 2 UMETA(DisplayName = "Pháp Giới (Caster)"),
+	Monk      = 3 UMETA(DisplayName = "Khí Công (Monk)"),
+	Count     = 4 UMETA(Hidden)
+};
+
+/**
+ * EPAWeaponFamily
+ *
+ * 7 Dòng Vũ Khí theo chuẩn GDD itemization.md & character-visual-system.md:
+ * - Blade_1H: Kiếm 1 tay (Vanguard, Templar, Void Blade, God Slayer).
+ * - Heavy_2H: Đại khí hạng nặng (Berserker, Vanguard 2H, Dragon Knight).
+ * - Polearm_2H: Thương dài / Kích (Dragon Knight, God Slayer, Town Guard).
+ * - Bow_2H: Cung tên xạ kích (Ranger).
+ * - DualDaggers: Song đoản đao (Shadowblade, Ranger sub-set).
+ * - Staff_2H: Trượng phép (Arcanist, Elementalist).
+ * - MaceRelic_1H: Chùy & Pháp bảo (Acolyte, Templar, Chronomancer).
+ * - None: Không vũ khí / Chưa gán.
+ */
+UENUM(BlueprintType)
+enum class EPAWeaponFamily : uint8
+{
+	Blade_1H      = 0 UMETA(DisplayName = "Kiếm 1 Tay (1H Blade)"),
+	Heavy_2H      = 1 UMETA(DisplayName = "Đại Khí 2 Tay (2H Heavy)"),
+	Polearm_2H    = 2 UMETA(DisplayName = "Thương/Kích (2H Polearm)"),
+	Bow_2H        = 3 UMETA(DisplayName = "Cung Tên (2H Bow)"),
+	DualDaggers   = 4 UMETA(DisplayName = "Song Đoản Đao (Dual Daggers)"),
+	Staff_2H      = 5 UMETA(DisplayName = "Trượng Phép (2H Staff)"),
+	MaceRelic_1H  = 6 UMETA(DisplayName = "Chùy & Pháp Bảo (1H Mace/Relic)"),
+	None          = 7 UMETA(DisplayName = "Không Vũ Khí (None)"),
+	Count         = 8 UMETA(Hidden)
+};
+
 /** Hằng số chuẩn hóa cho Paperdoll (kích thước, socket, pivot) */
 struct PROJECTASCENDANT_API FPAPaperdollConstants
 {
@@ -44,6 +90,15 @@ struct PROJECTASCENDANT_API FPAPaperdollConstants
 	static const FName HandSocket_L;
 	static const FVector2D FootPivot;             // (64, 114) theo SPEC-ART-2026-09-23-V2
 	static const FIntPoint PlaceholderDimensions; // (128, 128)
+
+	static const FName Socket_LowerBody;
+	static const FName Socket_UpperBody;
+	static const FVector2D WaistPivot;            // (64, 80)
+
+	static FName GetDefaultLowerBodyAssetForRig(EPAMasterRig Rig);
+	static FName GetDefaultUpperBodyAssetForFamily(EPAWeaponFamily Family);
+	static EPAWeaponFamily GetWeaponFamilyFromTag(FGameplayTag Tag);
+	static FGameplayTag GetTagForWeaponFamily(EPAWeaponFamily Family);
 };
 
 /**
@@ -269,6 +324,18 @@ struct PROJECTASCENDANT_API FPAPaperdollModel
 	UPROPERTY(BlueprintReadOnly, Category = "Paperdoll|Model")
 	FPAPaperdollAppearance CurrentAppearance;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Paperdoll|Rig")
+	EPAMasterRig CurrentMasterRig = EPAMasterRig::HeavyTank;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Paperdoll|Rig")
+	EPAWeaponFamily CurrentWeaponFamily = EPAWeaponFamily::Blade_1H;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Paperdoll|Rig")
+	FName LowerBodyVisualAssetId = FName(TEXT("FB_Lower_HeavyTank_Set"));
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Paperdoll|Rig")
+	FName UpperBodyVisualAssetId = FName(TEXT("FB_Upper_1H_Blade_Combo"));
+
 	FPAPaperdollModel()
 	{
 		ResetToStarterCloth();
@@ -280,6 +347,48 @@ struct PROJECTASCENDANT_API FPAPaperdollModel
 	void ResetToStarterCloth()
 	{
 		CurrentAppearance = FPAPaperdollAppearance();
+		CurrentMasterRig = EPAMasterRig::HeavyTank;
+		CurrentWeaponFamily = EPAWeaponFamily::Blade_1H;
+		LowerBodyVisualAssetId = FPAPaperdollConstants::GetDefaultLowerBodyAssetForRig(CurrentMasterRig);
+		UpperBodyVisualAssetId = FPAPaperdollConstants::GetDefaultUpperBodyAssetForFamily(CurrentWeaponFamily);
+	}
+
+	/**
+	 * Gán Master Rig cho Lower Body.
+	 */
+	void SetMasterRig(EPAMasterRig InRig)
+	{
+		CurrentMasterRig = InRig;
+		LowerBodyVisualAssetId = FPAPaperdollConstants::GetDefaultLowerBodyAssetForRig(InRig);
+	}
+
+	EPAMasterRig GetMasterRig() const { return CurrentMasterRig; }
+	FName GetLowerBodyVisualAssetId() const { return LowerBodyVisualAssetId; }
+
+	/**
+	 * Gán Weapon Family cho Upper Body.
+	 */
+	void SetUpperBodyWeaponFamily(EPAWeaponFamily InFamily)
+	{
+		CurrentWeaponFamily = InFamily;
+		UpperBodyVisualAssetId = FPAPaperdollConstants::GetDefaultUpperBodyAssetForFamily(InFamily);
+	}
+
+	EPAWeaponFamily GetWeaponFamily() const { return CurrentWeaponFamily; }
+	FName GetUpperBodyVisualAssetId() const { return UpperBodyVisualAssetId; }
+
+	/**
+	 * Gán Weapon Family bằng Gameplay Tag (vd Weapon.1H.Blade).
+	 */
+	bool SetUpperBodyWeaponFamilyByTag(FGameplayTag WeaponTag)
+	{
+		const EPAWeaponFamily Family = FPAPaperdollConstants::GetWeaponFamilyFromTag(WeaponTag);
+		if (Family != EPAWeaponFamily::None)
+		{
+			SetUpperBodyWeaponFamily(Family);
+			return true;
+		}
+		return false;
 	}
 
 	/**

@@ -165,6 +165,55 @@ public:
 	UFUNCTION(BlueprintPure, Category = "Paperdoll")
 	FName GetActiveVisualAssetId(EPAPaperdollLayer Layer) const { return Model.GetActiveVisualAssetId(Layer); }
 
+	// -------------------------------------------------------------------------
+	// Decoupled Master Rig & Weapon Family API (Story visual-001, Sprint 7)
+	// -------------------------------------------------------------------------
+
+	/**
+	 * Thiết lập Master Rig cho Lower Body locomotion (HeavyTank, Agility, Caster, Monk).
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Paperdoll|Rig")
+	void SetMasterRig(EPAMasterRig InRig);
+
+	UFUNCTION(BlueprintPure, Category = "Paperdoll|Rig")
+	EPAMasterRig GetMasterRig() const { return Model.GetMasterRig(); }
+
+	/**
+	 * Thiết lập Weapon Family cho Upper Body combat animation (Decoupled, không ảnh hưởng chân).
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Paperdoll|Rig")
+	void SetUpperBodyWeaponFamily(EPAWeaponFamily InFamily);
+
+	UFUNCTION(BlueprintCallable, Category = "Paperdoll|Rig")
+	bool SetUpperBodyWeaponFamilyByTag(FGameplayTag WeaponTag);
+
+	UFUNCTION(BlueprintPure, Category = "Paperdoll|Rig")
+	EPAWeaponFamily GetWeaponFamily() const { return Model.GetWeaponFamily(); }
+
+	/**
+	 * Khởi tạo tự động 2 sub-components cho Decoupled Master Rig (LowerBody và UpperBody).
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Paperdoll|Rig")
+	void InitializeDecoupledMasterRigComponents();
+
+	UFUNCTION(BlueprintCallable, Category = "Paperdoll|Rig")
+	void RegisterLowerBodyComponent(UPaperFlipbookComponent* InComp);
+
+	UFUNCTION(BlueprintPure, Category = "Paperdoll|Rig")
+	UPaperFlipbookComponent* GetLowerBodyComponent() const { return LowerBodyComponent; }
+
+	UFUNCTION(BlueprintCallable, Category = "Paperdoll|Rig")
+	void RegisterUpperBodyComponent(UPaperFlipbookComponent* InComp);
+
+	UFUNCTION(BlueprintPure, Category = "Paperdoll|Rig")
+	UPaperFlipbookComponent* GetUpperBodyComponent() const { return UpperBodyComponent; }
+
+	UFUNCTION(BlueprintPure, Category = "Paperdoll|Rig")
+	FName GetActiveLowerBodyVisualAssetId() const { return Model.GetLowerBodyVisualAssetId(); }
+
+	UFUNCTION(BlueprintPure, Category = "Paperdoll|Rig")
+	FName GetActiveUpperBodyVisualAssetId() const { return Model.GetUpperBodyVisualAssetId(); }
+
 	/**
 	 * Đăng ký / Ánh xạ một Flipbook Component cho một Layer đồ họa.
 	 */
@@ -211,6 +260,14 @@ private:
 	/** Map tham chiếu đến 9 sub-component cho 9 slot (Story item-004) */
 	UPROPERTY(Transient)
 	TMap<EPAPaperdollSlot, TObjectPtr<UPaperFlipbookComponent>> SlotComponents;
+
+	/** Flipbook Component hiển thị chuyển động Lower Body (Chân & Thắt lưng) */
+	UPROPERTY(Transient)
+	TObjectPtr<UPaperFlipbookComponent> LowerBodyComponent = nullptr;
+
+	/** Flipbook Component hiển thị chuyển động Upper Body (Thân trên & Tay cầm vũ khí) */
+	UPROPERTY(Transient)
+	TObjectPtr<UPaperFlipbookComponent> UpperBodyComponent = nullptr;
 
 	/** Hướng ngắm 8 chiều hiện tại */
 	UPROPERTY(Transient)

@@ -13,6 +13,82 @@ const FName FPAPaperdollConstants::HandSocket_L(TEXT("HandSocket_L"));
 const FVector2D FPAPaperdollConstants::FootPivot(64.0f, 114.0f);
 const FIntPoint FPAPaperdollConstants::PlaceholderDimensions(128, 128);
 
+const FName FPAPaperdollConstants::Socket_LowerBody(TEXT("Socket_LowerBody"));
+const FName FPAPaperdollConstants::Socket_UpperBody(TEXT("Socket_UpperBody"));
+const FVector2D FPAPaperdollConstants::WaistPivot(64.0f, 80.0f);
+
+FName FPAPaperdollConstants::GetDefaultLowerBodyAssetForRig(EPAMasterRig Rig)
+{
+	switch (Rig)
+	{
+	case EPAMasterRig::HeavyTank: return FName(TEXT("FB_Lower_HeavyTank_Set"));
+	case EPAMasterRig::Agility:   return FName(TEXT("FB_Lower_Agility_Set"));
+	case EPAMasterRig::Caster:    return FName(TEXT("FB_Lower_Caster_Set"));
+	case EPAMasterRig::Monk:      return FName(TEXT("FB_Lower_Monk_Set"));
+	default:                      return FName(TEXT("FB_Lower_HeavyTank_Set"));
+	}
+}
+
+FName FPAPaperdollConstants::GetDefaultUpperBodyAssetForFamily(EPAWeaponFamily Family)
+{
+	switch (Family)
+	{
+	case EPAWeaponFamily::Blade_1H:     return FName(TEXT("FB_Upper_1H_Blade_Combo"));
+	case EPAWeaponFamily::Heavy_2H:     return FName(TEXT("FB_Upper_2H_Heavy_Combo"));
+	case EPAWeaponFamily::Polearm_2H:   return FName(TEXT("FB_Upper_2H_Polearm_Combo"));
+	case EPAWeaponFamily::Bow_2H:       return FName(TEXT("FB_Upper_2H_Bow_Combo"));
+	case EPAWeaponFamily::DualDaggers:  return FName(TEXT("FB_Upper_Dual_Daggers_Combo"));
+	case EPAWeaponFamily::Staff_2H:     return FName(TEXT("FB_Upper_2H_Staff_Combo"));
+	case EPAWeaponFamily::MaceRelic_1H: return FName(TEXT("FB_Upper_1H_MaceRelic_Combo"));
+	default:                            return NAME_None;
+	}
+}
+
+EPAWeaponFamily FPAPaperdollConstants::GetWeaponFamilyFromTag(FGameplayTag Tag)
+{
+	if (!Tag.IsValid())
+	{
+		return EPAWeaponFamily::None;
+	}
+
+	const FString TagStr = Tag.ToString();
+	if (TagStr.Contains(TEXT("Weapon.1H.Blade"))) return EPAWeaponFamily::Blade_1H;
+	if (TagStr.Contains(TEXT("Weapon.2H.Heavy"))) return EPAWeaponFamily::Heavy_2H;
+	if (TagStr.Contains(TEXT("Weapon.2H.Polearm"))) return EPAWeaponFamily::Polearm_2H;
+	if (TagStr.Contains(TEXT("Weapon.2H.Bow"))) return EPAWeaponFamily::Bow_2H;
+	if (TagStr.Contains(TEXT("Weapon.Dual.Daggers"))) return EPAWeaponFamily::DualDaggers;
+	if (TagStr.Contains(TEXT("Weapon.2H.Staff"))) return EPAWeaponFamily::Staff_2H;
+	if (TagStr.Contains(TEXT("Weapon.1H.Mace"))) return EPAWeaponFamily::MaceRelic_1H;
+
+	return EPAWeaponFamily::None;
+}
+
+#include "GameplayTagsManager.h"
+
+FGameplayTag FPAPaperdollConstants::GetTagForWeaponFamily(EPAWeaponFamily Family)
+{
+	FName TagName = NAME_None;
+	switch (Family)
+	{
+	case EPAWeaponFamily::Blade_1H:     TagName = FName(TEXT("Weapon.1H.Blade")); break;
+	case EPAWeaponFamily::Heavy_2H:     TagName = FName(TEXT("Weapon.2H.Heavy")); break;
+	case EPAWeaponFamily::Polearm_2H:   TagName = FName(TEXT("Weapon.2H.Polearm")); break;
+	case EPAWeaponFamily::Bow_2H:       TagName = FName(TEXT("Weapon.2H.Bow")); break;
+	case EPAWeaponFamily::DualDaggers:  TagName = FName(TEXT("Weapon.Dual.Daggers")); break;
+	case EPAWeaponFamily::Staff_2H:     TagName = FName(TEXT("Weapon.2H.Staff")); break;
+	case EPAWeaponFamily::MaceRelic_1H: TagName = FName(TEXT("Weapon.1H.Mace")); break;
+	default: break;
+	}
+
+	if (TagName.IsNone())
+	{
+		return FGameplayTag();
+	}
+
+	UGameplayTagsManager::Get().AddNativeGameplayTag(TagName);
+	return FGameplayTag::RequestGameplayTag(TagName, false);
+}
+
 bool FPAPaperdollSortKey::IsMirroredDirection(EPAAimDirection8Way Direction)
 {
 	return Direction == EPAAimDirection8Way::West ||
@@ -118,6 +194,22 @@ void UPAPaperdollComponent::TickComponent(float DeltaTime, ELevelTick TickType, 
 					{
 						Pair.Value->SetPlaybackPositionInFrames(CurrentFrame, false);
 					}
+				}
+			}
+
+			if (LowerBodyComponent && LowerBodyComponent->IsVisible())
+			{
+				if (LowerBodyComponent->GetPlaybackPositionInFrames() != CurrentFrame)
+				{
+					LowerBodyComponent->SetPlaybackPositionInFrames(CurrentFrame, false);
+				}
+			}
+
+			if (UpperBodyComponent && UpperBodyComponent->IsVisible())
+			{
+				if (UpperBodyComponent->GetPlaybackPositionInFrames() != CurrentFrame)
+				{
+					UpperBodyComponent->SetPlaybackPositionInFrames(CurrentFrame, false);
 				}
 			}
 		}
@@ -262,6 +354,15 @@ void UPAPaperdollComponent::UpdateDirectionalSortKeys(EPAAimDirection8Way Direct
 {
 	CurrentOrientation = Direction;
 
+	if (LowerBodyComponent)
+	{
+		LowerBodyComponent->SetTranslucentSortPriority(10);
+	}
+	if (UpperBodyComponent)
+	{
+		UpperBodyComponent->SetTranslucentSortPriority(20);
+	}
+
 	for (auto& Pair : SlotComponents)
 	{
 		if (Pair.Value)
@@ -269,6 +370,82 @@ void UPAPaperdollComponent::UpdateDirectionalSortKeys(EPAAimDirection8Way Direct
 			const int32 SortKey = FPAPaperdollSortKey::GetSortPriorityForSlot(Pair.Key, Direction);
 			Pair.Value->SetTranslucentSortPriority(SortKey);
 		}
+	}
+}
+
+void UPAPaperdollComponent::SetMasterRig(EPAMasterRig InRig)
+{
+	Model.SetMasterRig(InRig);
+	SynchronizeLayerSprites();
+}
+
+void UPAPaperdollComponent::SetUpperBodyWeaponFamily(EPAWeaponFamily InFamily)
+{
+	Model.SetUpperBodyWeaponFamily(InFamily);
+	SynchronizeLayerSprites();
+}
+
+bool UPAPaperdollComponent::SetUpperBodyWeaponFamilyByTag(FGameplayTag WeaponTag)
+{
+	const bool bSuccess = Model.SetUpperBodyWeaponFamilyByTag(WeaponTag);
+	if (bSuccess)
+	{
+		SynchronizeLayerSprites();
+	}
+	return bSuccess;
+}
+
+void UPAPaperdollComponent::InitializeDecoupledMasterRigComponents()
+{
+	AActor* OwnerActor = GetOwner();
+	USceneComponent* AttachRoot = OwnerActor ? OwnerActor->GetRootComponent() : nullptr;
+
+	if (OwnerActor && AttachRoot)
+	{
+		if (!LowerBodyComponent)
+		{
+			LowerBodyComponent = NewObject<UPaperFlipbookComponent>(OwnerActor, TEXT("Paperdoll_LowerBody"));
+			if (LowerBodyComponent)
+			{
+				LowerBodyComponent->AttachToComponent(AttachRoot, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+				LowerBodyComponent->SetTranslucentSortPriority(10);
+				LowerBodyComponent->RegisterComponent();
+			}
+		}
+
+		if (!UpperBodyComponent)
+		{
+			UpperBodyComponent = NewObject<UPaperFlipbookComponent>(OwnerActor, TEXT("Paperdoll_UpperBody"));
+			if (UpperBodyComponent)
+			{
+				UpperBodyComponent->AttachToComponent(AttachRoot, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+				UpperBodyComponent->SetTranslucentSortPriority(20);
+				UpperBodyComponent->RegisterComponent();
+			}
+		}
+	}
+
+	UpdateDirectionalSortKeys(CurrentOrientation);
+	SynchronizeLayerSprites();
+}
+
+void UPAPaperdollComponent::RegisterLowerBodyComponent(UPaperFlipbookComponent* InComp)
+{
+	if (InComp)
+	{
+		LowerBodyComponent = InComp;
+		LowerBodyComponent->SetTranslucentSortPriority(10);
+		SynchronizeLayerSprites();
+	}
+}
+
+void UPAPaperdollComponent::RegisterUpperBodyComponent(UPaperFlipbookComponent* InComp)
+{
+	if (InComp)
+	{
+		UpperBodyComponent = InComp;
+		UpperBodyComponent->SetTranslucentSortPriority(20);
+		SynchronizeLayerSprites();
 	}
 }
 
@@ -328,6 +505,18 @@ void UPAPaperdollComponent::SynchronizeLayerSprites()
 			const bool bShouldShow = !ActiveVisual.IsNone();
 			Pair.Value->SetVisibility(bShouldShow);
 		}
+	}
+
+	if (LowerBodyComponent)
+	{
+		const FName ActiveVisual = Model.GetLowerBodyVisualAssetId();
+		LowerBodyComponent->SetVisibility(!ActiveVisual.IsNone());
+	}
+
+	if (UpperBodyComponent)
+	{
+		const FName ActiveVisual = Model.GetUpperBodyVisualAssetId();
+		UpperBodyComponent->SetVisibility(!ActiveVisual.IsNone());
 	}
 }
 
