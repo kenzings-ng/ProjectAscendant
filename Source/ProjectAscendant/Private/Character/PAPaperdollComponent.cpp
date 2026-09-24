@@ -1,11 +1,79 @@
-// Copyright Project Ascendant. All Rights Reserved.
-
 #include "Character/PAPaperdollComponent.h"
 #include "Character/PABaseCharacter.h"
 #include "Inventory/PAEquipmentComponent.h"
 #include "Inventory/PAItemStaticDataAsset.h"
 #include "PaperFlipbookComponent.h"
 #include "Net/UnrealNetwork.h"
+
+// -----------------------------------------------------------------------------
+// Constants & Sort Key
+// -----------------------------------------------------------------------------
+const FName FPAPaperdollConstants::HandSocket_R(TEXT("HandSocket_R"));
+const FName FPAPaperdollConstants::HandSocket_L(TEXT("HandSocket_L"));
+const FVector2D FPAPaperdollConstants::FootPivot(64.0f, 114.0f);
+const FIntPoint FPAPaperdollConstants::PlaceholderDimensions(128, 128);
+
+bool FPAPaperdollSortKey::IsMirroredDirection(EPAAimDirection8Way Direction)
+{
+	return Direction == EPAAimDirection8Way::West ||
+	       Direction == EPAAimDirection8Way::SouthWest ||
+	       Direction == EPAAimDirection8Way::NorthWest;
+}
+
+int32 FPAPaperdollSortKey::GetSortPriorityForSlot(EPAPaperdollSlot Slot, EPAAimDirection8Way Direction)
+{
+	const bool bMirrored = IsMirroredDirection(Direction);
+
+	switch (Slot)
+	{
+	case EPAPaperdollSlot::OffHand:
+		// Khi không mirror (hướng Đông): OffHand ở phía xa camera -> SortKey = 5
+		// Khi mirror (hướng Tây): OffHand đảo chiều sang phía gần camera -> SortKey = 50
+		return bMirrored ? 50 : 5;
+
+	case EPAPaperdollSlot::Pants:
+		return 15;
+
+	case EPAPaperdollSlot::Boots:
+		return 18;
+
+	case EPAPaperdollSlot::Chest:
+		return 25;
+
+	case EPAPaperdollSlot::Gloves:
+		return 30;
+
+	case EPAPaperdollSlot::Helm:
+		return 35;
+
+	case EPAPaperdollSlot::Amulet:
+		return 38;
+
+	case EPAPaperdollSlot::Ring:
+		return 40;
+
+	case EPAPaperdollSlot::MainHand:
+		// Khi không mirror (hướng Đông): MainHand ở phía gần camera -> SortKey = 50
+		// Khi mirror (hướng Tây): MainHand đảo chiều ra phía xa camera -> SortKey = 5
+		return bMirrored ? 5 : 50;
+
+	default:
+		return 20;
+	}
+}
+
+FName FPAPaperdollSortKey::GetSocketNameForSlot(EPAPaperdollSlot Slot)
+{
+	switch (Slot)
+	{
+	case EPAPaperdollSlot::MainHand:
+		return FPAPaperdollConstants::HandSocket_R;
+	case EPAPaperdollSlot::OffHand:
+		return FPAPaperdollConstants::HandSocket_L;
+	default:
+		return NAME_None;
+	}
+}
 
 UPAPaperdollComponent::UPAPaperdollComponent()
 {
@@ -137,6 +205,109 @@ void UPAPaperdollComponent::HandleItemUnequipped(EPAEquipmentSlot Slot, const FP
 	}
 }
 
+bool UPAPaperdollComponent::EquipSlot(EPAPaperdollSlot Slot, FName ItemId, FName VisualAssetId)
+{
+	const bool bSuccess = Model.EquipSlot(Slot, ItemId, VisualAssetId);
+	if (bSuccess)
+	{
+		SynchronizeLayerSprites();
+
+		// Đồng bộ sang legacy Layer event nếu tương thích
+		EPAPaperdollLayer LegacyLayer = EPAPaperdollLayer::BaseBody;
+		if (Slot == EPAPaperdollSlot::Helm) LegacyLayer = EPAPaperdollLayer::Helmet;
+		else if (Slot == EPAPaperdollSlot::Chest) LegacyLayer = EPAPaperdollLayer::ChestArmor;
+		else if (Slot == EPAPaperdollSlot::MainHand) LegacyLayer = EPAPaperdollLayer::MainhandWeapon;
+		else if (Slot == EPAPaperdollSlot::OffHand) LegacyLayer = EPAPaperdollLayer::OffhandShield;
+
+		OnPaperdollVisualChanged.Broadcast(LegacyLayer, ItemId, VisualAssetId, true);
+	}
+	return bSuccess;
+}
+
+bool UPAPaperdollComponent::UnequipSlot(EPAPaperdollSlot Slot)
+{
+	const bool bSuccess = Model.UnequipSlot(Slot);
+	if (bSuccess)
+	{
+		SynchronizeLayerSprites();
+
+		EPAPaperdollLayer LegacyLayer = EPAPaperdollLayer::BaseBody;
+		if (Slot == EPAPaperdollSlot::Helm) LegacyLayer = EPAPaperdollLayer::Helmet;
+		else if (Slot == EPAPaperdollSlot::Chest) LegacyLayer = EPAPaperdollLayer::ChestArmor;
+		else if (Slot == EPAPaperdollSlot::MainHand) LegacyLayer = EPAPaperdollLayer::MainhandWeapon;
+		else if (Slot == EPAPaperdollSlot::OffHand) LegacyLayer = EPAPaperdollLayer::OffhandShield;
+
+		OnPaperdollVisualChanged.Broadcast(LegacyLayer, NAME_None, NAME_None, false);
+	}
+	return bSuccess;
+}
+
+void UPAPaperdollComponent::RegisterSlotFlipbookComponent(EPAPaperdollSlot Slot, UPaperFlipbookComponent* FlipbookComp)
+{
+	if (FlipbookComp)
+	{
+		SlotComponents.FindOrAdd(Slot) = FlipbookComp;
+		FlipbookComp->SetTranslucentSortPriority(FPAPaperdollSortKey::GetSortPriorityForSlot(Slot, CurrentOrientation));
+		SynchronizeLayerSprites();
+	}
+}
+
+UPaperFlipbookComponent* UPAPaperdollComponent::GetSlotFlipbookComponent(EPAPaperdollSlot Slot) const
+{
+	const TObjectPtr<UPaperFlipbookComponent>* Found = SlotComponents.Find(Slot);
+	return Found ? Found->Get() : nullptr;
+}
+
+void UPAPaperdollComponent::UpdateDirectionalSortKeys(EPAAimDirection8Way Direction)
+{
+	CurrentOrientation = Direction;
+
+	for (auto& Pair : SlotComponents)
+	{
+		if (Pair.Value)
+		{
+			const int32 SortKey = FPAPaperdollSortKey::GetSortPriorityForSlot(Pair.Key, Direction);
+			Pair.Value->SetTranslucentSortPriority(SortKey);
+		}
+	}
+}
+
+void UPAPaperdollComponent::Initialize9SlotSubcomponents()
+{
+	AActor* OwnerActor = GetOwner();
+	USceneComponent* AttachRoot = OwnerActor ? OwnerActor->GetRootComponent() : nullptr;
+
+	for (uint8 i = 0; i < (uint8)EPAPaperdollSlot::Count; ++i)
+	{
+		EPAPaperdollSlot Slot = (EPAPaperdollSlot)i;
+		if (!SlotComponents.Contains(Slot))
+		{
+			if (OwnerActor)
+			{
+				FString CompName = FString::Printf(TEXT("PaperdollSlot_%d"), i);
+				UPaperFlipbookComponent* NewComp = NewObject<UPaperFlipbookComponent>(OwnerActor, *CompName);
+				if (NewComp)
+				{
+					const FName SocketName = FPAPaperdollSortKey::GetSocketNameForSlot(Slot);
+					if (SocketName != NAME_None && AttachRoot)
+					{
+						NewComp->AttachToComponent(AttachRoot, FAttachmentTransformRules::SnapToTargetNotIncludingScale, SocketName);
+					}
+					else if (AttachRoot)
+					{
+						NewComp->AttachToComponent(AttachRoot, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+					}
+
+					NewComp->RegisterComponent();
+					RegisterSlotFlipbookComponent(Slot, NewComp);
+				}
+			}
+		}
+	}
+
+	UpdateDirectionalSortKeys(CurrentOrientation);
+}
+
 void UPAPaperdollComponent::SynchronizeLayerSprites()
 {
 	for (auto& Pair : LayerComponents)
@@ -144,6 +315,16 @@ void UPAPaperdollComponent::SynchronizeLayerSprites()
 		if (Pair.Value)
 		{
 			const FName ActiveVisual = Model.GetActiveVisualAssetId(Pair.Key);
+			const bool bShouldShow = !ActiveVisual.IsNone();
+			Pair.Value->SetVisibility(bShouldShow);
+		}
+	}
+
+	for (auto& Pair : SlotComponents)
+	{
+		if (Pair.Value)
+		{
+			const FName ActiveVisual = Model.GetActiveVisualAssetForSlot(Pair.Key);
 			const bool bShouldShow = !ActiveVisual.IsNone();
 			Pair.Value->SetVisibility(bShouldShow);
 		}

@@ -80,6 +80,49 @@ public:
 	FPAPaperdollModel& GetMutableModel() { return Model; }
 
 	/**
+	 * Mặc trang bị vào một trong 9 ô slot của Paperdoll (Story item-004).
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Paperdoll")
+	bool EquipSlot(EPAPaperdollSlot Slot, FName ItemId, FName VisualAssetId);
+
+	/**
+	 * Tháo trang bị khỏi một trong 9 ô slot của Paperdoll (Story item-004).
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Paperdoll")
+	bool UnequipSlot(EPAPaperdollSlot Slot);
+
+	/**
+	 * Đăng ký / Ánh xạ một Flipbook Component cho một trong 9 ô slot (item-004).
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Paperdoll")
+	void RegisterSlotFlipbookComponent(EPAPaperdollSlot Slot, UPaperFlipbookComponent* FlipbookComp);
+
+	/**
+	 * Lấy Flipbook Component được gán cho slot chỉ định.
+	 */
+	UFUNCTION(BlueprintPure, Category = "Paperdoll")
+	UPaperFlipbookComponent* GetSlotFlipbookComponent(EPAPaperdollSlot Slot) const;
+
+	/**
+	 * Cập nhật Directional Sort Key / Translucent Sort Priority theo hướng ngắm 8 chiều:
+	 * Tự động đảo priority giữa MainHand và OffHand khi mirror hướng Tây/Tây Nam/Tây Bắc.
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Paperdoll")
+	void UpdateDirectionalSortKeys(EPAAimDirection8Way Direction);
+
+	/**
+	 * Khởi tạo tự động 9 sub-components cho 9 slot (gắn HandSocket_R/L, pivot chân 64,114).
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Paperdoll")
+	void Initialize9SlotSubcomponents();
+
+	/**
+	 * Lấy hướng ngắm hiện tại của Paperdoll.
+	 */
+	UFUNCTION(BlueprintPure, Category = "Paperdoll")
+	EPAAimDirection8Way GetCurrentOrientation() const { return CurrentOrientation; }
+
+	/**
 	 * Lấy mã tài nguyên hiển thị của tầng chỉ định.
 	 */
 	UFUNCTION(BlueprintPure, Category = "Paperdoll")
@@ -127,6 +170,14 @@ private:
 	/** Map tham chiếu đến các Flipbook Component tương ứng cho từng Layer (chỉ dùng trên Client/Standalone có render) */
 	UPROPERTY(Transient)
 	TMap<EPAPaperdollLayer, TObjectPtr<UPaperFlipbookComponent>> LayerComponents;
+
+	/** Map tham chiếu đến 9 sub-component cho 9 slot (Story item-004) */
+	UPROPERTY(Transient)
+	TMap<EPAPaperdollSlot, TObjectPtr<UPaperFlipbookComponent>> SlotComponents;
+
+	/** Hướng ngắm 8 chiều hiện tại */
+	UPROPERTY(Transient)
+	EPAAimDirection8Way CurrentOrientation = EPAAimDirection8Way::East;
 
 	/** Con trỏ yếu đến EquipmentComponent đã liên kết */
 	TWeakObjectPtr<UPAEquipmentComponent> BoundEquipmentComponent;

@@ -138,4 +138,140 @@ bool FPAPaperdollTests::RunTest(const FString& Parameters)
 	return true;
 }
 
+/**
+ * FPAPaperdoll9SlotTest
+ *
+ * Kiểm thử cho Story item-004 (Paperdoll 9-Slot, EPIC-ITEMIZATION-001, Sprint 6):
+ * - AC-1: Khởi tạo 9 sub-component (Helm/Chest/Gloves/Pants/Boots/MainHand/OffHand/Amulet/Ring),
+ *         placeholder block 128x128, pivot chân (64, 114), socket HandSocket_R và HandSocket_L.
+ * - AC-2: Binding và trang bị trên toàn bộ 9 slot.
+ * - AC-3: Directional Sort Key đảo priority giữa MainHand và OffHand khi mirror hướng Tây,
+ *         không bị đảo lệch thứ tự lớp giữa trái/phải.
+ */
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(
+	FPAPaperdoll9SlotTest,
+	"ProjectAscendant.Itemization.Paperdoll9Slot",
+	EAutomationTestFlags_ApplicationContextMask | EAutomationTestFlags::ProductFilter)
+
+bool FPAPaperdoll9SlotTest::RunTest(const FString& Parameters)
+{
+	// =========================================================================
+	// AC-1: 9-Slot Hierarchy, Foot Pivot & Sockets
+	// =========================================================================
+	{
+		TestEqual(TEXT("AC-1: Paperdoll defines 9 distinct slots"), (uint8)EPAPaperdollSlot::Count, (uint8)9);
+
+		TestEqual(TEXT("AC-1: Placeholder block dimensions are 128x128"),
+			FPAPaperdollConstants::PlaceholderDimensions, FIntPoint(128, 128));
+
+		TestEqual(TEXT("AC-1: Foot pivot is (64, 114)"),
+			FPAPaperdollConstants::FootPivot, FVector2D(64.0f, 114.0f));
+
+		TestEqual(TEXT("AC-1: MainHand socket is HandSocket_R"),
+			FPAPaperdollSortKey::GetSocketNameForSlot(EPAPaperdollSlot::MainHand), FName(TEXT("HandSocket_R")));
+
+		TestEqual(TEXT("AC-1: OffHand socket is HandSocket_L"),
+			FPAPaperdollSortKey::GetSocketNameForSlot(EPAPaperdollSlot::OffHand), FName(TEXT("HandSocket_L")));
+
+		TestEqual(TEXT("AC-1: Helm has no specialized hand socket"),
+			FPAPaperdollSortKey::GetSocketNameForSlot(EPAPaperdollSlot::Helm), FName(NAME_None));
+	}
+
+	// =========================================================================
+	// AC-2: 9-Slot Equip & Unequip Logic
+	// =========================================================================
+	{
+		FPAPaperdollModel Model;
+
+		const struct FSlotTestData
+		{
+			EPAPaperdollSlot Slot;
+			FName ItemId;
+			FName VisualId;
+		} TestSlots[] =
+		{
+			{ EPAPaperdollSlot::Helm,     FName("item_iron_helm"),    FName("Visual_IronHelm") },
+			{ EPAPaperdollSlot::Chest,    FName("item_iron_chest"),   FName("Visual_IronChest") },
+			{ EPAPaperdollSlot::Gloves,   FName("item_steel_gloves"), FName("Visual_SteelGloves") },
+			{ EPAPaperdollSlot::Pants,    FName("item_iron_pants"),   FName("Visual_IronPants") },
+			{ EPAPaperdollSlot::Boots,    FName("item_iron_boots"),   FName("Visual_IronBoots") },
+			{ EPAPaperdollSlot::MainHand, FName("item_broadsword"),   FName("Visual_Broadsword") },
+			{ EPAPaperdollSlot::OffHand,  FName("item_iron_shield"),  FName("Visual_IronShield") },
+			{ EPAPaperdollSlot::Amulet,   FName("item_ruby_amulet"),  FName("Visual_RubyAmulet") },
+			{ EPAPaperdollSlot::Ring,     FName("item_gold_ring"),    FName("Visual_GoldRing") }
+		};
+
+		// 1. Kiểm tra ban đầu mọi slot đều trống
+		for (const auto& TestData : TestSlots)
+		{
+			TestFalse(FString::Printf(TEXT("AC-2: Slot %d is initially empty"), (int32)TestData.Slot),
+				Model.IsSlotEquipped(TestData.Slot));
+		}
+
+		// 2. Mặc trang bị lên cả 9 slot
+		for (const auto& TestData : TestSlots)
+		{
+			bool bEquipped = Model.EquipSlot(TestData.Slot, TestData.ItemId, TestData.VisualId);
+			TestTrue(FString::Printf(TEXT("AC-2: EquipSlot succeeded for slot %d"), (int32)TestData.Slot), bEquipped);
+			TestTrue(FString::Printf(TEXT("AC-2: Slot %d is equipped"), (int32)TestData.Slot), Model.IsSlotEquipped(TestData.Slot));
+			TestEqual(FString::Printf(TEXT("AC-2: Active visual matches for slot %d"), (int32)TestData.Slot),
+				Model.GetActiveVisualAssetForSlot(TestData.Slot), TestData.VisualId);
+		}
+
+		// 3. Tháo trang bị từng slot và kiểm tra hoàn trả
+		for (const auto& TestData : TestSlots)
+		{
+			bool bUnequipped = Model.UnequipSlot(TestData.Slot);
+			TestTrue(FString::Printf(TEXT("AC-2: UnequipSlot succeeded for slot %d"), (int32)TestData.Slot), bUnequipped);
+			TestFalse(FString::Printf(TEXT("AC-2: Slot %d is no longer equipped"), (int32)TestData.Slot), Model.IsSlotEquipped(TestData.Slot));
+			TestEqual(FString::Printf(TEXT("AC-2: Visual cleared to None for slot %d"), (int32)TestData.Slot),
+				Model.GetActiveVisualAssetForSlot(TestData.Slot), FName(NAME_None));
+		}
+	}
+
+	// =========================================================================
+	// AC-3: Directional Sort Key & Horizontal Mirroring Priority Inversion
+	// =========================================================================
+	{
+		// 1. Kiểm tra phát hiện hướng Mirror
+		TestFalse(TEXT("AC-3: East is NOT mirrored"), FPAPaperdollSortKey::IsMirroredDirection(EPAAimDirection8Way::East));
+		TestFalse(TEXT("AC-3: NorthEast is NOT mirrored"), FPAPaperdollSortKey::IsMirroredDirection(EPAAimDirection8Way::NorthEast));
+		TestFalse(TEXT("AC-3: SouthEast is NOT mirrored"), FPAPaperdollSortKey::IsMirroredDirection(EPAAimDirection8Way::SouthEast));
+
+		TestTrue(TEXT("AC-3: West IS mirrored"), FPAPaperdollSortKey::IsMirroredDirection(EPAAimDirection8Way::West));
+		TestTrue(TEXT("AC-3: NorthWest IS mirrored"), FPAPaperdollSortKey::IsMirroredDirection(EPAAimDirection8Way::NorthWest));
+		TestTrue(TEXT("AC-3: SouthWest IS mirrored"), FPAPaperdollSortKey::IsMirroredDirection(EPAAimDirection8Way::SouthWest));
+
+		// 2. Hướng Đông (Chuẩn không lật): MainHand (50) nằm TRƯỚC Chest (25) và OffHand (5) nằm SAU
+		const int32 EastMain = FPAPaperdollSortKey::GetSortPriorityForSlot(EPAPaperdollSlot::MainHand, EPAAimDirection8Way::East);
+		const int32 EastOff = FPAPaperdollSortKey::GetSortPriorityForSlot(EPAPaperdollSlot::OffHand, EPAAimDirection8Way::East);
+		const int32 EastChest = FPAPaperdollSortKey::GetSortPriorityForSlot(EPAPaperdollSlot::Chest, EPAAimDirection8Way::East);
+
+		TestEqual(TEXT("AC-3: East MainHand priority is 50"), EastMain, 50);
+		TestEqual(TEXT("AC-3: East OffHand priority is 5"), EastOff, 5);
+		TestTrue(TEXT("AC-3: East MainHand > Chest > OffHand"), EastMain > EastChest && EastChest > EastOff);
+
+		// 3. Hướng Tây (Mirror lật ngang): ĐẢO PRIORITY giữa MainHand và OffHand
+		// OffHand (50) giờ đây nằm TRƯỚC Chest (25), MainHand (5) chuyển ra SAU lưng
+		const int32 WestMain = FPAPaperdollSortKey::GetSortPriorityForSlot(EPAPaperdollSlot::MainHand, EPAAimDirection8Way::West);
+		const int32 WestOff = FPAPaperdollSortKey::GetSortPriorityForSlot(EPAPaperdollSlot::OffHand, EPAAimDirection8Way::West);
+		const int32 WestChest = FPAPaperdollSortKey::GetSortPriorityForSlot(EPAPaperdollSlot::Chest, EPAAimDirection8Way::West);
+
+		TestEqual(TEXT("AC-3: West MainHand priority flipped to 5"), WestMain, 5);
+		TestEqual(TEXT("AC-3: West OffHand priority flipped to 50"), WestOff, 50);
+		TestTrue(TEXT("AC-3: West OffHand > Chest > MainHand (Z-order preserved under mirror)"), WestOff > WestChest && WestChest > WestMain);
+
+		// 4. Các lớp thân thể không bị ảnh hưởng bởi Mirror
+		TestEqual(TEXT("AC-3: Pants priority consistent East vs West"),
+			FPAPaperdollSortKey::GetSortPriorityForSlot(EPAPaperdollSlot::Pants, EPAAimDirection8Way::East),
+			FPAPaperdollSortKey::GetSortPriorityForSlot(EPAPaperdollSlot::Pants, EPAAimDirection8Way::West));
+
+		TestEqual(TEXT("AC-3: Helm priority consistent East vs West"),
+			FPAPaperdollSortKey::GetSortPriorityForSlot(EPAPaperdollSlot::Helm, EPAAimDirection8Way::East),
+			FPAPaperdollSortKey::GetSortPriorityForSlot(EPAPaperdollSlot::Helm, EPAAimDirection8Way::West));
+	}
+
+	return true;
+}
+
 #endif // WITH_DEV_AUTOMATION_TESTS

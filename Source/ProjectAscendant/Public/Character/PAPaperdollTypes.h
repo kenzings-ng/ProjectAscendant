@@ -4,7 +4,60 @@
 
 #include "CoreMinimal.h"
 #include "Inventory/PAInventoryTypes.h"
+#include "Controller/PAIsometricMovementMath.h"
 #include "PAPaperdollTypes.generated.h"
+
+/**
+ * EPAPaperdollSlot
+ *
+ * 9 Vị trí trang bị nhân vật (Story item-004, EPIC-ITEMIZATION-001, Sprint 6):
+ * 1. Helm: Mũ giáp / Mũ trùm
+ * 2. Chest: Giáp thân / Áo choàng
+ * 3. Gloves: Găng tay
+ * 4. Pants: Quần chiến / Xà cạp
+ * 5. Boots: Ủng / Giày
+ * 6. MainHand: Vũ khí tay phải (gắn HandSocket_R)
+ * 7. OffHand: Vũ khí phụ / Khiên tay trái (gắn HandSocket_L)
+ * 8. Amulet: Dây chuyền
+ * 9. Ring: Nhẫn
+ */
+UENUM(BlueprintType)
+enum class EPAPaperdollSlot : uint8
+{
+	Helm        = 0 UMETA(DisplayName = "Mũ Nón (Helm)"),
+	Chest       = 1 UMETA(DisplayName = "Áo Giáp Thân (Chest)"),
+	Gloves      = 2 UMETA(DisplayName = "Găng Tay (Gloves)"),
+	Pants       = 3 UMETA(DisplayName = "Quần Chiến (Pants)"),
+	Boots       = 4 UMETA(DisplayName = "Ủng (Boots)"),
+	MainHand    = 5 UMETA(DisplayName = "Vũ Khí Chính (MainHand)"),
+	OffHand     = 6 UMETA(DisplayName = "Vũ Khí Phụ / Khiên (OffHand)"),
+	Amulet      = 7 UMETA(DisplayName = "Dây Chuyền (Amulet)"),
+	Ring        = 8 UMETA(DisplayName = "Nhẫn (Ring)"),
+	Count       = 9 UMETA(Hidden)
+};
+
+/** Hằng số chuẩn hóa cho Paperdoll (kích thước, socket, pivot) */
+struct PROJECTASCENDANT_API FPAPaperdollConstants
+{
+	static const FName HandSocket_R;
+	static const FName HandSocket_L;
+	static const FVector2D FootPivot;             // (64, 114) theo SPEC-ART-2026-09-23-V2
+	static const FIntPoint PlaceholderDimensions; // (128, 128)
+};
+
+/**
+ * FPAPaperdollSortKey
+ *
+ * Tính toán Directional Sort Key / Z-order cho từng layer Paperdoll:
+ * Khi mirror hướng Tây/Tây Nam/Tây Bắc, đảo priority giữa MainHand và OffHand để bảo toàn trật tự thị sai chiều sâu.
+ */
+class PROJECTASCENDANT_API FPAPaperdollSortKey
+{
+public:
+	static bool IsMirroredDirection(EPAAimDirection8Way Direction);
+	static int32 GetSortPriorityForSlot(EPAPaperdollSlot Slot, EPAAimDirection8Way Direction);
+	static FName GetSocketNameForSlot(EPAPaperdollSlot Slot);
+};
 
 /**
  * EPAPaperdollLayer
@@ -76,10 +129,25 @@ struct PROJECTASCENDANT_API FPAPaperdollAppearance
 	FPAPaperdollVisualSlot Helmet;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Paperdoll")
+	FPAPaperdollVisualSlot Gloves;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Paperdoll")
+	FPAPaperdollVisualSlot Pants;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Paperdoll")
+	FPAPaperdollVisualSlot Boots;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Paperdoll")
 	FPAPaperdollVisualSlot Mainhand;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Paperdoll")
 	FPAPaperdollVisualSlot Offhand;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Paperdoll")
+	FPAPaperdollVisualSlot Amulet;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Paperdoll")
+	FPAPaperdollVisualSlot Ring;
 
 	FPAPaperdollAppearance()
 	{
@@ -87,8 +155,47 @@ struct PROJECTASCENDANT_API FPAPaperdollAppearance
 		BaseBody = FPAPaperdollVisualSlot(FName(TEXT("item_starter_cloth")), FName(TEXT("Visual_StarterCloth")), true);
 		ChestArmor = FPAPaperdollVisualSlot(NAME_None, NAME_None, false);
 		Helmet = FPAPaperdollVisualSlot(NAME_None, NAME_None, false);
+		Gloves = FPAPaperdollVisualSlot(NAME_None, NAME_None, false);
+		Pants = FPAPaperdollVisualSlot(NAME_None, NAME_None, false);
+		Boots = FPAPaperdollVisualSlot(NAME_None, NAME_None, false);
 		Mainhand = FPAPaperdollVisualSlot(NAME_None, NAME_None, false);
 		Offhand = FPAPaperdollVisualSlot(NAME_None, NAME_None, false);
+		Amulet = FPAPaperdollVisualSlot(NAME_None, NAME_None, false);
+		Ring = FPAPaperdollVisualSlot(NAME_None, NAME_None, false);
+	}
+
+	FPAPaperdollVisualSlot& GetVisualSlot(EPAPaperdollSlot Slot)
+	{
+		switch (Slot)
+		{
+		case EPAPaperdollSlot::Helm: return Helmet;
+		case EPAPaperdollSlot::Chest: return ChestArmor;
+		case EPAPaperdollSlot::Gloves: return Gloves;
+		case EPAPaperdollSlot::Pants: return Pants;
+		case EPAPaperdollSlot::Boots: return Boots;
+		case EPAPaperdollSlot::MainHand: return Mainhand;
+		case EPAPaperdollSlot::OffHand: return Offhand;
+		case EPAPaperdollSlot::Amulet: return Amulet;
+		case EPAPaperdollSlot::Ring: return Ring;
+		default: return BaseBody;
+		}
+	}
+
+	const FPAPaperdollVisualSlot& GetVisualSlot(EPAPaperdollSlot Slot) const
+	{
+		switch (Slot)
+		{
+		case EPAPaperdollSlot::Helm: return Helmet;
+		case EPAPaperdollSlot::Chest: return ChestArmor;
+		case EPAPaperdollSlot::Gloves: return Gloves;
+		case EPAPaperdollSlot::Pants: return Pants;
+		case EPAPaperdollSlot::Boots: return Boots;
+		case EPAPaperdollSlot::MainHand: return Mainhand;
+		case EPAPaperdollSlot::OffHand: return Offhand;
+		case EPAPaperdollSlot::Amulet: return Amulet;
+		case EPAPaperdollSlot::Ring: return Ring;
+		default: return BaseBody;
+		}
 	}
 };
 
@@ -120,6 +227,55 @@ struct PROJECTASCENDANT_API FPAPaperdollModel
 	void ResetToStarterCloth()
 	{
 		CurrentAppearance = FPAPaperdollAppearance();
+	}
+
+	/**
+	 * Mặc trang bị lên một trong 9 ô slot của Paperdoll.
+	 */
+	bool EquipSlot(EPAPaperdollSlot Slot, FName ItemId, FName VisualAssetId)
+	{
+		if (ItemId.IsNone() || VisualAssetId.IsNone())
+		{
+			return false;
+		}
+
+		CurrentAppearance.GetVisualSlot(Slot) = FPAPaperdollVisualSlot(ItemId, VisualAssetId, true);
+		return true;
+	}
+
+	/**
+	 * Tháo trang bị khỏi một ô slot trong 9 ô.
+	 */
+	bool UnequipSlot(EPAPaperdollSlot Slot)
+	{
+		CurrentAppearance.GetVisualSlot(Slot) = FPAPaperdollVisualSlot(NAME_None, NAME_None, false);
+		return true;
+	}
+
+	/**
+	 * Kiểm tra ô slot có đang mang trang bị và hiển thị hay không.
+	 */
+	bool IsSlotEquipped(EPAPaperdollSlot Slot) const
+	{
+		const FPAPaperdollVisualSlot& Visual = CurrentAppearance.GetVisualSlot(Slot);
+		return Visual.bIsVisible && !Visual.ItemId.IsNone();
+	}
+
+	/**
+	 * Lấy VisualAssetId đang hiển thị trên ô slot chỉ định.
+	 */
+	FName GetActiveVisualAssetForSlot(EPAPaperdollSlot Slot) const
+	{
+		const FPAPaperdollVisualSlot& Visual = CurrentAppearance.GetVisualSlot(Slot);
+		return Visual.bIsVisible ? Visual.VisualAssetId : NAME_None;
+	}
+
+	/**
+	 * Lấy Directional Sort Key / Translucent Sort Priority cho slot theo hướng ngắm 8 chiều.
+	 */
+	int32 GetSlotSortPriority(EPAPaperdollSlot Slot, EPAAimDirection8Way Direction) const
+	{
+		return FPAPaperdollSortKey::GetSortPriorityForSlot(Slot, Direction);
 	}
 
 	/**
