@@ -271,66 +271,127 @@ def validate_and_process_weapon(input_path, output_dir):
 
         return True, "PASS", [], out_path, meta_path
 
-def validate_and_process_armor(input_path, output_dir):
+ARMOR_NAME_MAPPING = {
+    "Armor_Arcanist_Scholar_Tunic.png": "ARM_Arcanist_01_Scholar_Tunic.png",
+    "Armor_Leather_Scout_Vest.png": "ARM_Ranger_01_Leather_Scout_Vest.png",
+    "Armor_Steel_Knight_Cuirass.png": "ARM_Vanguard_01_Steel_Knight_Cuirass.png",
+    "Boots_Leather_Traveler_Boots.png": "ARM_Ranger_02_Leather_Traveler_Boots.png",
+    "Greaves_Steel_Knight_Legguards.png": "ARM_Vanguard_02_Steel_Knight_Legguards.png",
+    "Helmet_Leather_Ranger_Hood.png": "ARM_Ranger_03_Leather_Ranger_Hood.png",
+    "Helmet_Steel_Knight_Closed.png": "ARM_Vanguard_03_Steel_Knight_Closed_Helm.png",
+    "Helmet_Steel_Knight_Open.png": "ARM_Vanguard_04_Steel_Knight_Open_Helm.png"
+}
+
+OFFICIAL_4TONE_PALETTE = [
+    (18, 18, 20), (30, 36, 44),
+    (74, 88, 104), (148, 164, 180), (220, 228, 236), (255, 255, 255),
+    (58, 36, 8), (140, 90, 20), (224, 168, 48), (255, 244, 176),
+    (44, 24, 8), (92, 58, 30), (154, 106, 64), (208, 168, 120),
+    (80, 40, 24), (176, 112, 80), (232, 176, 136), (255, 224, 192),
+    (56, 0, 8), (128, 8, 24), (208, 32, 32), (255, 112, 96),
+    (8, 16, 48), (16, 40, 120), (40, 96, 208), (112, 176, 255),
+    (24, 4, 40), (64, 16, 104), (128, 48, 192), (208, 136, 255)
+]
+
+def map_to_official_palette(rgb):
+    best_c = OFFICIAL_4TONE_PALETTE[0]
+    best_d = float("inf")
+    r, g, b = int(rgb[0]), int(rgb[1]), int(rgb[2])
+    for c in OFFICIAL_4TONE_PALETTE:
+        d = (r - c[0])**2 + (g - c[1])**2 + (b - c[2])**2
+        if d < best_d:
+            best_d = d
+            best_c = c
+    return best_c
+
+def rework_armor_to_32x32(input_path):
     """
-    Validates a legacy armor PNG against Art Gate criteria
+    Reworks high-res legacy armor asset to 32x32 pixel art:
+    - Downsamples with LANCZOS filter
+    - Quantizes to official 4-tone ramp palette
+    - Normalizes alpha to strict binary {0, 255}
+    """
+    with Image.open(input_path) as raw:
+        img = raw.convert("RGBA")
+        small = img.resize((32, 32), Image.Resampling.LANCZOS)
+        out_img = Image.new("RGBA", (32, 32), (0, 0, 0, 0))
+        for y in range(32):
+            for x in range(32):
+                r, g, b, a = small.getpixel((x, y))
+                if a >= 128:
+                    c = map_to_official_palette((r, g, b))
+                    out_img.putpixel((x, y), (c[0], c[1], c[2], 255))
+                else:
+                    out_img.putpixel((x, y), (0, 0, 0, 0))
+        return out_img
+
+def validate_and_process_armor(input_path, output_dir, rework=False):
+    """
+    Validates an armor PNG against Art Gate criteria
     and promotes it to Content/Art/Armor/ with standardized naming and sidecar metadata.
     """
     fname = os.path.basename(input_path)
-    clean_name = fname.replace(".png", "")
-    out_name = f"ARM_{clean_name}.png" if not clean_name.startswith("ARM_") else f"{clean_name}.png"
+    out_name = ARMOR_NAME_MAPPING.get(fname, f"ARM_{fname}" if not fname.startswith("ARM_") else fname)
     out_path = os.path.join(output_dir, out_name)
     meta_path = os.path.join(output_dir, f"{os.path.splitext(out_name)[0]}_meta.json")
 
-    with Image.open(input_path) as img:
-        w, h = img.size
-        mode = img.mode
-        colors = img.getcolors(maxcolors=2000)
-        num_colors = len(colors) if colors else 0
-        bbox = img.getbbox()
+    if rework:
+        img = rework_armor_to_32x32(input_path)
+    else:
+        img = Image.open(input_path)
 
-        issues = []
-        if (w, h) not in [(32, 32), (128, 128)]:
-            issues.append(f"Invalid dimensions {w}x{h} (expected 32x32 inventory icon or 128x128 rig)")
+    w, h = img.size
+    mode = img.mode
+    colors = img.getcolors(maxcolors=2000)
+    num_colors = len(colors) if colors else 0
+    bbox = img.getbbox()
 
-        semi_trans = []
-        if mode == "RGBA":
-            for y in range(h):
-                for x in range(w):
-                    r, g, b, a = img.getpixel((x, y))
-                    if 0 < a < 255:
-                        semi_trans.append((x, y, a))
-        if semi_trans:
-            issues.append(f"{len(semi_trans)} semi-transparent pixels detected (violates binary alpha)")
+    issues = []
+    if (w, h) not in [(32, 32), (128, 128)]:
+        issues.append(f"Invalid dimensions {w}x{h} (expected 32x32 inventory icon or 128x128 rig)")
 
-        thumb = img.resize((16, 16), Image.NEAREST)
-        thumb_bbox = thumb.getbbox()
-        if not (thumb_bbox and (thumb_bbox[2] - thumb_bbox[0] >= 3) and (thumb_bbox[3] - thumb_bbox[1] >= 3)):
-            issues.append("Silhouette legibility failed at 16x16 thumbnail")
+    semi_trans = []
+    if mode == "RGBA":
+        for y in range(h):
+            for x in range(w):
+                r, g, b, a = img.getpixel((x, y))
+                if 0 < a < 255:
+                    semi_trans.append((x, y, a))
+    if semi_trans:
+        issues.append(f"{len(semi_trans)} semi-transparent pixels detected (violates binary alpha)")
 
-        if num_colors > 32 or num_colors < 4:
-            issues.append(f"Palette color count ({num_colors if num_colors else '>2000'}) outside accepted range [4, 32]")
+    thumb = img.resize((16, 16), Image.NEAREST)
+    thumb_bbox = thumb.getbbox()
+    if not (thumb_bbox and (thumb_bbox[2] - thumb_bbox[0] >= 3) and (thumb_bbox[3] - thumb_bbox[1] >= 3)):
+        issues.append("Silhouette legibility failed at 16x16 thumbnail")
 
-        if issues:
-            return False, "REWORK_REQUIRED", issues, None, None
+    if num_colors > 32 or num_colors < 4:
+        issues.append(f"Palette color count ({num_colors if num_colors else '>2000'}) outside accepted range [4, 32]")
 
-        os.makedirs(output_dir, exist_ok=True)
-        img.save(out_path)
+    if issues:
+        if not rework:
+            img.close()
+        return False, "REWORK_REQUIRED", issues, None, None
 
-        meta = {
-            "asset_name": out_name,
-            "type": "armor_equipment",
-            "dimensions": [w, h],
-            "colors": num_colors,
-            "bounding_box": list(bbox) if bbox else [],
-            "art_gate_status": "APPROVED",
-            "source_legacy_path": os.path.relpath(input_path),
-            "target_engine_path": f"/Game/Art/Armor/{os.path.splitext(out_name)[0]}"
-        }
-        with open(meta_path, "w", encoding="utf-8") as f:
-            json.dump(meta, f, indent=2)
+    os.makedirs(output_dir, exist_ok=True)
+    img.save(out_path)
+    if not rework:
+        img.close()
 
-        return True, "PASS", [], out_path, meta_path
+    meta = {
+        "asset_name": out_name,
+        "type": "armor_equipment",
+        "dimensions": [w, h],
+        "colors": num_colors,
+        "bounding_box": list(bbox) if bbox else [],
+        "art_gate_status": "APPROVED",
+        "source_legacy_path": os.path.relpath(input_path),
+        "target_engine_path": f"/Game/Art/Armor/{os.path.splitext(out_name)[0]}"
+    }
+    with open(meta_path, "w", encoding="utf-8") as f:
+        json.dump(meta, f, indent=2)
+
+    return True, "PASS", [], out_path, meta_path
 
 def main():
     parser = argparse.ArgumentParser(description="Aseprite Batch Exporter for Project Ascendant")
@@ -340,6 +401,7 @@ def main():
     parser.add_argument("--batch", "-b", action="store_true", help="Xử lý hàng loạt toàn bộ file trong thư mục")
     parser.add_argument("--weapons", "-w", action="store_true", help="Xử lý và chuẩn hóa tài nguyên vũ khí tĩnh 32x32 qua Art Gate")
     parser.add_argument("--armor", "-a", action="store_true", help="Xử lý và chuẩn hóa tài nguyên áo giáp qua Art Gate")
+    parser.add_argument("--rework", "-r", action="store_true", help="Áp dụng quy trình tái thiết pixel-art 32x32 cho tài sản cần sửa đổi")
     args = parser.parse_args()
 
     if args.armor:
@@ -347,11 +409,11 @@ def main():
         out_dir = args.output_dir if args.output_dir != "Content/Art/Characters/MasterRigs/Exported" else "Content/Art/Armor"
         if os.path.isdir(target):
             files = sorted([os.path.join(target, f) for f in os.listdir(target) if f.endswith(".png")])
-            print(f"Bắt đầu xử lý {len(files)} tài sản áo giáp...")
+            print(f"Bắt đầu xử lý {len(files)} tài sản áo giáp (rework={args.rework})...")
             pass_cnt = 0
             fail_cnt = 0
             for f in files:
-                success, status, issues, out_p, meta_p = validate_and_process_armor(f, out_dir)
+                success, status, issues, out_p, meta_p = validate_and_process_armor(f, out_dir, rework=args.rework)
                 if success:
                     print(f"  [PASS] {os.path.basename(f)} -> {os.path.basename(out_p)}")
                     pass_cnt += 1
@@ -360,7 +422,7 @@ def main():
                     fail_cnt += 1
             print(f"Hoàn thành kiểm tra áo giáp: {pass_cnt} PASS, {fail_cnt} REWORK_REQUIRED.")
         else:
-            success, status, issues, out_p, meta_p = validate_and_process_armor(target, out_dir)
+            success, status, issues, out_p, meta_p = validate_and_process_armor(target, out_dir, rework=args.rework)
             if success:
                 print(f"  [PASS] {target} -> {out_p}")
             else:

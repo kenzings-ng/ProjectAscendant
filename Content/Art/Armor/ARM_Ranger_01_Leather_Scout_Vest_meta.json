@@ -1,0 +1,18 @@
+{
+  "asset_name": "ARM_Ranger_01_Leather_Scout_Vest.png",
+  "type": "armor_equipment",
+  "dimensions": [
+    32,
+    32
+  ],
+  "colors": 11,
+  "bounding_box": [
+    4,
+    2,
+    28,
+    30
+  ],
+  "art_gate_status": "APPROVED",
+  "source_legacy_path": "Art_Gallery/legacy/armor/Armor_Leather_Scout_Vest.png",
+  "target_engine_path": "/Game/Art/Armor/ARM_Ranger_01_Leather_Scout_Vest"
+}

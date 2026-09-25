@@ -1,0 +1,18 @@
+{
+  "asset_name": "ARM_Vanguard_01_Steel_Knight_Cuirass.png",
+  "type": "armor_equipment",
+  "dimensions": [
+    32,
+    32
+  ],
+  "colors": 9,
+  "bounding_box": [
+    2,
+    3,
+    30,
+    29
+  ],
+  "art_gate_status": "APPROVED",
+  "source_legacy_path": "Art_Gallery/legacy/armor/Armor_Steel_Knight_Cuirass.png",
+  "target_engine_path": "/Game/Art/Armor/ARM_Vanguard_01_Steel_Knight_Cuirass"
+}

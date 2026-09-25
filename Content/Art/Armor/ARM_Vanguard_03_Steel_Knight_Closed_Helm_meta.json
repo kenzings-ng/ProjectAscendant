@@ -1,0 +1,18 @@
+{
+  "asset_name": "ARM_Vanguard_03_Steel_Knight_Closed_Helm.png",
+  "type": "armor_equipment",
+  "dimensions": [
+    32,
+    32
+  ],
+  "colors": 7,
+  "bounding_box": [
+    5,
+    2,
+    27,
+    30
+  ],
+  "art_gate_status": "APPROVED",
+  "source_legacy_path": "Art_Gallery/legacy/armor/Helmet_Steel_Knight_Closed.png",
+  "target_engine_path": "/Game/Art/Armor/ARM_Vanguard_03_Steel_Knight_Closed_Helm"
+}

@@ -1,0 +1,18 @@
+{
+  "asset_name": "ARM_Ranger_03_Leather_Ranger_Hood.png",
+  "type": "armor_equipment",
+  "dimensions": [
+    32,
+    32
+  ],
+  "colors": 7,
+  "bounding_box": [
+    2,
+    2,
+    30,
+    30
+  ],
+  "art_gate_status": "APPROVED",
+  "source_legacy_path": "Art_Gallery/legacy/armor/Helmet_Leather_Ranger_Hood.png",
+  "target_engine_path": "/Game/Art/Armor/ARM_Ranger_03_Leather_Ranger_Hood"
+}

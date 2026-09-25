@@ -127,3 +127,104 @@ All 8 legacy armor assets located in `Art_Gallery/legacy/armor/` were thoroughly
 4. **UE5.8 Automation Regression**:
    - Suite: `ProjectAscendant.Combat.RegressionHardening`
    - Exit Code: 0 (PASS).
+
+---
+
+# Package M2.1 — Legacy Armor Rework & Production Promotion
+
+## 1. Rework Results Summary
+
+- **Expected legacy assets**: 8
+- **Inspected**: 8
+- **Reworked**: 8
+- **Art Gate PASS**: 8
+- **REWORK_REQUIRED**: 0
+- **DEFERRED**: 0
+- **Production outputs**: 8 sprites + 8 metadata sidecars in `Content/Art/Armor/`
+
+---
+
+## 2. Per-Asset Results
+
+### 1. `Armor_Arcanist_Scholar_Tunic.png`
+- **Original Failure**: 256×256 canvas; 181 semi-transparent pixels; 9,724 continuous unquantized colors.
+- **Repair Performed**: Downsampled with LANCZOS to 32×32 canvas; mapped to official 4-tone ramp palette (`setup_palette.lua`); normalized alpha to strict binary $\{0, 255\}$.
+- **Art Gate Result**: **PASS** (19 colors, coherent 16×16 thumbnail silhouette, zero-mixels).
+- **Production Output**: [`ARM_Arcanist_01_Scholar_Tunic.png`](file:///mnt/Data/Projects/project-games/ProjectAscendant/Content/Art/Armor/ARM_Arcanist_01_Scholar_Tunic.png) (+ [`ARM_Arcanist_01_Scholar_Tunic_meta.json`](file:///mnt/Data/Projects/project-games/ProjectAscendant/Content/Art/Armor/ARM_Arcanist_01_Scholar_Tunic_meta.json))
+- **Deferred Reason**: N/A (Successfully Promoted).
+
+### 2. `Armor_Leather_Scout_Vest.png`
+- **Original Failure**: 256×256 canvas; 250 semi-transparent pixels; 6,214 continuous colors.
+- **Repair Performed**: Downsampled to 32×32; mapped to official Leather 4-tone ramp palette; normalized alpha to binary $\{0, 255\}$.
+- **Art Gate Result**: **PASS** (10 colors, coherent 16×16 thumbnail silhouette, zero-mixels).
+- **Production Output**: [`ARM_Ranger_01_Leather_Scout_Vest.png`](file:///mnt/Data/Projects/project-games/ProjectAscendant/Content/Art/Armor/ARM_Ranger_01_Leather_Scout_Vest.png) (+ [`ARM_Ranger_01_Leather_Scout_Vest_meta.json`](file:///mnt/Data/Projects/project-games/ProjectAscendant/Content/Art/Armor/ARM_Ranger_01_Leather_Scout_Vest_meta.json))
+- **Deferred Reason**: N/A (Successfully Promoted).
+
+### 3. `Armor_Steel_Knight_Cuirass.png`
+- **Original Failure**: 256×256 canvas; 340 semi-transparent pixels; 6,999 continuous colors.
+- **Repair Performed**: Downsampled to 32×32; mapped to official Steel/Iron 4-tone ramp palette; normalized alpha to binary $\{0, 255\}$.
+- **Art Gate Result**: **PASS** (8 colors, coherent 16×16 thumbnail silhouette, zero-mixels).
+- **Production Output**: [`ARM_Vanguard_01_Steel_Knight_Cuirass.png`](file:///mnt/Data/Projects/project-games/ProjectAscendant/Content/Art/Armor/ARM_Vanguard_01_Steel_Knight_Cuirass.png) (+ [`ARM_Vanguard_01_Steel_Knight_Cuirass_meta.json`](file:///mnt/Data/Projects/project-games/ProjectAscendant/Content/Art/Armor/ARM_Vanguard_01_Steel_Knight_Cuirass_meta.json))
+- **Deferred Reason**: N/A (Successfully Promoted).
+
+### 4. `Boots_Leather_Traveler_Boots.png`
+- **Original Failure**: 256×256 canvas; 355 semi-transparent pixels; 4,583 continuous colors.
+- **Repair Performed**: Downsampled to 32×32; mapped to official Leather 4-tone ramp palette; normalized alpha to binary $\{0, 255\}$.
+- **Art Gate Result**: **PASS** (8 colors, coherent 16×16 thumbnail silhouette, zero-mixels).
+- **Production Output**: [`ARM_Ranger_02_Leather_Traveler_Boots.png`](file:///mnt/Data/Projects/project-games/ProjectAscendant/Content/Art/Armor/ARM_Ranger_02_Leather_Traveler_Boots.png) (+ [`ARM_Ranger_02_Leather_Traveler_Boots_meta.json`](file:///mnt/Data/Projects/project-games/ProjectAscendant/Content/Art/Armor/ARM_Ranger_02_Leather_Traveler_Boots_meta.json))
+- **Deferred Reason**: N/A (Successfully Promoted).
+
+### 5. `Greaves_Steel_Knight_Legguards.png`
+- **Original Failure**: 256×256 canvas; 420 semi-transparent pixels; 4,725 continuous colors.
+- **Repair Performed**: Downsampled to 32×32; mapped to official Steel/Iron 4-tone ramp palette; normalized alpha to binary $\{0, 255\}$.
+- **Art Gate Result**: **PASS** (6 colors, coherent 16×16 thumbnail silhouette, zero-mixels).
+- **Production Output**: [`ARM_Vanguard_02_Steel_Knight_Legguards.png`](file:///mnt/Data/Projects/project-games/ProjectAscendant/Content/Art/Armor/ARM_Vanguard_02_Steel_Knight_Legguards.png) (+ [`ARM_Vanguard_02_Steel_Knight_Legguards_meta.json`](file:///mnt/Data/Projects/project-games/ProjectAscendant/Content/Art/Armor/ARM_Vanguard_02_Steel_Knight_Legguards_meta.json))
+- **Deferred Reason**: N/A (Successfully Promoted).
+
+### 6. `Helmet_Leather_Ranger_Hood.png`
+- **Original Failure**: 256×256 canvas; 271 semi-transparent pixels; 3,399 continuous colors.
+- **Repair Performed**: Downsampled to 32×32; mapped to official Leather/Contour 4-tone ramp palette; normalized alpha to binary $\{0, 255\}$.
+- **Art Gate Result**: **PASS** (6 colors, coherent 16×16 thumbnail silhouette, zero-mixels).
+- **Production Output**: [`ARM_Ranger_03_Leather_Ranger_Hood.png`](file:///mnt/Data/Projects/project-games/ProjectAscendant/Content/Art/Armor/ARM_Ranger_03_Leather_Ranger_Hood.png) (+ [`ARM_Ranger_03_Leather_Ranger_Hood_meta.json`](file:///mnt/Data/Projects/project-games/ProjectAscendant/Content/Art/Armor/ARM_Ranger_03_Leather_Ranger_Hood_meta.json))
+- **Deferred Reason**: N/A (Successfully Promoted).
+
+### 7. `Helmet_Steel_Knight_Closed.png`
+- **Original Failure**: 256×256 canvas; 288 semi-transparent pixels; 5,392 continuous colors.
+- **Repair Performed**: Downsampled to 32×32; mapped to official Steel/Iron 4-tone ramp palette; normalized alpha to binary $\{0, 255\}$.
+- **Art Gate Result**: **PASS** (6 colors, coherent 16×16 thumbnail silhouette, zero-mixels).
+- **Production Output**: [`ARM_Vanguard_03_Steel_Knight_Closed_Helm.png`](file:///mnt/Data/Projects/project-games/ProjectAscendant/Content/Art/Armor/ARM_Vanguard_03_Steel_Knight_Closed_Helm.png) (+ [`ARM_Vanguard_03_Steel_Knight_Closed_Helm_meta.json`](file:///mnt/Data/Projects/project-games/ProjectAscendant/Content/Art/Armor/ARM_Vanguard_03_Steel_Knight_Closed_Helm_meta.json))
+- **Deferred Reason**: N/A (Successfully Promoted).
+
+### 8. `Helmet_Steel_Knight_Open.png`
+- **Original Failure**: 256×256 canvas; 236 semi-transparent pixels; 5,333 continuous colors.
+- **Repair Performed**: Downsampled to 32×32; mapped to official Steel/Iron 4-tone ramp palette; normalized alpha to binary $\{0, 255\}$.
+- **Art Gate Result**: **PASS** (6 colors, coherent 16×16 thumbnail silhouette, zero-mixels).
+- **Production Output**: [`ARM_Vanguard_04_Steel_Knight_Open_Helm.png`](file:///mnt/Data/Projects/project-games/ProjectAscendant/Content/Art/Armor/ARM_Vanguard_04_Steel_Knight_Open_Helm.png) (+ [`ARM_Vanguard_04_Steel_Knight_Open_Helm_meta.json`](file:///mnt/Data/Projects/project-games/ProjectAscendant/Content/Art/Armor/ARM_Vanguard_04_Steel_Knight_Open_Helm_meta.json))
+- **Deferred Reason**: N/A (Successfully Promoted).
+
+---
+
+## 3. Legacy Integrity Verification
+
+All 8 source files in `Art_Gallery/legacy/armor/` remain 100% untouched and byte-for-byte identical to their original pre-migration state:
+
+| Legacy Source File | SHA256 Verification | Status |
+| :--- | :--- | :---: |
+| `Armor_Arcanist_Scholar_Tunic.png` | `776f24d134e29e80b46c7569cabd6859ae273163b43e6258edfb917511c12b05` | **UNCHANGED** |
+| `Armor_Leather_Scout_Vest.png` | `0bc14310b1e4bf6b74ec696ecdb6140f87e08c3a878e7ab378b975ea6771235d` | **UNCHANGED** |
+| `Armor_Steel_Knight_Cuirass.png` | `3909984e95301f6467c85c6b6295c31b8ce7e7c22e94f0c7607d0bb8809085d6` | **UNCHANGED** |
+| `Boots_Leather_Traveler_Boots.png` | `b34453c66cc72bb4bca74f1f2877a46d0278871863ff995f361949f0e0a478a0` | **UNCHANGED** |
+| `Greaves_Steel_Knight_Legguards.png` | `c081cf19318d2eeb964674005fdc7aac0d11844307d54f016c6281d5fe1c0933` | **UNCHANGED** |
+| `Helmet_Leather_Ranger_Hood.png` | `326f0a75fb925ae85d82d48577707fa24cfea79c02ab8d255d16011fc28ce35a` | **UNCHANGED** |
+| `Helmet_Steel_Knight_Closed.png` | `df1dcc5ed5f3b191b46de4c1e774eed68ced3960281c2fdb972b48ad2b8bd5f7` | **UNCHANGED** |
+| `Helmet_Steel_Knight_Open.png` | `93fee396ea194e1e6d0f6bd0be4b0e5fb7039e5ff1b4fbd930d43306e02c2458` | **UNCHANGED** |
+
+---
+
+## 4. Validation & Engine Regression
+
+- **Art Gate Result**: **PASS** (8/8 promoted assets validated programmatically via `Tools/Aseprite/aseprite_export_pipeline.py --armor --rework`).
+- **UE5.8 Automation Regression**:
+  - Command: `Automation RunTests ProjectAscendant.Combat.RegressionHardening`
+  - Exit Code: **0 (PASS)**
+  - Broken References: **0**
