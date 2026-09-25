@@ -5,7 +5,7 @@
 > **Layer**: Presentation / Pixel Art Asset Production  
 > **Type**: Art & Production (Handcrafted Pixel Sprites)  
 > **Estimate**: 2.5 days (20 hours)  
-> **Status**: Ready for Dev  
+> **Status**: Completed  
 > **Owner**: Technical Artist & Pixel Artist  
 > **Governing Spec**: [`SPEC-ART-2026-09-23-V2`](file:///mnt/Data/Projects/project-games/ProjectAscendant/design/art/pixel-asset-specifications.md)  
 
@@ -26,15 +26,15 @@ Thay thế các dummy placeholder flipbooks trong `visual-001` bằng các bộ 
 
 ## 2. Tiêu Chí Nghiệm Thu (Acceptance Criteria)
 
-- [ ] **AC-1 (Đầy Đủ 420 Frames Vẽ Tay)**:
+- [x] **AC-1 (Đầy Đủ 420 Frames Vẽ Tay)**:
   - Xuất xưởng 4 bộ Flipbook hoàn chỉnh vào `Content/Art/Characters/MasterRigs/`:
     - `FB_Lower_HeavyTank_Set` (105 frames).
     - `FB_Lower_Agility_Set` (105 frames).
     - `FB_Lower_Caster_Set` (105 frames).
     - `FB_Lower_Monk_Set` (105 frames).
-- [ ] **AC-2 (Quy Chuẩn Kỹ Thuật Anti-AI)**:
+- [x] **AC-2 (Quy Chuẩn Kỹ Thuật Anti-AI)**:
   - 100% sprite tuân thủ quy tắc 4-tone ramp, nguồn sáng cứng góc $10$ giờ ($45^\circ$).
   - Không Mixels, không Pillow Shading, viền ngoài 1px than sẫm, Selout nội bộ.
-- [ ] **AC-3 (Khớp Khít Tuyệt Đối Với PaperZD)**:
+- [x] **AC-3 (Khớp Khít Tuyệt Đối Với PaperZD)**:
   - Pivot điểm tiếp đất luôn nằm chính xác tại $(64, 114)$ trên toàn bộ 420 frames.
   - Vị trí nối eo $Y = 80$ phẳng phiu, không bị hở pixel khi ghép với Upper Body.
