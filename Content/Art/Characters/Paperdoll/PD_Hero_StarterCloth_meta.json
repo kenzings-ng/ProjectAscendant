@@ -1,0 +1,30 @@
+{
+  "source": "Content/art/characters/paperdoll/T_Hero_StarterCloth.png",
+  "production_asset": "PD_Hero_StarterCloth.png",
+  "canvas": [
+    128,
+    128
+  ],
+  "pivot": [
+    64,
+    114
+  ],
+  "waist_y": 80,
+  "alpha": "binary",
+  "lighting": "10_oclock",
+  "status": "approved",
+  "paperdoll_visual_id": "Visual_StarterCloth",
+  "paperdoll_layer": "BaseBody",
+  "target_engine_path": "/Game/Art/Characters/Paperdoll/PD_Hero_StarterCloth",
+  "normalization_metrics": {
+    "source_head_top_y": 97,
+    "source_foot_bottom_y": 921,
+    "source_center_x": 525.267164723032,
+    "source_height_px": 824,
+    "scale_factor": 0.0970873786407767,
+    "paste_offset": [
+      13,
+      25
+    ]
+  }
+}

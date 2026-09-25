@@ -1,0 +1,30 @@
+{
+  "source": "Content/art/characters/paperdoll/T_Hero_ArcanistRobe.png",
+  "production_asset": "PD_Hero_ArcanistRobe.png",
+  "canvas": [
+    128,
+    128
+  ],
+  "pivot": [
+    64,
+    114
+  ],
+  "waist_y": 80,
+  "alpha": "binary",
+  "lighting": "10_oclock",
+  "status": "approved",
+  "paperdoll_visual_id": "Visual_ArcanistRobe",
+  "paperdoll_layer": "ChestArmor",
+  "target_engine_path": "/Game/Art/Characters/Paperdoll/PD_Hero_ArcanistRobe",
+  "normalization_metrics": {
+    "source_head_top_y": 97,
+    "source_foot_bottom_y": 922,
+    "source_center_x": 616.8063991849408,
+    "source_height_px": 825,
+    "scale_factor": 0.09696969696969697,
+    "paste_offset": [
+      4,
+      25
+    ]
+  }
+}
