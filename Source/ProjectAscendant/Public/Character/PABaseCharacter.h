@@ -202,6 +202,36 @@ public:
 	UFUNCTION(BlueprintPure, Category = "ProjectAscendant|Paperdoll")
 	UPAPaperdollComponent* GetPaperdollComponent() const { return PaperdollComponent.Get(); }
 
+	// -------------------------------------------------------------------------
+	// Karma & Outlaw System (GDD zone-system.md & story visual-003)
+	// -------------------------------------------------------------------------
+
+	/** Điểm Karma hiện tại (-100 đến +100). Âm là phạm tội / Outlaw */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectAscendant|Karma")
+	float Karma = 0.0f;
+
+	/** Cờ đánh dấu người chơi bị truy nã / Outlaw (Red Name) */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectAscendant|Karma")
+	bool bIsOutlaw = false;
+
+	/** Kiểm tra xem nhân vật có phải Outlaw / Kẻ bị truy nã hay không */
+	UFUNCTION(BlueprintPure, Category = "ProjectAscendant|Karma")
+	bool IsOutlaw() const { return bIsOutlaw || Karma < 0.0f; }
+
+	/** Cập nhật điểm Karma và tự động cập nhật cờ Outlaw */
+	UFUNCTION(BlueprintCallable, Category = "ProjectAscendant|Karma")
+	void SetKarma(float NewKarma)
+	{
+		Karma = NewKarma;
+		bIsOutlaw = (Karma < 0.0f);
+	}
+
+	UFUNCTION(BlueprintCallable, Category = "ProjectAscendant|Karma")
+	void SetIsOutlaw(bool bOutlaw)
+	{
+		bIsOutlaw = bOutlaw;
+	}
+
 protected:
 	/** Circular ring buffer lưu trữ lịch sử vị trí 200ms phục vụ Lag Compensation */
 	UPROPERTY()
