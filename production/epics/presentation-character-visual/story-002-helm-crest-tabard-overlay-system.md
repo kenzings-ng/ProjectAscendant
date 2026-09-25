@@ -5,7 +5,7 @@
 > **Layer**: Presentation / Modular Paperdoll Extension  
 > **Type**: Architecture & Code (100% Placeholder Testable)  
 > **Estimate**: 1.0 day (8 hours)  
-> **Status**: Ready for Dev  
+> **Status**: Completed  
 > **Owner**: Gameplay Programmer  
 
 ---
@@ -22,20 +22,20 @@ Story này mở rộng `UPAPaperdollComponent` đã code ở `item-004` để h�
 
 ## 2. Tiêu Chí Nghiệm Thu (Acceptance Criteria)
 
-- [ ] **AC-1 (Khởi Tạo Sockets & Sub-Components Mới)**:
+- [x] **AC-1 (Khởi Tạo Sockets & Sub-Components Mới)**:
   - Khởi tạo hằng số socket trong `FPAPaperdollConstants`:
     - `Socket_HelmCrest = TEXT("Socket_HelmCrest")` tại $(64, 40)$.
     - `Socket_Tabard = TEXT("Socket_Tabard")` tại $(64, 60)$.
   - Tự động tạo 2 `UPaperFlipbookComponent` phụ trợ trong `Initialize9SlotSubcomponents()` với `SnapToTargetNotIncludingScale`.
-- [ ] **AC-2 (Auto Class Identity Binding)**:
+- [x] **AC-2 (Auto Class Identity Binding)**:
   - Khi nhân vật nhận thẻ Gameplay Tag Chức Nghiệp (vd `Class.Vanguard`, `Class.Templar`, `Class.Acolyte`), hệ thống tự động gán đúng Asset ID của Crest và Tabard tương ứng mà không cần người chơi phải trang bị thủ công.
   - Khi người chơi tháo/mặc giáp `Helm` hoặc `Chest`, các phụ kiện Crest và Tabard vẫn duy trì hiển thị, không bị ẩn theo giáp.
-- [ ] **AC-3 (Directional Sort Key & Mirroring)**:
+- [x] **AC-3 (Directional Sort Key & Mirroring)**:
   - Tích hợp vào `FPAPaperdollSortKey`:
     - `Socket_HelmCrest` luôn có Sort Priority $= 36$ (nằm trên `Helm` có Sort Priority $= 35$).
     - `Socket_Tabard` luôn có Sort Priority $= 26$ (nằm trên `Chest` có Sort Priority $= 25$).
   - Khi xoay sang hướng Tây (`EPAAimDirection8Way::West`), không xảy ra lỗi giáp ngực đè bẹp dải khăn Tabard.
-- [ ] **AC-4 (Headless Unit Tests Pass 100%)**:
+- [x] **AC-4 (Headless Unit Tests Pass 100%)**:
   - Triển khai test trong `PACharacterVisualIdentityTests.cpp`:
     - Trang bị lần lượt 3 hạng cân giáp (`Armor_Heavy_T1`, `Armor_Medium_T1`, `Armor_Light_T1`) kết hợp đổi qua 12 class tags.
     - Xác nhận cả 12 class đều giữ được Crest và Tabard hiển thị đúng component, không bị crash hay null pointer.

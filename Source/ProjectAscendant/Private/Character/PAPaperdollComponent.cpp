@@ -17,6 +17,13 @@ const FName FPAPaperdollConstants::Socket_LowerBody(TEXT("Socket_LowerBody"));
 const FName FPAPaperdollConstants::Socket_UpperBody(TEXT("Socket_UpperBody"));
 const FVector2D FPAPaperdollConstants::WaistPivot(64.0f, 80.0f);
 
+const FName FPAPaperdollConstants::Socket_HelmCrest(TEXT("Socket_HelmCrest"));
+const FName FPAPaperdollConstants::Socket_Tabard(TEXT("Socket_Tabard"));
+const FVector2D FPAPaperdollConstants::HelmCrestLocation(64.0f, 40.0f);
+const FVector2D FPAPaperdollConstants::TabardLocation(64.0f, 60.0f);
+const FIntPoint FPAPaperdollConstants::CrestPlaceholderDimensions(32, 32);
+const FIntPoint FPAPaperdollConstants::TabardPlaceholderDimensions(48, 64);
+
 FName FPAPaperdollConstants::GetDefaultLowerBodyAssetForRig(EPAMasterRig Rig)
 {
 	switch (Rig)
@@ -89,11 +96,91 @@ FGameplayTag FPAPaperdollConstants::GetTagForWeaponFamily(EPAWeaponFamily Family
 	return FGameplayTag::RequestGameplayTag(TagName, false);
 }
 
+FName FPAPaperdollConstants::GetDefaultCrestAssetForClass(FName ClassName)
+{
+	const FString NameStr = ClassName.ToString().ToLower();
+	if (NameStr.Contains(TEXT("vanguard")))     return FName(TEXT("FB_Crest_Vanguard"));
+	if (NameStr.Contains(TEXT("ranger")))       return FName(TEXT("FB_Crest_Ranger"));
+	if (NameStr.Contains(TEXT("arcanist")))     return FName(TEXT("FB_Crest_Arcanist"));
+	if (NameStr.Contains(TEXT("acolyte")))      return FName(TEXT("FB_Crest_Acolyte"));
+	if (NameStr.Contains(TEXT("berserker")))    return FName(TEXT("FB_Crest_Berserker"));
+	if (NameStr.Contains(TEXT("shadowblade")))  return FName(TEXT("FB_Crest_Shadowblade"));
+	if (NameStr.Contains(TEXT("elementalist"))) return FName(TEXT("FB_Crest_Elementalist"));
+	if (NameStr.Contains(TEXT("templar")))      return FName(TEXT("FB_Crest_Templar"));
+	if (NameStr.Contains(TEXT("voidblade")) || NameStr.Contains(TEXT("void blade"))) return FName(TEXT("FB_Crest_VoidBlade"));
+	if (NameStr.Contains(TEXT("chronomancer"))) return FName(TEXT("FB_Crest_Chronomancer"));
+	if (NameStr.Contains(TEXT("dragonknight")) || NameStr.Contains(TEXT("dragon knight"))) return FName(TEXT("FB_Crest_DragonKnight"));
+	if (NameStr.Contains(TEXT("godslayer")) || NameStr.Contains(TEXT("god slayer"))) return FName(TEXT("FB_Crest_GodSlayer"));
+
+	return FName(TEXT("FB_Crest_Vanguard"));
+}
+
+FName FPAPaperdollConstants::GetDefaultTabardAssetForClass(FName ClassName)
+{
+	const FString NameStr = ClassName.ToString().ToLower();
+	if (NameStr.Contains(TEXT("vanguard")))     return FName(TEXT("FB_Tabard_Vanguard"));
+	if (NameStr.Contains(TEXT("ranger")))       return FName(TEXT("FB_Tabard_Ranger"));
+	if (NameStr.Contains(TEXT("arcanist")))     return FName(TEXT("FB_Tabard_Arcanist"));
+	if (NameStr.Contains(TEXT("acolyte")))      return FName(TEXT("FB_Tabard_Acolyte"));
+	if (NameStr.Contains(TEXT("berserker")))    return FName(TEXT("FB_Tabard_Berserker"));
+	if (NameStr.Contains(TEXT("shadowblade")))  return FName(TEXT("FB_Tabard_Shadowblade"));
+	if (NameStr.Contains(TEXT("elementalist"))) return FName(TEXT("FB_Tabard_Elementalist"));
+	if (NameStr.Contains(TEXT("templar")))      return FName(TEXT("FB_Tabard_Templar"));
+	if (NameStr.Contains(TEXT("voidblade")) || NameStr.Contains(TEXT("void blade"))) return FName(TEXT("FB_Tabard_VoidBlade"));
+	if (NameStr.Contains(TEXT("chronomancer"))) return FName(TEXT("FB_Tabard_Chronomancer"));
+	if (NameStr.Contains(TEXT("dragonknight")) || NameStr.Contains(TEXT("dragon knight"))) return FName(TEXT("FB_Tabard_DragonKnight"));
+	if (NameStr.Contains(TEXT("godslayer")) || NameStr.Contains(TEXT("god slayer"))) return FName(TEXT("FB_Tabard_GodSlayer"));
+
+	return FName(TEXT("FB_Tabard_Vanguard"));
+}
+
+FGameplayTag FPAPaperdollConstants::GetTagForClass(FName ClassName)
+{
+	FString CleanName = ClassName.ToString();
+	if (CleanName.StartsWith(TEXT("Class.")))
+	{
+		CleanName = CleanName.RightChop(6);
+	}
+	CleanName.RemoveSpacesInline();
+
+	const FName TagName = FName(*FString::Printf(TEXT("Class.%s"), *CleanName));
+	UGameplayTagsManager::Get().AddNativeGameplayTag(TagName);
+	return FGameplayTag::RequestGameplayTag(TagName, false);
+}
+
+FName FPAPaperdollConstants::GetClassNameFromTag(FGameplayTag ClassTag)
+{
+	if (!ClassTag.IsValid())
+	{
+		return FName(TEXT("Vanguard"));
+	}
+
+	FString TagStr = ClassTag.ToString();
+	if (TagStr.StartsWith(TEXT("Class.")))
+	{
+		TagStr = TagStr.RightChop(6);
+	}
+	return FName(*TagStr);
+}
+
 bool FPAPaperdollSortKey::IsMirroredDirection(EPAAimDirection8Way Direction)
 {
 	return Direction == EPAAimDirection8Way::West ||
 	       Direction == EPAAimDirection8Way::SouthWest ||
 	       Direction == EPAAimDirection8Way::NorthWest;
+}
+
+int32 FPAPaperdollSortKey::GetSortPriorityForIdentitySocket(FName SocketName, EPAAimDirection8Way Direction)
+{
+	if (SocketName == FPAPaperdollConstants::Socket_HelmCrest)
+	{
+		return 36;
+	}
+	if (SocketName == FPAPaperdollConstants::Socket_Tabard)
+	{
+		return 26;
+	}
+	return 20;
 }
 
 int32 FPAPaperdollSortKey::GetSortPriorityForSlot(EPAPaperdollSlot Slot, EPAAimDirection8Way Direction)
@@ -210,6 +297,22 @@ void UPAPaperdollComponent::TickComponent(float DeltaTime, ELevelTick TickType, 
 				if (UpperBodyComponent->GetPlaybackPositionInFrames() != CurrentFrame)
 				{
 					UpperBodyComponent->SetPlaybackPositionInFrames(CurrentFrame, false);
+				}
+			}
+
+			if (HelmCrestComponent && HelmCrestComponent->IsVisible())
+			{
+				if (HelmCrestComponent->GetPlaybackPositionInFrames() != CurrentFrame)
+				{
+					HelmCrestComponent->SetPlaybackPositionInFrames(CurrentFrame, false);
+				}
+			}
+
+			if (TabardComponent && TabardComponent->IsVisible())
+			{
+				if (TabardComponent->GetPlaybackPositionInFrames() != CurrentFrame)
+				{
+					TabardComponent->SetPlaybackPositionInFrames(CurrentFrame, false);
 				}
 			}
 		}
@@ -362,6 +465,14 @@ void UPAPaperdollComponent::UpdateDirectionalSortKeys(EPAAimDirection8Way Direct
 	{
 		UpperBodyComponent->SetTranslucentSortPriority(20);
 	}
+	if (TabardComponent)
+	{
+		TabardComponent->SetTranslucentSortPriority(26);
+	}
+	if (HelmCrestComponent)
+	{
+		HelmCrestComponent->SetTranslucentSortPriority(36);
+	}
 
 	for (auto& Pair : SlotComponents)
 	{
@@ -482,7 +593,103 @@ void UPAPaperdollComponent::Initialize9SlotSubcomponents()
 		}
 	}
 
+	InitializeClassIdentityComponents();
+
 	UpdateDirectionalSortKeys(CurrentOrientation);
+}
+
+void UPAPaperdollComponent::InitializeClassIdentityComponents()
+{
+	AActor* OwnerActor = GetOwner();
+	USceneComponent* AttachRoot = OwnerActor ? OwnerActor->GetRootComponent() : nullptr;
+
+	if (OwnerActor && AttachRoot)
+	{
+		if (!HelmCrestComponent)
+		{
+			HelmCrestComponent = NewObject<UPaperFlipbookComponent>(OwnerActor, TEXT("Paperdoll_HelmCrest"));
+			if (HelmCrestComponent)
+			{
+				HelmCrestComponent->AttachToComponent(AttachRoot, FAttachmentTransformRules::SnapToTargetNotIncludingScale, FPAPaperdollConstants::Socket_HelmCrest);
+				HelmCrestComponent->SetTranslucentSortPriority(36);
+				HelmCrestComponent->RegisterComponent();
+			}
+		}
+
+		if (!TabardComponent)
+		{
+			TabardComponent = NewObject<UPaperFlipbookComponent>(OwnerActor, TEXT("Paperdoll_Tabard"));
+			if (TabardComponent)
+			{
+				TabardComponent->AttachToComponent(AttachRoot, FAttachmentTransformRules::SnapToTargetNotIncludingScale, FPAPaperdollConstants::Socket_Tabard);
+				TabardComponent->SetTranslucentSortPriority(26);
+				TabardComponent->RegisterComponent();
+			}
+		}
+	}
+
+	UpdateDirectionalSortKeys(CurrentOrientation);
+	SynchronizeLayerSprites();
+}
+
+void UPAPaperdollComponent::RegisterHelmCrestComponent(UPaperFlipbookComponent* InComp)
+{
+	if (InComp)
+	{
+		HelmCrestComponent = InComp;
+		HelmCrestComponent->SetTranslucentSortPriority(36);
+		SynchronizeLayerSprites();
+	}
+}
+
+void UPAPaperdollComponent::RegisterTabardComponent(UPaperFlipbookComponent* InComp)
+{
+	if (InComp)
+	{
+		TabardComponent = InComp;
+		TabardComponent->SetTranslucentSortPriority(26);
+		SynchronizeLayerSprites();
+	}
+}
+
+void UPAPaperdollComponent::SetClassIdentity(FName InClassName)
+{
+	Model.SetClassIdentity(InClassName);
+	SynchronizeLayerSprites();
+}
+
+bool UPAPaperdollComponent::SetClassIdentityByTag(FGameplayTag InClassTag)
+{
+	const bool bSuccess = Model.SetClassIdentityByTag(InClassTag);
+	if (bSuccess)
+	{
+		SynchronizeLayerSprites();
+	}
+	return bSuccess;
+}
+
+void UPAPaperdollComponent::SetHelmCrestVisual(FName InAssetId)
+{
+	Model.SetHelmCrestVisual(InAssetId);
+	SynchronizeLayerSprites();
+}
+
+void UPAPaperdollComponent::SetTabardVisual(FName InAssetId)
+{
+	Model.SetTabardVisual(InAssetId);
+	SynchronizeLayerSprites();
+}
+
+void UPAPaperdollComponent::SetHelmCrestVisibility(bool bVisible)
+{
+	Model.SetHelmCrestVisible(bVisible);
+	SynchronizeLayerSprites();
+}
+
+void UPAPaperdollComponent::SetTabardVisibility(bool bVisible)
+{
+	Model.SetTabardVisible(bVisible);
+	SynchronizeLayerSprites();
 }
 
 void UPAPaperdollComponent::SynchronizeLayerSprites()
@@ -517,6 +724,18 @@ void UPAPaperdollComponent::SynchronizeLayerSprites()
 	{
 		const FName ActiveVisual = Model.GetUpperBodyVisualAssetId();
 		UpperBodyComponent->SetVisibility(!ActiveVisual.IsNone());
+	}
+
+	if (HelmCrestComponent)
+	{
+		const FName ActiveVisual = Model.GetHelmCrestVisualAssetId();
+		HelmCrestComponent->SetVisibility(!ActiveVisual.IsNone());
+	}
+
+	if (TabardComponent)
+	{
+		const FName ActiveVisual = Model.GetTabardVisualAssetId();
+		TabardComponent->SetVisibility(!ActiveVisual.IsNone());
 	}
 }
 

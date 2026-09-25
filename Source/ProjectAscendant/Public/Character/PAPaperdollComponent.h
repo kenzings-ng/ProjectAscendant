@@ -226,6 +226,58 @@ public:
 	UFUNCTION(BlueprintPure, Category = "Paperdoll")
 	UPaperFlipbookComponent* GetLayerFlipbookComponent(EPAPaperdollLayer Layer) const;
 
+	// -------------------------------------------------------------------------
+	// Class Identity Sockets & Overlays API (Story visual-002, Sprint 7)
+	// -------------------------------------------------------------------------
+
+	/**
+	 * Khởi tạo tự động 2 sub-components cho Class Identity (HelmCrestComponent và TabardComponent).
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Paperdoll|Identity")
+	void InitializeClassIdentityComponents();
+
+	UFUNCTION(BlueprintCallable, Category = "Paperdoll|Identity")
+	void RegisterHelmCrestComponent(UPaperFlipbookComponent* InComp);
+
+	UFUNCTION(BlueprintPure, Category = "Paperdoll|Identity")
+	UPaperFlipbookComponent* GetHelmCrestComponent() const { return HelmCrestComponent; }
+
+	UFUNCTION(BlueprintCallable, Category = "Paperdoll|Identity")
+	void RegisterTabardComponent(UPaperFlipbookComponent* InComp);
+
+	UFUNCTION(BlueprintPure, Category = "Paperdoll|Identity")
+	UPaperFlipbookComponent* GetTabardComponent() const { return TabardComponent; }
+
+	/**
+	 * Thiết lập Class Identity (tự động bind Crest và Tabard theo Class).
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Paperdoll|Identity")
+	void SetClassIdentity(FName InClassName);
+
+	UFUNCTION(BlueprintCallable, Category = "Paperdoll|Identity")
+	bool SetClassIdentityByTag(FGameplayTag InClassTag);
+
+	UFUNCTION(BlueprintPure, Category = "Paperdoll|Identity")
+	FGameplayTag GetCurrentClassTag() const { return Model.GetCurrentClassTag(); }
+
+	UFUNCTION(BlueprintPure, Category = "Paperdoll|Identity")
+	FName GetActiveHelmCrestVisualAssetId() const { return Model.GetHelmCrestVisualAssetId(); }
+
+	UFUNCTION(BlueprintPure, Category = "Paperdoll|Identity")
+	FName GetActiveTabardVisualAssetId() const { return Model.GetTabardVisualAssetId(); }
+
+	UFUNCTION(BlueprintCallable, Category = "Paperdoll|Identity")
+	void SetHelmCrestVisual(FName InAssetId);
+
+	UFUNCTION(BlueprintCallable, Category = "Paperdoll|Identity")
+	void SetTabardVisual(FName InAssetId);
+
+	UFUNCTION(BlueprintCallable, Category = "Paperdoll|Identity")
+	void SetHelmCrestVisibility(bool bVisible);
+
+	UFUNCTION(BlueprintCallable, Category = "Paperdoll|Identity")
+	void SetTabardVisibility(bool bVisible);
+
 public:
 	/** Sự kiện phát thanh khi ngoại hình một lớp trang bị thay đổi */
 	UPROPERTY(BlueprintAssignable, Category = "Paperdoll|Events")
@@ -268,6 +320,14 @@ private:
 	/** Flipbook Component hiển thị chuyển động Upper Body (Thân trên & Tay cầm vũ khí) */
 	UPROPERTY(Transient)
 	TObjectPtr<UPaperFlipbookComponent> UpperBodyComponent = nullptr;
+
+	/** Flipbook Component hiển thị Mào Nón / Sừng Giáp (Story visual-002) */
+	UPROPERTY(Transient)
+	TObjectPtr<UPaperFlipbookComponent> HelmCrestComponent = nullptr;
+
+	/** Flipbook Component hiển thị Cờ Ngực / Khăn Choàng (Story visual-002) */
+	UPROPERTY(Transient)
+	TObjectPtr<UPaperFlipbookComponent> TabardComponent = nullptr;
 
 	/** Hướng ngắm 8 chiều hiện tại */
 	UPROPERTY(Transient)

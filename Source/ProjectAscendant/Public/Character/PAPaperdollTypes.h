@@ -95,10 +95,23 @@ struct PROJECTASCENDANT_API FPAPaperdollConstants
 	static const FName Socket_UpperBody;
 	static const FVector2D WaistPivot;            // (64, 80)
 
+	// Class Identity Sockets (Story visual-002, EPIC-CHARACTER-VISUAL-001)
+	static const FName Socket_HelmCrest;          // TEXT("Socket_HelmCrest")
+	static const FName Socket_Tabard;             // TEXT("Socket_Tabard")
+	static const FVector2D HelmCrestLocation;     // (64, 40)
+	static const FVector2D TabardLocation;        // (64, 60)
+	static const FIntPoint CrestPlaceholderDimensions;  // (32, 32)
+	static const FIntPoint TabardPlaceholderDimensions; // (48, 64)
+
 	static FName GetDefaultLowerBodyAssetForRig(EPAMasterRig Rig);
 	static FName GetDefaultUpperBodyAssetForFamily(EPAWeaponFamily Family);
 	static EPAWeaponFamily GetWeaponFamilyFromTag(FGameplayTag Tag);
 	static FGameplayTag GetTagForWeaponFamily(EPAWeaponFamily Family);
+
+	static FName GetDefaultCrestAssetForClass(FName ClassName);
+	static FName GetDefaultTabardAssetForClass(FName ClassName);
+	static FGameplayTag GetTagForClass(FName ClassName);
+	static FName GetClassNameFromTag(FGameplayTag ClassTag);
 };
 
 /**
@@ -112,6 +125,7 @@ class PROJECTASCENDANT_API FPAPaperdollSortKey
 public:
 	static bool IsMirroredDirection(EPAAimDirection8Way Direction);
 	static int32 GetSortPriorityForSlot(EPAPaperdollSlot Slot, EPAAimDirection8Way Direction);
+	static int32 GetSortPriorityForIdentitySocket(FName SocketName, EPAAimDirection8Way Direction);
 	static FName GetSocketNameForSlot(EPAPaperdollSlot Slot);
 };
 
@@ -336,6 +350,21 @@ struct PROJECTASCENDANT_API FPAPaperdollModel
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Paperdoll|Rig")
 	FName UpperBodyVisualAssetId = FName(TEXT("FB_Upper_1H_Blade_Combo"));
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Paperdoll|Identity")
+	FGameplayTag CurrentClassTag;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Paperdoll|Identity")
+	FName HelmCrestVisualAssetId = NAME_None;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Paperdoll|Identity")
+	FName TabardVisualAssetId = NAME_None;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Paperdoll|Identity")
+	bool bShowHelmCrest = true;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Paperdoll|Identity")
+	bool bShowTabard = true;
+
 	FPAPaperdollModel()
 	{
 		ResetToStarterCloth();
@@ -351,7 +380,49 @@ struct PROJECTASCENDANT_API FPAPaperdollModel
 		CurrentWeaponFamily = EPAWeaponFamily::Blade_1H;
 		LowerBodyVisualAssetId = FPAPaperdollConstants::GetDefaultLowerBodyAssetForRig(CurrentMasterRig);
 		UpperBodyVisualAssetId = FPAPaperdollConstants::GetDefaultUpperBodyAssetForFamily(CurrentWeaponFamily);
+		if (CurrentClassTag.IsValid())
+		{
+			const FName ClassName = FPAPaperdollConstants::GetClassNameFromTag(CurrentClassTag);
+			HelmCrestVisualAssetId = FPAPaperdollConstants::GetDefaultCrestAssetForClass(ClassName);
+			TabardVisualAssetId = FPAPaperdollConstants::GetDefaultTabardAssetForClass(ClassName);
+		}
+		else
+		{
+			SetClassIdentity(FName(TEXT("Vanguard")));
+		}
 	}
+
+	/**
+	 * Gán Class Identity theo tên Class hoặc Tag.
+	 */
+	void SetClassIdentity(FName InClassName)
+	{
+		CurrentClassTag = FPAPaperdollConstants::GetTagForClass(InClassName);
+		HelmCrestVisualAssetId = FPAPaperdollConstants::GetDefaultCrestAssetForClass(InClassName);
+		TabardVisualAssetId = FPAPaperdollConstants::GetDefaultTabardAssetForClass(InClassName);
+	}
+
+	bool SetClassIdentityByTag(FGameplayTag InClassTag)
+	{
+		if (!InClassTag.IsValid())
+		{
+			return false;
+		}
+
+		CurrentClassTag = InClassTag;
+		const FName ClassName = FPAPaperdollConstants::GetClassNameFromTag(InClassTag);
+		HelmCrestVisualAssetId = FPAPaperdollConstants::GetDefaultCrestAssetForClass(ClassName);
+		TabardVisualAssetId = FPAPaperdollConstants::GetDefaultTabardAssetForClass(ClassName);
+		return true;
+	}
+
+	FGameplayTag GetCurrentClassTag() const { return CurrentClassTag; }
+	FName GetHelmCrestVisualAssetId() const { return bShowHelmCrest ? HelmCrestVisualAssetId : NAME_None; }
+	FName GetTabardVisualAssetId() const { return bShowTabard ? TabardVisualAssetId : NAME_None; }
+	void SetHelmCrestVisual(FName InAssetId) { HelmCrestVisualAssetId = InAssetId; }
+	void SetTabardVisual(FName InAssetId) { TabardVisualAssetId = InAssetId; }
+	void SetHelmCrestVisible(bool bVisible) { bShowHelmCrest = bVisible; }
+	void SetTabardVisible(bool bVisible) { bShowTabard = bVisible; }
 
 	/**
 	 * Gán Master Rig cho Lower Body.
