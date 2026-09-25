@@ -126,3 +126,14 @@ flowchart TD
 | **8** | **4 Foundational Classes & Skill Trees** | Vertical Slice | Feature | game-designer | Large (3 phiên) |
 | **9** | **Zone-tiered Blacksmithing System** | Vertical Slice | Feature | economy-designer | Medium (2 phiên) |
 | **10** | **Open World MMO Netcode & Contested Aggro Sync** | Vertical Slice | Core | network-programmer | Large (3 phiên) |
+
+---
+
+## Technical & Algorithmic Research Backlog
+
+Các công nghệ và thuật toán đã được nghiên cứu, trích xuất và lưu trữ sẵn sàng kích hoạt theo cột mốc Roadmap:
+- **Tài liệu nghiên cứu**: [`docs/research/algorithmic-reference-pcg-spatial-ai.md`](file:///mnt/Data/Projects/project-games/ProjectAscendant/docs/research/algorithmic-reference-pcg-spatial-ai.md) (Nguồn: `InfiniBrains/Awesome-GameDev-Resources`)
+  - **Alpha Milestone**: Wave Function Collapse (WFC) cho việc sinh hầm ngục phế tích 2.5D tự động.
+  - **Beta Milestone**: Spatial Hashing Grid 2D & KD-Tree cho việc tối ưu bảng cừu hận MMO diện rộng và Town Guard AI.
+  - **Polish Milestone**: Boids / Flocking Behaviors cho sinh vật môi trường (Ambient Fauna) và quái bọ bầy đàn (Swarm Minions).
+
