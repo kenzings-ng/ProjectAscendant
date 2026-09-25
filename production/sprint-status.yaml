@@ -5,54 +5,84 @@
 #   backlog        ↔  Not Started
 #   ready-for-dev  ↔  Ready
 #   in-progress    ↔  In Progress
-#   review         ↔  In Review
+#   review         ↔  Review
 #   done           ↔  Complete
 #   blocked        ↔  Blocked
 
-sprint: 6
-goal: "Deliver the World Integration, Citadel Safe Zones & Account Authentication Layer for Project Ascendant — Seamless 3-Tier Zones, Citadel Safe Zones (cấm PvP/drop aggro/auto-save/relog return/2.0s fast travel), AI Leash Boundary (2500cm), Dynamic Difficulty Scaling (Boss HP/Posture formulas) with Instanced Loot Thresholds (>=5% HP / 10% Posture), 5-Tier Karma State Machine with PvE/PvP/Wanted Death Penalties & Labor Prison, and UPAAccountSubsystem with 1-Click Fast Playtest (<0.1s) and Server Token Handshake."
-start: "2026-10-17"
-end: "2026-10-31"
-generated: "2026-09-23"
-updated: "2026-09-23"
+sprint: 7
+goal: "Character & NPC Visual Identity System — Master Rig Architecture, Decoupled State Machines, Helm Crest & Tabard Sockets, Civilian NPC Component & Dynamic Palette Swap, Town Guard AI, and Animation Timing / Socket Validation Wireframe Proxies."
+start: "2026-11-01"
+end: "2026-11-14"
+generated: "2026-09-25"
+updated: "2026-09-25"
 
 stories:
-  - id: "zone-001"
-    name: "3-Tier Seamless Zones, Citadel Safe Zones, Auto-Save & Relog Return"
-    file: "production/epics/world-zone-auth/story-001-seamless-zones-citadels-autosave.md"
+  - id: "visual-001"
+    name: "Master Rig Architecture & Decoupled State Machine Binding"
+    file: "production/epics/presentation-character-visual/story-001-master-rig-decoupled-state-machine.md"
     priority: must-have
     status: done
-    owner: "world-designer"
-    estimate_days: 1.0
+    owner: "gameplay-programmer"
+    estimate_days: 1.5
     blocker: ""
-    completed: "2026-09-23"
+    completed: "2026-09-25"
 
-  - id: "zone-002"
-    name: "Dynamic Difficulty Scaling & Contested Instanced Loot"
-    file: "production/epics/world-zone-auth/story-002-dynamic-difficulty-instanced-loot.md"
+  - id: "visual-002"
+    name: "Helm Crest Socket & Tabard Cutout Component Integration"
+    file: "production/epics/presentation-character-visual/story-002-helm-crest-tabard-overlay-system.md"
     priority: must-have
     status: done
     owner: "gameplay-programmer"
     estimate_days: 1.0
     blocker: ""
-    completed: "2026-09-23"
+    completed: "2026-09-25"
 
-  - id: "zone-003"
-    name: "5-Tier Karma State Machine & Death Penalties Matrix"
-    file: "production/epics/world-zone-auth/story-003-karma-death-penalties.md"
-    priority: should-have
+  - id: "visual-003"
+    name: "Civilian NPC Component, Dynamic Palette Swap & Town Guard AI"
+    file: "production/epics/presentation-character-visual/story-003-civilian-npc-palette-guard-ai.md"
+    priority: must-have
     status: done
     owner: "systems-designer"
     estimate_days: 1.0
     blocker: ""
-    completed: "2026-09-23"
+    completed: "2026-09-25"
 
-  - id: "auth-001"
-    name: "Account Subsystem, 1-Click Fast Playtest & Server Token Handshake"
-    file: "production/epics/world-zone-auth/story-004-account-subsystem-auth-handshake.md"
+  - id: "visual-004"
+    name: "4 Master Lower Body Animation Sets (420 Frames Wireframe Proxy)"
+    file: "production/epics/presentation-character-visual/story-004-art-lower-body-master-rigs.md"
     priority: should-have
-    status: done
-    owner: "backend-engineer"
-    estimate_days: 1.0
+    status: "Completed (Placeholder-tier art — cần thay thế bằng pixel art thật trước khi release)"
+    owner: "technical-artist"
+    estimate_days: 2.5
     blocker: ""
-    completed: "2026-09-23"
+    completed: "2026-09-25"
+
+  - id: "visual-005"
+    name: "7 Weapon Family Upper Body Combat Sets (560 Frames Wireframe Proxy)"
+    file: "production/epics/presentation-character-visual/story-005-art-upper-body-weapon-families.md"
+    priority: should-have
+    status: "Completed (Placeholder-tier art — cần thay thế bằng pixel art thật trước khi release)"
+    owner: "technical-artist"
+    estimate_days: 3.0
+    blocker: ""
+    completed: "2026-09-25"
+
+  - id: "visual-006"
+    name: "12 Class Idle Stances, Crest Sockets & Tabards (360 Assets Wireframe Proxy)"
+    file: "production/epics/presentation-character-visual/story-006-art-class-idle-crest-tabard.md"
+    priority: should-have
+    status: "Completed (Placeholder-tier art — cần thay thế bằng pixel art thật trước khi release)"
+    owner: "pixel-artist"
+    estimate_days: 2.0
+    blocker: ""
+    completed: "2026-09-25"
+
+  - id: "visual-007"
+    name: "Civilian Upper Body & Town Props (255 Assets Wireframe Proxy)"
+    file: "production/epics/presentation-character-visual/story-007-art-civilian-props-upper-body.md"
+    priority: should-have
+    status: "Completed (Placeholder-tier art — cần thay thế bằng pixel art thật trước khi release)"
+    owner: "pixel-artist"
+    estimate_days: 1.5
+    blocker: ""
+    completed: "2026-09-25"
