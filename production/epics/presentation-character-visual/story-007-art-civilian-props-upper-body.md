@@ -5,7 +5,7 @@
 > **Layer**: Presentation / Pixel Art Asset Production  
 > **Type**: Art & Production (Handcrafted Pixel Sprites)  
 > **Estimate**: 1.5 days (12 hours)  
-> **Status**: Ready for Dev  
+> **Status**: Completed  
 > **Owner**: Pixel Artist  
 > **Governing Spec**: [`character-visual-system.md`](file:///mnt/Data/Projects/project-games/ProjectAscendant/design/gdd/character-visual-system.md)  
 
@@ -27,11 +27,11 @@ Lấp đầy hệ thống NPC dân cư thị trấn trong các khu an toàn (Ver
 
 ## 2. Tiêu Chí Nghiệm Thu (Acceptance Criteria)
 
-- [ ] **AC-1 (Đầy Đủ 205 Frames Upper Body Dân Sự)**:
+- [x] **AC-1 (Đầy Đủ 205 Frames Upper Body Dân Sự)**:
   - Xuất xưởng vào `Content/Art/Characters/Civilian/UpperBody/`.
   - Khớp khít đường nối eo $Y = 80$ với các Master Rigs Lower Body có sẵn.
-- [ ] **AC-2 (10 Đạo Cụ Tĩnh Khớp Hand Sockets)**:
+- [x] **AC-2 (10 Đạo Cụ Tĩnh Khớp Hand Sockets)**:
   - Xuất xưởng vào `Content/Art/Characters/Civilian/Props/`.
   - Snap chính xác vào `HandSocket_R` $(96, 76)$ hoặc `HandSocket_L` $(32, 76)$, không bị lệch tâm khi xoay 5 hướng.
-- [ ] **AC-3 (Quest Giver Callout Frame)**:
+- [x] **AC-3 (Quest Giver Callout Frame)**:
   - Frame vẫy tay thể hiện rõ tư thế khẩn thiết, đón ánh nhìn từ xa của người chơi.

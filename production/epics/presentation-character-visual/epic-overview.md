@@ -2,7 +2,7 @@
 
 > **Epic ID**: `EPIC-CHARACTER-VISUAL-001`  
 > **Target Sprint**: Sprint 7  
-> **Status**: Ready for Planning / Backlog  
+> **Status**: Completed  
 > **Stage**: Production (Visual Identity & Modular Animation Layer)  
 > **Governing GDD**: [`design/gdd/character-visual-system.md`](file:///mnt/Data/Projects/project-games/ProjectAscendant/design/gdd/character-visual-system.md)  
 > **Technical Contract**: [`SPEC-ART-2026-09-23-V2`](file:///mnt/Data/Projects/project-games/ProjectAscendant/design/art/pixel-asset-specifications.md)  

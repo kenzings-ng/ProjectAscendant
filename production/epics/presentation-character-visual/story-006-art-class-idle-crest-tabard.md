@@ -5,7 +5,7 @@
 > **Layer**: Presentation / Pixel Art Asset Production  
 > **Type**: Art & Production (Handcrafted Pixel Sprites)  
 > **Estimate**: 2.0 days (16 hours)  
-> **Status**: Ready for Dev  
+> **Status**: Completed  
 > **Owner**: Pixel Artist & Art Director  
 > **Governing Spec**: [`character-visual-system.md`](file:///mnt/Data/Projects/project-games/ProjectAscendant/design/gdd/character-visual-system.md)  
 
@@ -23,14 +23,14 @@ Story này sản xuất toàn bộ các chi tiết bản sắc độc quyền c�
 
 ## 2. Tiêu Chí Nghiệm Thu (Acceptance Criteria)
 
-- [ ] **AC-1 (Đầy Đủ 12 Idle Loops Riêng Biệt)**:
+- [x] **AC-1 (Đầy Đủ 12 Idle Loops Riêng Biệt)**:
   - Thể hiện rõ nét các tư thế độc nhất theo GDD:
     - Vanguard (khiên che 40%, kiếm chúc $45^\circ$), Ranger (cung vút cao 12px), Arcanist (trượng đứng $90^\circ$, đá bay lơ lửng), Acolyte (đồng hồ cát cân bằng), Berserker (lưng gù, đại đao vác vai 18px), Shadowblade (cúi sát đất, đao chéo X), Elementalist (lơ lửng 4px), Templar (tháp Gothic thẳng tắp), Void Blade (zigzag áo xé), Chronomancer (kim đồng hồ xoay), Dragon Knight (chiến kích vươn 24px), God Slayer (không nhịp thở, đại kiếm cắm đất).
-- [ ] **AC-2 (12 Helm Crest Sprites)**:
+- [x] **AC-2 (12 Helm Crest Sprites)**:
   - Đầy đủ 12 biểu tượng: Bờm đỏ, Lông chim ưng, Mảnh lam ngọc, Vòng kim cô, Sừng thú, Băng bịt mắt, Vương miện 3 hạt, Cánh thép, Sừng hư không, Con lắc xoay, Sừng rồng, Vòng gai đen.
-- [ ] **AC-3 (12 Tabard / Sash Sprites)**:
+- [x] **AC-3 (12 Tabard / Sash Sprites)**:
   - Khớp chính xác với rãnh khoét giáp ngực của 9 bộ giáp cơ sở từ Itemization.
-- [ ] **AC-4 (Vượt Qua Silhouette QA Gate Check 100%)**:
+- [x] **AC-4 (Vượt Qua Silhouette QA Gate Check 100%)**:
   - Toàn bộ sprite vượt qua script `qa_silhouette_check.py`:
     - Biến thành Pure Black (#000000) trên nền trắng.
     - Phân biệt rõ ràng ở kích thước Thumbnail $32 \times 32$ và $16 \times 16$.
