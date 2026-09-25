@@ -1,0 +1,29 @@
+{
+  "_comment": "SCHEMA/EXAMPLE ONLY - not real production metadata. Copy this structure once real art exists in vanguard_character_source.aseprite and fill in measured values. Geometry fields (canvas/pivot/waist_y/mainhand_socket/offhand_socket) are already fixed by the project's master-rig convention (Tools/Aseprite/aseprite_export_pipeline.py SOCKET_METADATA) and must not be changed here.",
+  "character": "Vanguard",
+  "source_aseprite": "Tools/Aseprite/templates/vanguard_character_source.aseprite",
+  "canvas": [128, 128],
+  "pivot": [64, 114],
+  "waist_y": 80,
+  "mainhand_socket": [96, 76],
+  "offhand_socket": [32, 76],
+  "facing_convention": "single-direction art (facing right), mirrored via SpriteComponent yaw 0/180 in APABaseCharacter::SetSpriteFacingRight - NOT an 8-direction sprite set. See production/art/m5-character-production-report.md Section 6.",
+  "animations": {
+    "Idle": {"frame_range": [0, 3], "frame_count": 4, "duration_ms": 150},
+    "Walk": {"frame_range": [4, 9], "frame_count": 6, "duration_ms": 100},
+    "Run": {"frame_range": [10, 15], "frame_count": 6, "duration_ms": 80},
+    "Attack": {"frame_range": [16, 23], "frame_count": 8, "duration_ms": 90, "note": "target range 6-10 frames; trim only if every remaining frame still carries intentional anticipation/action/impact/recovery motion"}
+  },
+  "lighting": "10_oclock",
+  "equipment_compatibility": {
+    "mainhand_weapon_proof": "PENDING - to be filled once at least one existing Content/Art/Weapons/*.png sword is composited against the drawn Mainhand socket",
+    "offhand_shield_proof": "PENDING - to be filled once at least one existing Content/Art/Weapons/*.png shield is composited against the drawn Offhand socket"
+  },
+  "layers": [
+    "Layer_BaseBody", "Layer_Legs", "Layer_Feet", "Layer_Torso", "Layer_Arms",
+    "Layer_Hands", "Layer_Head", "Layer_Hair", "Layer_Armor_VanguardArmor",
+    "Layer_Equipment_Mainhand", "Layer_Equipment_Offhand", "Layer_Effects",
+    "Guide_Sockets"
+  ],
+  "art_gate_status": "NOT_RUN - no character content exists yet, only guide-marker structure. Run Tools/Aseprite/character_art_gate.py against the real content before promoting."
+}
