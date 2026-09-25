@@ -16,6 +16,7 @@
 | **Packs Rejected** | **2** | 1 do xung đột đề tài (súng hiện đại), 1 do thiếu chứng chỉ pháp lý (UNKNOWN) |
 | **Packs Pending** | **1** | Đang chờ thẩm định tương thích góc chiếu Isometric trước khi nạp |
 | **Assets Harvested** | **30** | Lưu tại `Content/Art/ThirdParty/CC0_Harvested/` kèm SHA-256 |
+| **Art Gate Clearance** | **23 Approved / 7 Rejected** | Thẩm định độc lập: [`art-gate-report-batch-01.md`](production/qa/art-gate-report-batch-01.md) |
 
 ---
 
