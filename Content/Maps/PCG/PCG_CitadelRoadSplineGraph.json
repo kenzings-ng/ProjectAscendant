@@ -1,0 +1,71 @@
+{
+  "graph_name": "PCG_CitadelRoadSplineGraph",
+  "version": "1.0",
+  "engine_target": "UE_5.8",
+  "nodes": [
+    {
+      "id": "GetSplineData_0",
+      "type": "PCGGetSplineData",
+      "properties": {
+        "actor_filter": "AllWorldActors",
+        "tag_filter": "CitadelConnectingRoad"
+      }
+    },
+    {
+      "id": "SplineSampler_0",
+      "type": "PCGSplineSampler",
+      "properties": {
+        "mode": "Distance",
+        "dimension": "OnSpline",
+        "step_distance_cm": 100.0,
+        "subdivide_curves": true
+      }
+    },
+    {
+      "id": "Projection_0",
+      "type": "PCGProjection",
+      "properties": {
+        "projection_axis": "Z",
+        "max_slope_deg": 25.0,
+        "target": "Landscape"
+      }
+    },
+    {
+      "id": "RoadCrossSection_0",
+      "type": "PCGTransformPoints",
+      "properties": {
+        "path_width_cm": 400.0,
+        "falloff_shoulder_cm": 100.0
+      }
+    },
+    {
+      "id": "CobblestoneSpawner_0",
+      "type": "PCGStaticMeshSpawner",
+      "properties": {
+        "mesh_paths": [
+          "/Game/Content/Maps/Meshes/SM_RoadCobblestone_01",
+          "/Game/Content/Maps/Meshes/SM_RoadCobblestone_02"
+        ],
+        "hism_enabled": true
+      }
+    }
+  ],
+  "connections": [
+    {
+      "from": "GetSplineData_0",
+      "to": "SplineSampler_0"
+    },
+    {
+      "from": "SplineSampler_0",
+      "to": "Projection_0"
+    },
+    {
+      "from": "Projection_0",
+      "to": "RoadCrossSection_0"
+    },
+    {
+      "from": "RoadCrossSection_0",
+      "to": "CobblestoneSpawner_0"
+    }
+  ]
+}
