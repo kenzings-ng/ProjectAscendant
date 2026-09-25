@@ -60,4 +60,12 @@
 |---|---|---|---|---|---|---|
 | [`world-zone-auth`](world-zone-auth/EPIC.md) | World / Auth | Seamless Zones, Citadel Safe Zones, Karma, DDS & Account Auth | [`zone-system.md`](../../design/gdd/zone-system.md), [`authentication-account-system.md`](../../design/gdd/authentication-account-system.md) | ADR-0001, ADR-0003 | 4 stories | **Done** |
 
+---
+
+## Character & Visual Presentation Layer Epics (Sprint 7 - 100% Complete)
+
+| Epic | Layer | System | Design Document (GDD) | Governing ADRs | Stories Status | Epic Status |
+|---|---|---|---|---|---|---|
+| [`presentation-character-visual`](presentation-character-visual/epic-overview.md) | Presentation | Character & NPC Visual Identity, 4 Master Rigs, 7 Weapon Families, 12 Class Idles & Civilian NPCs | [`character-visual-system.md`](../../design/gdd/character-visual-system.md) | SPEC-ART-2026-09-23-V2 | 7 stories (1,595 assets) | **Done** |
+
 
