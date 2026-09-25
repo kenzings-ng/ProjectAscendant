@@ -1,0 +1,18 @@
+{
+  "asset_name": "WPN_Ranger_02_Recurve_Hunting_Bow.png",
+  "type": "static_weapon",
+  "dimensions": [
+    32,
+    32
+  ],
+  "colors": 8,
+  "bounding_box": [
+    12,
+    3,
+    19,
+    29
+  ],
+  "art_gate_status": "APPROVED",
+  "source_legacy_path": "Art_Gallery/legacy/weapons/Ranger_02_Recurve_Hunting_Bow_32x32_native.png",
+  "target_engine_path": "/Game/Art/Weapons/WPN_Ranger_02_Recurve_Hunting_Bow"
+}

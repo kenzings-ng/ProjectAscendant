@@ -209,13 +209,101 @@ def export_file(input_path, output_dir, sheet_name=None):
     print(f"✅ Đã xuất Metadata:   {out_meta_json}")
     return True
 
+def validate_and_process_weapon(input_path, output_dir):
+    """
+    Validates a native 32x32 static weapon PNG against Art Gate criteria
+    and promotes it to Content/Art/Weapons/ with standardized naming and sidecar metadata.
+    """
+    fname = os.path.basename(input_path)
+    clean_name = fname.replace("_32x32_native.png", "").replace(".png", "")
+    out_name = f"WPN_{clean_name}.png" if not clean_name.startswith("WPN_") else f"{clean_name}.png"
+    out_path = os.path.join(output_dir, out_name)
+    meta_path = os.path.join(output_dir, f"{os.path.splitext(out_name)[0]}_meta.json")
+
+    with Image.open(input_path) as img:
+        w, h = img.size
+        mode = img.mode
+        colors = img.getcolors(maxcolors=1000)
+        num_colors = len(colors) if colors else 0
+        bbox = img.getbbox()
+
+        issues = []
+        if w != 32 or h != 32:
+            issues.append(f"Invalid dimensions {w}x{h} (expected 32x32)")
+
+        semi_trans = []
+        if mode == "RGBA":
+            for y in range(h):
+                for x in range(w):
+                    r, g, b, a = img.getpixel((x, y))
+                    if 0 < a < 255:
+                        semi_trans.append((x, y, a))
+        if semi_trans:
+            issues.append(f"{len(semi_trans)} semi-transparent pixels detected (e.g. a={semi_trans[0][2]})")
+
+        thumb = img.resize((16, 16), Image.NEAREST)
+        thumb_bbox = thumb.getbbox()
+        if not (thumb_bbox and (thumb_bbox[2] - thumb_bbox[0] >= 3) and (thumb_bbox[3] - thumb_bbox[1] >= 3)):
+            issues.append("Silhouette legibility failed at 16x16 thumbnail")
+
+        if num_colors > 32 or num_colors < 4:
+            issues.append(f"Palette color count ({num_colors}) outside accepted range [4, 32]")
+
+        if issues:
+            return False, "REWORK_REQUIRED", issues, None, None
+
+        # Passed Art Gate! Copy/promote to production
+        os.makedirs(output_dir, exist_ok=True)
+        img.save(out_path)
+
+        meta = {
+            "asset_name": out_name,
+            "type": "static_weapon",
+            "dimensions": [w, h],
+            "colors": num_colors,
+            "bounding_box": list(bbox) if bbox else [],
+            "art_gate_status": "APPROVED",
+            "source_legacy_path": os.path.relpath(input_path),
+            "target_engine_path": f"/Game/Art/Weapons/{os.path.splitext(out_name)[0]}"
+        }
+        with open(meta_path, "w", encoding="utf-8") as f:
+            json.dump(meta, f, indent=2)
+
+        return True, "PASS", [], out_path, meta_path
+
 def main():
     parser = argparse.ArgumentParser(description="Aseprite Batch Exporter for Project Ascendant")
     parser.add_argument("--input", "-i", help="Đường dẫn file .aseprite hoặc thư mục")
     parser.add_argument("--output-dir", "-o", default="Content/Art/Characters/MasterRigs/Exported", help="Thư mục xuất xưởng")
     parser.add_argument("--sheet-name", "-n", help="Tên file spritesheet")
     parser.add_argument("--batch", "-b", action="store_true", help="Xử lý hàng loạt toàn bộ file trong thư mục")
+    parser.add_argument("--weapons", "-w", action="store_true", help="Xử lý và chuẩn hóa tài nguyên vũ khí tĩnh 32x32 qua Art Gate")
     args = parser.parse_args()
+
+    if args.weapons:
+        target = args.input or "Art_Gallery/legacy/weapons"
+        out_dir = args.output_dir if args.output_dir != "Content/Art/Characters/MasterRigs/Exported" else "Content/Art/Weapons"
+        if os.path.isdir(target):
+            files = sorted([os.path.join(target, f) for f in os.listdir(target) if f.endswith("_32x32_native.png")])
+            print(f"Bắt đầu xử lý {len(files)} vũ khí tĩnh 32x32...")
+            pass_cnt = 0
+            fail_cnt = 0
+            for f in files:
+                success, status, issues, out_p, meta_p = validate_and_process_weapon(f, out_dir)
+                if success:
+                    print(f"  [PASS] {os.path.basename(f)} -> {os.path.basename(out_p)}")
+                    pass_cnt += 1
+                else:
+                    print(f"  [REWORK_REQUIRED] {os.path.basename(f)}: {', '.join(issues)}")
+                    fail_cnt += 1
+            print(f"Hoàn thành: {pass_cnt} PASS, {fail_cnt} REWORK_REQUIRED.")
+        else:
+            success, status, issues, out_p, meta_p = validate_and_process_weapon(target, out_dir)
+            if success:
+                print(f"  [PASS] {target} -> {out_p}")
+            else:
+                print(f"  [{status}] {target}: {', '.join(issues)}")
+        return
 
     target = args.input or "Tools/Aseprite/templates"
     if args.batch or os.path.isdir(target):
@@ -228,3 +316,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

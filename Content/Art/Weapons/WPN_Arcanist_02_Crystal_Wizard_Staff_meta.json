@@ -1,0 +1,18 @@
+{
+  "asset_name": "WPN_Arcanist_02_Crystal_Wizard_Staff.png",
+  "type": "static_weapon",
+  "dimensions": [
+    32,
+    32
+  ],
+  "colors": 12,
+  "bounding_box": [
+    11,
+    3,
+    21,
+    29
+  ],
+  "art_gate_status": "APPROVED",
+  "source_legacy_path": "Art_Gallery/legacy/weapons/Arcanist_02_Crystal_Wizard_Staff_32x32_native.png",
+  "target_engine_path": "/Game/Art/Weapons/WPN_Arcanist_02_Crystal_Wizard_Staff"
+}

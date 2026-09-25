@@ -1,0 +1,18 @@
+{
+  "asset_name": "WPN_Vanguard_03_Broadsword_Tier2_RunicFlame.png",
+  "type": "static_weapon",
+  "dimensions": [
+    32,
+    32
+  ],
+  "colors": 10,
+  "bounding_box": [
+    5,
+    4,
+    28,
+    28
+  ],
+  "art_gate_status": "APPROVED",
+  "source_legacy_path": "Art_Gallery/legacy/weapons/Vanguard_03_Broadsword_Tier2_RunicFlame_32x32_native.png",
+  "target_engine_path": "/Game/Art/Weapons/WPN_Vanguard_03_Broadsword_Tier2_RunicFlame"
+}

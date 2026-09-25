@@ -1,0 +1,18 @@
+{
+  "asset_name": "WPN_Acolyte_02_Spiked_Morningstar_Mace.png",
+  "type": "static_weapon",
+  "dimensions": [
+    32,
+    32
+  ],
+  "colors": 12,
+  "bounding_box": [
+    10,
+    3,
+    22,
+    29
+  ],
+  "art_gate_status": "APPROVED",
+  "source_legacy_path": "Art_Gallery/legacy/weapons/Acolyte_02_Spiked_Morningstar_Mace_32x32_native.png",
+  "target_engine_path": "/Game/Art/Weapons/WPN_Acolyte_02_Spiked_Morningstar_Mace"
+}

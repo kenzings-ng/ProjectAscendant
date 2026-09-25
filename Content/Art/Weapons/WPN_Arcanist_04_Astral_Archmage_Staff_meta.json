@@ -1,0 +1,18 @@
+{
+  "asset_name": "WPN_Arcanist_04_Astral_Archmage_Staff.png",
+  "type": "static_weapon",
+  "dimensions": [
+    32,
+    32
+  ],
+  "colors": 13,
+  "bounding_box": [
+    12,
+    4,
+    19,
+    29
+  ],
+  "art_gate_status": "APPROVED",
+  "source_legacy_path": "Art_Gallery/legacy/weapons/Arcanist_04_Astral_Archmage_Staff_32x32_native.png",
+  "target_engine_path": "/Game/Art/Weapons/WPN_Arcanist_04_Astral_Archmage_Staff"
+}
