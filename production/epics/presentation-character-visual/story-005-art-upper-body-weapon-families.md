@@ -5,7 +5,7 @@
 > **Layer**: Presentation / Pixel Art Asset Production  
 > **Type**: Art & Production (Handcrafted Pixel Sprites)  
 > **Estimate**: 3.0 days (24 hours)  
-> **Status**: Ready for Dev  
+> **Status**: Completed  
 > **Owner**: Technical Artist & Pixel Artist  
 > **Governing Spec**: [`SPEC-ART-2026-09-23-V2`](file:///mnt/Data/Projects/project-games/ProjectAscendant/design/art/pixel-asset-specifications.md), [`itemization.md`](file:///mnt/Data/Projects/project-games/ProjectAscendant/design/gdd/itemization.md)  
 
@@ -27,10 +27,10 @@ Thay thế placeholder Upper Body trong `visual-001` bằng hoạt ảnh chiến
 
 ## 2. Tiêu Chí Nghiệm Thu (Acceptance Criteria)
 
-- [ ] **AC-1 (Đầy Đủ 560 Frames Vẽ Tay)**:
+- [x] **AC-1 (Đầy Đủ 560 Frames Vẽ Tay)**:
   - Xuất xưởng 7 bộ Flipbook vào `Content/Art/Characters/UpperBodyWeapons/`.
-- [ ] **AC-2 (Khớp Khít Hand Sockets Tuyệt Đối)**:
+- [x] **AC-2 (Khớp Khít Hand Sockets Tuyệt Đối)**:
   - Khung xương tay luôn giữ vị trí bàn tay trùng khít với `HandSocket_R` $(96, 76)$ và `HandSocket_L` $(32, 76)$ trong tư thế chuẩn, và di chuyển mượt mà theo quỹ đạo vung đòn.
-- [ ] **AC-3 (Tương Thích Kho Vũ Khí Itemization)**:
+- [x] **AC-3 (Tương Thích Kho Vũ Khí Itemization)**:
   - Khi gắn 21 Base Weapon Sprites từ Itemization lên tay, vũ khí xoay theo đúng góc vát đòn đánh mà không bị lệch chuôi.
   - Vùng phía trước mặt luôn chừa khoảng đệm chuyển động (Motion Padding) $32\text{ px}$ để đón vệt chém Niagara Slash Trail.
