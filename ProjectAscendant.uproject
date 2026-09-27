@@ -43,6 +43,14 @@
 		{
 			"Name": "EditorScriptingUtilities",
 			"Enabled": true
+		},
+		{
+			"Name": "ProceduralMeshComponent",
+			"Enabled": true
+		},
+		{
+			"Name": "SpinePlugin",
+			"Enabled": true
 		}
 	]
 }

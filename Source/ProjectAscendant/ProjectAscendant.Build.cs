@@ -21,6 +21,7 @@ public class ProjectAscendant : ModuleRules
 			"NetCore",
 			"Paper2D",
 			"PaperZD",
+			"SpinePlugin",
 			"UMG"
 		});
 
