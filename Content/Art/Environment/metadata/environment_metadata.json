@@ -1,0 +1,255 @@
+{
+  "package": "Package M6 \u2014 Environment & Vegetation Production Foundation",
+  "conforms_to": "SPEC-ART-2026-09-23-V2",
+  "lighting": "10_oclock_directional",
+  "color_ramp": "4_tone_steep_contrast",
+  "alpha_mode": "strictly_binary",
+  "sorting_anchor": "bottom_center_pivot",
+  "foliage": {
+    "FOL_Grass_Tuft_01": {
+      "dimensions": [
+        16,
+        16
+      ],
+      "pivot": [
+        8,
+        14
+      ],
+      "category": "Foliage/Grass"
+    },
+    "FOL_Grass_Patch_02": {
+      "dimensions": [
+        32,
+        32
+      ],
+      "pivot": [
+        16,
+        28
+      ],
+      "category": "Foliage/Grass"
+    },
+    "FOL_Grass_Tall_03": {
+      "dimensions": [
+        32,
+        32
+      ],
+      "pivot": [
+        16,
+        29
+      ],
+      "category": "Foliage/Grass"
+    },
+    "FOL_Flower_Poppies_01": {
+      "dimensions": [
+        32,
+        32
+      ],
+      "pivot": [
+        16,
+        28
+      ],
+      "category": "Foliage/Flowers"
+    },
+    "FOL_Flower_Bellflowers_02": {
+      "dimensions": [
+        32,
+        32
+      ],
+      "pivot": [
+        16,
+        28
+      ],
+      "category": "Foliage/Flowers"
+    },
+    "FOL_Flower_Daisies_03": {
+      "dimensions": [
+        32,
+        32
+      ],
+      "pivot": [
+        16,
+        28
+      ],
+      "category": "Foliage/Flowers"
+    },
+    "FOL_Bush_Small_01": {
+      "dimensions": [
+        32,
+        32
+      ],
+      "pivot": [
+        16,
+        28
+      ],
+      "category": "Foliage/Bushes"
+    },
+    "FOL_Bush_Medium_02": {
+      "dimensions": [
+        48,
+        48
+      ],
+      "pivot": [
+        24,
+        42
+      ],
+      "category": "Foliage/Bushes"
+    },
+    "FOL_Bush_Bramble_03": {
+      "dimensions": [
+        48,
+        48
+      ],
+      "pivot": [
+        24,
+        43
+      ],
+      "category": "Foliage/Bushes"
+    }
+  },
+  "trees": {
+    "TREE_Sapling_01": {
+      "dimensions": [
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        45
+      ],
+      "category": "Trees/Woodland"
+    },
+    "TREE_Oak_Canopy_02": {
+      "dimensions": [
+        64,
+        96
+      ],
+      "pivot": [
+        32,
+        90
+      ],
+      "category": "Trees/Woodland"
+    },
+    "TREE_Pine_Evergreen_03": {
+      "dimensions": [
+        48,
+        96
+      ],
+      "pivot": [
+        24,
+        90
+      ],
+      "category": "Trees/Conifer"
+    }
+  },
+  "rocks_and_props": {
+    "ROCK_Pebbles_01": {
+      "dimensions": [
+        16,
+        16
+      ],
+      "pivot": [
+        8,
+        14
+      ],
+      "category": "Rocks"
+    },
+    "ROCK_Boulder_Mossy_02": {
+      "dimensions": [
+        32,
+        32
+      ],
+      "pivot": [
+        16,
+        27
+      ],
+      "category": "Rocks"
+    },
+    "ROCK_Formation_Crag_03": {
+      "dimensions": [
+        48,
+        48
+      ],
+      "pivot": [
+        24,
+        42
+      ],
+      "category": "Rocks"
+    },
+    "PROP_Crate_Oak_01": {
+      "dimensions": [
+        32,
+        32
+      ],
+      "pivot": [
+        16,
+        28
+      ],
+      "category": "Props/Containers"
+    },
+    "PROP_Barrel_Keg_02": {
+      "dimensions": [
+        32,
+        32
+      ],
+      "pivot": [
+        16,
+        28
+      ],
+      "category": "Props/Containers"
+    },
+    "PROP_Signpost_Waymarker_03": {
+      "dimensions": [
+        32,
+        32
+      ],
+      "pivot": [
+        16,
+        29
+      ],
+      "category": "Props/Waymarkers"
+    }
+  },
+  "animated_props": {
+    "PROP_Brazier_Torch_04": {
+      "dimensions": [
+        32,
+        32
+      ],
+      "pivot": [
+        16,
+        28
+      ],
+      "frames": 4,
+      "duration_ms": 100
+    }
+  },
+  "tileset": {
+    "grid_size": [
+      32,
+      32
+    ],
+    "atlas_dimensions": [
+      128,
+      128
+    ],
+    "tile_count": 16,
+    "tiles": [
+      "TILE_Dirt_Base",
+      "TILE_Grass_Base",
+      "TILE_Stone_Cobble_Path",
+      "TILE_Cliff_Ledge_Wall",
+      "TILE_Grass_Edge_N",
+      "TILE_Grass_Edge_S",
+      "TILE_Grass_Edge_W",
+      "TILE_Grass_Edge_E",
+      "TILE_Grass_Corner_NW",
+      "TILE_Grass_Corner_NE",
+      "TILE_Grass_Corner_SW",
+      "TILE_Grass_Corner_SE",
+      "TILE_Grass_Inner_NW",
+      "TILE_Grass_Inner_NE",
+      "TILE_Grass_Inner_SW",
+      "TILE_Grass_Inner_SE"
+    ]
+  }
+}
