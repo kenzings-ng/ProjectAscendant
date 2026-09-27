@@ -4,74 +4,74 @@ format: RGBA8888
 filter: Nearest, Nearest
 repeat: none
 torso
-  bounds: 2, 2, 110, 95
-  offsets: 0, 0, 110, 95
+  bounds: 2, 2, 120, 110
+  offsets: 0, 0, 120, 110
   index: -1
 head
-  bounds: 114, 2, 70, 85
-  offsets: 0, 0, 70, 85
-  index: -1
-shoulder_r
-  bounds: 186, 2, 75, 75
-  offsets: 0, 0, 75, 75
-  index: -1
-shadow
-  bounds: 263, 2, 180, 70
-  offsets: 0, 0, 180, 70
+  bounds: 124, 2, 60, 80
+  offsets: 0, 0, 60, 80
   index: -1
 arm_lower_r
-  bounds: 2, 99, 75, 70
-  offsets: 0, 0, 75, 70
+  bounds: 186, 2, 55, 75
+  offsets: 0, 0, 55, 75
   index: -1
 arm_lower_l
-  bounds: 79, 99, 70, 70
-  offsets: 0, 0, 70, 70
-  index: -1
-arm_upper_l
-  bounds: 151, 99, 60, 65
-  offsets: 0, 0, 60, 65
-  index: -1
-fist_l
-  bounds: 213, 99, 70, 65
-  offsets: 0, 0, 70, 65
-  index: -1
-fist_r
-  bounds: 285, 99, 70, 60
-  offsets: 0, 0, 70, 60
-  index: -1
-shoulder_l
-  bounds: 357, 99, 60, 60
-  offsets: 0, 0, 60, 60
+  bounds: 243, 2, 55, 75
+  offsets: 0, 0, 55, 75
   index: -1
 calf_r
-  bounds: 419, 99, 55, 60
-  offsets: 0, 0, 55, 60
-  index: -1
-thigh_r
-  bounds: 2, 171, 50, 55
-  offsets: 0, 0, 50, 55
+  bounds: 300, 2, 50, 70
+  offsets: 0, 0, 50, 70
   index: -1
 calf_l
-  bounds: 54, 171, 60, 55
-  offsets: 0, 0, 60, 55
-  index: -1
-pelvis
-  bounds: 116, 171, 90, 50
-  offsets: 0, 0, 90, 50
+  bounds: 352, 2, 50, 70
+  offsets: 0, 0, 50, 70
   index: -1
 arm_upper_r
-  bounds: 208, 171, 50, 50
-  offsets: 0, 0, 50, 50
+  bounds: 404, 2, 45, 65
+  offsets: 0, 0, 45, 65
+  index: -1
+fist_r
+  bounds: 2, 114, 65, 65
+  offsets: 0, 0, 65, 65
+  index: -1
+arm_upper_l
+  bounds: 69, 114, 45, 65
+  offsets: 0, 0, 45, 65
+  index: -1
+fist_l
+  bounds: 116, 114, 65, 65
+  offsets: 0, 0, 65, 65
+  index: -1
+thigh_r
+  bounds: 183, 114, 45, 65
+  offsets: 0, 0, 45, 65
   index: -1
 thigh_l
-  bounds: 260, 171, 55, 50
-  offsets: 0, 0, 55, 50
+  bounds: 230, 114, 45, 65
+  offsets: 0, 0, 45, 65
   index: -1
-foot_l
-  bounds: 317, 171, 65, 45
-  offsets: 0, 0, 65, 45
+shadow
+  bounds: 277, 114, 180, 60
+  offsets: 0, 0, 180, 60
+  index: -1
+shoulder_r
+  bounds: 2, 181, 65, 60
+  offsets: 0, 0, 65, 60
+  index: -1
+shoulder_l
+  bounds: 69, 181, 65, 60
+  offsets: 0, 0, 65, 60
+  index: -1
+pelvis
+  bounds: 136, 181, 90, 55
+  offsets: 0, 0, 90, 55
   index: -1
 foot_r
-  bounds: 384, 171, 60, 35
-  offsets: 0, 0, 60, 35
+  bounds: 228, 181, 70, 45
+  offsets: 0, 0, 70, 45
+  index: -1
+foot_l
+  bounds: 300, 181, 70, 45
+  offsets: 0, 0, 70, 45
   index: -1
