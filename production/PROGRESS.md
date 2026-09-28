@@ -13,9 +13,9 @@
 | **Giai đoạn 0** | Hoàn tất Spine Boss Stone Golem (IK constraint, squash slam, Nearest filter, Art Gate exception) | **HOÀN THÀNH** | Merged to `main` (`45c1103`) |
 | **Giai đoạn 1** | Vanguard Locomotion, 8-directional Flipbooks, Socket System (`Hand_R`, `Hand_L`) | **HOÀN THÀNH** | Merged to `main` (`22605f7`) |
 | **Giai đoạn 1.5** | Iris Network Replication, PIE 2-Player Dedicated Server, Mixed ASC Mode | **HOÀN THÀNH** | Merged to `main` (`7b8459f`) |
-| **Việc đầu tiên** | Cổng tự động (GDD validator, CI headless, Postgres test), DECISIONS.md, Reviewer subagent, Settings safety | **ĐANG THỰC HIỆN** | Nhánh `infra/autonomous-mode-setup` |
-| **Docs Sync** | Đồng bộ GDD Cây chuyển chức 4 Nhánh (Guard, Scout, Caster, Faith) + Apex, Dual-Class (A1/B1) | **SẴN SÀNG AUDIT** | Nhánh `docs/class-tree-dual-class` |
-| **Giai đoạn 2** | Whitebox / Prototype Level: Graybox Citadel, Tilemap Biome, Collision NavMesh | **CHƯA BẮT ĐẦU** | Chờ Giai đoạn 1 & Docs |
+| **Việc đầu tiên** | Cổng tự động (GDD validator, CI headless, Postgres test), DECISIONS.md, Reviewer subagent, Settings safety | **HOÀN THÀNH** | Merged to `main` (`360837c`) |
+| **Docs Sync** | Đồng bộ GDD Cây chuyển chức 4 Nhánh (Guard, Scout, Caster, Faith) + Apex, Dual-Class (A1/B1) | **HOÀN THÀNH** | Merged to `main` (`360837c`), 22/22 GDD PASS |
+| **Giai đoạn 2** | Whitebox / Prototype Level: Graybox Citadel, Tilemap Biome, Collision NavMesh | **SẴN SÀNG THI CÔNG** | Bắt đầu theo roadmap |
 | **Giai đoạn 3** | Vanguard Production Art Gate (Aesthetic Approval sample) & Paperdoll System | **CHỜ DUYỆT ART** | Cần hỏi người dùng về art mẫu |
 | **Giai đoạn 4** | Combat System Vertical Slice: Vanguard + Golem Boss Encounter (Stagger, Hitstun, Damage Numbers) | **CHƯA BẮT ĐẦU** | Theo spec `combat-system.md` |
 | **Giai đoạn 5** | Dedicated Server Integration & Network Stress Test (Iris Replication under 100ms jitter) | **CHƯA BẮT ĐẦU** | Theo spec `multiplayer-coop.md` |
@@ -75,6 +75,10 @@
   - `validate_gdd_consistency.py`: **PASS 100%** (22/22 file GDD đạt chuẩn tuyệt đối, 0 Error, 0 Warning). Exit Code: 0.
   - `test_backend_postgres.py`: **PASS 100%** (4/4 tests: DDL check cả DECISIONS & GDD, Atomic slot swap với unique constraint, Concurrency race-condition anti-dupe, Tag update). Exit Code: 0.
   - `run_headless_tests.sh`: **PASS 100%** (Gate 1 PASS, Gate 2 PASS). Exit Code: 0.
+- **Kết Luận Chung Cuộc Subagent Reviewer**: **VERDICT: PASS** (Toàn bộ 17 file rà soát đạt chuẩn tuyệt đối).
+- **Xác Nhận Merge & Push Remote**:
+  - Commit Hash: `360837c` (`360837cc3c30aa5b481f27d644f21f37b45fc9af`)
+  - Xác nhận `git ls-remote`: `360837cc3c30aa5b481f27d644f21f37b45fc9af    refs/heads/main` (Khớp 100%).
 
 ---
 
