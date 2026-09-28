@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Project Ascendant — Stone Golem Animation Viewer</title>
+    <style>
+        body {
+            background-color: #0f1115;
+            color: #e0e0e0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 30px;
+        }
+        h1 {
+            color: #46f1ff;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+        p.subtitle {
+            text-align: center;
+            color: #888;
+            margin-top: 0;
+            margin-bottom: 40px;
+        }
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .section-title {
+            color: #ffcf00;
+            border-bottom: 2px solid #2a2e38;
+            padding-bottom: 8px;
+            margin-top: 40px;
+            font-size: 20px;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 24px;
+            margin-top: 20px;
+        }
+        .card {
+            background: #171a21;
+            border: 1px solid #2a2e38;
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+            transition: transform 0.2s, border-color 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-4px);
+            border-color: #46f1ff;
+        }
+        .card h3 {
+            margin: 10px 0 6px 0;
+            font-size: 16px;
+            color: #ffffff;
+        }
+        .card p {
+            margin: 0;
+            font-size: 12px;
+            color: #9ba394;
+        }
+        .card .img-box {
+            background: #0b0c0f;
+            border-radius: 6px;
+            padding: 20px 10px;
+            height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .card img {
+            max-height: 160px;
+            max-width: 100%;
+            image-rendering: pixelated;
+        }
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        .badge-game {
+            background: #1a3a40;
+            color: #46f1ff;
+            border: 1px solid #136c7a;
+        }
+        .badge-spine {
+            background: #3b2a1a;
+            color: #ffaa46;
+            border: 1px solid #7a4813;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🪨 Stone Golem Boss Animation Viewer</h1>
+        <p class="subtitle">Project Ascendant — 2.5D Isometric HD-2D Dark Fantasy Action RPG</p>
+
+        <div class="section-title">1. Hoạt Ảnh Chiến Đấu Trong Game (PaperZD Pixel-Art Engine)</div>
+        <div class="grid">
+            <div class="card">
+                <span class="badge badge-game">IN-GAME ENGINE</span>
+                <div class="img-box">
+                    <img src="Content/art/characters/boss/FB_Golem_Slam.gif" alt="Ground Slam">
+                </div>
+                <h3>💥 Ground Slam (Đập Đất AoE)</h3>
+                <p>35 Damage + 30 Posture Dmg (Radius 300cm)</p>
+            </div>
+            <div class="card">
+                <span class="badge badge-game">IN-GAME ENGINE</span>
+                <div class="img-box">
+                    <img src="Content/art/characters/boss/FB_Golem_Idle.gif" alt="Idle">
+                </div>
+                <h3>⏳ Idle Breathing (Nhịp Thở)</h3>
+                <p>Mắt & Rune cyan phát quang</p>
+            </div>
+            <div class="card">
+                <span class="badge badge-game">IN-GAME ENGINE</span>
+                <div class="img-box">
+                    <img src="Content/art/characters/boss/FB_Golem_Walk.gif" alt="Walk">
+                </div>
+                <h3>🚶 Walk / Patrol (Tuần Tra)</h3>
+                <p>Tốc độ 220 cm/s rung chuyển mặt đất</p>
+            </div>
+            <div class="card">
+                <span class="badge badge-game">IN-GAME ENGINE</span>
+                <div class="img-box">
+                    <img src="Content/art/characters/boss/FB_Golem_Stagger.gif" alt="Stagger">
+                </div>
+                <h3>💫 Stagger (Trúng Đòn Choáng)</h3>
+                <p>Bị phá vỡ thế trận / vỡ Posture</p>
+            </div>
+            <div class="card">
+                <span class="badge badge-game">IN-GAME ENGINE</span>
+                <div class="img-box">
+                    <img src="Content/art/characters/boss/FB_Golem_Death.gif" alt="Death">
+                </div>
+                <h3>💀 Death (Tử Trận)</h3>
+                <p>Sụp đổ thành đống đổ nát</p>
+            </div>
+        </div>
+
+        <div class="section-title">2. Hoạt Ảnh Khung Xương Spine 2D (Spine Skeletal Animation)</div>
+        <div class="grid">
+            <div class="card">
+                <span class="badge badge-spine">SPINE 4.3 RUNTIME</span>
+                <div class="img-box">
+                    <img src="Content/art/characters/boss/spine/stone_golem_slam.gif" alt="Spine Slam">
+                </div>
+                <h3>⚡ Spine Ground Slam</h3>
+                <p>FK Bone rotation & impact event</p>
+            </div>
+            <div class="card">
+                <span class="badge badge-spine">SPINE 4.3 RUNTIME</span>
+                <div class="img-box">
+                    <img src="Content/art/characters/boss/spine/stone_golem_idle.gif" alt="Spine Idle">
+                </div>
+                <h3>🌿 Spine Idle Breathing</h3>
+                <p>Nhịp thở tịnh tiến trọng tâm hông</p>
+            </div>
+            <div class="card">
+                <span class="badge badge-spine">SPINE 4.3 RUNTIME</span>
+                <div class="img-box">
+                    <img src="Content/art/characters/boss/spine/stone_golem_walk.gif" alt="Spine Walk">
+                </div>
+                <h3>🐾 Spine Walk Cycle</h3>
+                <p>Xương sải bước luân phiên</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

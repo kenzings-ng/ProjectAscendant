@@ -1,77 +1,104 @@
+
 stone_golem.png
-size: 512, 512
+size: 1024,512
 format: RGBA8888
-filter: Nearest, Nearest
+filter: Linear,Linear
 repeat: none
-torso
-  bounds: 2, 2, 120, 110
-  offsets: 0, 0, 120, 110
-  index: -1
-head
-  bounds: 124, 2, 60, 80
-  offsets: 0, 0, 60, 80
-  index: -1
 arm_lower_r
-  bounds: 186, 2, 55, 75
-  offsets: 0, 0, 55, 75
+  rotate: false
+  xy: 4, 4
+  size: 145, 215
+  orig: 145, 215
+  offset: 0, 0
   index: -1
 arm_lower_l
-  bounds: 243, 2, 55, 75
-  offsets: 0, 0, 55, 75
+  rotate: false
+  xy: 153, 4
+  size: 147, 204
+  orig: 147, 204
+  offset: 0, 0
+  index: -1
+torso
+  rotate: false
+  xy: 304, 4
+  size: 223, 183
+  orig: 223, 183
+  offset: 0, 0
   index: -1
 calf_r
-  bounds: 300, 2, 50, 70
-  offsets: 0, 0, 50, 70
-  index: -1
-calf_l
-  bounds: 352, 2, 50, 70
-  offsets: 0, 0, 50, 70
-  index: -1
-arm_upper_r
-  bounds: 404, 2, 45, 65
-  offsets: 0, 0, 45, 65
-  index: -1
-fist_r
-  bounds: 2, 114, 65, 65
-  offsets: 0, 0, 65, 65
-  index: -1
-arm_upper_l
-  bounds: 69, 114, 45, 65
-  offsets: 0, 0, 45, 65
-  index: -1
-fist_l
-  bounds: 116, 114, 65, 65
-  offsets: 0, 0, 65, 65
-  index: -1
-thigh_r
-  bounds: 183, 114, 45, 65
-  offsets: 0, 0, 45, 65
-  index: -1
-thigh_l
-  bounds: 230, 114, 45, 65
-  offsets: 0, 0, 45, 65
-  index: -1
-shadow
-  bounds: 277, 114, 180, 60
-  offsets: 0, 0, 180, 60
+  rotate: false
+  xy: 531, 4
+  size: 105, 164
+  orig: 105, 164
+  offset: 0, 0
   index: -1
 shoulder_r
-  bounds: 2, 181, 65, 60
-  offsets: 0, 0, 65, 60
+  rotate: false
+  xy: 640, 4
+  size: 131, 146
+  orig: 131, 146
+  offset: 0, 0
   index: -1
-shoulder_l
-  bounds: 69, 181, 65, 60
-  offsets: 0, 0, 65, 60
+arm_upper_r
+  rotate: false
+  xy: 775, 4
+  size: 80, 145
+  orig: 80, 145
+  offset: 0, 0
+  index: -1
+head
+  rotate: false
+  xy: 859, 4
+  size: 150, 144
+  orig: 150, 144
+  offset: 0, 0
+  index: -1
+thigh_r
+  rotate: false
+  xy: 4, 223
+  size: 80, 140
+  orig: 80, 140
+  offset: 0, 0
+  index: -1
+thigh_l
+  rotate: false
+  xy: 88, 223
+  size: 108, 135
+  orig: 108, 135
+  offset: 0, 0
+  index: -1
+arm_upper_l
+  rotate: false
+  xy: 200, 223
+  size: 95, 114
+  orig: 95, 114
+  offset: 0, 0
   index: -1
 pelvis
-  bounds: 136, 181, 90, 55
-  offsets: 0, 0, 90, 55
+  rotate: false
+  xy: 299, 223
+  size: 174, 109
+  orig: 174, 109
+  offset: 0, 0
   index: -1
-foot_r
-  bounds: 228, 181, 70, 45
-  offsets: 0, 0, 70, 45
+calf_l
+  rotate: false
+  xy: 477, 223
+  size: 119, 105
+  orig: 119, 105
+  offset: 0, 0
   index: -1
-foot_l
-  bounds: 300, 181, 70, 45
-  offsets: 0, 0, 70, 45
+shoulder_l
+  rotate: false
+  xy: 600, 223
+  size: 110, 99
+  orig: 110, 99
+  offset: 0, 0
+  index: -1
+shadow
+  rotate: false
+  xy: 714, 223
+  size: 260, 90
+  orig: 260, 90
+  offset: 0, 0
   index: -1
