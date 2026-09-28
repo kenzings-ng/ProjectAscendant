@@ -7,7 +7,10 @@
 
 UPAPaperZDAnimInstance::UPAPaperZDAnimInstance()
 	: CurrentSpeed(0.0f)
+	, Speed(0.0f)
 	, bIsMoving(false)
+	, bIsRunning(false)
+	, RunningSpeedThreshold(280.0f)
 	, bIsDashing(false)
 	, bIsAttacking(false)
 	, bIsHurt(false)
@@ -60,7 +63,9 @@ void UPAPaperZDAnimInstance::UpdateAnimationVariables(float DeltaTime)
 	{
 		// Cập nhật vận tốc di chuyển 2D
 		CurrentSpeed = OwningPABaseCharacter->GetVelocity().Size2D();
+		Speed = CurrentSpeed;
 		bIsMoving = CurrentSpeed > 10.0f;
+		bIsRunning = CurrentSpeed >= RunningSpeedThreshold;
 
 		// Cập nhật hướng ngắm 8 chiều
 		CurrentAimDirection8Way = OwningPABaseCharacter->GetCurrent8WayOrientation();

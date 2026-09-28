@@ -51,9 +51,21 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "ProjectAscendant|Animation")
 	float CurrentSpeed;
 
+	/** Tốc độ di chuyển mặt đất (expose cho AnimBP) */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "ProjectAscendant|Animation")
+	float Speed;
+
 	/** Cờ đánh dấu nhân vật đang di chuyển (CurrentSpeed > 10.0f) */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "ProjectAscendant|Animation")
 	bool bIsMoving;
+
+	/** Cờ đánh dấu nhân vật đang chạy nhanh vượt ngưỡng (Walk vs Run) */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "ProjectAscendant|Animation")
+	bool bIsRunning;
+
+	/** Ngưỡng tốc độ để chuyển từ Walk (đi bộ) sang Run (chạy nhanh) */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectAscendant|Animation")
+	float RunningSpeedThreshold;
 
 	/** Cờ đánh dấu đang lướt né I-frame (State.Dashing) */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "ProjectAscendant|Animation")

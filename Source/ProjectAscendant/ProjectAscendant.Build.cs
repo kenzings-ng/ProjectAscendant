@@ -22,7 +22,9 @@ public class ProjectAscendant : ModuleRules
 			"Paper2D",
 			"PaperZD",
 			"SpinePlugin",
-			"UMG"
+			"UMG",
+			"Json",
+			"JsonUtilities"
 		});
 
 		PrivateDependencyModuleNames.AddRange(new string[] {
