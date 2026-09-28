@@ -62,12 +62,13 @@ Kinh tế Project Ascendant vận hành trên hai kênh tiền tệ tách biệt
 | Tiền tệ | Tên Hiển Thị | Nguồn Cung (Faucets) | Kênh Tiêu Hao (Sinks) | Giới Hạn Mang |
 |---|---|---|---|---|
 | **Gold** (`currency_gold`) | Vàng | Tiêu diệt quái vật, rương kho báu, bán vật phẩm cho Thương nhân | Mua hàng, sửa chữa trang bị (`repair_cost_formula`), tháo ngọc (`gem_unsocket_fee = 100`), nộp phạt Karma Bailout, phạt chết PvE (50%), phạt chết PvP (25%) | 9,999,999 Gold |
-| **Skill Shards / Ash Shards** (`item_skill_shard`) | Tàn Trang Kỹ Năng | Tinh anh (Elite), Thủ lĩnh (Boss), phân rã Sách Kỹ Năng (`item_skill_book`), rương ẩn Tier 2-3 | Nâng cấp kỹ năng (`foundational_upgrade_cost`), chế tác Thợ Rèn cao cấp, đục lỗ Prismatic, mua hàng đặc thù Tier 2-3 | 99,999 Shards |
+| **Skill Shards** (`item_skill_shard`) | Tàn Trang Kỹ Năng | Tinh anh (Elite), Thủ lĩnh (Boss), phân rã Sách Kỹ Năng / Quyển Trục (`item_skill_book`), rương ẩn Tier 2-3 | Nâng cấp kỹ năng (`foundational_upgrade_cost`), chế tác Thợ Rèn cao cấp, đục lỗ Prismatic, mua hàng đặc thù Tier 2-3 | 99,999 Shards |
 
 **Quy tắc chung:**
 - Server-Authoritative 100%: Mọi thay đổi số dư tiền tệ chỉ được thực hiện bởi Dedicated Server qua Server RPC (theo ADR-0001).
 - Client chỉ gửi yêu cầu giao dịch (Request), Server xác nhận (Validate → Execute → Replicate).
 - Không tồn tại giao dịch giữa người chơi với nhau (No Player-to-Player Trading) trong phiên bản MVP — chỉ giao dịch qua NPC Thương nhân.
+  - *Lộ trình Hậu MVP (Post-MVP)*: Ghi nhận tính năng Chợ Đấu Giá / Giao dịch Người Chơi (Player Marketplace) với cơ chế chống bot (Yêu cầu Character Level tối thiểu 20, áp thuế giao dịch 10% Gold Sink). Quyển Trục Chuyển Chức Ẩn (Mythic Scroll) tự động khóa vĩnh viễn sau 1 lần giao dịch thành công (Bind-on-Trade) để ngăn chặn hành vi đầu cơ lũng đoạn.
 
 #### 2. Mạng Lưới Thương Nhân 3 Bậc (3-Tier Merchant Network)
 
@@ -101,7 +102,7 @@ Kinh tế Project Ascendant vận hành trên hai kênh tiền tệ tách biệt
 | Đá Bảo Hộ Ép Đồ (`item_blacksmith_ward`) | 800 | Gold | Protection | Bảo vệ 1 lần nâng cấp thất bại |
 
 - **Danh mục hàng xoay vòng** (4 ô, thay đổi mỗi chu kỳ restock):
-  - Pool xoay vòng: Bản Đồ Mật Cảnh (Dungeon Map, giá = Ash Shards), Nguyên liệu chế tác Tier 2, Ngọc thô Tier 2, Cuộn Teleport Khẩn Cấp (Emergency Warp Scroll, giá = Ash Shards), Thức ăn buff tạm thời.
+  - Pool xoay vòng: Quyển Trục Chuyển Chức Bậc 2 (`Rare Promotion Scroll`, giá = Skill Shards), Bản Đồ Mật Cảnh (Dungeon Map, giá = Skill Shards), Nguyên liệu chế tác Tier 2, Ngọc thô Tier 2, Cuộn Teleport Khẩn Cấp (Emergency Warp Scroll, giá = Skill Shards), Thức ăn buff tạm thời.
   - Mỗi món giới hạn tồn kho: 1–3 đơn vị.
 - **Chính sách từ chối**: Không từ chối ai — gã buôn lậu không quan tâm đến luật pháp. Tuy nhiên **giá mua tăng 20%** cho người chơi có Karma < -50 (phí rủi ro buôn bán với tội phạm).
 - **Dịch vụ thu mua**: Như Tier 1, `vendor_sell_penalty = 0.30`.
@@ -116,7 +117,7 @@ Kinh tế Project Ascendant vận hành trên hai kênh tiền tệ tách biệt
 | Khói Tẩu Xóa Dấu (Smoke Veil) | 300 | Gold | Consumable | Xóa trạng thái bị quái truy đuổi 1 lần |
 
 - **Danh mục hàng xoay vòng** (5 ô, thay đổi mỗi chu kỳ restock):
-  - Pool xoay vòng: Cổ Vật Cấm Địa (Relic Fragments, giá = Ash Shards), Độc Dược Tê Liệt (Paralysis Toxin, giá = Gold), Ngọc thô Tier 3, Nguyên liệu Thợ Rèn Tier 3, Sách Kỹ Năng Ngẫu Nhiên (`item_skill_book`, giá = Ash Shards).
+  - Pool xoay vòng: Quyển Trục Chuyển Chức Bậc 3 (`Epic Promotion Scroll`, giá = Skill Shards), Cổ Vật Cấm Địa (Relic Fragments, giá = Skill Shards), Độc Dược Tê Liệt (Paralysis Toxin, giá = Gold), Ngọc thô Tier 3, Nguyên liệu Thợ Rèn Tier 3, Sách Kỹ Năng Ngẫu Nhiên (`item_skill_book`, giá = Skill Shards).
   - Mỗi món giới hạn tồn kho: 1 đơn vị.
 - **Dịch vụ độc quyền — Nộp Phạt Chuộc Tội (Karma Bailout)**:
   - Chỉ khả dụng tại Chợ Đen Tier 3.
