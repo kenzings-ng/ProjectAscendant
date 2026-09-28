@@ -102,7 +102,11 @@ def check_file(file_path: Path):
 
         # Check GameplayTags
         tag_matches = re.findall(r'\bClass\.[A-Za-z0-9_.]+', line)
-        for tag in tag_matches:
+        for raw_tag in tag_matches:
+            tag = raw_tag.rstrip(".:,;()[]\"'`")
+            if not tag:
+                continue
+
             if tag in ALLOWED_META_TAGS:
                 continue
 

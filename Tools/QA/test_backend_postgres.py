@@ -68,7 +68,8 @@ def test_atomic_slot_swapping():
         owner_type TEXT NOT NULL,
         owner_id TEXT NOT NULL,
         slot_type TEXT NOT NULL,
-        slot_index INTEGER NOT NULL
+        slot_index INTEGER NOT NULL,
+        CONSTRAINT uk_owner_slot UNIQUE (owner_type, owner_id, slot_type, slot_index)
     )
     """)
 
@@ -79,7 +80,15 @@ def test_atomic_slot_swapping():
     cursor.execute("INSERT INTO items VALUES (?, ?, ?, ?, ?, ?)", (item_a, "sword_01", "CHARACTER", char_id, "INVENTORY", 0))
     cursor.execute("INSERT INTO items VALUES (?, ?, ?, ?, ?, ?)", (item_b, "shield_01", "CHARACTER", char_id, "INVENTORY", 1))
 
-    # Perform atomic swap using transaction
+    # Test 3a: Direct collision update without swap mechanism triggers IntegrityError
+    direct_collision_failed = False
+    try:
+        cursor.execute("UPDATE items SET slot_index = 0 WHERE item_instance_id = ?", (item_b,))
+    except sqlite3.IntegrityError:
+        direct_collision_failed = True
+    assert direct_collision_failed, "FAIL: Direct slot index collision did not trigger uk_owner_slot IntegrityError"
+
+    # Test 3b: Perform atomic swap using transaction
     cursor.execute("BEGIN TRANSACTION")
     # Temp slot index -1
     cursor.execute("UPDATE items SET slot_index = -1 WHERE item_instance_id = ?", (item_a,))
@@ -93,7 +102,7 @@ def test_atomic_slot_swapping():
     slot_b = cursor.fetchone()[0]
 
     assert slot_a == 1 and slot_b == 0, f"Atomic swap failed: slot_a={slot_a}, slot_b={slot_b}"
-    print("  -> Atomic slot swapping: PASSED")
+    print("  -> Atomic slot swapping with uk_owner_slot constraint: PASSED")
     conn.close()
     return True
 
