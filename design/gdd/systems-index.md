@@ -18,6 +18,7 @@ Project Ascendant là một tựa game 2.5D Isometric Action RPG hardcore nơi k
 
 | # | Tên Hệ Thống (System Name) | Nhóm (Category) | Mức Ưu Tiên | Trạng Thái | Tài Liệu Thiết Kế (Design Doc) | Phụ Thuộc (Depends On) |
 |---|----------------------------|-----------------|-------------|------------|--------------------------------|------------------------|
+| 0 | Core Game Loop & Triad Progression | Core | MVP | Approved | `design/gdd/core-game-loop.md` | — |
 | 1 | Character Attributes & Stats Engine (GAS) *(inferred)* | Core | MVP | Approved | `design/gdd/attributes-system.md` | — |
 | 2 | Input & Isometric Camera Controller *(inferred)* | Core | MVP | Approved | `design/gdd/isometric-controller.md` | — |
 | 3 | Dash & I-frame Evasion | Gameplay | MVP | Approved | `design/gdd/dash-evasion.md` | Attributes (1), Controller (2) |
