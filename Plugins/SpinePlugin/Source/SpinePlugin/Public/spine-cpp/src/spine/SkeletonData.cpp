@@ -77,7 +77,7 @@ Skin *SkeletonData::findSkin(const String &skinName) {
 	return ArrayUtils::findWithName(_skins, skinName);
 }
 
-EventData *SkeletonData::findEvent(const String &eventDataName) {
+spine::EventData *SkeletonData::findEvent(const String &eventDataName) {
 	return ArrayUtils::findWithName(_events, eventDataName);
 }
 
@@ -124,7 +124,7 @@ void SkeletonData::setDefaultSkin(Skin *inValue) {
 	_defaultSkin = inValue;
 }
 
-Array<EventData *> &SkeletonData::getEvents() {
+Array<spine::EventData *> &SkeletonData::getEvents() {
 	return _events;
 }
 

@@ -53,6 +53,10 @@ public:
 	UFUNCTION(BlueprintPure, Category = "ProjectAscendant|Boss|Spine")
 	bool IsSpineModeActive() const { return bIsSpineActive; }
 
+	/** Lấy trạng thái hoạt ảnh hiện tại */
+	UFUNCTION(BlueprintPure, Category = "ProjectAscendant|Boss|Spine")
+	EPASpineBossState GetCurrentState() const { return CurrentState; }
+
 	/** Chơi hoạt ảnh Slam của Boss qua Spine */
 	UFUNCTION(BlueprintCallable, Category = "ProjectAscendant|Boss|Spine")
 	bool PlaySpineSlamAnimation();

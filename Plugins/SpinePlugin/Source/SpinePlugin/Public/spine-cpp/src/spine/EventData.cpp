@@ -33,27 +33,27 @@
 
 using namespace spine;
 
-EventData::EventData(const String &name) : _name(name), _audioPath(), _setupPose(-1, *this) {
+spine::EventData::EventData(const String &name) : _name(name), _audioPath(), _setupPose(-1, *this) {
 	assert(_name.length() > 0);
 }
 
 /// The name of the event, which is unique within the skeleton.
-const String &EventData::getName() const {
+const String &spine::EventData::getName() const {
 	return _name;
 }
 
-Event &EventData::getSetupPose() {
+Event &spine::EventData::getSetupPose() {
 	return _setupPose;
 }
 
-const Event &EventData::getSetupPose() const {
+const Event &spine::EventData::getSetupPose() const {
 	return _setupPose;
 }
 
-const String &EventData::getAudioPath() const {
+const String &spine::EventData::getAudioPath() const {
 	return _audioPath;
 }
 
-void EventData::setAudioPath(const String &inValue) {
+void spine::EventData::setAudioPath(const String &inValue) {
 	_audioPath = inValue;
 }

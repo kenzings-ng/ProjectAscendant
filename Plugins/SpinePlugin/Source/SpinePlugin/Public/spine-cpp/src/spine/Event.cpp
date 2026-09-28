@@ -33,10 +33,10 @@
 
 using namespace spine;
 
-Event::Event(float time, const EventData &data) : _data(data), _time(time), _intValue(0), _floatValue(0), _stringValue(), _volume(0), _balance(0) {
+Event::Event(float time, const spine::EventData &data) : _data(data), _time(time), _intValue(0), _floatValue(0), _stringValue(), _volume(0), _balance(0) {
 }
 
-const EventData &Event::getData() {
+const spine::EventData &Event::getData() {
 	return _data;
 }
 

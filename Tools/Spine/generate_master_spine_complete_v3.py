@@ -177,7 +177,7 @@ def build_texture_atlas(parts):
         "\nstone_golem.png",
         f"size: {atlas_w},{atlas_h}",
         "format: RGBA8888",
-        "filter: Linear,Linear",
+        "filter: Nearest,Nearest",
         "repeat: none"
     ]
 
@@ -229,6 +229,8 @@ def generate_spine_json(parts):
     bones_def = [
         {"name": "root"},
         {"name": "shadow", "parent": "root"},
+        {"name": "target_foot_r", "parent": "root", "x": -71.0, "y": 0.0},
+        {"name": "target_foot_l", "parent": "root", "x": 59.0, "y": 0.0},
         {"name": "pelvis", "parent": "root", 
          "x": round(joints_spine["pelvis"][0], 2), "y": round(joints_spine["pelvis"][1], 2)},
         {"name": "torso", "parent": "pelvis",
@@ -255,16 +257,16 @@ def generate_spine_json(parts):
         {"name": "arm_lower_l", "parent": "arm_upper_l",
          "x": round(joints_spine["arm_lower_l"][0] - joints_spine["arm_upper_l"][0], 2),
          "y": round(joints_spine["arm_lower_l"][1] - joints_spine["arm_upper_l"][1], 2)},
-        {"name": "thigh_r", "parent": "pelvis",
+        {"name": "thigh_r", "parent": "pelvis", "length": 73.5,
          "x": round(joints_spine["thigh_r"][0] - joints_spine["pelvis"][0], 2),
          "y": round(joints_spine["thigh_r"][1] - joints_spine["pelvis"][1], 2)},
-        {"name": "calf_r", "parent": "thigh_r",
+        {"name": "calf_r", "parent": "thigh_r", "length": 87.5,
          "x": round(joints_spine["calf_r"][0] - joints_spine["thigh_r"][0], 2),
          "y": round(joints_spine["calf_r"][1] - joints_spine["thigh_r"][1], 2)},
-        {"name": "thigh_l", "parent": "pelvis",
+        {"name": "thigh_l", "parent": "pelvis", "length": 63.5,
          "x": round(joints_spine["thigh_l"][0] - joints_spine["pelvis"][0], 2),
          "y": round(joints_spine["thigh_l"][1] - joints_spine["pelvis"][1], 2)},
-        {"name": "calf_l", "parent": "thigh_l",
+        {"name": "calf_l", "parent": "thigh_l", "length": 102.5,
          "x": round(joints_spine["calf_l"][0] - joints_spine["thigh_l"][0], 2),
          "y": round(joints_spine["calf_l"][1] - joints_spine["thigh_l"][1], 2)},
     ]
@@ -348,7 +350,7 @@ def generate_spine_json(parts):
                 }
             }
         },
-                "slam": {
+        "slam": {
             "events": [
                 {"time": 0.60, "name": "slam_impact", "int": 100}
             ],
@@ -356,132 +358,144 @@ def generate_spine_json(parts):
                 "pelvis": {
                     "translate": [
                         {"time": 0.0, "x": 0, "y": 0},
-                        {"time": 0.35, "x": -3, "y": 10},   # Wind-up lift
-                        {"time": 0.45, "x": -3, "y": 10},   # Apex pause
-                        {"time": 0.60, "x": 4, "y": -16},   # Heavy downward smash
-                        {"time": 0.75, "x": 3, "y": -12},   # Shockwave squat
-                        {"time": 1.20, "x": 0, "y": 0}      # Recover
+                        {"time": 0.35, "x": -4, "y": 12},  # Wind-up coil
+                        {"time": 0.45, "x": -4, "y": 12},  # Apex pause
+                        {"time": 0.60, "x": 4, "y": -26},  # Explosive downward smash & deep squat
+                        {"time": 0.85, "x": 3, "y": -24},  # Impact freeze & shockwave hold
+                        {"time": 1.25, "x": 0, "y": 0}     # Recover to guard
                     ]
                 },
                 "torso": {
                     "rotate": [
                         {"time": 0.0, "value": 0},
-                        {"time": 0.35, "value": -14}, # Arch back
-                        {"time": 0.45, "value": -14},
-                        {"time": 0.60, "value": 18},  # Slam forward
-                        {"time": 0.75, "value": 14},  # Stay crushed
-                        {"time": 1.20, "value": 0}
+                        {"time": 0.35, "value": -16}, # Arch back
+                        {"time": 0.45, "value": -16},
+                        {"time": 0.60, "value": 22},  # Slam forward with full weight
+                        {"time": 0.85, "value": 18},  # Stay crushed in shockwave
+                        {"time": 1.25, "value": 0}
                     ]
                 },
                 "head": {
                     "rotate": [
                         {"time": 0.0, "value": 0},
-                        {"time": 0.35, "value": -8},
-                        {"time": 0.60, "value": 12},
-                        {"time": 0.75, "value": 8},
-                        {"time": 1.20, "value": 0}
+                        {"time": 0.35, "value": -10},
+                        {"time": 0.60, "value": 14},
+                        {"time": 0.85, "value": 10},
+                        {"time": 1.25, "value": 0}
                     ]
                 },
                 "shoulder_r": {
                     "rotate": [
                         {"time": 0.0, "value": 0},
-                        {"time": 0.35, "value": 32},  # Raise high
-                        {"time": 0.45, "value": 32},
-                        {"time": 0.60, "value": -26}, # Smash down
-                        {"time": 0.75, "value": -22},
-                        {"time": 1.20, "value": 0}
+                        {"time": 0.35, "value": 36},  # Raise massive boulder arm
+                        {"time": 0.45, "value": 36},
+                        {"time": 0.60, "value": -30}, # Crash down into ground
+                        {"time": 0.85, "value": -24},
+                        {"time": 1.25, "value": 0}
                     ]
                 },
                 "arm_upper_r": {
                     "rotate": [
                         {"time": 0.0, "value": 0},
-                        {"time": 0.35, "value": 14},
-                        {"time": 0.60, "value": -12},
-                        {"time": 1.20, "value": 0}
+                        {"time": 0.35, "value": 16},
+                        {"time": 0.60, "value": -14},
+                        {"time": 1.25, "value": 0}
                     ]
                 },
                 "arm_lower_r": {
                     "rotate": [
                         {"time": 0.0, "value": 0},
-                        {"time": 0.35, "value": 16},
-                        {"time": 0.60, "value": -14},
-                        {"time": 1.20, "value": 0}
+                        {"time": 0.35, "value": 18},
+                        {"time": 0.60, "value": -16},
+                        {"time": 1.25, "value": 0}
                     ]
                 },
                 "shoulder_l": {
                     "rotate": [
                         {"time": 0.0, "value": 0},
-                        {"time": 0.35, "value": 28},
-                        {"time": 0.45, "value": 28},
-                        {"time": 0.60, "value": -22},
-                        {"time": 0.75, "value": -18},
-                        {"time": 1.20, "value": 0}
+                        {"time": 0.35, "value": 32},
+                        {"time": 0.45, "value": 32},
+                        {"time": 0.60, "value": -26},
+                        {"time": 0.85, "value": -20},
+                        {"time": 1.25, "value": 0}
                     ]
                 },
                 "arm_upper_l": {
                     "rotate": [
                         {"time": 0.0, "value": 0},
-                        {"time": 0.35, "value": 12},
-                        {"time": 0.60, "value": -10},
-                        {"time": 1.20, "value": 0}
+                        {"time": 0.35, "value": 14},
+                        {"time": 0.60, "value": -12},
+                        {"time": 1.25, "value": 0}
                     ]
                 },
                 "arm_lower_l": {
                     "rotate": [
                         {"time": 0.0, "value": 0},
-                        {"time": 0.35, "value": 14},
-                        {"time": 0.60, "value": -12},
-                        {"time": 1.20, "value": 0}
+                        {"time": 0.35, "value": 16},
+                        {"time": 0.60, "value": -14},
+                        {"time": 1.25, "value": 0}
+                    ]
+                },
+                "target_foot_r": {
+                    "translate": [
+                        {"time": 0.0, "x": 0.0, "y": 0.0},
+                        {"time": 1.25, "x": 0.0, "y": 0.0}  # Ground locked
+                    ]
+                },
+                "target_foot_l": {
+                    "translate": [
+                        {"time": 0.0, "x": 0.0, "y": 0.0},
+                        {"time": 1.25, "x": 0.0, "y": 0.0}  # Ground locked
                     ]
                 },
                 "thigh_r": {
-                    "translate": [
-                        {"time": 0.0, "x": 0, "y": 0},
-                        {"time": 0.35, "x": 0, "y": -8},
-                        {"time": 0.60, "x": 0, "y": 14},  # Knee compression keeps foot on ground
-                        {"time": 0.75, "x": 0, "y": 10},
-                        {"time": 1.20, "x": 0, "y": 0}
+                    "scale": [
+                        {"time": 0.0, "x": 1.0, "y": 1.0},
+                        {"time": 0.35, "x": 0.96, "y": 1.04}, # Windup stretch
+                        {"time": 0.60, "x": 1.18, "y": 0.82}, # Ground impact squash!
+                        {"time": 0.85, "x": 1.15, "y": 0.85}, # Shockwave hang squash
+                        {"time": 1.25, "x": 1.0, "y": 1.0}
                     ],
                     "rotate": [
                         {"time": 0.0, "value": 0},
-                        {"time": 0.35, "value": -5},
-                        {"time": 0.60, "value": 12},
-                        {"time": 0.75, "value": 8},
-                        {"time": 1.20, "value": 0}
+                        {"time": 0.35, "value": 8},
+                        {"time": 0.60, "value": -32}, # Knee flare
+                        {"time": 0.85, "value": -28},
+                        {"time": 1.25, "value": 0}
                     ]
                 },
                 "calf_r": {
                     "rotate": [
                         {"time": 0.0, "value": 0},
-                        {"time": 0.35, "value": 5},
-                        {"time": 0.60, "value": -12},
-                        {"time": 0.75, "value": -8},
-                        {"time": 1.20, "value": 0}
+                        {"time": 0.35, "value": -6},
+                        {"time": 0.60, "value": 52},  # Ground pinned
+                        {"time": 0.85, "value": 46},
+                        {"time": 1.25, "value": 0}
                     ]
                 },
                 "thigh_l": {
-                    "translate": [
-                        {"time": 0.0, "x": 0, "y": 0},
-                        {"time": 0.35, "x": 0, "y": -8},
-                        {"time": 0.60, "x": 0, "y": 14},
-                        {"time": 0.75, "x": 0, "y": 10},
-                        {"time": 1.20, "x": 0, "y": 0}
+                    "scale": [
+                        {"time": 0.0, "x": 1.0, "y": 1.0},
+                        {"time": 0.35, "x": 0.96, "y": 1.04}, # Windup stretch
+                        {"time": 0.60, "x": 1.18, "y": 0.82}, # Ground impact squash!
+                        {"time": 0.85, "x": 1.15, "y": 0.85}, # Shockwave hang squash
+                        {"time": 1.25, "x": 1.0, "y": 1.0}
                     ],
                     "rotate": [
                         {"time": 0.0, "value": 0},
-                        {"time": 0.35, "value": 5},
-                        {"time": 0.60, "value": -12},
-                        {"time": 0.75, "value": -8},
-                        {"time": 1.20, "value": 0}
+                        {"time": 0.35, "value": -8},
+                        {"time": 0.60, "value": 34},
+                        {"time": 0.85, "value": 30},
+                        {"time": 1.25, "value": 0}
                     ]
                 },
                 "calf_l": {
                     "rotate": [
                         {"time": 0.0, "value": 0},
-                        {"time": 0.35, "value": -5},
-                        {"time": 0.60, "value": 12},
-                        {"time": 0.75, "value": 8},
-                        {"time": 1.20, "value": 0}
+                        {"time": 0.35, "value": 6},
+                        {"time": 0.60, "value": -53}, # Ground pinned
+                        {"time": 0.85, "value": -47},
+                        {"time": 1.25, "value": 0}
                     ]
                 }
             }
@@ -490,61 +504,90 @@ def generate_spine_json(parts):
             "bones": {
                 "pelvis": {
                     "translate": [
-                        {"time": 0.0, "x": -3, "y": 0},
-                        {"time": 0.3, "x": 0, "y": 4},
-                        {"time": 0.6, "x": 3, "y": 0},
-                        {"time": 0.9, "x": 0, "y": 4},
-                        {"time": 1.2, "x": -3, "y": 0}
+                        {"time": 0.0, "x": -4, "y": 0},
+                        {"time": 0.3, "x": 0, "y": 5},
+                        {"time": 0.6, "x": 4, "y": 0},
+                        {"time": 0.9, "x": 0, "y": 5},
+                        {"time": 1.2, "x": -4, "y": 0}
+                    ]
+                },
+                "torso": {
+                    "rotate": [
+                        {"time": 0.0, "value": 2},
+                        {"time": 0.3, "value": 0},
+                        {"time": 0.6, "value": -2},
+                        {"time": 0.9, "value": 0},
+                        {"time": 1.2, "value": 2}
+                    ]
+                },
+                "target_foot_r": {
+                    "translate": [
+                        {"time": 0.0, "x": 0.0, "y": 0.0},  # Planted on ground (0.0 to 0.6s)
+                        {"time": 0.6, "x": 0.0, "y": 0.0},  # Planted on ground
+                        {"time": 0.75, "x": -6.0, "y": 14.0}, # Lift
+                        {"time": 0.9, "x": 6.0, "y": 18.0},  # Stride forward apex
+                        {"time": 1.05, "x": 2.0, "y": 8.0},  # Descend
+                        {"time": 1.2, "x": 0.0, "y": 0.0}   # Re-planted on ground
+                    ]
+                },
+                "target_foot_l": {
+                    "translate": [
+                        {"time": 0.0, "x": 0.0, "y": 0.0},
+                        {"time": 0.15, "x": -6.0, "y": 14.0}, # Lift
+                        {"time": 0.3, "x": 6.0, "y": 18.0},  # Stride forward apex
+                        {"time": 0.45, "x": 2.0, "y": 8.0},  # Descend
+                        {"time": 0.6, "x": 0.0, "y": 0.0},  # Planted on ground (0.6 to 1.2s)
+                        {"time": 1.2, "x": 0.0, "y": 0.0}   # Planted on ground
                     ]
                 },
                 "thigh_r": {
                     "rotate": [
-                        {"time": 0.0, "value": 8},
+                        {"time": 0.0, "value": 10},
                         {"time": 0.3, "value": 0},
-                        {"time": 0.6, "value": -8},
-                        {"time": 0.9, "value": 0},
-                        {"time": 1.2, "value": 8}
+                        {"time": 0.6, "value": -12}, # Push-off
+                        {"time": 0.9, "value": 16},  # Knee forward swing
+                        {"time": 1.2, "value": 10}
                     ]
                 },
                 "calf_r": {
                     "rotate": [
-                        {"time": 0.0, "value": -4},
+                        {"time": 0.0, "value": -6},
                         {"time": 0.3, "value": 8},
                         {"time": 0.6, "value": 0},
-                        {"time": 0.9, "value": -4},
-                        {"time": 1.2, "value": -4}
+                        {"time": 0.9, "value": -14},
+                        {"time": 1.2, "value": -6}
                     ]
                 },
                 "thigh_l": {
                     "rotate": [
-                        {"time": 0.0, "value": -8},
-                        {"time": 0.3, "value": 0},
-                        {"time": 0.6, "value": 8},
+                        {"time": 0.0, "value": -12}, # Push-off
+                        {"time": 0.3, "value": 16},  # Knee forward swing
+                        {"time": 0.6, "value": 10},
                         {"time": 0.9, "value": 0},
-                        {"time": 1.2, "value": -8}
+                        {"time": 1.2, "value": -12}
                     ]
                 },
                 "calf_l": {
                     "rotate": [
                         {"time": 0.0, "value": 0},
-                        {"time": 0.3, "value": -4},
-                        {"time": 0.6, "value": -4},
+                        {"time": 0.3, "value": -14},
+                        {"time": 0.6, "value": -6},
                         {"time": 0.9, "value": 8},
                         {"time": 1.2, "value": 0}
                     ]
                 },
                 "shoulder_r": {
                     "rotate": [
-                        {"time": 0.0, "value": -6},
-                        {"time": 0.6, "value": 6},
-                        {"time": 1.2, "value": -6}
+                        {"time": 0.0, "value": -8},
+                        {"time": 0.6, "value": 8},
+                        {"time": 1.2, "value": -8}
                     ]
                 },
                 "shoulder_l": {
                     "rotate": [
-                        {"time": 0.0, "value": 6},
-                        {"time": 0.6, "value": -6},
-                        {"time": 1.2, "value": 6}
+                        {"time": 0.0, "value": 8},
+                        {"time": 0.6, "value": -8},
+                        {"time": 1.2, "value": 8}
                     ]
                 }
             }
@@ -564,6 +607,22 @@ def generate_spine_json(parts):
         },
         "bones": bones_def,
         "slots": slots_def,
+        "ik": [
+            {
+                "name": "ik_leg_r",
+                "order": 0,
+                "bones": ["thigh_r", "calf_r"],
+                "target": "target_foot_r",
+                "bendPositive": False
+            },
+            {
+                "name": "ik_leg_l",
+                "order": 1,
+                "bones": ["thigh_l", "calf_l"],
+                "target": "target_foot_l",
+                "bendPositive": True
+            }
+        ],
         "skins": [
             {
                 "name": "default",
@@ -649,6 +708,7 @@ def render_spine_animation(skel, parts, anim_name, duration_sec, fps=16):
 
             delta_x, delta_y = 0.0, 0.0
             delta_rot = 0.0
+            scale_x, scale_y = 1.0, 1.0
 
             if b_name in anim_bones:
                 b_anim = anim_bones[b_name]
@@ -656,13 +716,15 @@ def render_spine_animation(skel, parts, anim_name, duration_sec, fps=16):
                     delta_x, delta_y = sample_vec2_timeline(b_anim["translate"], t)
                 if "rotate" in b_anim:
                     delta_rot = sample_val_timeline(b_anim["rotate"], t, val_key="value")
+                if "scale" in b_anim:
+                    scale_x, scale_y = sample_vec2_timeline(b_anim["scale"], t, default_x=1.0, default_y=1.0)
 
             local_x = setup_x + delta_x
             local_y = setup_y + delta_y
             local_rot = setup_rot + delta_rot
 
             if parent_name and parent_name in world_transforms:
-                p_x, p_y, p_rot = world_transforms[parent_name]
+                p_x, p_y, p_rot, p_sx, p_sy = world_transforms[parent_name]
                 rad = math.radians(p_rot)
                 cos_r, sin_r = math.cos(rad), math.sin(rad)
                 w_x = p_x + (local_x * cos_r - local_y * sin_r)
@@ -671,7 +733,7 @@ def render_spine_animation(skel, parts, anim_name, duration_sec, fps=16):
             else:
                 w_x, w_y, w_rot = local_x, local_y, local_rot
 
-            world_transforms[b_name] = (w_x, w_y, w_rot)
+            world_transforms[b_name] = (w_x, w_y, w_rot, scale_x, scale_y)
 
         # Draw slots back-to-front
         for slot in slots_def:
@@ -680,8 +742,12 @@ def render_spine_animation(skel, parts, anim_name, duration_sec, fps=16):
             if s_name not in parts or bone_name not in world_transforms:
                 continue
 
+            w_x, w_y, w_rot, sc_x, sc_y = world_transforms[bone_name]
             part_img = parts[s_name]["img"]
-            w_x, w_y, w_rot = world_transforms[bone_name]
+            if abs(sc_x - 1.0) > 0.01 or abs(sc_y - 1.0) > 0.01:
+                nw = max(1, int(part_img.width * sc_x))
+                nh = max(1, int(part_img.height * sc_y))
+                part_img = part_img.resize((nw, nh), Image.Resampling.NEAREST)
 
             att_info = attachments_def.get(s_name, {}).get(s_name, {})
             att_x = att_info.get("x", 0.0)

@@ -2,7 +2,7 @@
 stone_golem.png
 size: 1024,512
 format: RGBA8888
-filter: Linear,Linear
+filter: Nearest,Nearest
 repeat: none
 arm_lower_r
   rotate: false
