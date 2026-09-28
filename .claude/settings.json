@@ -1,0 +1,52 @@
+{
+  "safety": {
+    "protectedBranches": ["main", "master"],
+    "blockDirectPushToProtected": true,
+    "blockForcePush": true,
+    "blockHistoryRewrite": true,
+    "allowedRmRfPaths": [
+      "/tmp",
+      "Intermediate",
+      "Saved",
+      "DerivedDataCache",
+      ".tmp",
+      "build/temp"
+    ]
+  },
+  "permissions": {
+    "deny": [
+      "git push origin main",
+      "git push origin master",
+      "git push --force*",
+      "git push -f*",
+      "git push * --force",
+      "git push * -f",
+      "git filter-branch*",
+      "git filter-repo*",
+      "rm -rf /",
+      "rm -rf /mnt",
+      "rm -rf /mnt/Data",
+      "rm -rf /mnt/Data/Projects",
+      "rm -rf /mnt/Data/Projects/project-games",
+      "rm -rf /mnt/Data/Projects/project-games/ProjectAscendant",
+      "rm -rf ~"
+    ]
+  },
+  "commands": {
+    "blocked": [
+      "git push origin main",
+      "git push origin master",
+      "git push --force",
+      "git push -f",
+      "git push * --force",
+      "git push * -f",
+      "git reset --hard HEAD~*",
+      "rm -rf Source",
+      "rm -rf Content",
+      "rm -rf design",
+      "rm -rf production",
+      "rm -rf Tools",
+      "rm -rf Scripts"
+    ]
+  }
+}
