@@ -84,6 +84,9 @@ Gồm 6 vị trí trang bị cố định, liên kết trực tiếp với `UAsc
   - Các lớp Flipbook đồ họa trang bị được gắn trực tiếp vào `APABaseCharacter` và điều khiển qua `UPAPaperdollComponent`.
   - Trong mỗi chu kỳ Tick, khung hình hiển thị (`PlaybackPositionInFrames`) của các lớp trang phục được khóa cứng và đồng bộ chính xác với khung hình của `BaseSprite` (PaperZD Animation Component), loại bỏ hiện tượng trôi lệch frame giữa nhân vật và vũ khí/áo giáp khi di chuyển 8 hướng hoặc vung đòn.
 - **Tương Tác Click-to-Equip Trực Quan:** Khi người chơi nhấp chọn hoặc kéo trang bị từ túi đồ vào ô Paperdoll tương ứng, hệ thống phát thanh sự kiện `OnPaperdollVisualChanged`, vừa cập nhật thuộc tính GAS vừa lập tức tráo đổi sprite hiển thị trên mô hình nhân vật theo thời gian thực.
+- **Quy Tắc Hiển Thị Song Chức Nghiệp (Dual-Class Visual Priority)**:
+  - Mô hình Paperdoll luôn ưu tiên thể hiện bản sắc thị giác của **Class Chính**: Dáng đứng tĩnh (Idle Stance), Mũ nón/Crest và Khăn choàng/Tabard.
+  - Khi người chơi chọn Class Chính là **Kiếm Sư (Swordmaster)**: Ô Vũ Khí Phụ (`OffhandShield`) tự động bị khóa/gỡ bỏ (`nullptr`), bàn tay trái ở trạng thái tự do không cầm khiên.
 
 ### 3.3 Khay Phím Tắt Nhanh (Quickbar Slots 1–4)
 - 4 ô trang bị nhanh tương ứng với các phím bấm nóng `[1]`, `[2]`, `[3]`, `[4]`.
@@ -97,28 +100,25 @@ Gồm 6 vị trí trang bị cố định, liên kết trực tiếp với `UAsc
 
 ---
 
-## 4. Danh Mục Đặc Thù: Sách Kỹ Năng (Skill Book Category)
+## 4. Danh Mục Đặc Thù: Sách Kỹ Năng & Quyển Trục Chuyển Chức (Skill Books & Scrolls)
 
-*Đồng bộ tuyệt đối từ [`design/gdd/skill-progression-system.md`](file:///mnt/Data/Projects/project-games/design/gdd/skill-progression-system.md).*
+*Đồng bộ tuyệt đối từ [`design/gdd/skill-progression-system.md`](file:///mnt/Data/Projects/project-games/design/gdd/skill-progression-system.md) và [`advanced-classes.md`](file:///mnt/Data/Projects/project-games/design/gdd/advanced-classes.md).*
 
-### Thuộc Tính DataAsset Của Sách Kỹ Năng (`USkillBookItemDefinition`):
+### Thuộc Tính DataAsset Của Sách & Quyển Trục:
 - `ItemID`: Mã định danh vật phẩm duy nhất.
-- `ItemCategory`: `Consumable_Learnable`.
-- `GrantedAbilityClass`: Lớp kỹ năng GAS `UGameplayAbility` sẽ mở khóa.
-- `ClassLock`: **`true`** — Bắt buộc kiểm tra `RequiredClassTag`.
-  - *Sách Độc Quyền:* Yêu cầu đúng Class (ví dụ `Class.VoidBlade`).
-  - *Sách Võ Học Chung:* Yêu cầu loại vũ khí tương thích (`Weapon.Blade`, `Weapon.Bow`, v.v.).
-- `Stackable`: **`false`** (Mỗi cuốn sách chiếm 1 ô túi đồ).
+- `ItemCategory`: `Consumable_Learnable` (Sách Kỹ Năng) hoặc `Consumable_PromotionScroll` (Quyển Trục Chuyển Chức).
+- `Stackable`: **`false`** (Không xếp chồng, mỗi cuốn sách / quyển trục chiếm 1 ô túi đồ).
 - `Salvageable`: **`true`** (Có thể đem tới NPC để rã thành `item_skill_shard`).
+- *Lưu ý độ hiếm:* Sách và Quyển trục áp dụng thang 4 bậc kỹ năng (`Normal`, `Rare`, `Epic`, `Mythic`), tách biệt khỏi thang 5 bậc trang bị (`Common` .. `Legendary`).
 
-### Bảng Ánh Xạ Độ Hiếm Của Sách Kỹ Năng Trong Kho Đồ:
+### Bảng Ánh Xạ Độ Hiếm & Phân Rã Trong Kho Đồ:
 
-| Bậc Sách | Tương Ứng Class | Hành Vi Kho Đồ | Kết Quả Phân Rã (Salvage) |
+| Bậc Sách / Quyển Trục | Chủng Loại Vật Phẩm | Hành Vi Kho Đồ | Kết Quả Phân Rã (Salvage) |
 | :--- | :--- | :--- | :--- |
-| **Normal Book** | 4 Class Cơ Bản & Sách Vũ khí Chung | Nhấp chuột phải để học (nếu đúng Class) | 1 Tàn Trang Kỹ Năng (`item_skill_shard`) |
-| **Rare Book** | 4 Class Hiếm | Nhấp chuột phải để học (nếu đúng Class) | 3 Tàn Trang Kỹ Năng |
-| **Epic Book** | 3 Class Cao Cấp | Nhấp chuột phải để học (nếu đúng Class) | 8 Tàn Trang Kỹ Năng |
-| **Mythic Book** | 1 Class Ẩn (God Slayer) | Nhấp chuột phải để học (nếu đúng Class) | 25 Tàn Trang Kỹ Năng |
+| **Normal** | Sách Kỹ Năng 4 Class Cơ Bản | Nhấp chuột phải để nạp vào Thư Viện Kỹ Năng | 1 Tàn Trang Kỹ Năng (`item_skill_shard`) |
+| **Rare** | Sách Kỹ Năng Bậc 2 & Quyển Trục T2 | Nhấp chuột phải để học chiêu hoặc thăng Bậc 2 | 3 Tàn Trang Kỹ Năng |
+| **Epic** | Sách Kỹ Năng Bậc 3 & Quyển Trục T3 | Nhấp chuột phải để học chiêu hoặc thăng Bậc 3 | 8 Tàn Trang Kỹ Năng |
+| **Mythic** | Quyển Trục Thần Tích T4 (God Slayer) | Thăng Bậc 4 Apex sau khi thỏa mãn điều kiện kép | 25 Tàn Trang Kỹ Năng |
 
 ### Tương Tác Giữa Kho Đồ & Hệ Thống Kỹ Năng:
 1. **Kiểm Tra Điều Kiện:** Nhấp chuột phải vào Sách Kỹ Năng $\rightarrow$ Nếu nhân vật mang thẻ `State.InCombat`, thông báo *"Không thể đọc bí kíp trong lúc giao chiến"*. Nếu không khớp `RequiredClassTag`, thông báo *"Chức nghiệp không phù hợp"*.

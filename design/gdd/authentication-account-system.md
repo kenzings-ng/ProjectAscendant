@@ -67,6 +67,90 @@ struct FPAAccountProfile
   - `OnLoginStateChanged(EPAAuthLoginState NewState, FString ErrorMessage)`
   - `OnLoginSuccess(FPAAccountProfile Profile)`
 
+### 3.3 Phân Định Ranh Giới Dữ Liệu: Tài Khoản vs Nhân Vật (PostgreSQL Schema)
+Theo nguyên tắc kiến trúc ADR-0001, dữ liệu người chơi được phân định tách bạch thành 3 bảng cơ sở:
+
+```sql
+-- 1. BẢNG TÀI KHOẢN (Account Level)
+CREATE TABLE accounts (
+    account_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    gold_balance BIGINT NOT NULL DEFAULT 0 CHECK (gold_balance >= 0),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- 2. BẢNG NHÂN VẬT (Character Level)
+CREATE TABLE characters (
+    character_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    account_id UUID NOT NULL REFERENCES accounts(account_id) ON DELETE CASCADE,
+    character_name VARCHAR(64) UNIQUE NOT NULL,
+    character_level INT NOT NULL DEFAULT 1 CHECK (character_level BETWEEN 1 AND 50),
+    character_exp BIGINT NOT NULL DEFAULT 0 CHECK (character_exp >= 0),
+    primary_class_tag VARCHAR(128) NOT NULL,
+    secondary_class_tag VARCHAR(128),
+    -- Lưu tiến trình độc lập của toàn bộ các class đã từng luyện (Khởi tạo rỗng)
+    class_progression_history JSONB NOT NULL DEFAULT '{}',
+    completed_quests TEXT[] NOT NULL DEFAULT '{}',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- 3. BẢNG VẬT PHẨM RIÊNG BIỆT (Items Table - Single Source of Truth)
+CREATE TABLE items (
+    item_instance_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    item_def_id VARCHAR(64) NOT NULL,      -- Tham chiếu ID trong DataAsset (VD: 'scroll_dragon_knight')
+    owner_type VARCHAR(16) NOT NULL,       -- 'CHARACTER' (Balo/Trang bị) hoặc 'ACCOUNT' (Hòm kho chung)
+    owner_id UUID NOT NULL,                -- Chứa character_id HOẶC account_id tương ứng
+    slot_type VARCHAR(32) NOT NULL,        -- 'INVENTORY', 'MAINHAND', 'OFFHAND', 'BODY', 'SHARED_STASH'
+    slot_index INT NOT NULL,               -- Tọa độ vị trí ô đồ (0..N)
+    quantity INT NOT NULL DEFAULT 1 CHECK (quantity > 0),
+    durability FLOAT NOT NULL DEFAULT 100.0,
+    enhancement_level INT NOT NULL DEFAULT 0,
+    item_data JSONB NOT NULL DEFAULT '{}', -- Dữ liệu riêng (ngọc khảm, chỉ số ngẫu nhiên)
+    b_is_locked BOOLEAN NOT NULL DEFAULT FALSE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    -- Khai báo ràng buộc duy nhất DEFERRABLE INITIALLY DEFERRED để hoán đổi ô đồ không vi phạm UNIQUE
+    CONSTRAINT uk_owner_slot UNIQUE (owner_type, owner_id, slot_type, slot_index) DEFERRABLE INITIALLY DEFERRED
+);
+```
+
+### 3.4 Giao Dịch Chuyển Chức Chống Dupe Tuyệt Đối (Atomic Transaction & Row-Locking)
+Mọi thao tác sử dụng Quyển Trục thăng chức được Dedicated Server thực thi với khóa dòng độc quyền:
+
+```sql
+BEGIN;
+
+-- 1. Khóa độc quyền bản ghi quyển trục chống race condition / duplicate
+SELECT item_instance_id, item_def_id, owner_type, owner_id, quantity 
+FROM items 
+WHERE item_instance_id = $1 AND owner_type = 'CHARACTER' AND owner_id = $2
+FOR UPDATE;
+
+-- 2. Kiểm tra nghiệp vụ trên Server:
+-- IF item_def_id != ExpectedScrollDefId OR server_validation_failed THEN
+--     ROLLBACK;
+--     RETURN ERROR;
+-- END IF;
+
+-- 3. Cập nhật thẻ class vào đúng slot đạt điều kiện (Primary HOẶC Secondary):
+-- (Nếu thăng chức cho Class Chính):
+UPDATE characters 
+SET primary_class_tag = $3,
+    class_progression_history = jsonb_set(class_progression_history, ARRAY[$3], $4, true)
+WHERE character_id = $2;
+
+-- (Nếu thăng chức cho Class Phụ):
+-- UPDATE characters 
+-- SET secondary_class_tag = $3,
+--     class_progression_history = jsonb_set(class_progression_history, ARRAY[$3], $4, true)
+-- WHERE character_id = $2;
+
+-- 4. Tiêu hủy Quyển Trục sau khi thăng chức thành công
+DELETE FROM items WHERE item_instance_id = $1;
+
+COMMIT;
+```
+
 ---
 
 ## 4. Quy Chuẩn Xác Thực & Bảo Mật
