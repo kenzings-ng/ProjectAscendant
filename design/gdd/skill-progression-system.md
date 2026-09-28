@@ -54,19 +54,30 @@ Mỗi chức nghiệp khi được khởi tạo hoặc mở khóa trong thế gi
 
 ---
 
-### 2. Skill Book Item Specification (Đặc Tả Vật Phẩm Sách Kỹ Năng)
+### 2. Skill Book & Promotion Scroll Specifications (Đặc Tả Sách Kỹ Năng & Quyển Trục)
 
-Sách Kỹ Năng được định nghĩa trong Unreal Engine qua class `USkillBookItemDefinition` (`UPrimaryDataAsset`):
+> [!IMPORTANT]
+> **Quy Chuẩn Hai Thang Độ Hiếm Phân Biệt**:
+> - **Thang Độ Hiếm Trang Bị (5 Bậc)**: `Common` $\rightarrow$ `Uncommon` $\rightarrow$ `Rare` $\rightarrow$ `Epic` $\rightarrow$ `Legendary` (theo chuẩn [`itemization.md`](file:///mnt/Data/Projects/project-games/ProjectAscendant/design/gdd/itemization.md)).
+> - **Thang Độ Hiếm Sách Kỹ Năng & Quyển Trục (4 Bậc)**: `Normal` $\rightarrow$ `Rare` $\rightarrow$ `Epic` $\rightarrow$ `Mythic` (theo chuẩn hệ thống kỹ năng dưới đây). Hai thang này hoạt động độc lập và không dùng chung phân cấp.
+
+#### A. Sách Kỹ Năng Chiến Đấu (`USkillBookItemDefinition`):
+Định nghĩa trong Unreal Engine qua class `USkillBookItemDefinition` (`UPrimaryDataAsset`):
 * `FText SkillName`: Tên kỹ năng hiển thị.
 * `TSubclassOf<UGameplayAbility> GrantedAbilityClass`: Lớp kỹ năng GAS sẽ nạp vào ASC.
-* `FGameplayTag RequiredClassTag`: Thẻ chức nghiệp bắt buộc (ví dụ `Class.Vanguard`, `Class.VoidBlade`).
+* `FGameplayTag RequiredClassTag`: Thẻ chức nghiệp bắt buộc (ví dụ `Class.Line.Guard.Vanguard`, `Class.Line.Guard.VoidBlade`).
 * `FGameplayTag RequiredWeaponTag`: Thẻ loại vũ khí yêu cầu (dùng cho sách võ học chung).
-* `EItemRarity RarityTier`: 4 bậc (Normal, Rare, Epic, Mythic).
+* `EItemRarity RarityTier`: 4 bậc (`Normal`, `Rare`, `Epic`, `Mythic`).
 
-#### Phân Loại Khóa Chức Nghiệp (Class-Lock):
-1. **Sách Độc Quyền (Dedicated Class Book):** Chỉ duy nhất Class mang đúng `RequiredClassTag` mới đọc được. Toàn bộ sách của 7 Class Nâng Cao và 1 Class Ẩn đều thuộc nhóm này.
-2. **Bí Kíp Võ Học Chung (Shared Weapon Grimoire):** Dành cho các Class dùng chung vũ khí (Kiếm, Cung, Trượng, Chùy).
-   - *Lợi thế của 4 Class Cơ Bản (Normal):* Có thể học toàn bộ Sách Cơ Bản của mình LẪN các Bí Kíp Võ Học Chung, giúp lối build đồ vô cùng đa dạng và linh hoạt (Đúng triết lý A+C).
+#### B. Quyển Trục Chuyển Chức (`UClassPromotionScrollDefinition`):
+Định nghĩa vật phẩm thăng tiến Bậc chức nghiệp (theo [`advanced-classes.md`](file:///mnt/Data/Projects/project-games/ProjectAscendant/design/gdd/advanced-classes.md)):
+* `FName ScrollID`: Tên định danh của Quyển Trục.
+* `FGameplayTag TargetClassTag`: Thẻ chức nghiệp đích sau khi thăng chức (VD: `Class.Line.Guard.DragonKnight`).
+* `TArray<FGameplayTag> AllowedSourceClassTags`: Danh sách các class nguồn hợp lệ được phép thăng lên class này (VD: `[Class.Line.Guard.Templar, Class.Line.Guard.Berserker]`).
+* `uint8 RequiredMinRank`: Bậc tối thiểu của class nguồn (1: Sơ cấp, 2: Trung cấp, 3: Cao cấp).
+* `int32 RequiredSourceClassLevel`: Cấp độ tối thiểu của class nguồn (mặc định 20).
+* `FGameplayTag RequiredQuestFlag`: Thẻ nhiệm vụ/kỳ ngộ bắt buộc (nếu có).
+* `EItemRarity RarityTier`: Quyển Trục Bậc 2 = `Rare`, Bậc 3 = `Epic`, Bậc 4 = `Mythic`.
 
 ---
 
@@ -78,21 +89,26 @@ Sách Kỹ Năng được định nghĩa trong Unreal Engine qua class `USkillBo
 * Nếu hợp lệ: Tiêu hao 1 cuốn sách, gọi hàm `GiveAbility(GrantedAbilityClass, Level = 1)` nạp vào `UAbilitySystemComponent`.
 * Kỹ năng được lưu vĩnh viễn vào **Thư Viện Kỹ Năng (Grimoire Library)**.
 
-#### Giới Hạn Slot Hành Động (Action Deck - Tránh Quá Tải Phím):
-Dù người chơi có thể học hàng chục kỹ năng vào Grimoire, khi tham chiến chỉ được trang bị:
-* **4 Ô Kỹ Năng Chủ Động (Active Ability Slots):** Gán vào các phím nóng `[Q]`, `[E]`, `[R]`, `[F]` (hoặc 4 nút mặt tay cầm).
-* **3 Ô Kỹ Năng Nội Tại (Passive Trait Slots):** Gán các hiệu ứng buff nội tại kích hoạt tự động.
-* *Quy tắc đổi Skill:* Chỉ được hoán đổi kỹ năng trong Loadout khi đứng gần Lửa Trại, Điểm Lưu (Checkpoint) hoặc tại Thành trấn an toàn.
+#### Phân Bổ Khay Kỹ Năng Hành Động (Action Deck 4+3 Theo Cơ Chế Song Chức Nghiệp):
+Để đảm bảo chiều sâu chiến thuật và tránh quá tải thao tác, Action Deck gồm **4 Kỹ năng Chủ Động** và **3 Kỹ năng Nội Tại** được phân bổ theo quy tắc:
+* **Class Chính (Primary Class)**: Chiếm **3 Ô Chủ Động (`[Q]`, `[E]`, `[R]`)** + **2 Ô Nội Tại (`P1`, `P2`)**.
+* **Class Phụ (Secondary Sub-Class)**: Chiếm **1 Ô Chủ Động (`[F]`)** + **1 Ô Nội Tại (`P3`)**.
+  - *Quy tắc tương thích vũ khí (Quy tắc B1)*: Ô `[F]` của Class Phụ chỉ chấp nhận kỹ năng Không Phụ Thuộc Vũ Khí (Weapon-Agnostic) nếu khác dòng vũ khí với Class Chính.
+* *Quy tắc đổi Skill:* Chỉ được hoán đổi kỹ năng trong Loadout khi đứng gần Lửa Trại, Điểm Lưu (Checkpoint) hoặc tại Tòa Thành an toàn (Sanctuary).
 
 #### Cơ Chế Cường Hóa Kỹ Năng (Level 1 → Level 5):
 * **Cấp 1 → 3 (Cơ Bản → Thành Thạo):** 
-  - Tiêu hao: **Vàng** + **Tàn Trang Kỹ Năng (Skill Shards)**.
+  - Tiêu hao: **Vàng** + **Tàn Trang Kỹ Năng (`item_skill_shard`)**.
   - Tác dụng: Tăng +10% sát thương/hiệu ứng mỗi cấp, giảm 5% thời gian hồi chiêu.
 * **Cấp 4 → 5 (Đỉnh Phong / Mastery):**
   - Tiêu hao: **Vàng** + **1 cuốn Sách Kỹ Năng cùng loại (Duplicate Book)**.
-  - Tác dụng: Mở khóa **Hiệu Ứng Đột Biến (Mastery Mutation)** (ví dụ: Chiêu tăng phạm vi AoE +30%, hoặc cú chém tạo thêm hiệu ứng chảy máu).
-* **Cơ Chế Phân Rã Sách Thừa (Salvage):**
-  - Nhặt được Sách Kỹ Năng của Class khác? Người chơi đem tới NPC Học Giả / Thợ Rèn để phân rã thành **Tàn Trang Kỹ Năng (Skill Shards)** dùng nâng cấp chiêu thức cho Class của mình. *Không có cuốn sách nào bị vô dụng!*
+  - Tác dụng: Mở khóa **Hiệu Ứng Đột Biến (Mastery Mutation)**.
+* **Cơ Chế Phân Rã Sách & Quyển Trục Thừa (Salvage):**
+  - Đem tới NPC Học Giả / Thợ Rèn để phân rã thành **Tàn Trang Kỹ Năng (`item_skill_shard`)**:
+    - Sách Kỹ Năng Normal: 1 Tàn Trang.
+    - Sách / Quyển Trục Rare: 3 Tàn Trang.
+    - Sách / Quyển Trục Epic: 8 Tàn Trang.
+    - Sách / Quyển Trục Mythic: 25 Tàn Trang.
 
 ---
 
