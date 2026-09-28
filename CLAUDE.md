@@ -30,17 +30,33 @@ Each agent owns a specific domain, enforcing separation of concerns and quality.
 
 @.claude/docs/coordination-rules.md
 
-## Collaboration Protocol
+## CHẾ ĐỘ TỰ VẬN HÀNH (Autonomous Mode)
 
-**User-driven collaboration, not autonomous execution.**
-Every task follows: **Question -> Options -> Decision -> Draft -> Approval**
+Mục tiêu: thực hiện tuần tự roadmap (Giai đoạn 0 → 6) và các quyết định thiết kế đã chốt, không cần tôi duyệt từng bước.
 
-- Agents MUST ask "May I write this to [filepath]?" before using Write/Edit tools
-- Agents MUST show drafts or summaries before requesting approval
-- Multi-file changes require explicit approval for the full changeset
-- No commits without user instruction
+### Quy trình mỗi đầu việc
+1. Tạo nhánh riêng từ main. Làm việc nhỏ, commit nhỏ.
+2. Trước khi sửa file nào, đọc nội dung gốc của file đó. Nếu chỉ thị (kể cả của tôi) mâu thuẫn với file, ghi lại mâu thuẫn và chọn theo file; báo trong PROGRESS.md.
+3. Chạy toàn bộ cổng tự động: build, test ProjectAscendant.*, pixel-review (nếu có art), script kiểm tra nhất quán GDD (nếu sửa GDD), migration + test backend (nếu sửa backend).
+4. Gọi subagent "reviewer" với context mới: nhiệm vụ là TÌM LỖI, mỗi nhận xét phải trích file:dòng. Sửa hết lỗi reviewer nêu rồi chạy lại bước 3.
+5. Chỉ merge vào main khi mọi cổng pass và reviewer đồng ý. Push lên remote. Xác nhận bằng git ls-remote.
+6. Ghi vào production/PROGRESS.md: việc đã làm, commit hash đã push, log test (số test, pass, exit code), kết luận reviewer.
 
-See `docs/COLLABORATIVE-DESIGN-PRINCIPLE.md` for full protocol and examples.
+### Việc đầu tiên
+Trước khi làm roadmap: xây các cổng tự động còn thiếu (script kiểm tra nhất quán GDD, CI chạy test headless, Postgres test cho backend), cấu hình bảo vệ nhánh main, và cấu hình .claude/settings.json chặn git push --force, xóa lịch sử, rm -rf ngoài thư mục tạm.
+
+### BẮT BUỘC DỪNG VÀ HỎI TÔI khi
+- Cần duyệt thẩm mỹ: bộ art mẫu Vanguard (Giai đoạn 3), cảm giác chơi.
+- Cần tiêu tiền (asset pack, dịch vụ trả phí).
+- Thêm asset có license không phải CC0, hoặc asset sinh bằng AI.
+- Xóa asset ngoài danh sách DELETE đã duyệt, hoặc thay đổi quyết định đã chốt.
+- Thử 3 lần vẫn không qua một cổng.
+
+### CẤM
+- Push thẳng vào main, force push, viết lại lịch sử git.
+- Báo cáo "đã xong / đã merge" khi chưa có commit hash trên remote và log test.
+- Tự tạo thuật ngữ, tiền tệ, thang độ hiếm hay hệ thống mới không có trong GDD.
+- Tự rewrite code hoặc refactor diện rộng ngoài phạm vi task.
 
 > **First session?** If the project has no engine configured and no game concept,
 > run `/start` to begin the guided onboarding flow.

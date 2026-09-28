@@ -39,22 +39,28 @@ Hệ thống 4 Chức Nghiệp Nền Tảng mang đến trải nghiệm nhập v
 ### Core Rules
 
 #### 1. Quy Chuẩn Khởi Tạo & Bảng Chỉ Số Nền Tảng (Baseline Stats & Attributes)
-Tất cả 4 Class cơ bản được mở khóa miễn phí ngay từ màn hình tạo nhân vật. Khi chọn một class, nhân vật nhận đúng thẻ nhận diện chức nghiệp (`Class.Vanguard`, `Class.Ranger`, `Class.Arcanist`, `Class.Acolyte`), khởi tạo bộ trang bị Bậc 1 (Normal) và nạp bảng chỉ số thuộc tính vào `UAscendantAttributeSet`:
+Tất cả 4 Class cơ bản được mở khóa miễn phí ngay từ màn hình tạo nhân vật, đóng vai trò là **Bậc 1 (T1 Sơ Cấp - Foundational)** của 4 Nhánh chức nghiệp: **Guard**, **Scout**, **Caster**, và **Faith** (theo [`advanced-classes.md`](file:///mnt/Data/Projects/project-games/ProjectAscendant/design/gdd/advanced-classes.md)). Khi chọn một class, nhân vật nhận đúng thẻ nhận diện chức nghiệp phẳng (`Class.Line.Guard.Vanguard`, `Class.Line.Scout.Ranger`, `Class.Line.Caster.Arcanist`, `Class.Line.Faith.Acolyte`), khởi tạo bộ trang bị Bậc 1 và nạp bảng chỉ số thuộc tính vào `UAscendantAttributeSet`:
 
 | Thuộc Tính (Attribute) | Chiến Binh (Vanguard) | Du Hiệp (Ranger) | Thuật Sĩ (Arcanist) | Tu Sĩ (Acolyte) | Ý Nghĩa Thiết Kế |
 | :--- | :---: | :---: | :---: | :---: | :--- |
+| **Nhánh Chức Nghiệp** | **Nhánh Guard** | **Nhánh Scout** | **Nhánh Caster** | **Nhánh Faith** | Gốc rễ của 4 cây chuyển chức độc lập. |
 | **Máu Tối Đa (Max Health)** | **120** | 90 | 85 | 110 | Vanguard & Acolyte đứng tuyến đầu; Ranger & Arcanist mỏng manh. |
 | **Thể Lực (Max Stamina)** | 110 | **120** | 90 | 100 | Ranger có trữ lượng lướt né dồi dào nhất. |
 | **Mana Tối Đa (Max Mana)** | 80 | 90 | **140** | 110 | Arcanist sở hữu bể mana khổng lồ để dội phép liên tục. |
 | **Thế Đứng (Max Posture)** | **120** | 90 | 80 | 110 | Khả năng chịu đòn đỡ phá vỡ thế đứng trước Boss. |
 | **Tốc Chạy (Move Speed)** | 520 cm/s | **570 cm/s** | 530 cm/s | 530 cm/s | Ranger có độ cơ động và tốc độ lướt né vượt trội. |
-| **Vũ Khí Khởi Đầu** | Kiếm Sắt + Khiên Gỗ | Cung Săn Gỗ | Trượng Gỗ Khắc Ấn | Chùy Sắt + Hạt Khí | Xác định hoạt ảnh đòn đánh và bộ kỹ năng vũ khí chung. |
+| **Vũ Khí Khởi Đầu** | Kiếm Sắt + Khiên Sắt Vuông | Cung Săn Gỗ | Trượng Gỗ Khắc Ấn | Chùy Sắt + Hạt Khí | Xác định hoạt ảnh đòn đánh và bộ kỹ năng vũ khí chung. |
+
+> [!NOTE]
+> **Quy Tắc Song Chức Nghiệp & Tiến Trình (Dual-Class & Dual-Track Progression)**:
+> - Nhân vật sở hữu đồng thời **Class Chính** và **Class Phụ**. Action Deck (4 Active + 3 Passive) được phân bổ: **Class Chính** chiếm 3 Active (Q, E, R) + 2 Passive (P1, P2); **Class Phụ** chiếm 1 Active (F) + 1 Passive (P3). Slot F của Class Phụ chỉ chấp nhận kỹ năng không phụ thuộc vũ khí (Weapon-Agnostic) nếu khác dòng vũ khí với Class Chính.
+> - **Tiến trình Song Song**: Cấp độ nhân vật (Character Level 1–50) vận hành song song với Cấp độ chức nghiệp (Class Level 1–20 mỗi Bậc). Người chơi có thể tự do dùng **Quy tắc A1 (Hoán đổi Class Chính ↔ Phụ miễn phí tại Tòa Thành)** để đưa class phụ lên vị trí Class Chính nhằm hưởng tỷ lệ nhận EXP cao hơn (70% thay vì 30%), giúp cày cấp class phụ nhanh chóng hơn.
 
 ---
 
 #### 2. Đặc Tả Chi Tiết 4 Chức Nghiệp Nền Tảng
 
-##### A. CHIẾN BINH (VANGUARD) — `Class.Vanguard`
+##### A. CHIẾN BINH (VANGUARD) — `Class.Line.Guard.Vanguard`
 - **Phong cách:** Bậc thầy cận chiến, áp sát càn lướt và phản đòn chớp nhoáng.
 - **Cơ Chế Độc Quyền: Thế Thủ & Phản Đòn Hoàn Hảo (Defensive Stance & Perfect Parry)**:
   - Nhấn giữ `[RMB]` (Chuột phải): Giương khiên vào tư thế Block. Giảm 80% sát thương nhận phải, chuyển sát thương thành tiêu hao Posture.
@@ -74,7 +80,7 @@ Tất cả 4 Class cơ bản được mở khóa miễn phí ngay từ màn hìn
 
 ---
 
-##### B. DU HIỆP (RANGER) — `Class.Ranger`
+##### B. DU HIỆP (RANGER) — `Class.Line.Scout.Ranger`
 - **Phong cách:** Cơ động tốc độ cao, cấu rỉa tầm xa, kiểm soát bước chân quái bằng bẫy.
 - **Cơ Chế Độc Quyền: Nhịp Lướt Tật Phong (Acrobatic Momentum)**:
   - Chi phí lướt né (Dash Stamina Cost) giảm từ 25 xuống còn **20 điểm Thể Lực**.
@@ -92,7 +98,7 @@ Tất cả 4 Class cơ bản được mở khóa miễn phí ngay từ màn hìn
 
 ---
 
-##### C. THUẬT SĨ (ARCANIST) — `Class.Arcanist`
+##### C. THUẬT SĨ (ARCANIST) — `Class.Line.Caster.Arcanist`
 - **Phong cách:** Kiểm soát diện rộng, gom quái tập trung, dồn sát thương ma pháp bùng nổ.
 - **Cơ Chế Độc Quyền: Quá Tải Ma Lực (Arcane Surge)**:
   - Mỗi khi một kỹ năng ma pháp đánh trúng kẻ địch, tích lũy 1 tầng `State.Buff.ArcaneCharge` (Tối đa 3 tầng, duy trì 8 giây).
@@ -109,7 +115,7 @@ Tất cả 4 Class cơ bản được mở khóa miễn phí ngay từ màn hìn
 
 ---
 
-##### D. TU SĨ (ACOLYTE) — `Class.Acolyte`
+##### D. TU SĨ (ACOLYTE) — `Class.Line.Faith.Acolyte`
 - **Phong cách:** Trụ cột sinh tồn, đấu sĩ cận chiến bọc thép, hồi phục thể lực và hộ thể đồng đội.
 - **Cơ Chế Độc Quyền: Chân Khí Hộ Thể (Ki Aegis Surge)**:
   - Khi thanh Stamina của nhân vật tụt xuống dưới 30%: Bản thân lập tức kích hoạt luồng sóng chân khí đẩy lùi quái nhỏ xung quanh và **hoàn trả ngay 30 điểm Thể Lực** (Thời gian hồi nội tại của cơ chế: 20 giây).
