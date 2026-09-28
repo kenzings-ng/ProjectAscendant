@@ -80,7 +80,7 @@ Tất cả 4 Class cơ bản được mở khóa miễn phí ngay từ màn hìn
 
 ---
 
-##### B. DU HIỆP (RANGER) — `Class.Ranger`
+##### B. DU HIỆP (RANGER) — `Class.Line.Scout.Ranger`
 - **Phong cách:** Cơ động tốc độ cao, cấu rỉa tầm xa, kiểm soát bước chân quái bằng bẫy.
 - **Cơ Chế Độc Quyền: Nhịp Lướt Tật Phong (Acrobatic Momentum)**:
   - Chi phí lướt né (Dash Stamina Cost) giảm từ 25 xuống còn **20 điểm Thể Lực**.
@@ -98,7 +98,7 @@ Tất cả 4 Class cơ bản được mở khóa miễn phí ngay từ màn hìn
 
 ---
 
-##### C. THUẬT SĨ (ARCANIST) — `Class.Arcanist`
+##### C. THUẬT SĨ (ARCANIST) — `Class.Line.Caster.Arcanist`
 - **Phong cách:** Kiểm soát diện rộng, gom quái tập trung, dồn sát thương ma pháp bùng nổ.
 - **Cơ Chế Độc Quyền: Quá Tải Ma Lực (Arcane Surge)**:
   - Mỗi khi một kỹ năng ma pháp đánh trúng kẻ địch, tích lũy 1 tầng `State.Buff.ArcaneCharge` (Tối đa 3 tầng, duy trì 8 giây).
@@ -115,7 +115,7 @@ Tất cả 4 Class cơ bản được mở khóa miễn phí ngay từ màn hìn
 
 ---
 
-##### D. TU SĨ (ACOLYTE) — `Class.Acolyte`
+##### D. TU SĨ (ACOLYTE) — `Class.Line.Faith.Acolyte`
 - **Phong cách:** Trụ cột sinh tồn, đấu sĩ cận chiến bọc thép, hồi phục thể lực và hộ thể đồng đội.
 - **Cơ Chế Độc Quyền: Chân Khí Hộ Thể (Ki Aegis Surge)**:
   - Khi thanh Stamina của nhân vật tụt xuống dưới 30%: Bản thân lập tức kích hoạt luồng sóng chân khí đẩy lùi quái nhỏ xung quanh và **hoàn trả ngay 30 điểm Thể Lực** (Thời gian hồi nội tại của cơ chế: 20 giây).

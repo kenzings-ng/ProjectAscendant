@@ -65,7 +65,7 @@ Mỗi chức nghiệp khi được khởi tạo hoặc mở khóa trong thế gi
 Định nghĩa trong Unreal Engine qua class `USkillBookItemDefinition` (`UPrimaryDataAsset`):
 * `FText SkillName`: Tên kỹ năng hiển thị.
 * `TSubclassOf<UGameplayAbility> GrantedAbilityClass`: Lớp kỹ năng GAS sẽ nạp vào ASC.
-* `FGameplayTag RequiredClassTag`: Thẻ chức nghiệp bắt buộc (ví dụ `Class.Line.Guard.Vanguard`, `Class.Line.Guard.VoidBlade`).
+* `FGameplayTag RequiredClassTag`: Thẻ chức nghiệp bắt buộc (ví dụ `Class.Line.Guard.Vanguard`, `Class.Line.Guard.DragonKnight`).
 * `FGameplayTag RequiredWeaponTag`: Thẻ loại vũ khí yêu cầu (dùng cho sách võ học chung).
 * `EItemRarity RarityTier`: 4 bậc (`Normal`, `Rare`, `Epic`, `Mythic`).
 

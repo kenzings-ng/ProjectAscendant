@@ -55,10 +55,26 @@
 - **Báo cáo Phản biện Subagent Reviewer (Vòng 1 - Commit `12c2186`)**:
   - Nhận xét: Nêu 6 nhóm lỗi (1.1–6.1) về mâu thuẫn số class, thiếu mục Netcode trong DECISIONS, dead code validator, SQLite thiếu test concurrency, pre-push thiếu nhánh master, settings.json lọt lưới rm-rf và thiếu minh bạch progress.
   - Kết luận Vòng 1: `VERDICT: FAIL`.
-  - **Hành động khắc phục**: Toàn bộ 6 nhóm lỗi đã được giải quyết triệt để trong commit tiếp theo.
-- **Kết quả Cổng Tự Động Cập Nhật**:
-  - `test_backend_postgres.py`: **PASS 100%** (4/4 tests: DDL check, Atomic slot swap, Concurrency race-condition anti-dupe, Tag update). Exit Code: 0.
-  - `validate_gdd_consistency.py`: Đã phát hiện chính xác 25 lỗi tồn đọng trên các file GDD cũ (chờ giải quyết khi audit và merge nhánh `docs/class-tree-dual-class`). Exit Code: 1 (Working as designed to guard GDD integrity).
+  - **Hành động khắc phục**: Toàn bộ 6 nhóm lỗi đã được giải quyết triệt để trong commit `02224fe`.
+- **Báo cáo Phản biện Subagent Reviewer (Vòng 2 - Commit `02224fe`)**:
+  - Nhận xét: Ghi nhận 90% lỗi đã khắc phục. Nêu 2 tồn đọng kỹ thuật:
+    1. Bảng `items` trong `test_atomic_slot_swapping()` cần có `CONSTRAINT uk_owner_slot` và assert trực tiếp va chạm slot index ném IntegrityError.
+    2. Regex bóc tách GameplayTag trong `validate_gdd_consistency.py` cần `rstrip(".:,;()[]\"'`")` để không nuốt dấu chấm câu cuối dòng.
+    3. Advisory: Tích hợp GDD từ `docs/class-tree-dual-class` để đưa Gate 1 về Exit Code 0 trước khi merge vào `main`.
+  - Kết luận Vòng 2: `VERDICT: FAIL` (chờ 2 bản vá).
+- **Hành động khắc phục & Đồng bộ Toàn diện (Vòng 3)**:
+  1. `Tools/QA/test_backend_postgres.py`: Đã bổ sung `CONSTRAINT uk_owner_slot UNIQUE (...)` vào `test_atomic_slot_swapping()` và assert `IntegrityError` khi update va chạm trực tiếp mà không qua cơ chế swap.
+  2. `Tools/QA/validate_gdd_consistency.py`: Đã chuẩn hóa `tag = raw_tag.rstrip(".:,;()[]\"'`")`.
+  3. Đồng bộ và tinh chỉnh toàn bộ tài liệu GDD:
+     - Merge nhánh `docs/class-tree-dual-class` vào.
+     - Khắc phục bảng 17 class trong `advanced-classes.md` (chuyển Swordmaster về Scout, thay VoidBlade bằng VoidWeaver/Oracle).
+     - Chuẩn hóa tag Ranger, Arcanist, Acolyte trong `foundational-classes.md`.
+     - Thay thế toàn bộ 14 vị trí `Ash Shards` bằng `Tàn Trang (Skill Shards)` / `item_skill_shard` trong `merchant-economy.md`.
+     - Chuẩn hóa ví dụ tag trong `skill-progression-system.md`.
+- **Kết quả Cổng Tự Động Toàn Diện**:
+  - `validate_gdd_consistency.py`: **PASS 100%** (22/22 file GDD đạt chuẩn tuyệt đối, 0 Error, 0 Warning). Exit Code: 0.
+  - `test_backend_postgres.py`: **PASS 100%** (4/4 tests: DDL check cả DECISIONS & GDD, Atomic slot swap với unique constraint, Concurrency race-condition anti-dupe, Tag update). Exit Code: 0.
+  - `run_headless_tests.sh`: **PASS 100%** (Gate 1 PASS, Gate 2 PASS). Exit Code: 0.
 
 ---
 

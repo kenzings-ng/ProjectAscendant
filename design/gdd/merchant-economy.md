@@ -10,7 +10,7 @@
 
 ## Overview
 
-Hệ thống Vòng Lặp Kinh Tế Tiền Tệ & Mạng Lưới Thương Nhân Dã Ngoại (Merchant & Currency Economy Loop) đóng vai trò là xương sống điều tiết tài nguyên, kiểm soát lạm phát và kiến tạo huyết mạch sinh tồn trong thế giới mở Project Ascendant. Hệ thống hiện thực hóa trực tiếp Trụ cột 3 ("Kinh tế dã ngoại & Thám hiểm rủi ro cao - phần thưởng lớn") và liên kết chặt chẽ với Hệ thống Túi Đồ ([`inventory-system.md`](file:///mnt/Data/Projects/project-games/design/gdd/inventory-system.md)), Hệ thống Bản Đồ Mở & Lửa Trại ([`zone-system.md`](file:///mnt/Data/Projects/project-games/design/gdd/zone-system.md)), cùng Hệ thống Thợ Rèn Dã Ngoại ([`blacksmithing-system.md`](file:///mnt/Data/Projects/project-games/design/gdd/blacksmithing-system.md)). Kinh tế trong trò chơi vận hành xoay quanh hai loại tiền tệ chính với cơ chế cung-cầu tách biệt rõ ràng: **Vàng (Gold - `currency_gold`)**—tiền tệ giao thương vĩ mô dùng để mua nhu yếu phẩm dã ngoại, chi trả phí sửa chữa trang bị hao mòn (`repair_cost_formula`), tháo khảm ngọc (`gem_unsocket_fee = 100 gold`), và chuộc lại tội danh Karma; cùng **Tàn Trang Kỹ Năng / Skill Shards (`item_skill_shard`, tên gọi dã ngoại: Ash Shards)**—tiền tệ linh hồn quý hiếm thu thập từ quái Tinh anh và Thủ lĩnh hoặc phân rã Sách Kỹ Năng (`item_skill_book`), dùng cho các nâng cấp thợ rèn tối thượng và đột phá kỹ năng.
+Hệ thống Vòng Lặp Kinh Tế Tiền Tệ & Mạng Lưới Thương Nhân Dã Ngoại (Merchant & Currency Economy Loop) đóng vai trò là xương sống điều tiết tài nguyên, kiểm soát lạm phát và kiến tạo huyết mạch sinh tồn trong thế giới mở Project Ascendant. Hệ thống hiện thực hóa trực tiếp Trụ cột 3 ("Kinh tế dã ngoại & Thám hiểm rủi ro cao - phần thưởng lớn") và liên kết chặt chẽ với Hệ thống Túi Đồ ([`inventory-system.md`](file:///mnt/Data/Projects/project-games/design/gdd/inventory-system.md)), Hệ thống Bản Đồ Mở & Lửa Trại ([`zone-system.md`](file:///mnt/Data/Projects/project-games/design/gdd/zone-system.md)), cùng Hệ thống Thợ Rèn Dã Ngoại ([`blacksmithing-system.md`](file:///mnt/Data/Projects/project-games/design/gdd/blacksmithing-system.md)). Kinh tế trong trò chơi vận hành xoay quanh hai loại tiền tệ chính với cơ chế cung-cầu tách biệt rõ ràng: **Vàng (Gold - `currency_gold`)**—tiền tệ giao thương vĩ mô dùng để mua nhu yếu phẩm dã ngoại, chi trả phí sửa chữa trang bị hao mòn (`repair_cost_formula`), tháo khảm ngọc (`gem_unsocket_fee = 100 gold`), và chuộc lại tội danh Karma; cùng **Tàn Trang Kỹ Năng / Skill Shards (`item_skill_shard`)**—tiền tệ linh hồn quý hiếm thu thập từ quái Tinh anh và Thủ lĩnh hoặc phân rã Sách Kỹ Năng (`item_skill_book`), dùng cho các nâng cấp thợ rèn tối thượng và đột phá kỹ năng.
 
 Người chơi tương tác với hệ thống qua hai kênh:
 1. **Tương tác chủ động**: Tiếp cận các NPC Thương nhân phân bố theo 3 bậc nguy hiểm của thế giới để mua sắm vật tư, thanh lý chiến lợi phẩm thu gom từ dã ngoại với giá chiết khấu chuẩn (`vendor_sell_penalty = 0.30`), sử dụng danh mục mua lại đồ đã bán (Buyback Window), hoặc thực hiện các dịch vụ đặc thù phân vùng.
@@ -41,7 +41,7 @@ Hệ thống Kinh Tế & Thương Nhân phục vụ đồng thời Trụ cột 1
 
 | Khoảnh khắc | Cảm xúc mục tiêu |
 |---|---|
-| Nhặt Gold/Ash Shards sau trận đánh | Thỏa mãn tích lũy — "từng đồng đều xứng đáng" |
+| Nhặt Gold/Skill Shards sau trận đánh | Thỏa mãn tích lũy — "từng đồng đều xứng đáng" |
 | Đến Thương nhân sau chuyến dã ngoại dài | Nhẹ nhõm, an tâm — "ốc đảo văn minh giữa hoang dã" |
 | Thấy món hàng hiếm Limited Stock | Hưng phấn + áp lực quyết định — "mua hay không mua?" |
 | Thanh lý chiến lợi phẩm (Sell) | Hài lòng gọn gàng — "dọn túi, chốt lời" |
@@ -217,8 +217,8 @@ stateDiagram-v2
 | [`blacksmithing-system.md`](file:///mnt/Data/Projects/project-games/design/gdd/blacksmithing-system.md) | → Downstream | Thương nhân bán `item_blacksmith_ward`, nguyên liệu chế tác. Chi phí sửa chữa theo `repair_cost_formula` |
 | [`zone-system.md`](file:///mnt/Data/Projects/project-games/design/gdd/zone-system.md) | ← Upstream | Quyết định NPC nào xuất hiện ở Tier nào. Thương nhân gắn với Lửa Trại trong zone tương ứng |
 | [`attributes-system.md`](file:///mnt/Data/Projects/project-games/design/gdd/attributes-system.md) | ← Upstream | Tiêu thụ phẩm mua tại shop hồi HP/MP/Stamina. Consumable buff ảnh hưởng stats |
-| [`skill-progression-system.md`](file:///mnt/Data/Projects/project-games/design/gdd/skill-progression-system.md) | → Downstream | Chợ Đen Tier 3 bán `item_skill_book` ngẫu nhiên. Ash Shards cho nâng cấp kỹ năng |
-| [`stagger-system.md`](file:///mnt/Data/Projects/project-games/design/gdd/stagger-system.md) | ← Upstream (gián tiếp) | Gold/Ash Shards faucet từ Boss kill, Boss posture break → loot → tiền tệ |
+| [`skill-progression-system.md`](file:///mnt/Data/Projects/project-games/design/gdd/skill-progression-system.md) | → Downstream | Chợ Đen Tier 3 bán `item_skill_book` ngẫu nhiên. Skill Shards (Tàn Trang) cho nâng cấp kỹ năng |
+| [`stagger-system.md`](file:///mnt/Data/Projects/project-games/design/gdd/stagger-system.md) | ← Upstream (gián tiếp) | Gold/Skill Shards faucet từ Boss kill, Boss posture break → loot → tiền tệ |
 | [`ADR-0001`](file:///mnt/Data/Projects/project-games/docs/architecture/adr-0001-open-world-mmo-combat-networking.md) | ← Governance | Mọi giao dịch phải Server-Authoritative, Atomic Transaction, anti-duping |
 
 ## Formulas
@@ -302,10 +302,10 @@ Bằng đúng số Gold người chơi đã nhận khi bán. Không áp dụng c
 | [`blacksmithing-system.md`](file:///mnt/Data/Projects/project-games/design/gdd/blacksmithing-system.md) | ✅ Approved | → Downstream | `repair_cost_formula`, `item_blacksmith_ward`, `gem_unsocket_fee`, nguyên liệu chế tác |
 | [`zone-system.md`](file:///mnt/Data/Projects/project-games/design/gdd/zone-system.md) | ✅ Approved | ← Upstream | Phân bố NPC theo 3 Bậc Vùng Đất, Lửa Trại, Sanctuary radius, Karma/Wanted rules |
 | [`attributes-system.md`](file:///mnt/Data/Projects/project-games/design/gdd/attributes-system.md) | ✅ Approved | ← Upstream | Consumable hồi HP/MP/Stamina, buff stats tạm thời |
-| [`skill-progression-system.md`](file:///mnt/Data/Projects/project-games/design/gdd/skill-progression-system.md) | ✅ Approved | → Downstream | `item_skill_book` bán tại Chợ Đen, Ash Shards cho nâng cấp skill |
-| [`stagger-system.md`](file:///mnt/Data/Projects/project-games/design/gdd/stagger-system.md) | ✅ Approved | ← Upstream (gián tiếp) | Boss loot → Gold/Ash Shards faucet |
+| [`skill-progression-system.md`](file:///mnt/Data/Projects/project-games/design/gdd/skill-progression-system.md) | ✅ Approved | → Downstream | `item_skill_book` bán tại Chợ Đen, Skill Shards (Tàn Trang) cho nâng cấp skill |
+| [`stagger-system.md`](file:///mnt/Data/Projects/project-games/design/gdd/stagger-system.md) | ✅ Approved | ← Upstream (gián tiếp) | Boss loot → Gold/Skill Shards faucet |
 | [`ADR-0001`](file:///mnt/Data/Projects/project-games/docs/architecture/adr-0001-open-world-mmo-combat-networking.md) | ✅ Accepted | ← Governance | Server-Authoritative, Atomic Transaction, anti-duping, rate-limiting |
-| [`foundational-classes.md`](file:///mnt/Data/Projects/project-games/design/gdd/foundational-classes.md) | ✅ Approved | ← Upstream (gián tiếp) | `foundational_upgrade_cost` sử dụng Ash Shards |
+| [`foundational-classes.md`](file:///mnt/Data/Projects/project-games/design/gdd/foundational-classes.md) | ✅ Approved | ← Upstream (gián tiếp) | `foundational_upgrade_cost` sử dụng Skill Shards (Tàn Trang) |
 
 ## Tuning Knobs
 
@@ -326,7 +326,7 @@ Bằng đúng số Gold người chơi đã nhận khi bán. Không áp dụng c
 | `merchant_interaction_distance` | 300 cm | 200 – 500 | Khoảng cách tương tác mở Shop |
 | `shop_auto_close_distance` | 500 cm | 400 – 800 | Khoảng cách tự đóng Shop |
 | `gold_carry_limit` | 9,999,999 | 999,999 – 99,999,999 | Giới hạn Gold mang theo |
-| `ash_shards_carry_limit` | 99,999 | 9,999 – 999,999 | Giới hạn Ash Shards mang theo |
+| `skill_shards_carry_limit` | 99,999 | 9,999 – 999,999 | Giới hạn Skill Shards (Tàn Trang) mang theo |
 
 ## Visual/Audio Requirements
 
@@ -336,12 +336,12 @@ Bằng đúng số Gold người chơi đã nhận khi bán. Không áp dụng c
 - **NPC Chợ Đen Tier 3**: Trang phục đen toàn thân, mặt nạ sọ thú, bàn trải vải đỏ thẫm với cổ vật lấp lánh. Chiếu sáng bằng đèn lồng đỏ thay vì lửa trại. Biểu tượng hộp sọ vàng.
 - **UI Shop**: Giao diện chia 2 phần — bên trái: danh mục hàng NPC (cố định + xoay vòng), bên phải: ba lô người chơi. Tab Buyback riêng biệt.
 - **Hàng Limited Stock hết**: Ô item greyed-out với chữ đỏ "Hết hàng" và đồng hồ đếm ngược restock.
-- **Giao dịch thành công**: Flash vàng trên icon item + số Gold/Ash Shards bay lên rồi mờ dần.
+- **Giao dịch thành công**: Flash vàng trên icon item + số Gold/Skill Shards bay lên rồi mờ dần.
 - **Giao dịch thất bại**: Rung nhẹ (screen shake micro) + flash đỏ trên nút giao dịch.
 
 ### Audio
 - **Mở Shop**: Tiếng lục lạc nhỏ (Tier 1), tiếng mở hòm gỗ kẽo kẹt (Tier 2), tiếng chuông gió rùng rợn (Tier 3).
-- **Mua hàng**: Tiếng đồng xu rơi leng keng (Gold), tiếng thủy tinh vỡ nhẹ + tiếng vọng (Ash Shards).
+- **Mua hàng**: Tiếng đồng xu rơi leng keng (Gold), tiếng thủy tinh vỡ nhẹ + tiếng vọng (Skill Shards).
 - **Bán hàng**: Tiếng túi vải đặt xuống bàn "thịch".
 - **Buyback**: Tiếng đồng xu kéo ngược + item bay lại vào ba lô.
 - **Từ chối Wanted (Tier 1)**: Tiếng quát giận dữ của NPC + tiếng kiếm rút khỏi vỏ (đe dọa).
@@ -353,9 +353,9 @@ Bằng đúng số Gold người chơi đã nhận khi bán. Không áp dụng c
 ### Giao Diện Shop Chính
 - **Layout**: Chia đôi màn hình — NPC Inventory (trái) | Player Inventory (phải).
 - **Tab Navigation**: `[Mua hàng]` | `[Bán]` | `[Mua lại]` | `[Sửa chữa]` | `[Chuộc tội]` (chỉ hiện tại Tier 3).
-- **Mỗi ô hàng hiển thị**: Icon item, tên, giá (Gold icon hoặc Ash Shard icon), số lượng tồn kho (nếu Limited), rarity border color.
+- **Mỗi ô hàng hiển thị**: Icon item, tên, giá (Gold icon hoặc Skill Shard icon), số lượng tồn kho (nếu Limited), rarity border color.
 - **Header**: Tên NPC + Tier badge + đồng hồ restock tiếp theo.
-- **Footer**: Tổng Gold hiện có | Tổng Ash Shards hiện có | Ô trống ba lô còn lại.
+- **Footer**: Tổng Gold hiện có | Tổng Skill Shards hiện có | Ô trống ba lô còn lại.
 
 ### Tooltip Chi Tiết
 - Hover item hiện tooltip: Tên đầy đủ, mô tả, stats (nếu equipment), giá mua/bán, so sánh với đồ đang mặc (nếu equipment).
