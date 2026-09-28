@@ -92,23 +92,25 @@ if [ "${RUN_UE}" -eq 1 ]; then
             TOTAL_PASS=$(grep -c "Automation Test Succeeded" "${LOG_FILE}" || true)
             TOTAL_FAIL=$(grep -c "Automation Test Failed" "${LOG_FILE}" || true)
             echo "UE Automation Summary: Passed=${TOTAL_PASS}, Failed=${TOTAL_FAIL}, ExitCode=${UE_EXIT}"
-            if [ "${TOTAL_FAIL}" -gt 0 ] || [ "${UE_EXIT}" -ne 0 ]; then
-                echo ">> [FAIL] UE Automation Gate"
+            # Require at least 1 test passed, 0 failures, and clean exit code
+            if [ "${TOTAL_FAIL}" -gt 0 ] || [ "${UE_EXIT}" -ne 0 ] || [ "${TOTAL_PASS}" -le 0 ]; then
+                echo ">> [FAIL] UE Automation Gate (Passed=${TOTAL_PASS}, Failed=${TOTAL_FAIL}, ExitCode=${UE_EXIT})"
                 FAILED_GATES=$((FAILED_GATES + 1))
             else
                 echo ">> [PASS] UE Automation Gate (${TOTAL_PASS} passed)"
             fi
         else
             if [ "${UE_EXIT}" -ne 0 ]; then
-                echo ">> [FAIL] UE Process exited with code ${UE_EXIT}"
+                echo ">> [FAIL] UE Process exited with code ${UE_EXIT} (Log file missing)"
                 FAILED_GATES=$((FAILED_GATES + 1))
             else
-                echo ">> [PASS] UE Process completed successfully"
+                echo ">> [FAIL] UE Automation log file not generated at ${LOG_FILE}"
+                FAILED_GATES=$((FAILED_GATES + 1))
             fi
         fi
     fi
 else
-    echo -e "\n[GATE 3/3] Skipping Unreal Engine Automation Tests (use --ue or --all to run)."
+    echo -e "\n[GATE 3/3] UE Automation Tests skipped for fast check (run with --ue or --all for full PR merge verification)."
 fi
 
 echo -e "\n============================================================"

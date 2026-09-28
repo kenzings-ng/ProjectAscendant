@@ -9,19 +9,19 @@ zero="0000000000000000000000000000000000000000"
 
 while read local_ref local_oid remote_ref remote_oid
 do
-    # 1. Block direct push to main
-    if [ "$remote_ref" = "refs/heads/main" ]; then
+    # 1. Block direct push to protected branches (main, master)
+    if [ "$remote_ref" = "refs/heads/main" ] || [ "$remote_ref" = "refs/heads/master" ]; then
         # Check if caller explicitly bypassed via verified merge workflow
         if [ "$ALLOW_MAIN_PUSH" != "1" ]; then
-            echo "[GIT HOOK ERROR] Direct push to 'main' is BLOCKED by Project Ascendant Autonomous Policy." >&2
+            echo "[GIT HOOK ERROR] Direct push to protected branch ('${remote_ref}') is BLOCKED by Project Ascendant Autonomous Policy." >&2
             echo "You must work on a feature/docs/infra branch and merge to main only after all QA gates pass." >&2
             exit 1
         fi
     fi
 
-    # 2. Block force push / branch deletion of main
-    if [ "$local_oid" = "$zero" ] && [ "$remote_ref" = "refs/heads/main" ]; then
-        echo "[GIT HOOK ERROR] Deletion of 'main' branch is BLOCKED." >&2
+    # 2. Block force push / branch deletion of protected branches
+    if [ "$local_oid" = "$zero" ] && ([ "$remote_ref" = "refs/heads/main" ] || [ "$remote_ref" = "refs/heads/master" ]); then
+        echo "[GIT HOOK ERROR] Deletion of protected branch ('${remote_ref}') is BLOCKED." >&2
         exit 1
     fi
 

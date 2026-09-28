@@ -10,6 +10,7 @@ import sys
 from pathlib import Path
 
 # Approved canonical classes and lines
+# 16 Branch Classes (4 Lines x 4 Classes) + 1 Apex Class = 17 Classes Total
 APPROVED_CLASSES = {
     "Guard": {
         "T1": ["Vanguard"],
@@ -36,66 +37,116 @@ APPROVED_CLASSES = {
     },
 }
 
+# Lookup map: class_name_lower -> line_name
+CLASS_TO_LINE = {}
 ALL_APPROVED_CLASSES = set()
 for line, tiers in APPROVED_CLASSES.items():
     for tier, classes in tiers.items():
         for c in classes:
-            ALL_APPROVED_CLASSES.add(c.lower())
+            c_lower = c.lower()
+            CLASS_TO_LINE[c_lower] = line
+            ALL_APPROVED_CLASSES.add(c_lower)
 
 APPROVED_LINES = set(APPROVED_CLASSES.keys())
 
-PROHIBITED_PATTERNS = [
-    (re.compile(r'\bash[\s_-]?shards?\b', re.IGNORECASE), "CẤM: 'Ash Shards'. Quyển trục phân rã thành 'Tàn Trang' (Skill Shards / item_skill_shard)."),
-    (re.compile(r'roi\s+x[ií]ch|chain[\s_-]?whip', re.IGNORECASE), "CẤM: Roi xích cho Inquisitor. Inquisitor chỉ dùng Weapon.1H.Mace (Chùy 1 tay)."),
-    (re.compile(r'Class\.Tier[1-4]\.', re.IGNORECASE), "CẤM định dạng tag cũ 'Class.TierX.'. Phải dùng 'Class.Line.<Nhánh>.<Class>'."),
-    (re.compile(r'Class\.Rank[1-4]\.', re.IGNORECASE), "CẤM định dạng tag cũ 'Class.RankX.'. Phải dùng 'Class.Line.<Nhánh>.<Class>'."),
+ALLOWED_META_TAGS = {
+    "Class.Primary",
+    "Class.Secondary",
+    "Class.Identity",
+    "Class.Slot",
+}
+
+# Regex to detect prohibited terms with targeted context inspection
+ASH_SHARDS_REGEX = re.compile(r'\bash[\s_-]?shards?\b', re.IGNORECASE)
+CHAIN_WHIP_REGEX = re.compile(r'roi\s+x[ií]ch|chain[\s_-]?whip', re.IGNORECASE)
+
+LEGITIMATE_CONTEXT_PATTERNS = [
+    re.compile(r'(?:thay\s+v[iì]|thay\s+th[eế]|thay\s+cho|kh[oô]ng\s+d[uù]ng|kh[oô]ng\s+t[aạ]o|b[oỏ]|c[aấ]m|lo[aạ]i\s+b[oỏ]|thay\s+b[oở]i|tr[uư][oớ]c\s+[đd][aâ]y|thay\s+v[iì]\s+d[uù]ng|tuy[eệ]t\s+[đd][oố]i\s+kh[oô]ng)\s+[^.\n]*?\bash[\s_-]?shards?\b', re.IGNORECASE),
+    re.compile(r'\bash[\s_-]?shards?\b\s*\(?(?:c[uũ]|tr[uư][oớ]c\s+[đd][aâ]y|b[oỏ]|kh[oô]ng\s+c[oò]n\s+d[uù]ng)\)?', re.IGNORECASE),
+    re.compile(r'(?:b[oỏ]|kh[oô]ng\s+d[uù]ng|c[aấ]m)\s+[^.\n]*?(?:roi\s+x[ií]ch|chain[\s_-]?whip)', re.IGNORECASE),
 ]
+
+def is_legitimate_context(line: str, pattern_match) -> bool:
+    """Checks if the occurrence of a prohibited term is part of an explicit deprecation or negative rule statement."""
+    for leg_pat in LEGITIMATE_CONTEXT_PATTERNS:
+        if leg_pat.search(line):
+            return True
+    return False
 
 def check_file(file_path: Path):
     errors = []
     warnings = []
     
     with open(file_path, "r", encoding="utf-8", errors="replace") as f:
-        lines = f.readlines()
+        content = f.read()
 
     # Skip historical / archived gate check notes if marked as archive
-    is_archive = "gdd-cross-review" in file_path.name
+    if "gdd-cross-review" in file_path.name:
+        return errors, warnings
 
+    lines = content.splitlines()
+
+    # 1. Line-by-line checks
     for line_idx, line in enumerate(lines, 1):
-        if is_archive:
-            continue
+        # Check Ash Shards
+        ash_match = ASH_SHARDS_REGEX.search(line)
+        if ash_match:
+            if not is_legitimate_context(line, ash_match):
+                errors.append(f"{file_path}:{line_idx}: CẤM: 'Ash Shards' dùng làm tiền tệ. Quyển trục phân rã thành 'Tàn Trang' (Skill Shards / item_skill_shard).")
 
-        # Check prohibited terms
-        for pattern, msg in PROHIBITED_PATTERNS:
-            if pattern.search(line):
-                # Check context - allow if explicitly saying "không dùng Ash Shards" or "bỏ roi xích"
-                lower = line.lower()
-                if "không" in lower or "bỏ" in lower or "cấm" in lower or "thay vì" in lower or "trước đây" in lower:
-                    continue
-                errors.append(f"{file_path}:{line_idx}: {msg}")
+        # Check Chain Whip for Inquisitor
+        whip_match = CHAIN_WHIP_REGEX.search(line)
+        if whip_match:
+            if not is_legitimate_context(line, whip_match):
+                errors.append(f"{file_path}:{line_idx}: CẤM: Roi xích cho Inquisitor. Inquisitor chỉ dùng Weapon.1H.Mace (Chùy 1 tay).")
 
-        # Check GameplayTags pattern
-        tag_matches = re.findall(r'Class\.[A-Za-z0-9_.]+', line)
+        # Check GameplayTags
+        tag_matches = re.findall(r'\bClass\.[A-Za-z0-9_.]+', line)
         for tag in tag_matches:
+            if tag in ALLOWED_META_TAGS:
+                continue
+
             if tag.startswith("Class.Line."):
                 parts = tag.split(".")
-                if len(parts) >= 4:
-                    line_name = parts[2]
-                    class_name = parts[3]
-                    if line_name not in APPROVED_LINES:
-                        errors.append(f"{file_path}:{line_idx}: Tag '{tag}' chứa nhánh '{line_name}' không hợp lệ. Phải là một trong: {list(APPROVED_LINES)}.")
-            elif tag in ["Class.Primary", "Class.Secondary", "Class.Identity", "Class.Slot"]:
-                continue
-            elif "Class.Tier" in tag or "Class.Rank" in tag:
-                errors.append(f"{file_path}:{line_idx}: Tag '{tag}' sai cấu trúc. Cấu trúc chuẩn: 'Class.Line.<Nhánh>.<Class>'.")
+                if len(parts) != 4:
+                    errors.append(f"{file_path}:{line_idx}: Tag '{tag}' sai định dạng. Cấu trúc chuẩn: 'Class.Line.<Nhánh>.<Class>'.")
+                    continue
+                
+                line_name = parts[2]
+                class_name = parts[3]
+                class_lower = class_name.lower()
 
-        # Check Database schema specifics if SQL file or sql codeblock
-        if "CONSTRAINT uk_owner_slot" in line:
-            if "DEFERRABLE INITIALLY DEFERRED" not in line:
-                errors.append(f"{file_path}:{line_idx}: Ràng buộc uk_owner_slot thiếu 'DEFERRABLE INITIALLY DEFERRED' để cho phép hoán đổi ô đồ nguyên tử.")
+                # Validate Line Name
+                if line_name not in APPROVED_LINES:
+                    errors.append(f"{file_path}:{line_idx}: Tag '{tag}' chứa nhánh '{line_name}' không hợp lệ. Phải là một trong: {list(APPROVED_LINES)}.")
+                    continue
 
+                # Validate Class Name existence
+                if class_lower not in ALL_APPROVED_CLASSES:
+                    errors.append(f"{file_path}:{line_idx}: Tag '{tag}' chứa class '{class_name}' không tồn tại trong danh mục 17 class đã chốt.")
+                    continue
+
+                # Validate Class belongs to Line
+                expected_line = CLASS_TO_LINE[class_lower]
+                if line_name != expected_line:
+                    errors.append(f"{file_path}:{line_idx}: Tag '{tag}' mâu thuẫn: Class '{class_name}' thuộc nhánh '{expected_line}', không phải '{line_name}'.")
+            else:
+                # Obsolete tag pattern (Class.TierX.*, Class.RankX.*, Class.Vanguard, Class.VoidBlade, etc.)
+                errors.append(f"{file_path}:{line_idx}: Tag '{tag}' sai cấu trúc hoặc lỗi thời. Toàn bộ GameplayTag chức nghiệp bắt buộc dùng chuẩn 'Class.Line.<Nhánh>.<Class>'.")
+
+        # Check naming error
         if "item_instance_instance_id" in line:
             errors.append(f"{file_path}:{line_idx}: Lỗi tên cột 'item_instance_instance_id', phải là 'item_instance_id'.")
+
+    # 2. Multiline SQL Schema Validation
+    if "CREATE TABLE items" in content:
+        # Check multiline uk_owner_slot constraint
+        uk_pattern = re.compile(
+            r'CONSTRAINT\s+uk_owner_slot\s+UNIQUE\s*\([^)]+\)\s+DEFERRABLE\s+INITIALLY\s+DEFERRED',
+            re.IGNORECASE | re.MULTILINE
+        )
+        if not uk_pattern.search(content):
+            errors.append(f"{file_path}: Bảng 'items' thiếu hoặc khai báo sai ràng buộc 'CONSTRAINT uk_owner_slot UNIQUE (...) DEFERRABLE INITIALLY DEFERRED'.")
 
     return errors, warnings
 
@@ -151,6 +202,5 @@ def validate_all_gdd(project_root: Path):
 
 if __name__ == "__main__":
     current_dir = Path(__file__).resolve().parent
-    # Project root is 2 levels up from Tools/QA
     root = current_dir.parent.parent
     sys.exit(validate_all_gdd(root))

@@ -20,28 +20,28 @@
 
 ---
 
-## 2. Cây Chuyển Chức 4 Nhánh & Apex Class (16 Class Hoàn Chỉnh)
+## 2. Cây Chuyển Chức 4 Nhánh (16 Class) & Apex Class (Tổng Cộng 17 Class)
 
-Cấu trúc cây chức nghiệp gồm 4 nhánh chính bắt nguồn từ 4 class T1 nền tảng, cùng 1 class Apex đa nhánh:
+Cấu trúc cây chức nghiệp gồm 16 class thuộc 4 nhánh chính bắt nguồn từ 4 class T1 nền tảng, cùng 1 class Apex đa nhánh (tổng cộng 17 class):
 
-1. **Nhánh Hộ Vệ (Guard Line)**:
+1. **Nhánh Hộ Vệ (Guard Line - 4 Class)**:
    - **T1**: `Vanguard` (Tiên Phong)
    - **T2**: `Templar` (Thánh Hiệp Sĩ) & `Berserker` (Cuồng Chiến Sĩ)
    - **T3**: `Dragon Knight` (Long Kỵ Sĩ)
-2. **Nhánh Du Hiệp (Scout Line)**:
+2. **Nhánh Du Hiệp (Scout Line - 4 Class)**:
    - **T1**: `Ranger` (Xạ Thủ)
    - **T2**: `Shadowblade` (Ảnh Nhẫn) & `Swordmaster` (Kiếm Sư)
    - **T3**: `Phantom Stalker` (U Hồn Đoạt Mệnh)
-3. **Nhánh Pháp Sư (Caster Line)**:
+3. **Nhánh Pháp Sư (Caster Line - 4 Class)**:
    - **T1**: `Arcanist` (Bí Thuật Sư)
    - **T2**: `Elementalist` (Nguyên Tố Sư) & `Chronomancer` (Thời Gian Pháp Sư)
    - **T3**: `Void Weaver` (Hư Không Dệt Mệnh)
-4. **Nhánh Tín Đồ (Faith Line)**:
+4. **Nhánh Tín Đồ (Faith Line - 4 Class)**:
    - **T1**: `Acolyte` (Tập Sự)
    - **T2**: `Inquisitor` (Thẩm Phán Dị Giáo) & `Oracle` (Nhà Tiên Tri)
    - **T3**: `Seraph` (Thiên Sứ Lục Dực - Phương án 1: chân chạm đất, dùng chung Lower Body Rig, 50 asset mới)
-5. **Class Ẩn Tối Thượng (Apex Class)**:
-   - **T4**: `God Slayer` (Kẻ Diệt Thần - Yêu cầu hoàn thành kỳ ngộ và đạt T3 từ nhiều nhánh).
+5. **Class Ẩn Tối Thượng (Apex Class - 1 Class Đa Nhánh)**:
+   - **T4**: `God Slayer` (Kẻ Diệt Thần - Yêu cầu hoàn thành kỳ ngộ và đạt T3 từ nhiều nhánh). Tag chuẩn: `Class.Line.Apex.GodSlayer`.
 
 ---
 
@@ -124,8 +124,9 @@ Thống nhất dứt điểm mọi mâu thuẫn giữa các file GDD cũ:
 - Cấu trúc Tag Class chuẩn:
   `Class.Line.<Nhánh>.<Class>`  
   *(Ví dụ: `Class.Line.Guard.Vanguard`, `Class.Line.Guard.DragonKnight`, `Class.Line.Scout.Swordmaster`)*.
+- **Quy chuẩn riêng cho Apex Class**: `Class.Line.Apex.GodSlayer`.
 - Điều kiện chuyển chức không hardcode trong Tag mà nằm trong Data Asset của quyển trục (`AllowedSourceClassTags`, `RequiredMinRank`).
-- Bỏ cụm tag phân nhánh cấp độ thô sơ cũ.
+- Bỏ hoàn toàn các tag cũ (`Class.TierX.*`, `Class.RankX.*`, `Class.Vanguard`, `Class.VoidBlade`).
 
 ---
 
@@ -146,3 +147,14 @@ Thống nhất dứt điểm mọi mâu thuẫn giữa các file GDD cũ:
 - Phong cách chủ đạo: **Action-First HD-2D**, kết hợp Paper2D/PaperZD cho nhân vật và Spine 4.3 cho boss.
 - **Ngoại Lệ Art Gate**: Boss Stone Golem dùng Spine 4.3 được chấp nhận có rotation artifacts (nội suy xoay khớp xương), không bị cổng `pixel-review` đánh rớt.
 - **Vanguard Art Direction**: Chọn Phương án A (Iron Bastion) - Giáp trụ hiệp sĩ gothic nặng, khiên sắt vuông, phong thái kiên cường vững chãi.
+
+---
+
+## 11. Kiến Trúc Netcode & An Toàn Đồng Bộ Mạng (100% Server-Authoritative)
+
+- **Nguyên tắc cốt lõi (ADR-0001)**: Mọi logic trò chơi là **100% Server-Authoritative**. Dedicated Server là thẩm quyền duy nhất (Single Source of Truth) quyết định máu, sát thương, hiệu ứng khống chế, vị trí thực tế, nhặt đồ và thăng chức. Client chỉ chạy mô phỏng dự đoán (Client-side Prediction) và hiển thị kết quả.
+- **Iris Network Replication**: Bắt buộc bật Iris Replication (`net.Iris.UseIrisReplication=1`) cho Unreal Engine 5.8+, tối ưu băng thông cho kiến trúc MMO/Co-op diện rộng.
+- **Gameplay Ability System (GAS) Replication Mode**:
+  - Nhân vật người chơi (Player Characters / Pawns): Sử dụng `EGameplayEffectReplicationMode::Mixed` (Replicate GameplayEffects tới Owner Client để hiển thị UI/HUD lập tức; chỉ Replicate GameplayTags và GameplayCues tới các Simulated Proxies khác để tối ưu đường truyền).
+  - Quái vật / Boss / NPC: Sử dụng `EGameplayEffectReplicationMode::Minimal` (Chỉ replicate GameplayTags và GameplayCues).
+- **Kiểm thử tự động mạng**: Mọi tính năng gameplay/combat đều phải có bài test headless replication xác thực tính nhất quán giữa Server và ít nhất 2 Clients.
