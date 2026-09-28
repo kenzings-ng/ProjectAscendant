@@ -33,7 +33,7 @@ Project Ascendant là một tựa game 2.5D Isometric Action RPG hardcore nơi k
 | 12 | Non-gated Open Zones & Checkpoints | World | Vertical Slice | Approved | `design/gdd/zone-system.md` | Controller (2) |
 | 13 | Merchant & Currency Economy Loop | Economy | Vertical Slice | Approved | `design/gdd/merchant-economy.md` | Inventory (9) |
 | 14 | Open World MMO Netcode & Contested Aggro Sync | Multiplayer | Vertical Slice | Approved | `design/gdd/multiplayer-coop.md` | Controller (2), Combat (4) |
-| 15 | 7 Advanced Classes (4 Rare + 3 Epic) | Progression | Alpha | Not Started | `design/gdd/advanced-classes.md` | Foundational Classes (10) |
+| 15 | Advanced Classes & Dual-Class Specialization System | Progression | Vertical Slice | Approved | `design/gdd/advanced-classes.md` | Foundational Classes (10), Skills (8) |
 | 16 | Apothecary & Weapon Oils System | Gameplay | Alpha | Not Started | `design/gdd/apothecary-system.md` | Inventory (9), Stagger (5) |
 | 17 | Open World Boss Raids & Contested Battles | Multiplayer | Alpha | Not Started | `design/gdd/world-bosses.md` | Multiplayer (14), Boss AI (6) |
 | 18 | 1–2 Hidden/Mythic Classes & Trials | Progression | Full Vision | Not Started | `design/gdd/hidden-classes.md` | Advanced Classes (15) |
