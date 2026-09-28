@@ -77,3 +77,14 @@ Mọi tài nguyên đồ họa (kể cả asset thu hoạch CC0 từ bên thứ 
                 ▼
            [ APPROVED ]
 ```
+
+---
+
+## 3. Ngoại Lệ Kỹ Thuật Được Phê Duyệt (Approved Technical Exceptions)
+
+### Ngoại Lệ 3.1: Boss & Sinh Vật Sử Dụng Khung Xương Spine 2D (Spine Skeletal Rig)
+- **Phạm vi áp dụng**: Các thực thể trùm (Boss), sinh vật khổng lồ được điều khiển bằng Spine 4.3 Runtime (`SpinePlugin` / `USpineSkeletonAnimationComponent`), cụ thể là Stone Golem Boss (`Content/art/characters/boss/spine/`).
+- **Nội dung ngoại lệ**:
+  - **Cho phép Rotation Artifacts**: Quá trình xoay xương liên tục thời gian thực và giải thuật Inverse Kinematics (IK) tất yếu tạo ra các điểm ảnh xoay góc (pixel rotation / stepping artifacts). Đây là đặc tính kỹ thuật tiêu chuẩn của hoạt ảnh skeletal 2D, **không bị coi là vi phạm Tiêu Chí 1 (Mixel/Pixel Ratio)**.
+  - **Yêu cầu đối soát bắt buộc**: Toàn bộ các mảnh cắt modular parts trong atlas (`stone_golem.png`) phải được trích xuất từ pixel art vẽ tay gốc, sử dụng texture filter **Nearest** (Point filtering, no mipmaps), đảm bảo binary alpha ($A \in \{0, 255\}$) và tuân thủ bảng màu chuẩn.
+  - **Quy tắc QA tự động**: Công cụ `pixel-review` và các kịch bản Art Gate tự động được cấu hình bỏ qua kiểm tra góc xoay pixel đối với thư mục Spine Boss.

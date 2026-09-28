@@ -8,6 +8,10 @@ DerivedDataCache/
 Intermediate/
 Saved/
 Build/
+Plugins/**/Binaries/
+Plugins/**/Intermediate/
+__pycache__/
+*.pyc
 
 # === Content — use Git LFS or separate repo for large binary assets ===
 # Uncomment the line below to ignore ALL Content (if managing assets separately)

@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Project Ascendant — Environment & Vegetation Showcase (Package M6)</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --card-bg: #161b22;
+      --border: #30363d;
+      --text: #c9d1d9;
+      --heading: #f0f6fc;
+      --accent: #58a6ff;
+      --accent-green: #3fb950;
+      --accent-gold: #d29922;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 24px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+    header {
+      max-width: 1200px;
+      margin: 0 auto 32px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 16px;
+    }
+    h1 {
+      margin: 0 0 8px;
+      color: var(--heading);
+      font-size: 26px;
+    }
+    .badge-bar {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+    }
+    .badge.pass { border-color: var(--accent-green); color: var(--accent-green); }
+    .badge.info { border-color: var(--accent); color: var(--accent); }
+    .badge.gold { border-color: var(--accent-gold); color: var(--accent-gold); }
+
+    .nav-tabs {
+      display: flex;
+      gap: 8px;
+      margin: 24px 0 16px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 8px;
+    }
+    .tab-btn {
+      background: none;
+      border: none;
+      color: var(--text);
+      padding: 8px 16px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      border-radius: 6px;
+    }
+    .tab-btn:hover { background: var(--border); }
+    .tab-btn.active { background: var(--accent); color: #fff; }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .asset-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: transform 0.15s ease, border-color 0.15s ease;
+    }
+    .asset-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--accent);
+    }
+    .preview-box {
+      width: 100%;
+      height: 140px;
+      background: #080b0f;
+      background-image: 
+        linear-gradient(45deg, #12161f 25%, transparent 25%), 
+        linear-gradient(-45deg, #12161f 25%, transparent 25%), 
+        linear-gradient(45deg, transparent 75%, #12161f 75%), 
+        linear-gradient(-45deg, transparent 75%, #12161f 75%);
+      background-size: 16px 16px;
+      background-position: 0 0, 0 8px, 8px -8px, -8px 0px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 6px;
+      border: 1px solid #21262d;
+      margin-bottom: 12px;
+      overflow: hidden;
+    }
+    .preview-box img {
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+      transform: scale(3);
+    }
+    .preview-box.tall img {
+      transform: scale(2);
+    }
+    .asset-title {
+      font-weight: 600;
+      color: var(--heading);
+      font-size: 14px;
+      margin-bottom: 4px;
+      text-align: center;
+      word-break: break-all;
+    }
+    .asset-meta {
+      font-size: 12px;
+      color: #8b949e;
+      display: flex;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .asset-desc {
+      font-size: 12px;
+      color: #8b949e;
+      text-align: center;
+      margin: 0;
+    }
+
+    .atlas-section {
+      max-width: 1200px;
+      margin: 32px auto;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 24px;
+    }
+    .atlas-display {
+      display: flex;
+      gap: 32px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .atlas-display img {
+      image-rendering: pixelated;
+      border: 2px solid var(--border);
+      border-radius: 4px;
+      transform: scale(2.5);
+      transform-origin: top left;
+      margin-bottom: 180px;
+    }
+    .quick-links {
+      margin-top: 16px;
+    }
+    .btn-link {
+      display: inline-block;
+      padding: 10px 20px;
+      background: var(--accent);
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    .btn-link:hover { opacity: 0.9; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Project Ascendant — Environment & Vegetation Foundation (Package M6)</h1>
+    <div>Production art created using <strong>Game Art Studio Anti-AI Craft Rules</strong> + <strong>Aseprite Master Pipeline</strong>.</div>
+    <div class="badge-bar">
+      <span class="badge pass">Art Gate: PASS (43/43 Assets)</span>
+      <span class="badge info">Binary Alpha: {0, 255} Strictly</span>
+      <span class="badge info">Lighting: 10 o'clock Locked</span>
+      <span class="badge gold">Palette: 32-Color 4-Tone Ramp</span>
+      <span class="badge pass">UE 5.8 Regression: PASS (Exit Code 0)</span>
+    </div>
+  </header>
+
+  <div class="quick-links" style="max-width: 1200px; margin: 0 auto 24px;">
+    <a href="environment_preview.html" class="btn-link" target="_blank">🎮 Mở Trình Xem Bản Đồ Tương Tác (Interactive Map Previewer)</a>
+  </div>
+
+  <div class="nav-tabs" style="max-width: 1200px; margin: 0 auto 20px;">
+    <button class="tab-btn active" onclick="filterCategory('all')">Tất Cả (All Assets)</button>
+    <button class="tab-btn" onclick="filterCategory('foliage')">Foliage (Cỏ & Bụi)</button>
+    <button class="tab-btn" onclick="filterCategory('flowers')">Hoa Dại (Flowers)</button>
+    <button class="tab-btn" onclick="filterCategory('trees')">Cây Cối (Trees)</button>
+    <button class="tab-btn" onclick="filterCategory('rocks')">Đá (Rocks)</button>
+    <button class="tab-btn" onclick="filterCategory('props')">Đạo Cụ (Props)</button>
+    <button class="tab-btn" onclick="filterCategory('tiles')">Gạch Địa Hình (Tiles)</button>
+  </div>
+
+  <main class="gallery-grid" id="assetGrid">
+    <!-- FOLIAGE -->
+    <div class="asset-card" data-cat="foliage">
+      <div class="preview-box"><img src="../Content/Art/Environment/Sprites/Foliage/FOL_Grass_Tuft_01.png" alt="Grass Tuft"></div>
+      <div class="asset-title">FOL_Grass_Tuft_01</div>
+      <div class="asset-meta"><span>16×16 px</span><span>Pivot: (8, 14)</span></div>
+      <p class="asset-desc">Bụi cỏ dại đơn lẻ với rễ ghim đất.</p>
+    </div>
+    <div class="asset-card" data-cat="foliage">
+      <div class="preview-box"><img src="../Content/Art/Environment/Sprites/Foliage/FOL_Grass_Patch_02.png" alt="Grass Patch"></div>
+      <div class="asset-title">FOL_Grass_Patch_02</div>
+      <div class="asset-meta"><span>32×32 px</span><span>Pivot: (16, 28)</span></div>
+      <p class="asset-desc">Mảng cỏ xanh dày dặn với đốm sáng 10h.</p>
+    </div>
+    <div class="asset-card" data-cat="foliage">
+      <div class="preview-box"><img src="../Content/Art/Environment/Sprites/Foliage/FOL_Grass_Tall_03.png" alt="Tall Grass"></div>
+      <div class="asset-title">FOL_Grass_Tall_03</div>
+      <div class="asset-meta"><span>32×32 px</span><span>Pivot: (16, 29)</span></div>
+      <p class="asset-desc">Cỏ lau cao uốn lượn theo chiều gió.</p>
+    </div>
+    <div class="asset-card" data-cat="foliage">
+      <div class="preview-box"><img src="../Content/Art/Environment/Sprites/Foliage/FOL_Bush_Small_01.png" alt="Small Bush"></div>
+      <div class="asset-title">FOL_Bush_Small_01</div>
+      <div class="asset-meta"><span>32×32 px</span><span>Pivot: (16, 28)</span></div>
+      <p class="asset-desc">Bụi cây lùn đính quả mọng đỏ tươi.</p>
+    </div>
+    <div class="asset-card" data-cat="foliage">
+      <div class="preview-box"><img src="../Content/Art/Environment/Sprites/Foliage/FOL_Bush_Medium_02.png" alt="Medium Bush"></div>
+      <div class="asset-title">FOL_Bush_Medium_02</div>
+      <div class="asset-meta"><span>48×48 px</span><span>Pivot: (24, 42)</span></div>
+      <p class="asset-desc">Tán bụi rậm rạp phân lớp khối cầu.</p>
+    </div>
+    <div class="asset-card" data-cat="foliage">
+      <div class="preview-box"><img src="../Content/Art/Environment/Sprites/Foliage/FOL_Bush_Bramble_03.png" alt="Bramble Bush"></div>
+      <div class="asset-title">FOL_Bush_Bramble_03</div>
+      <div class="asset-meta"><span>48×48 px</span><span>Pivot: (24, 43)</span></div>
+      <p class="asset-desc">Bụi gai gai góc đan xen cành khô.</p>
+    </div>
+
+    <!-- FLOWERS -->
+    <div class="asset-card" data-cat="flowers">
+      <div class="preview-box"><img src="../Content/Art/Environment/Sprites/Foliage/FOL_Flower_Poppies_01.png" alt="Poppies"></div>
+      <div class="asset-title">FOL_Flower_Poppies_01</div>
+      <div class="asset-meta"><span>32×32 px</span><span>Pivot: (16, 28)</span></div>
+      <p class="asset-desc">Hoa anh túc đỏ thắm nở trên thảm cỏ.</p>
+    </div>
+    <div class="asset-card" data-cat="flowers">
+      <div class="preview-box"><img src="../Content/Art/Environment/Sprites/Foliage/FOL_Flower_Bellflowers_02.png" alt="Bellflowers"></div>
+      <div class="asset-title">FOL_Flower_Bellflowers_02</div>
+      <div class="asset-meta"><span>32×32 px</span><span>Pivot: (16, 28)</span></div>
+      <p class="asset-desc">Hoa chuông xanh lam phát quang ma thuật.</p>
+    </div>
+    <div class="asset-card" data-cat="flowers">
+      <div class="preview-box"><img src="../Content/Art/Environment/Sprites/Foliage/FOL_Flower_Daisies_03.png" alt="Daisies"></div>
+      <div class="asset-title">FOL_Flower_Daisies_03</div>
+      <div class="asset-meta"><span>32×32 px</span><span>Pivot: (16, 28)</span></div>
+      <p class="asset-desc">Cúc dại hoa vàng nhụy sáng rực rỡ.</p>
+    </div>
+
+    <!-- TREES -->
+    <div class="asset-card" data-cat="trees">
+      <div class="preview-box tall"><img src="../Content/Art/Environment/Sprites/Trees/TREE_Sapling_01.png" alt="Sapling"></div>
+      <div class="asset-title">TREE_Sapling_01</div>
+      <div class="asset-meta"><span>32×48 px</span><span>Pivot: (16, 45)</span></div>
+      <p class="asset-desc">Cây non thon thả với vòm lá tơ.</p>
+    </div>
+    <div class="asset-card" data-cat="trees">
+      <div class="preview-box tall"><img src="../Content/Art/Environment/Sprites/Trees/TREE_Oak_Canopy_02.png" alt="Oak Canopy"></div>
+      <div class="asset-title">TREE_Oak_Canopy_02</div>
+      <div class="asset-meta"><span>64×96 px</span><span>Pivot: (32, 90)</span></div>
+      <p class="asset-desc">Cây sồi đại thụ với tán vòm khổng lồ & rễ bạnh.</p>
+    </div>
+    <div class="asset-card" data-cat="trees">
+      <div class="preview-box tall"><img src="../Content/Art/Environment/Sprites/Trees/TREE_Pine_Evergreen_03.png" alt="Evergreen Pine"></div>
+      <div class="asset-title">TREE_Pine_Evergreen_03</div>
+      <div class="asset-meta"><span>48×96 px</span><span>Pivot: (24, 90)</span></div>
+      <p class="asset-desc">Cây thông kim cao nguyên 5 tầng tán lá.</p>
+    </div>
+
+    <!-- ROCKS -->
+    <div class="asset-card" data-cat="rocks">
+      <div class="preview-box"><img src="../Content/Art/Environment/Sprites/Props/ROCK_Pebbles_01.png" alt="Pebbles"></div>
+      <div class="asset-title">ROCK_Pebbles_01</div>
+      <div class="asset-meta"><span>16×16 px</span><span>Pivot: (8, 14)</span></div>
+      <p class="asset-desc">Sỏi đá vụn rải rác ven đường mòn.</p>
+    </div>
+    <div class="asset-card" data-cat="rocks">
+      <div class="preview-box"><img src="../Content/Art/Environment/Sprites/Props/ROCK_Boulder_Mossy_02.png" alt="Mossy Boulder"></div>
+      <div class="asset-title">ROCK_Boulder_Mossy_02</div>
+      <div class="asset-meta"><span>32×32 px</span><span>Pivot: (16, 27)</span></div>
+      <p class="asset-desc">Tảng đá hoa cương phủ rêu xanh trên đỉnh.</p>
+    </div>
+    <div class="asset-card" data-cat="rocks">
+      <div class="preview-box"><img src="../Content/Art/Environment/Sprites/Props/ROCK_Formation_Crag_03.png" alt="Crag Formation"></div>
+      <div class="asset-title">ROCK_Formation_Crag_03</div>
+      <div class="asset-meta"><span>48×48 px</span><span>Pivot: (24, 42)</span></div>
+      <p class="asset-desc">Rặng đá nhọn phân tầng nứt nẻ hiểm trở.</p>
+    </div>
+
+    <!-- PROPS -->
+    <div class="asset-card" data-cat="props">
+      <div class="preview-box"><img src="../Content/Art/Environment/Sprites/Props/PROP_Crate_Oak_01.png" alt="Crate"></div>
+      <div class="asset-title">PROP_Crate_Oak_01</div>
+      <div class="asset-meta"><span>32×32 px</span><span>Pivot: (16, 28)</span></div>
+      <p class="asset-desc">Thùng gỗ sồi nẹp góc kim loại chắc chắn.</p>
+    </div>
+    <div class="asset-card" data-cat="props">
+      <div class="preview-box"><img src="../Content/Art/Environment/Sprites/Props/PROP_Barrel_Keg_02.png" alt="Barrel"></div>
+      <div class="asset-title">PROP_Barrel_Keg_02</div>
+      <div class="asset-meta"><span>32×32 px</span><span>Pivot: (16, 28)</span></div>
+      <p class="asset-desc">Thùng rượu gỗ phình hông đai sắt.</p>
+    </div>
+    <div class="asset-card" data-cat="props">
+      <div class="preview-box"><img src="../Content/Art/Environment/Sprites/Props/PROP_Signpost_Waymarker_03.png" alt="Signpost"></div>
+      <div class="asset-title">PROP_Signpost_Waymarker_03</div>
+      <div class="asset-meta"><span>32×32 px</span><span>Pivot: (16, 29)</span></div>
+      <p class="asset-desc">Biển chỉ dẫn bằng gỗ cắm mốc ngã ba đường.</p>
+    </div>
+    <div class="asset-card" data-cat="props">
+      <div class="preview-box"><img src="../Content/Art/Environment/Sprites/Props/PROP_Brazier_Torch_04.gif" alt="Brazier Flame"></div>
+      <div class="asset-title">PROP_Brazier_Torch_04</div>
+      <div class="asset-meta"><span>32×32 px (4f)</span><span>Pivot: (16, 28)</span></div>
+      <p class="asset-desc">Vạc lửa chân sắt diễn hoạt ngọn lửa bập bùng.</p>
+    </div>
+
+    <!-- TILES -->
+    <div class="asset-card" data-cat="tiles">
+      <div class="preview-box"><img src="../Content/Art/Environment/Sprites/Tiles/TILE_Dirt_Base.png" alt="Dirt Base"></div>
+      <div class="asset-title">TILE_Dirt_Base</div>
+      <div class="asset-meta"><span>32×32 px</span><span>Tile</span></div>
+      <p class="asset-desc">Nền đất nâu màu mỡ phân lớp.</p>
+    </div>
+    <div class="asset-card" data-cat="tiles">
+      <div class="preview-box"><img src="../Content/Art/Environment/Sprites/Tiles/TILE_Grass_Base.png" alt="Grass Base"></div>
+      <div class="asset-title">TILE_Grass_Base</div>
+      <div class="asset-meta"><span>32×32 px</span><span>Tile</span></div>
+      <p class="asset-desc">Mặt cỏ xanh rờn liền mạch.</p>
+    </div>
+    <div class="asset-card" data-cat="tiles">
+      <div class="preview-box"><img src="../Content/Art/Environment/Sprites/Tiles/TILE_Stone_Cobble_Path.png" alt="Cobble Path"></div>
+      <div class="asset-title">TILE_Stone_Cobble_Path</div>
+      <div class="asset-meta"><span>32×32 px</span><span>Tile</span></div>
+      <p class="asset-desc">Đường lát đá cuội mộc mạc.</p>
+    </div>
+    <div class="asset-card" data-cat="tiles">
+      <div class="preview-box"><img src="../Content/Art/Environment/Sprites/Tiles/TILE_Cliff_Ledge_Wall.png" alt="Cliff Ledge"></div>
+      <div class="asset-title">TILE_Cliff_Ledge_Wall</div>
+      <div class="asset-meta"><span>32×32 px</span><span>Tile</span></div>
+      <p class="asset-desc">Vách đá dựng đứng phân lớp ranh giới.</p>
+    </div>
+  </main>
+
+  <section class="atlas-section">
+    <h2>Bộ Atlas Địa Hình Hoàn Chỉnh (16-Tile Terrain Atlas 128×128)</h2>
+    <p>Bao gồm đầy đủ 16 biến thể chuyển tiếp (Transition & Corners) sẵn sàng nạp vào Unreal Engine Paper2D TileMap hoặc Dual-Grid Autotiling System.</p>
+    <div class="atlas-display">
+      <img src="../Content/Art/Environment/Sprites/environment_terrain_tileset.png" alt="Terrain Tileset Atlas">
+      <div style="flex: 1; min-width: 260px;">
+        <h3>Thông số kỹ thuật Tileset:</h3>
+        <ul>
+          <li><strong>Quy chuẩn lưới</strong>: 32×32 px native per tile (Atlas: 128×128 px, 4×4 tiles)</li>
+          <li><strong>Hệ chuyển tiếp</strong>: 4 cạnh hướng (N, S, W, E), 4 góc ngoài (NW, NE, SW, SE), 4 góc trong (Inner Corners)</li>
+          <li><strong>Alpha</strong>: Hoàn toàn nhị phân 100%, không bị viền lem mờ</li>
+          <li><strong>Tương thích Engine</strong>: Unreal Engine 5.7 / 5.8 Paper2D TileMap, Godot 4 TileSet</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    function filterCategory(cat) {
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+      const cards = document.querySelectorAll('.asset-card');
+      cards.forEach(card => {
+        if (cat === 'all' || card.getAttribute('data-cat') === cat) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+  </script>
+
+</body>
+</html>

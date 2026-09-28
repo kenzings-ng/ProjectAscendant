@@ -1,0 +1,513 @@
+{
+  "character": "Vanguard",
+  "archetype": "HeavyTank",
+  "canvas": [
+    128,
+    128
+  ],
+  "pivot": [
+    64,
+    114
+  ],
+  "waist_seam_y": 80,
+  "lighting": "10_oclock",
+  "animations": {
+    "Idle": {
+      "start_frame": 0,
+      "end_frame": 3,
+      "frame_count": 4,
+      "duration_ms": 150
+    },
+    "Walk": {
+      "start_frame": 4,
+      "end_frame": 9,
+      "frame_count": 6,
+      "duration_ms": 100
+    },
+    "Run": {
+      "start_frame": 10,
+      "end_frame": 15,
+      "frame_count": 6,
+      "duration_ms": 80
+    },
+    "Attack": {
+      "start_frame": 16,
+      "end_frame": 21,
+      "frame_count": 6,
+      "duration_ms": 110
+    }
+  },
+  "equipment_separation": {
+    "weapons_baked_into_body": false,
+    "shields_baked_into_body": false,
+    "armor_baked_into_weapons": false,
+    "tested_mainhand_weapon": "Content/Art/Weapons/WPN_Vanguard_01_Broadsword_Tier0_RustedIron.png",
+    "tested_offhand_shield": "Content/Art/Weapons/WPN_Vanguard_09_Iron_Round_Shield.png"
+  },
+  "per_frame_sockets": [
+    {
+      "frame": 0,
+      "animation": "Idle",
+      "foot_pivot": [
+        64,
+        114
+      ],
+      "waist_y": 80,
+      "helm_socket": [
+        64,
+        44
+      ],
+      "hand_r": [
+        80,
+        76
+      ],
+      "hand_l": [
+        48,
+        76
+      ]
+    },
+    {
+      "frame": 1,
+      "animation": "Idle",
+      "foot_pivot": [
+        64,
+        114
+      ],
+      "waist_y": 79,
+      "helm_socket": [
+        64,
+        43
+      ],
+      "hand_r": [
+        80,
+        75
+      ],
+      "hand_l": [
+        48,
+        75
+      ]
+    },
+    {
+      "frame": 2,
+      "animation": "Idle",
+      "foot_pivot": [
+        64,
+        114
+      ],
+      "waist_y": 79,
+      "helm_socket": [
+        64,
+        43
+      ],
+      "hand_r": [
+        81,
+        75
+      ],
+      "hand_l": [
+        47,
+        75
+      ]
+    },
+    {
+      "frame": 3,
+      "animation": "Idle",
+      "foot_pivot": [
+        64,
+        114
+      ],
+      "waist_y": 80,
+      "helm_socket": [
+        64,
+        44
+      ],
+      "hand_r": [
+        80,
+        77
+      ],
+      "hand_l": [
+        48,
+        77
+      ]
+    },
+    {
+      "frame": 4,
+      "animation": "Walk",
+      "foot_pivot": [
+        64,
+        114
+      ],
+      "waist_y": 80,
+      "helm_socket": [
+        64,
+        44
+      ],
+      "hand_r": [
+        76,
+        78
+      ],
+      "hand_l": [
+        52,
+        74
+      ]
+    },
+    {
+      "frame": 5,
+      "animation": "Walk",
+      "foot_pivot": [
+        64,
+        114
+      ],
+      "waist_y": 79,
+      "helm_socket": [
+        64,
+        43
+      ],
+      "hand_r": [
+        78,
+        77
+      ],
+      "hand_l": [
+        50,
+        75
+      ]
+    },
+    {
+      "frame": 6,
+      "animation": "Walk",
+      "foot_pivot": [
+        64,
+        114
+      ],
+      "waist_y": 80,
+      "helm_socket": [
+        64,
+        44
+      ],
+      "hand_r": [
+        80,
+        76
+      ],
+      "hand_l": [
+        48,
+        76
+      ]
+    },
+    {
+      "frame": 7,
+      "animation": "Walk",
+      "foot_pivot": [
+        64,
+        114
+      ],
+      "waist_y": 80,
+      "helm_socket": [
+        64,
+        44
+      ],
+      "hand_r": [
+        84,
+        74
+      ],
+      "hand_l": [
+        44,
+        78
+      ]
+    },
+    {
+      "frame": 8,
+      "animation": "Walk",
+      "foot_pivot": [
+        64,
+        114
+      ],
+      "waist_y": 79,
+      "helm_socket": [
+        64,
+        43
+      ],
+      "hand_r": [
+        82,
+        75
+      ],
+      "hand_l": [
+        46,
+        77
+      ]
+    },
+    {
+      "frame": 9,
+      "animation": "Walk",
+      "foot_pivot": [
+        64,
+        114
+      ],
+      "waist_y": 80,
+      "helm_socket": [
+        64,
+        44
+      ],
+      "hand_r": [
+        79,
+        76
+      ],
+      "hand_l": [
+        49,
+        76
+      ]
+    },
+    {
+      "frame": 10,
+      "animation": "Run",
+      "foot_pivot": [
+        64,
+        114
+      ],
+      "waist_y": 78,
+      "helm_socket": [
+        66,
+        42
+      ],
+      "hand_r": [
+        73,
+        80
+      ],
+      "hand_l": [
+        55,
+        71
+      ]
+    },
+    {
+      "frame": 11,
+      "animation": "Run",
+      "foot_pivot": [
+        64,
+        114
+      ],
+      "waist_y": 79,
+      "helm_socket": [
+        66,
+        43
+      ],
+      "hand_r": [
+        76,
+        79
+      ],
+      "hand_l": [
+        52,
+        73
+      ]
+    },
+    {
+      "frame": 12,
+      "animation": "Run",
+      "foot_pivot": [
+        64,
+        114
+      ],
+      "waist_y": 80,
+      "helm_socket": [
+        66,
+        44
+      ],
+      "hand_r": [
+        80,
+        77
+      ],
+      "hand_l": [
+        48,
+        75
+      ]
+    },
+    {
+      "frame": 13,
+      "animation": "Run",
+      "foot_pivot": [
+        64,
+        114
+      ],
+      "waist_y": 78,
+      "helm_socket": [
+        66,
+        42
+      ],
+      "hand_r": [
+        87,
+        71
+      ],
+      "hand_l": [
+        41,
+        80
+      ]
+    },
+    {
+      "frame": 14,
+      "animation": "Run",
+      "foot_pivot": [
+        64,
+        114
+      ],
+      "waist_y": 79,
+      "helm_socket": [
+        66,
+        43
+      ],
+      "hand_r": [
+        84,
+        73
+      ],
+      "hand_l": [
+        44,
+        79
+      ]
+    },
+    {
+      "frame": 15,
+      "animation": "Run",
+      "foot_pivot": [
+        64,
+        114
+      ],
+      "waist_y": 80,
+      "helm_socket": [
+        66,
+        44
+      ],
+      "hand_r": [
+        81,
+        75
+      ],
+      "hand_l": [
+        47,
+        77
+      ]
+    },
+    {
+      "frame": 16,
+      "animation": "Attack",
+      "foot_pivot": [
+        64,
+        114
+      ],
+      "waist_y": 81,
+      "helm_socket": [
+        62,
+        45
+      ],
+      "hand_r": [
+        86,
+        64
+      ],
+      "hand_l": [
+        46,
+        76
+      ]
+    },
+    {
+      "frame": 17,
+      "animation": "Attack",
+      "foot_pivot": [
+        64,
+        114
+      ],
+      "waist_y": 80,
+      "helm_socket": [
+        65,
+        44
+      ],
+      "hand_r": [
+        88,
+        62
+      ],
+      "hand_l": [
+        44,
+        76
+      ]
+    },
+    {
+      "frame": 18,
+      "animation": "Attack",
+      "foot_pivot": [
+        64,
+        114
+      ],
+      "waist_y": 79,
+      "helm_socket": [
+        68,
+        43
+      ],
+      "hand_r": [
+        96,
+        76
+      ],
+      "hand_l": [
+        42,
+        78
+      ]
+    },
+    {
+      "frame": 19,
+      "animation": "Attack",
+      "foot_pivot": [
+        64,
+        114
+      ],
+      "waist_y": 81,
+      "helm_socket": [
+        67,
+        45
+      ],
+      "hand_r": [
+        88,
+        86
+      ],
+      "hand_l": [
+        44,
+        78
+      ]
+    },
+    {
+      "frame": 20,
+      "animation": "Attack",
+      "foot_pivot": [
+        64,
+        114
+      ],
+      "waist_y": 80,
+      "helm_socket": [
+        65,
+        44
+      ],
+      "hand_r": [
+        82,
+        80
+      ],
+      "hand_l": [
+        46,
+        76
+      ]
+    },
+    {
+      "frame": 21,
+      "animation": "Attack",
+      "foot_pivot": [
+        64,
+        114
+      ],
+      "waist_y": 80,
+      "helm_socket": [
+        64,
+        44
+      ],
+      "hand_r": [
+        80,
+        76
+      ],
+      "hand_l": [
+        48,
+        76
+      ]
+    }
+  ],
+  "art_gate_status": "APPROVED",
+  "target_engine_path": "/Game/Art/Characters/Vanguard/vanguard_character_spritesheet"
+}
