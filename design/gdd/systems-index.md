@@ -10,7 +10,7 @@
 
 ## Overview
 
-Project Ascendant là một tựa game 2.5D Isometric Action RPG hardcore nơi kỹ năng người chơi là trung tâm. Vòng lặp gameplay cốt lõi (Core Loop) được vận hành bởi sự kết hợp giữa: **Tránh né i-frame chuẩn xác**, **cơ chế Phá vỡ thế đứng (Stagger) để đánh Boss vượt cấp**, **kim tự tháp 12 Chức nghiệp** với 4 Class khởi đầu làm nền tảng và 8 Class mở khóa qua kỳ ngộ/kỹ năng, cùng **hệ thống Thợ rèn dã ngoại phân vùng** thúc đẩy người chơi mạo hiểm thám hiểm các vùng đất không giới hạn cấp độ.
+Project Ascendant là một tựa game 2.5D Isometric Action RPG hardcore nơi kỹ năng người chơi là trung tâm. Vòng lặp gameplay cốt lõi (Core Loop) được vận hành bởi sự kết hợp giữa: **Tránh né i-frame chuẩn xác**, **cơ chế Phá vỡ thế đứng (Stagger) để đánh Boss vượt cấp**, **cây tiến trình 16 Chức nghiệp** với 4 Class khởi đầu làm nền tảng và các Class nâng cao mở khóa qua kỳ ngộ/kỹ năng, cùng **hệ thống Thợ rèn dã ngoại phân vùng** thúc đẩy người chơi mạo hiểm thám hiểm các vùng đất không giới hạn cấp độ.
 
 ---
 
@@ -27,7 +27,7 @@ Project Ascendant là một tựa game 2.5D Isometric Action RPG hardcore nơi k
 | 6 | Prototype Boss AI & Telegraphs | Gameplay | MVP | Approved | `design/gdd/boss-ai.md` | Combat (4), Stagger (5) |
 | 7 | Minimal Combat HUD & Feedback *(inferred)* | UI | MVP | Approved | `design/gdd/combat-hud.md` | Attributes (1), Stagger (5) |
 | 8 | Skill Progression & Skill Book System | Progression | Vertical Slice | Approved | `design/gdd/skill-progression-system.md` | Attributes (1), Inventory (9) |
-| 9 | Inventory & 5-Tier Item Database *(inferred)* | Economy | Vertical Slice | Approved | `design/gdd/inventory-system.md` | — |
+| 9 | Inventory & 5-Rarity Item Database *(inferred)* | Economy | Vertical Slice | Approved | `design/gdd/inventory-system.md` | — |
 | 10 | 4 Foundational Classes & Skill Trees | Progression | Vertical Slice | Approved | `design/gdd/foundational-classes.md` | Attributes (1), Combat (4), Skills (8) |
 | 11 | Zone-tiered Blacksmithing System | Economy | Vertical Slice | Approved | `design/gdd/blacksmithing-system.md` | Inventory (9), Zones (12) |
 | 12 | Non-gated Open Zones & Checkpoints | World | Vertical Slice | Approved | `design/gdd/zone-system.md` | Controller (2) |
@@ -36,7 +36,7 @@ Project Ascendant là một tựa game 2.5D Isometric Action RPG hardcore nơi k
 | 15 | Advanced Classes & Dual-Class Specialization System | Progression | Vertical Slice | Approved | `design/gdd/advanced-classes.md` | Foundational Classes (10), Skills (8) |
 | 16 | Apothecary & Weapon Oils System | Gameplay | Alpha | Not Started | `design/gdd/apothecary-system.md` | Inventory (9), Stagger (5) |
 | 17 | Open World Boss Raids & Contested Battles | Multiplayer | Alpha | Not Started | `design/gdd/world-bosses.md` | Multiplayer (14), Boss AI (6) |
-| 18 | 1–2 Hidden/Mythic Classes & Trials | Progression | Full Vision | Not Started | `design/gdd/hidden-classes.md` | Advanced Classes (15) |
+| 18 | Apex Class (God Slayer) & Trials | Progression | Full Vision | Not Started | `design/gdd/hidden-classes.md` | Advanced Classes (15) |
 | 19 | Reincarnation & Soul Prestige Loop | Meta | Full Vision | Not Started | `design/gdd/reincarnation.md` | Attributes (1), Classes (15) |
 
 ---
@@ -123,7 +123,7 @@ flowchart TD
 | **4** | **Stagger & Part Breaking System** | MVP | Core | systems-designer | Medium (2 phiên) |
 | **5** | **Prototype Boss AI & Telegraphs** | MVP | Feature | ai-programmer | Medium (2 phiên) |
 | **6** | **Combat HUD & Feedback UI** | MVP | Presentation | ux-designer | Small (1 phiên) |
-| **7** | **Inventory & 5-Tier Item Database** | Vertical Slice | Foundation | systems-designer | Medium (2 phiên) |
+| **7** | **Inventory & 5-Rarity Item Database** | Vertical Slice | Foundation | systems-designer | Medium (2 phiên) |
 | **8** | **4 Foundational Classes & Skill Trees** | Vertical Slice | Feature | game-designer | Large (3 phiên) |
 | **9** | **Zone-tiered Blacksmithing System** | Vertical Slice | Feature | economy-designer | Medium (2 phiên) |
 | **10** | **Open World MMO Netcode & Contested Aggro Sync** | Vertical Slice | Core | network-programmer | Large (3 phiên) |

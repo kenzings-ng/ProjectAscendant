@@ -53,6 +53,34 @@
      - Bổ sung nhiệm vụ kiểm tra tính xác thực của test (test DB phải kết nối PostgreSQL thật, không dùng mock/sqlite).
      - Bổ sung cảnh báo nghiêm ngặt nếu phát hiện bất kỳ thay đổi nào trong `DECISIONS.md` mà không có chỉ thị phê duyệt từ người dùng.
 
+### 2.1 Cập Nhật Bổ Sung PR #1: Chuẩn Hóa Thuật Ngữ, Ánh Xạ Vũ Khí & Nâng Cấp Validator QA
+- **Mục tiêu**: Thực hiện toàn diện 5 yêu cầu bổ sung của người dùng trước khi duyệt PR #1.
+- **Nội dung thực hiện chi tiết**:
+  1. **Chuẩn hóa Thuật ngữ Chức nghiệp & Độ hiếm**:
+     - Thay thế toàn bộ cách dùng từ "Tier" hoặc tên độ hiếm (`Normal`/`Rare`/`Epic`/`Mythic`) cho Class bằng danh pháp chính thức: **Bậc (Rank)** gồm `Bậc T1 (Sơ cấp)`, `Bậc T2 (Trung cấp)`, `Bậc T3 (Cao cấp)`, `Bậc T4 (Ẩn)`.
+     - Tách biệt rành mạch hai thang đo:
+       - Thang 5 Bậc Hiếm Trang Bị: `Common`, `Uncommon`, `Rare`, `Epic`, `Legendary` (bỏ hoàn toàn `Immortal`, `Divine`, `ShieldTier`, `5-Tier Item`).
+       - Thang 4 Bậc Kỹ Năng / Quyển Trục Chuyển Chức: `Normal` (T1), `Rare` (T2), `Epic` (T3), `Mythic` (T4).
+     - Đã rà soát và chuẩn hóa triệt để trên: `character-visual-system.md`, `skill-progression-system.md`, `foundational-classes.md`, `inventory-system.md`, `game-concept.md`, `systems-index.md`, `blacksmithing-system.md`, `core-game-loop.md`, `zone-system.md`.
+  2. **Chuẩn hóa Ánh Xạ Vũ Khí (`itemization.md`, `character-visual-system.md`, `game-concept.md`)**:
+     - Thêm `Swordmaster` vào danh sách chức nghiệp sử dụng `Weapon.1H.Blade` (Kiếm 1 tay không khiên).
+     - Loại bỏ `Templar` khỏi `Weapon.1H.Blade` (Templar dùng `Weapon.1H.Mace` + Đại Thuẫn).
+     - Loại bỏ `Vanguard` khỏi `Weapon.2H.Heavy` (Vanguard chỉ dùng `Weapon.1H.Blade` + Khiên Sắt Vuông).
+     - Cập nhật số frame Idle 16 class: $16 \times 8 \times 4 = 512$ frames; cập nhật toàn bộ tham chiếu sprite, vệt chém Niagara và diagram Mermaid sang 16 class.
+  3. **Cập nhật `game-concept.md`**:
+     - Đặt ghi chú dẫn chiếu rõ ràng ở đầu Mục 4: *"Đã thay thế bởi advanced-classes.md và DECISIONS.md"*.
+     - Đồng bộ bảng class và vũ khí sang 16 class và thang 5 độ hiếm trang bị chuẩn.
+  4. **Nâng cấp Toàn diện Bộ Kiểm Tra Tính Nhất Quán (`Tools/QA/validate_gdd_consistency.py`)**:
+     - Bổ sung kiểm tra QUAN HỆ sâu:
+       - Rà soát ràng buộc vũ khí của từng class (`Swordmaster`, `Templar`, `Vanguard`, `Inquisitor`).
+       - Kiểm tra việc cấm dùng "Tier" / độ hiếm cho class, cấm "ShieldTier" / "5-Tier Item", cấm "Immortal" / "Divine".
+       - Bắt buộc kiểm tra ghi chú dẫn chiếu tại `game-concept.md`.
+     - **Kiểm chứng tính nghiêm ngặt**: Đã chạy thử trên bản tài liệu trước khi sửa, script phát hiện chính xác **28 lỗi vi phạm trên 7 file**. Sau khi hoàn tất sửa đổi, script báo: **22 files checked. Errors: 0 \| Warnings: 0. [RESULT] GDD Consistency Check PASSED**.
+  5. **Đánh Giá Phản Biện Độc Lập Từ Subagent Reviewer**:
+     - Subagent reviewer (Context độc lập) đã tiến hành rà soát 3 vòng đối chiếu với `DECISIONS.md`.
+     - Vòng 1 & 2: Phát hiện các vị trí còn sót trong `character-visual-system.md` và `inventory-system.md`.
+     - Vòng 3 (Sau khi hoàn tất khắc phục): Subagent đưa ra kết luận chính thức: **VERDICT: PASS**.
+
 ---
 
 ## 3. Danh Sách 16 Class Đã Được Duyệt Chính Thức

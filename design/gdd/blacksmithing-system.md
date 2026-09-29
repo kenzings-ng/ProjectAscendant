@@ -418,4 +418,4 @@ Bảng tổng hợp các biến số cân bằng kinh tế và rèn đúc dành 
 
 ## Open Questions
 
-*Không còn câu hỏi thiết kế tồn đọng. Toàn bộ cơ chế phân cấp thợ rèn dã ngoại, tỷ lệ cường hóa an toàn và chi phí mở rộng túi đồ đã đồng bộ hoàn hảo với Inventory & 5-Tier Item Database và Stagger System.*
+*Không còn câu hỏi thiết kế tồn đọng. Toàn bộ cơ chế phân cấp thợ rèn dã ngoại, tỷ lệ cường hóa an toàn và chi phí mở rộng túi đồ đã đồng bộ hoàn hảo với Inventory & 5-Rarity Item Database và Stagger System.*

@@ -60,7 +60,7 @@ Mỗi Tòa Thành (Citadel) là một trung tâm kiên cố đại diện cho t�
    * Người chơi có thể dịch chuyển tức thời giữa các Tòa Thành đã từng khám phá (Discovered).
    * Thời gian niệm chú 2.0 giây; hoàn toàn miễn phí; bị ngắt quãng nếu nhận sát thương hoặc di chuyển.
 5. **Thay Đổi Class & Action Deck Tại Tòa Thành**:
-   * Cho phép người chơi tự do hoán đổi 4 Active Skills + 3 Passive Skills (Action Deck từ [`skill-progression-system.md`](file:///mnt/Data/Projects/project-games/design/gdd/skill-progression-system.md)) và chuyển đổi linh hoạt giữa 12 Chức nghiệp đã mở khóa ([`foundational-classes.md`](file:///mnt/Data/Projects/project-games/design/gdd/foundational-classes.md)).
+   * Cho phép người chơi tự do hoán đổi 4 Active Skills + 3 Passive Skills (Action Deck từ [`skill-progression-system.md`](file:///mnt/Data/Projects/project-games/design/gdd/skill-progression-system.md)) và chuyển đổi linh hoạt giữa 16 Chức nghiệp đã mở khóa ([`foundational-classes.md`](file:///mnt/Data/Projects/project-games/design/gdd/foundational-classes.md)).
 
 ---
 
@@ -145,7 +145,7 @@ Mỗi Tòa Thành (Citadel) là một trung tâm kiên cố đại diện cho t�
 | **`isometric-controller.md`** | Tọa độ nhân vật, góc ngắm, hướng di chuyển 8 hướng. | Tín hiệu dịch chuyển tức thời (Teleport transform), áp dụng Dither Opacity Mask lên tường thành/mái vòm chắn camera. | Controller quản lý camera arm 1200 cm; Zone System kích hoạt Safe Zone và Dither Occlusion. |
 | **`attributes-system.md`** | Chỉ số Max HP/Mana/Stamina hiện tại của nhân vật. | GAS GameplayEffect `GE_CitadelRestoration` hồi đầy 100% tài nguyên khi vào thành; xử lý respawn / relog về Tòa Thành gần nhất. | Zone System phát trigger Auto-Save; Attributes System áp dụng GameplayEffect. |
 | **`skill-progression-system.md`** | Danh sách các kỹ năng Active/Passive đã học của nhân vật. | Cập nhật Action Deck Loadout mới (4 Active + 3 Passive) khi người chơi cấu hình tại Tòa Thành. | Skill System quản lý dữ liệu kỹ năng; Zone System cung cấp Safe Zone cho phép đổi chiêu an toàn. |
-| **`foundational-classes.md`** | Danh sách 12 Chức nghiệp đã được người chơi mở khóa. | Hoán đổi Class ID hiện tại của nhân vật tại Tòa Thành. | Class System cập nhật bộ thuộc tính cơ sở và passive nội tại; Zone System cung cấp trạm hoán đổi an toàn. |
+| **`foundational-classes.md`** | Danh sách 16 Chức nghiệp đã được người chơi mở khóa. | Hoán đổi Class ID hiện tại của nhân vật tại Tòa Thành. | Class System cập nhật bộ thuộc tính cơ sở và passive nội tại; Zone System cung cấp trạm hoán đổi an toàn. |
 | **`blacksmithing-system.md`** | Cấp độ Lò Rèn (Tier 1, Tier 2, Tier 3) đặt tại các Tòa Thành tương ứng. | Kích hoạt menu rèn trang bị, đục lỗ ngọc hoặc đúc Thần Binh từ Linh Hồn Boss. | Blacksmithing System quản lý công thức và tỷ lệ; Zone System quản lý vị trí NPC trong Tòa Thành. |
 | **`inventory-system.md`** | Số lượng Vàng, Tàn Trang và Trang Bị hiện có trong kho đồ. | Trừ 50% Vàng / 100% Tàn Trang (PvE) tạo Vệt Tro Tàn; nạp đầy số lần dùng Bình Dược Phẩm khi vào Tòa Thành; lưu dữ liệu vào bản ghi Auto-Save. | Inventory System trừ/cộng vật phẩm; Zone System kích hoạt Auto-Save. |
 

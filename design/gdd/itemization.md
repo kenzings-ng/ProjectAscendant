@@ -136,18 +136,18 @@ Chỉ xuất hiện trên trang bị Bậc Legendary. Thay vì chỉ tăng số 
 
 ---
 
-## 3. Bản Đồ Phân Bổ 12 Class Vào 7 Weapon Families
+## 3. Bản Đồ Phân Bổ 16 Class Vào 7 Weapon Families
 
-Để kiểm soát chặt chẽ ngân sách sản xuất đồ họa (tránh bùng nổ hàng trăm model/sprite vũ khí), toàn bộ **12 Chức Nghiệp** (4 Cơ Bản + 4 Hiếm + 3 Cao Cấp + 1 Ẩn) được phân bổ khoa học vào **7 Dòng Vũ Khí Cơ Sở (7 Weapon Families)**:
+Để kiểm soát chặt chẽ ngân sách sản xuất đồ họa (tránh bùng nổ hàng trăm model/sprite vũ khí), toàn bộ **16 Chức Nghiệp** (4 Sơ Cấp + 6 Trung Cấp + 5 Cao Cấp + 1 Ẩn) được phân bổ khoa học vào **7 Dòng Vũ Khí Cơ Sở (7 Weapon Families)**:
 
 ```mermaid
 graph TD
-    subgraph 12_Classes["12 CHỨC NGHIỆP TRONG GAME"]
-        C1["Chiến Binh (Vanguard)"]
+    subgraph 16_Classes["16 CHỨC NGHIỆP TRONG GAME"]
+        C1["Tiên Phong (Vanguard)"]
         C2["Du Hiệp (Ranger)"]
         C3["Thuật Sĩ (Arcanist)"]
         C4["Tu Sĩ (Acolyte)"]
-        C5["Cuồng Nộ (Berserker)"]
+        C5["Cuồng Chiến (Berserker)"]
         C6["Thích Khách (Shadowblade)"]
         C7["Nguyên Tố (Elementalist)"]
         C8["Thánh Hiệp Sĩ (Templar)"]
@@ -155,6 +155,10 @@ graph TD
         C10["Thời Gian (Chronomancer)"]
         C11["Long Kỵ Sĩ (Dragon Knight)"]
         C12["Thần Thí Giả (God Slayer)"]
+        C13["Kiếm Sư (Swordmaster)"]
+        C14["Thẩm Phán (Inquisitor)"]
+        C15["Bóng Ma (Phantom Stalker)"]
+        C16["Thiên Sứ (Seraph)"]
     end
 
     subgraph 7_Families["7 WEAPON FAMILIES (NGÂN SÁCH ART TỐI ƯU)"]
@@ -168,7 +172,6 @@ graph TD
     end
 
     C1 --> F1
-    C1 --> F2
     C2 --> F4
     C2 --> F5
     C3 --> F6
@@ -176,26 +179,30 @@ graph TD
     C5 --> F2
     C6 --> F5
     C7 --> F6
-    C8 --> F1
     C8 --> F7
     C9 --> F1
     C10 --> F7
     C11 --> F3
+    C11 --> F2
     C12 --> F1
     C12 --> F3
+    C13 --> F1
+    C14 --> F7
+    C15 --> F5
+    C16 --> F7
 ```
 
-### Bảng Ánh Xạ Chi Tiết 12 Class & Weapon Archetypes:
+### Bảng Ánh Xạ Chi Tiết 16 Class & Weapon Archetypes:
 
 | Dòng Vũ Khí (Weapon Family) | Archetype Kỹ Thuật | Đặc Điểm Hoạt Ảnh & Hitbox | Các Class Sử Dụng Được | Vũ Khí Phụ (Offhand) Tương Thích |
 | :--- | :--- | :--- | :--- | :--- |
-| **1. One-Handed Blades** | `Weapon.1H.Blade` | Chém ngang góc $120^\circ$, tầm 220cm, tốc độ 1.1 đòn/s. | **Vanguard, Templar, Void Blade, God Slayer** | Khiên Sắt, Khiên Phản Đòn, hoặc Bỏ trống (Song đấu). |
-| **2. Two-Handed Heavy** | `Weapon.2H.Heavy` | Bổ dọc 180cm, quét nặng $160^\circ$, tầm 300cm, tốc độ 0.75 đòn/s, Hyper-Armor. | **Berserker, Vanguard (2H), Dragon Knight** | Khóa cứng 2 tay (`bIsTwoHanded = true`). Không mang khiên. |
+| **1. One-Handed Blades** | `Weapon.1H.Blade` | Chém ngang góc $120^\circ$, tầm 220cm, tốc độ 1.1 đòn/s. | **Vanguard, Swordmaster, Void Blade, God Slayer** | Khiên Sắt, Khiên Phản Đòn, hoặc Bỏ trống (Song đấu, Kiếm Sư không dùng khiên). |
+| **2. Two-Handed Heavy** | `Weapon.2H.Heavy` | Bổ dọc 180cm, quét nặng $160^\circ$, tầm 300cm, tốc độ 0.75 đòn/s, Hyper-Armor. | **Berserker, Dragon Knight** | Khóa cứng 2 tay (`bIsTwoHanded = true`). Không mang khiên. |
 | **3. Polearms & Halberds** | `Weapon.2H.Polearm`| Đâm thẳng tầm xa 400cm, quét vòng tròn $360^\circ$ trên không, phá Posture cực lớn. | **Dragon Knight, God Slayer** | Khóa cứng 2 tay. |
 | **4. Ranged Bows** | `Weapon.2H.Bow` | Bắn đạn đạo tầm xa 1200–1600cm, sạc lực (Hold to Charge), tốc độ 0.9 phát/s. | **Ranger** | Khóa cứng 2 tay (Tự động nạp ống tên Quiver). |
 | **5. Twin Light Blades** | `Weapon.Dual.Daggers`| Đâm chém liên hoàn cực nhanh 2.2 đòn/s, hitbox hẹp 150cm, dồn tích tụ Xuất huyết. | **Shadowblade, Ranger (Sub-set)** | Tay thuận: Đoản đao. Tay nghịch: Dao găm hoặc Phi tiêu. |
 | **6. Magic Staves** | `Weapon.2H.Staff` | Phóng quả cầu ma pháp 900cm, giộng trượng kích hoạt AoE, tăng mạnh Spell Damage. | **Arcanist, Elementalist** | Cổ Thư Grimoire hoặc Cầu Phép (Orb) bổ trợ. |
-| **7. Blunt Maces & Relics** | `Weapon.1H.Mace` / `Relic` | Đập nện 180cm, gây choáng nhẹ (Stagger), sóng xung kích Holy/Time/Ki. | **Acolyte, Templar, Chronomancer** | Đại Thuẫn (Tower Shield), Tràng Hạt Khí Công, Đồng Hồ Cát. |
+| **7. Blunt Maces & Relics** | `Weapon.1H.Mace` / `Relic` | Đập nện 180cm, gây choáng nhẹ (Stagger), sóng xung kích Holy/Time/Ki. | **Acolyte, Templar, Inquisitor, Chronomancer, Seraph** | Đại Thuẫn (Tower Shield), Tràng Hạt Khí Công, Đồng Hồ Cát. |
 
 ---
 
@@ -485,7 +492,7 @@ Các thực thể mới được đăng ký chính thức vào [`design/registry
       - design/gdd/foundational-classes.md
       - design/gdd/advanced-classes.md
     attributes:
-      classes: ["Vanguard", "Templar", "Void Blade", "God Slayer"]
+      classes: ["Vanguard", "Swordmaster", "Void Blade", "God Slayer"]
       base_speed: 1.10
       hitbox_arc: 120
 
@@ -498,7 +505,7 @@ Các thực thể mới được đăng ký chính thức vào [`design/registry
       - design/gdd/foundational-classes.md
       - design/gdd/advanced-classes.md
     attributes:
-      classes: ["Berserker", "Vanguard", "Dragon Knight"]
+      classes: ["Berserker", "Dragon Knight"]
       base_speed: 0.75
       hitbox_arc: 160
       hyper_armor: true
@@ -563,7 +570,7 @@ Các thực thể mới được đăng ký chính thức vào [`design/registry
       - design/gdd/foundational-classes.md
       - design/gdd/advanced-classes.md
     attributes:
-      classes: ["Acolyte", "Templar", "Chronomancer"]
+      classes: ["Acolyte", "Templar", "Inquisitor", "Chronomancer", "Seraph"]
       base_speed: 1.00
       posture_stagger_bonus: 0.25
 ```
@@ -647,11 +654,11 @@ Tuân thủ nghiêm ngặt nguyên tắc của Art Bible: *"Màu sắc không ba
 
 1. **Hệ Thống Ký Hiệu Hình Học Bất Biến (Geometric Pip Badges):**
    Mỗi thẻ trang bị trên UI và biểu tượng nổi trên đầu vật phẩm rơi dưới đất đều gắn một biểu tượng hình học riêng biệt:
-   - **Common (Tier 1):** Hình Tròn Đơn `●` *(Circle)*.
-   - **Uncommon (Tier 2):** Hình Quả Trám Đôi `◆` *(Diamond)*.
-   - **Rare (Tier 3):** Hình Tam Giác Hướng Lên `▲` *(Chevron Triangle)*.
-   - **Epic (Tier 4):** Hình Đa Giác Ngũ Giác `⬟` *(Faceted Pentagon)*.
-   - **Legendary (Tier 5):** Vương Miện / Ngôi Sao Thái Dương `★` *(Sunburst Crown)*.
+   - **Common (Độ hiếm 1):** Hình Tròn Đơn `●` *(Circle)*.
+   - **Uncommon (Độ hiếm 2):** Hình Quả Trám Đôi `◆` *(Diamond)*.
+   - **Rare (Độ hiếm 3):** Hình Tam Giác Hướng Lên `▲` *(Chevron Triangle)*.
+   - **Epic (Độ hiếm 4):** Hình Đa Giác Ngũ Giác `⬟` *(Faceted Pentagon)*.
+   - **Legendary (Độ hiếm 5):** Vương Miện / Ngôi Sao Thái Dương `★` *(Sunburst Crown)*.
 2. **Tiền Tố Chữ Số La Mã Bắt Buộc (Roman Numeral Tag):**
    Tên vật phẩm và Tooltip luôn hiển thị kèm tiền tố cấp bậc: `[I] Kiếm Sắt`, `[II] Thép Mài`, `[III] Băng Tinh`, `[IV] Hư Không Trượng`, `[V] Thần Binh Tối Thượng`.
 3. **Âm Thanh Rơi Đồ Phân Tầng (Acoustic Stinger Hierarchy):**

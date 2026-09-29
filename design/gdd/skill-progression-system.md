@@ -10,7 +10,7 @@
 
 ## Overview
 
-Hệ thống Phát triển Kỹ năng & Sách Kỹ Năng (Skill Progression & Skill Book System) là kiến trúc quản lý toàn bộ vòng lặp thu thập, học tập, cường hóa và trang bị kỹ năng chiến đấu cho cả 12 Chức nghiệp trong Project Ascendant. Hệ thống xây dựng cầu nối liền mạch giữa:
+Hệ thống Phát triển Kỹ năng & Sách Kỹ Năng (Skill Progression & Skill Book System) là kiến trúc quản lý toàn bộ vòng lặp thu thập, học tập, cường hóa và trang bị kỹ năng chiến đấu cho toàn bộ 16 Chức nghiệp trong Project Ascendant. Hệ thống xây dựng cầu nối liền mạch giữa:
 1. **Kho Đồ (Inventory System):** Nơi Sách Kỹ Năng (Skill Book) tồn tại dưới dạng vật phẩm tiêu hao có điều kiện khóa Class/Vũ khí.
 2. **Hệ Thống Thuộc Tính (Attributes Engine - GAS):** Nơi các chiêu thức trích xuất Mana và Stamina để thi triển theo quy chuẩn cân bằng.
 3. **Thanh Kỹ Năng Hành Động (Action Deck):** Giới hạn số lượng kỹ năng mang vào chiến đấu (4 Active + 3 Passive) để duy trì trải nghiệm hành động tốc độ cao, tránh quá tải phím bấm.
@@ -27,7 +27,7 @@ Người chơi trải nghiệm cảm giác hồi hộp của việc săn tìm b�
 
 ## Detailed Design
 
-### 1. Starter Skills (Bộ Kỹ Năng Khởi Đầu 12 Class)
+### 1. Starter Skills (Bộ Kỹ Năng Khởi Đầu 16 Class)
 
 Mỗi chức nghiệp khi được khởi tạo hoặc mở khóa trong thế giới sẽ lập tức sở hữu miễn phí:
 * **2 Kỹ Năng Chủ Động Cơ Bản (Active Skills):** Gán mặc định vào Slot 1 và Slot 2.
@@ -67,7 +67,7 @@ Mỗi chức nghiệp khi được khởi tạo hoặc mở khóa trong thế gi
 * `TSubclassOf<UGameplayAbility> GrantedAbilityClass`: Lớp kỹ năng GAS sẽ nạp vào ASC.
 * `FGameplayTag RequiredClassTag`: Thẻ chức nghiệp bắt buộc (ví dụ `Class.Line.Guard.Vanguard`, `Class.Line.Guard.DragonKnight`).
 * `FGameplayTag RequiredWeaponTag`: Thẻ loại vũ khí yêu cầu (dùng cho sách võ học chung).
-* `EItemRarity RarityTier`: 4 bậc (`Normal`, `Rare`, `Epic`, `Mythic`).
+* `EItemRarity SkillRarity`: 4 bậc (`Normal`, `Rare`, `Epic`, `Mythic`).
 
 #### B. Quyển Trục Chuyển Chức (`UClassPromotionScrollDefinition`):
 Định nghĩa vật phẩm thăng tiến Bậc chức nghiệp (theo [`advanced-classes.md`](file:///mnt/Data/Projects/project-games/ProjectAscendant/design/gdd/advanced-classes.md)):
@@ -77,7 +77,7 @@ Mỗi chức nghiệp khi được khởi tạo hoặc mở khóa trong thế gi
 * `uint8 RequiredMinRank`: Bậc tối thiểu của class nguồn (1: Sơ cấp, 2: Trung cấp, 3: Cao cấp).
 * `int32 RequiredSourceClassLevel`: Cấp độ tối thiểu của class nguồn (mặc định 20).
 * `FGameplayTag RequiredQuestFlag`: Thẻ nhiệm vụ/kỳ ngộ bắt buộc (nếu có).
-* `EItemRarity RarityTier`: Quyển Trục Bậc 2 = `Rare`, Bậc 3 = `Epic`, Bậc 4 = `Mythic`.
+* `EItemRarity ScrollRarity`: Quyển Trục Bậc 2 = `Rare`, Bậc 3 = `Epic`, Bậc 4 = `Mythic`.
 
 ---
 
@@ -146,7 +146,7 @@ flowchart TD
     end
 
     subgraph InventorySystem["2. KHO ĐỒ (INVENTORY)"]
-        ItemBook["Item: Sách Kỹ Năng (Skill Book)<br/>- RequiredClassTag<br/>- AbilityClass<br/>- Rarity Tier"]
+        ItemBook["Item: Sách Kỹ Năng (Skill Book)<br/>- RequiredClassTag<br/>- AbilityClass<br/>- Skill Rarity"]
     end
 
     subgraph Evaluation["3. KIỂM TRA ĐIỀU KIỆN"]
@@ -179,22 +179,26 @@ flowchart TD
 
 ---
 
-## Class × Tier × Skill Book Mapping Matrix
+## Class × Rank × Skill Book Mapping Matrix
 
-| Tầng Class | Tên Chức Nghiệp | Cấp Độ Sách (Tier) | Loại Sách Sử Dụng | Nguồn Rơi Trọng Tâm |
+| Bậc Chức Nghiệp | Tên Chức Nghiệp | Độ Hiếm Sách / Quyển Trục | Loại Sách Sử Dụng | Nguồn Rơi Trọng Tâm |
 | :---: | :--- | :---: | :--- | :--- |
-| **Normal** | **Chiến Binh (Vanguard)** | Normal (Tier 1) | Sách Vanguard + Bí kíp Kiếm/Khiên chung | Quái thường, Thủ lĩnh, Thương nhân thành trấn |
-| **Normal** | **Du Hiệp (Ranger)** | Normal (Tier 1) | Sách Ranger + Bí kíp Cung/Song đao chung | Quái thường, Rương gỗ rừng sâu, Thủ lĩnh |
-| **Normal** | **Thuật Sĩ (Arcanist)** | Normal (Tier 1) | Sách Arcanist + Bí kíp Ma pháp trượng chung | Quái phép thuật, Thư viện phế tích, Thương nhân |
-| **Normal** | **Tu Sĩ (Acolyte)** | Normal (Tier 1) | Sách Acolyte + Bí kíp Khí công/Chùy chung | Tu viện đổ nát, Quái thánh địa, Thương nhân |
-| **Rare** | **Cuồng Chiến Sĩ (Berserker)** | Rare (Tier 2) | Sách Berserker độc quyền | Đấu trường Hẻm Núi Máu, Tinh anh cấp 20+ |
-| **Rare** | **Ảo Ảnh Thích Khách (Shadowblade)**| Rare (Tier 2) | Sách Shadowblade độc quyền | Căn cứ đầm lầy, Thích khách tinh anh |
-| **Rare** | **Nguyên Tố Sư (Elementalist)** | Rare (Tier 2) | Sách Elementalist độc quyền | Rương đền thờ nguyên tố, Tinh anh nguyên tố |
-| **Rare** | **Thánh Hiệp Sĩ (Templar)** | Rare (Tier 2) | Sách Templar độc quyền | Lăng mộ thánh địa, Kỵ sĩ tha hóa |
-| **Epic** | **Hư Không Kiếm Sư (Void Blade)** | Epic (Tier 3) | Sách Void Blade độc quyền | **Boss Lãnh Chúa Khe Nứt Hư Không** |
-| **Epic** | **Thời Gian Ma Đạo (Chronomancer)** | Epic (Tier 3) | Sách Chronomancer độc quyền | **Boss Lãnh Chúa Tháp Đồng Hồ** |
-| **Epic** | **Long Kỵ Sĩ (Dragon Knight)** | Epic (Tier 3) | Sách Dragon Knight độc quyền | **Boss Lãnh Chúa Hỏa Long** |
-| **Mythic** | **Thí Thần Giả (God Slayer)** | Mythic (Tier 4)| Sách Thí Thần độc quyền | **World Boss Thần Linh / Thử thách No-Hit** |
+| **Bậc T1 (Sơ cấp)** | **Chiến Binh (Vanguard)** | Normal | Sách Vanguard + Bí kíp Kiếm/Khiên chung | Quái thường, Thủ lĩnh, Thương nhân thành trấn |
+| **Bậc T1 (Sơ cấp)** | **Du Hiệp (Ranger)** | Normal | Sách Ranger + Bí kíp Cung/Song đao chung | Quái thường, Rương gỗ rừng sâu, Thủ lĩnh |
+| **Bậc T1 (Sơ cấp)** | **Thuật Sĩ (Arcanist)** | Normal | Sách Arcanist + Bí kíp Ma pháp trượng chung | Quái phép thuật, Thư viện phế tích, Thương nhân |
+| **Bậc T1 (Sơ cấp)** | **Tu Sĩ (Acolyte)** | Normal | Sách Acolyte + Bí kíp Khí công/Chùy chung | Tu viện đổ nát, Quái thánh địa, Thương nhân |
+| **Bậc T2 (Trung cấp)** | **Cuồng Chiến Sĩ (Berserker)** | Rare | Sách Berserker độc quyền | Đấu trường Hẻm Núi Máu, Tinh anh cấp 20+ |
+| **Bậc T2 (Trung cấp)** | **Ảo Ảnh Thích Khách (Shadowblade)**| Rare | Sách Shadowblade độc quyền | Căn cứ đầm lầy, Thích khách tinh anh |
+| **Bậc T2 (Trung cấp)** | **Nguyên Tố Sư (Elementalist)** | Rare | Sách Elementalist độc quyền | Rương đền thờ nguyên tố, Tinh anh nguyên tố |
+| **Bậc T2 (Trung cấp)** | **Thánh Hiệp Sĩ (Templar)** | Rare | Sách Templar độc quyền | Lăng mộ thánh địa, Kỵ sĩ tha hóa |
+| **Bậc T2 (Trung cấp)** | **Kiếm Sư (Swordmaster)** | Rare | Sách Swordmaster độc quyền | Di chỉ Kiếm Tông, Tinh anh kiếm thuật |
+| **Bậc T2 (Trung cấp)** | **Thẩm Phán (Inquisitor)** | Rare | Sách Inquisitor độc quyền | Tu viện hắc ám, Giáo sĩ tha hóa |
+| **Bậc T3 (Cao cấp)** | **Hư Không Kiếm Sư (Void Blade)** | Epic | Sách Void Blade độc quyền | **Boss Lãnh Chúa Khe Nứt Hư Không** |
+| **Bậc T3 (Cao cấp)** | **Thời Gian Ma Đạo (Chronomancer)** | Epic | Sách Chronomancer độc quyền | **Boss Lãnh Chúa Tháp Đồng Hồ** |
+| **Bậc T3 (Cao cấp)** | **Long Kỵ Sĩ (Dragon Knight)** | Epic | Sách Dragon Knight độc quyền | **Boss Lãnh Chúa Hỏa Long** |
+| **Bậc T3 (Cao cấp)** | **Bóng Ma (Phantom Stalker)** | Epic | Sách Phantom Stalker độc quyền | **Boss Lãnh Chúa Đầm Lầy Tử Khí** |
+| **Bậc T3 (Cao cấp)** | **Thiên Sứ (Seraph)** | Epic | Sách Seraph độc quyền | **Boss Lãnh Chúa Đền Thánh Ánh Sáng** |
+| **Bậc T4 (Ẩn)** | **Thí Thần Giả (God Slayer)** | Mythic | Sách Thí Thần độc quyền | **World Boss Thần Linh / Thử thách No-Hit** |
 
 ---
 
@@ -251,7 +255,7 @@ flowchart TD
 
 ## Acceptance Criteria
 
-- [ ] **AC-1 (Starter Skills):** Khi tạo nhân vật thuộc bất kỳ class nào trong 12 class, nhân vật lập tức sở hữu sẵn 2 kỹ năng chủ động và 1 nội tại trong thanh phím nóng với cấp độ 1, thi triển được ngay.
+- [ ] **AC-1 (Starter Skills):** Khi tạo nhân vật thuộc bất kỳ class nào trong 16 class, nhân vật lập tức sở hữu sẵn 2 kỹ năng chủ động và 1 nội tại trong thanh phím nóng với cấp độ 1, thi triển được ngay.
 - [ ] **AC-2 (Class-Lock Validation):** Khi dùng Sách Kỹ Năng, hệ thống chặn việc học và hiển thị thông báo *"Chức nghiệp không phù hợp"* nếu nhân vật không đúng `RequiredClassTag`.
 - [ ] **AC-3 (Slot Limits Enforced):** Người chơi không thể kích hoạt nhiều hơn 4 kỹ năng chủ động và 3 nội tại cùng một lúc.
 - [ ] **AC-4 (Salvage Loop):** Phân rã sách khác Class tại NPC trả về chính xác số lượng Tàn Trang Kỹ Năng (Skill Shards) tương ứng với độ hiếm của sách.
