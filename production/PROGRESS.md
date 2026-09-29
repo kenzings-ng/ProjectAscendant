@@ -130,7 +130,7 @@
      - Thêm vào `README.md`: Cảnh báo không dùng self-hosted runner trên repo public; hướng dẫn chạy `./Tools/QA/run_headless_tests.sh --ue` tại local.
      - Trạng thái kiểm thử UE: **UE tests CHƯA CHẠY** (chưa chạy cục bộ vì đợt commit này chỉ bao gồm tài liệu GDD, story, config và công cụ QA, không thay đổi mã nguồn C++).
 
-### 2.2 Nhật Ký Đầu Việc: Nhánh `infra/phase-0-repo-foundation` — Hoàn Thành & Kiểm Chứng Giai Đoạn 0
+### 2.2 Nhật Ký Đầu Việc: Nhánh `infra/phase-0-repo-foundation` — Hoàn Thành & Kiểm Chứng Giai Đoạn 0 (PR #2 - Commit `493a442`)
 - **Mục tiêu**: Thực thi toàn bộ các mục tiêu của **Giai đoạn 0 (Nền móng repo)** theo [`ROADMAP.md`](file:///mnt/Data/Projects/project-games/ProjectAscendant/production/ROADMAP.md) đã được chủ dự án phê duyệt.
 - **Nội dung thực hiện & Bằng chứng kiểm chứng chi tiết**:
   1. **Git LFS (`.gitattributes`)**:
