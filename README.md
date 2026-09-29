@@ -116,6 +116,22 @@ Các bộ test chính:
 - `ProjectAscendant.UI.FloatingCombatText` (Ballistic arc physics, pool recycling)
 - `ProjectAscendant.UI.ShopForgeUI` (2-column shop, FIFO buyback, hold-to-craft)
 
+### CI / CD Pipeline (`.github/workflows/tests.yml`)
+
+Hệ thống CI được phân tách thành 2 jobs độc lập:
+1. **`gates` (Fast Gates - chạy trên `ubuntu-latest`)**:
+   - Tự động chạy trong môi trường GitHub Actions với `postgres:16-alpine` service container.
+   - Chạy script kiểm tra nhất quán GDD: `python Tools/QA/validate_gdd_consistency.py`.
+   - Chạy kiểm thử Backend Database & Anti-Dupe PostgreSQL thực tế: `python Tools/QA/test_backend_postgres.py`.
+2. **`ue-tests` (UE Automation Tests - chạy trên `self-hosted`)**:
+   - **Yêu cầu Runner**: Cần GitHub Actions Runner tự host gắn nhãn `[self-hosted]`.
+   - **Môi trường máy runner**:
+     - Hệ điều hành: Linux (Ubuntu 22.04+ khuyến nghị).
+     - Cài đặt sẵn Unreal Engine 5.8+ tại đường dẫn cấu hình qua biến môi trường `UE_EDITOR_PATH` (mặc định: `/mnt/Data/Engine/Binaries/Linux/UnrealEditor`).
+     - Có GPU hoặc hỗ trợ `-nullrhi` cho headless testing.
+     - Đã cài đặt Git LFS (`git lfs install`).
+   - **Trạng thái**: *Chờ self-hosted runner được kích hoạt trên repository.* Không tính là PASS trên CI khi chưa chạy thật.
+
 ---
 
 ## 📜 Bản quyền & Giấy phép

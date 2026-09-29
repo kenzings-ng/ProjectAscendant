@@ -58,18 +58,17 @@ Hệ thống chức nghiệp trong Project Ascendant được tổ chức theo c
 | **Guard** | T1 | **Vanguard (Chiến Binh)** | `Class.Line.Guard.Vanguard` | `1H.Blade` + Khiên Sắt Vuông | Cận chiến cân bằng, phản đòn chớp nhoáng (Parry), càn lướt vững chắc. |
 | **Guard** | T2 | **Templar (Thánh Binh)** | `Class.Line.Guard.Templar` | `1H.Mace` + Đại Thuẫn | Tanker thuần túy, thu hút hận thù (Taunt), tạo khiên thánh hóa, phản sát thương. |
 | **Guard** | T2 | **Berserker (Cuồng Chiến Sĩ)** | `Class.Line.Guard.Berserker` | `2H.Heavy` (Đại Đao/Đại Rìu) | Liều mạng đổi sát thương, Super Armor không ngắt chiêu, máu càng thấp đánh càng nhanh. |
+| **Guard** | T2 | **Swordmaster (Kiếm Sư)** | `Class.Line.Guard.Swordmaster` | `1H.Blade` (Kiếm đơn, bỏ khiên) | Kiếm đạo tốc độ, bộ pháp lướt né thanh thoát, phản kích chuẩn xác từng khung hình. |
 | **Guard** | T3 | **Dragon Knight (Long Kỵ Sĩ)** | `Class.Line.Guard.DragonKnight` | `2H.Polearm` (Chiến Kích) | Bật nhảy không chiến, giáng đòn phá vỡ thế đứng cực mạnh (Posture Crush), hơi thở rồng lửa. |
+| **Guard** | T3 | **Void Blade (Hư Không Kiếm)** | `Class.Line.Guard.VoidBlade` | `1H.Blade` (Kiếm đơn Hư Không) | Trảm kích không thời gian (*Judgement Cut*), lướt dịch chuyển tức thời, tàn ảnh hư vô. |
 | **Scout** | T1 | **Ranger (Du Hiệp)** | `Class.Line.Scout.Ranger` | `2H.Bow` (Cung hai tay) | Xạ kích tầm xa, thả diều cơ động, đặt bẫy chông làm chậm mục tiêu. |
 | **Scout** | T2 | **Shadowblade (Ảo Ảnh Thích Khách)** | `Class.Line.Scout.Shadowblade` | `Dual.Daggers` (Song đoản đao) | Ám sát tàng hình, lướt để lại phân thân đánh lừa quái, đòn đánh sau lưng (Backstab) x3 bạo kích. |
-| **Scout** | T2 | **Swordmaster (Kiếm Sư)** | `Class.Line.Scout.Swordmaster` | `1H.Blade` (Kiếm đơn, bỏ khiên) | Kiếm đạo tốc độ, bộ pháp lướt né thanh thoát, phản kích chuẩn xác từng khung hình. |
 | **Scout** | T3 | **Phantom Stalker (Ảo Ảnh Dạ Hành)** | `Class.Line.Scout.PhantomStalker` | `Dual.Daggers` / Cung ám khí | Bẫy hư không bóng tối, phân thân liên hoàn cùng tấn công, biến mất vào màn đêm. |
 | **Caster** | T1 | **Arcanist (Thuật Sĩ)** | `Class.Line.Caster.Arcanist` | `2H.Staff` (Pháp trượng) | Kiểm soát chiến trường diện rộng, dồn quái thành cụm, phóng hồ quang nguyên tố bùng nổ. |
 | **Caster** | T2 | **Elementalist (Nguyên Tố Sư)** | `Class.Line.Caster.Elementalist` | `2H.Staff` / Cầu Phép (Orbs) | Phản ứng nguyên tố xoay vần: Đóng băng khống chế, Thiêu đốt rút máu, Sét giật lan truyền. |
-| **Caster** | T2 | **Chronomancer (Thời Gian Ma Đạo)** | `Class.Line.Caster.Chronomancer` | `Relic` (Đồng Hồ Cát) | Bong bóng ngưng đọng thời gian, tua ngược vị trí và lượng máu bản thân về 3 giây trước. |
-| **Caster** | T3 | **Void Weaver (Hư Không Dệt Mệnh)** | `Class.Line.Caster.VoidWeaver` | `2H.Staff` (Trượng Hư Không) | Trảm kích không thời gian, hố đen hút quái, xé rách không gian gây sát thương chuẩn. |
+| **Caster** | T3 | **Chronomancer (Thời Gian Ma Đạo)** | `Class.Line.Caster.Chronomancer` | `Relic` (Đồng Hồ Cát) | Bong bóng ngưng đọng thời gian, tua ngược vị trí và lượng máu bản thân về 3 giây trước. |
 | **Faith** | T1 | **Acolyte (Tu Sĩ)** | `Class.Line.Faith.Acolyte` | `1H.Mace` + Tràng Hạt Khí | Hỗ trợ sinh tồn, thanh tẩy hiệu ứng xấu, hồi phục thể lực (Stamina) cho bản thân và đồng đội. |
 | **Faith** | T2 | **Inquisitor (Thẩm Phán)** | `Class.Line.Faith.Inquisitor` | `1H.Mace` (Chiến Chùy) | Trừng phạt dị giáo, sát thương đập nện cực mạnh, ấn chú làm suy yếu giáp và thế đứng của Boss. |
-| **Faith** | T2 | **Oracle (Tiên Tri Sư)** | `Class.Line.Faith.Oracle` | `Relic` / Thánh Kinh | Thấu thị vận mệnh, ban phước khiên linh hồn, tiên đoán đòn đánh Boss để tăng né tránh cho đội. |
 | **Faith** | T3 | **Seraph (Lục Dực Thánh Sứ)** | `Class.Line.Faith.Seraph` | `1H.Mace` / Thánh Tích | Đôi cánh ánh sáng thánh hóa (chân chạm đất), dựng kết giới bất tử ngắn hạn, giáng sấm sét thánh tích toàn bản đồ. |
 | **Apex** | T4 | **God Slayer (Thí Thần Giả)** | `Class.Line.Apex.GodSlayer` | Thần Binh Hư Vô Tự Biến Hình | Né hoàn hảo ngưng đọng thời gian 1s, tước đoạt và sao chép chiêu thức đặc trưng của Boss. |
 

@@ -10,26 +10,26 @@ import sys
 from pathlib import Path
 
 # Approved canonical classes and lines
-# 16 Branch Classes (4 Lines x 4 Classes) + 1 Apex Class = 17 Classes Total
+# 15 Branch Classes + 1 Apex Class = 16 Classes Total
 APPROVED_CLASSES = {
     "Guard": {
         "T1": ["Vanguard"],
-        "T2": ["Templar", "Berserker"],
-        "T3": ["DragonKnight"],
+        "T2": ["Templar", "Berserker", "Swordmaster"],
+        "T3": ["DragonKnight", "VoidBlade"],
     },
     "Scout": {
         "T1": ["Ranger"],
-        "T2": ["Shadowblade", "Swordmaster"],
+        "T2": ["Shadowblade"],
         "T3": ["PhantomStalker"],
     },
     "Caster": {
         "T1": ["Arcanist"],
-        "T2": ["Elementalist", "Chronomancer"],
-        "T3": ["VoidWeaver"],
+        "T2": ["Elementalist"],
+        "T3": ["Chronomancer"],
     },
     "Faith": {
         "T1": ["Acolyte"],
-        "T2": ["Inquisitor", "Oracle"],
+        "T2": ["Inquisitor"],
         "T3": ["Seraph"],
     },
     "Apex": {
@@ -59,6 +59,7 @@ ALLOWED_META_TAGS = {
 # Regex to detect prohibited terms with targeted context inspection
 ASH_SHARDS_REGEX = re.compile(r'\bash[\s_-]?shards?\b', re.IGNORECASE)
 CHAIN_WHIP_REGEX = re.compile(r'roi\s+x[ií]ch|chain[\s_-]?whip', re.IGNORECASE)
+UNAPPROVED_CLASSES_REGEX = re.compile(r'\b(?:Void[\s_-]?Weaver|Class\.Line\.[A-Za-z0-9_.]*Oracle)\b', re.IGNORECASE)
 
 LEGITIMATE_CONTEXT_PATTERNS = [
     re.compile(r'(?:thay\s+v[iì]|thay\s+th[eế]|thay\s+cho|kh[oô]ng\s+d[uù]ng|kh[oô]ng\s+t[aạ]o|b[oỏ]|c[aấ]m|lo[aạ]i\s+b[oỏ]|thay\s+b[oở]i|tr[uư][oớ]c\s+[đd][aâ]y|thay\s+v[iì]\s+d[uù]ng|tuy[eệ]t\s+[đd][oố]i\s+kh[oô]ng)\s+[^.\n]*?\bash[\s_-]?shards?\b', re.IGNORECASE),
@@ -99,6 +100,11 @@ def check_file(file_path: Path):
         if whip_match:
             if not is_legitimate_context(line, whip_match):
                 errors.append(f"{file_path}:{line_idx}: CẤM: Roi xích cho Inquisitor. Inquisitor chỉ dùng Weapon.1H.Mace (Chùy 1 tay).")
+
+        # Check Unapproved Classes (Void Weaver, Oracle)
+        unapproved_match = UNAPPROVED_CLASSES_REGEX.search(line)
+        if unapproved_match:
+            errors.append(f"{file_path}:{line_idx}: CẤM: Class '{unapproved_match.group(0)}' không được duyệt. Tổng 15 class + 1 Apex = 16 class.")
 
         # Check GameplayTags
         tag_matches = re.findall(r'\bClass\.[A-Za-z0-9_.]+', line)

@@ -20,25 +20,26 @@
 
 ---
 
-## 2. Cây Chuyển Chức 4 Nhánh (16 Class) & Apex Class (Tổng Cộng 17 Class)
+## 2. Cây Chuyển Chức 4 Nhánh (15 Class) & Apex Class (Tổng Cộng 16 Class)
 
-Cấu trúc cây chức nghiệp gồm 16 class thuộc 4 nhánh chính bắt nguồn từ 4 class T1 nền tảng, cùng 1 class Apex đa nhánh (tổng cộng 17 class):
+Cấu trúc cây chức nghiệp chuẩn đã được duyệt gồm 15 class thuộc 4 nhánh chính bắt nguồn từ 4 class T1 nền tảng, cùng 1 class Apex đa nhánh (tổng cộng 16 class):
 
-1. **Nhánh Hộ Vệ (Guard Line - 4 Class)**:
+1. **Nhánh Hộ Vệ (Guard Line - 6 Class)**:
    - **T1**: `Vanguard` (Tiên Phong)
-   - **T2**: `Templar` (Thánh Hiệp Sĩ) & `Berserker` (Cuồng Chiến Sĩ)
-   - **T3**: `Dragon Knight` (Long Kỵ Sĩ)
-2. **Nhánh Du Hiệp (Scout Line - 4 Class)**:
+   - **T2**: `Templar` (Thánh Hiệp Sĩ), `Berserker` (Cuồng Chiến Sĩ), `Swordmaster` (Kiếm Sư)
+   - **T3**: `Dragon Knight` (Long Kỵ Sĩ), `Void Blade` (Hư Không Kiếm)
+   - *Lộ trình nhánh Kiếm*: `Swordmaster (T2) → Void Blade (T3)`.
+2. **Nhánh Du Hiệp (Scout Line - 3 Class)**:
    - **T1**: `Ranger` (Xạ Thủ)
-   - **T2**: `Shadowblade` (Ảnh Nhẫn) & `Swordmaster` (Kiếm Sư)
+   - **T2**: `Shadowblade` (Ảnh Nhẫn)
    - **T3**: `Phantom Stalker` (U Hồn Đoạt Mệnh)
-3. **Nhánh Pháp Sư (Caster Line - 4 Class)**:
+3. **Nhánh Pháp Sư (Caster Line - 3 Class)**:
    - **T1**: `Arcanist` (Bí Thuật Sư)
-   - **T2**: `Elementalist` (Nguyên Tố Sư) & `Chronomancer` (Thời Gian Pháp Sư)
-   - **T3**: `Void Weaver` (Hư Không Dệt Mệnh)
-4. **Nhánh Tín Đồ (Faith Line - 4 Class)**:
+   - **T2**: `Elementalist` (Nguyên Tố Sư)
+   - **T3**: `Chronomancer` (Thời Gian Pháp Sư)
+4. **Nhánh Tín Đồ (Faith Line - 3 Class)**:
    - **T1**: `Acolyte` (Tập Sự)
-   - **T2**: `Inquisitor` (Thẩm Phán Dị Giáo) & `Oracle` (Nhà Tiên Tri)
+   - **T2**: `Inquisitor` (Thẩm Phán Dị Giáo)
    - **T3**: `Seraph` (Thiên Sứ Lục Dực - Phương án 1: chân chạm đất, dùng chung Lower Body Rig, 50 asset mới)
 5. **Class Ẩn Tối Thượng (Apex Class - 1 Class Đa Nhánh)**:
    - **T4**: `God Slayer` (Kẻ Diệt Thần - Yêu cầu hoàn thành kỳ ngộ và đạt T3 từ nhiều nhánh). Tag chuẩn: `Class.Line.Apex.GodSlayer`.
@@ -123,10 +124,10 @@ Thống nhất dứt điểm mọi mâu thuẫn giữa các file GDD cũ:
 
 - Cấu trúc Tag Class chuẩn:
   `Class.Line.<Nhánh>.<Class>`  
-  *(Ví dụ: `Class.Line.Guard.Vanguard`, `Class.Line.Guard.DragonKnight`, `Class.Line.Scout.Swordmaster`)*.
+  *(Ví dụ: `Class.Line.Guard.Vanguard`, `Class.Line.Guard.DragonKnight`, `Class.Line.Guard.Swordmaster`, `Class.Line.Guard.VoidBlade`)*.
 - **Quy chuẩn riêng cho Apex Class**: `Class.Line.Apex.GodSlayer`.
 - Điều kiện chuyển chức không hardcode trong Tag mà nằm trong Data Asset của quyển trục (`AllowedSourceClassTags`, `RequiredMinRank`).
-- Bỏ hoàn toàn các tag cũ (`Class.TierX.*`, `Class.RankX.*`, `Class.Vanguard`, `Class.VoidBlade`).
+- Bỏ hoàn toàn các tag cũ định dạng cấp độ hoặc thiếu nhánh (`Class.TierX.*`, `Class.RankX.*`, `Class.Vanguard`). Tag của Void Blade là `Class.Line.Guard.VoidBlade`.
 
 ---
 
