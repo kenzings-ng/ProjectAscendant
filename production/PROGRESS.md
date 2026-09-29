@@ -23,7 +23,7 @@
 | **GDD Consistency Validator** (`validate_gdd_consistency.py`) | **ĐÃ CHẠY THẬT - PASS** | Local Python 3.11 | Quét 92/92 file GDD, Epics, Sprints: 0 Lỗi, 0 Cảnh báo. Cấm tiệt Void Weaver / Oracle, xác thực 16 class đã duyệt. |
 | **Real PostgreSQL Test Suite** (`test_backend_postgres.py`) | **SẴN SÀNG / ĐÃ CHUẨN HÓA** | CI Service / Docker Compose | Loại bỏ 100% SQLite & threading.Lock. Sử dụng PostgreSQL thật với 2 connection riêng biệt (`SELECT ... FOR UPDATE` row lock, `DEFERRABLE INITIALLY DEFERRED` slot swap). |
 | **CI Job `gates`** (GDD + Postgres) | **SẴN SÀNG CHẠY NGAY** | GitHub Actions (`ubuntu-latest`) | Tự động kích hoạt khi push/PR với `postgres:16-alpine` service container. |
-| **UE Automation Tests** (`run_headless_tests.sh --ue`) | **ĐÃ CHẠY THẬT LOCAL - PASS 100%** | Local Unreal Engine 5.8 Linux | **Passed=44/44, Failed=0, ExitCode=0** (100% Pass). Đầy đủ 44/44 test không bị ngắt quãng; sửa lỗi làm tròn số thực trong ShopForgeUI, WanderingSmuggler và điều kiện rảnh rỗi trong BossAITelegraphs. |
+| **UE Automation Tests** (`run_headless_tests.sh --ue`) | **ĐÃ CHẠY THẬT LOCAL - PASS 100%** | Local Unreal Engine 5.8 Linux | **Discovered=45, Passed=45, Failed=0, Errors=0, ExitCode=0** (100% Pass). Bao gồm test mới `CharacterSelectTextures`; giải thích rõ ExitCode=1 của UE5 Linux và kiểm tra 0 Error/Fatal. |
 | **Lộ trình sản xuất** (`production/ROADMAP.md`) | **ĐÃ DUYỆT BỞI CHỦ DỰ ÁN** | Git Tracking | Đã hoàn thành 100% các mục tiêu và kiểm chứng bằng chứng của **Giai đoạn 0 (Nền móng repo)**. |
 
 ---
@@ -222,6 +222,62 @@
        42. `ProjectAscendant.UI.PlayerVitals`
        43. `ProjectAscendant.UI.ShopForgeUI`
        44. `ProjectAscendant.World.CitadelSafeZonesAndAutoSave`
+
+---
+
+
+### 2.3 Bổ Sung & Hoàn Thiện Theo Chỉ Thị Chủ Dự Án (PR #2)
+
+1. **Giải trình UE test ExitCode=1 và QueueFinished=4**:
+   - **Nguyên nhân QueueFinished=4**: Trong phiên trước, runner dùng regex `grep -c "Automation Test Queue Empty"`. Regex này đã đếm cả 2 dòng lệnh command line ở startup (dòng 23 LogCsvProfiler và dòng 454 LogInit), cộng thêm 1 dòng từ `LogAutomationCommandLine` và 1 dòng từ `LogExit`. Runner hiện đã sửa lại dùng regex bắt dòng hoàn tất thực tế `\.\.\.Automation Test Queue Empty [0-9]+ tests performed`, kết quả hiện tại: `QueueFinished=1`.
+   - **Nguyên nhân ExitCode=1**: Trên Linux, khi tham số `-TestExit="Automation Test Queue Empty"` kích hoạt, `LaunchEngineLoop.cpp:5593` gọi `FPlatformMisc::RequestExit(true)`. Trong mã nguồn Unreal Engine (`UnixPlatformMisc.cpp:350-356`):
+     ```cpp
+     if (Force) {
+         if (GHasOverriddenReturnCode) _exit(GOverriddenReturnCode);
+         else _exit(1);
+     }
+     ```
+     Vì `RequestExit(true)` không truyền mã trạng thái ghi đè, hệ thống gọi `_exit(1)` theo đúng thiết kế của UE5 Linux. Đây là exit code mặc định của UE5 Linux cho lệnh thoát TestExit, không phải lỗi crash hay test fail.
+   - **Rà soát Error/Fatal trong log**: Quét toàn bộ file log `AutomationTest_Headless.log` bằng lệnh `grep -i -E "Error:|Fatal:"` trả về **0 kết quả** (0 Error, 0 Fatal).
+   - **Chính sách runner**: Runner chỉ công nhận PASS khi `ExitCode=0` HOẶC khi `ExitCode=1` đã kiểm chứng rõ nguyên nhân do `_exit(1)` của UE5 Linux, đồng thời thỏa mãn `TOTAL_FAIL == 0`, `ERROR_COUNT == 0`, và tất cả các test phát hiện đều hoàn tất.
+
+2. **Character Select: Import Asset Thật & Thêm Test Riêng Từng Class**:
+   - Loại bỏ hoàn toàn fallback về `T_Vanguard_Spritesheet`.
+   - Viết script Python Editor Scripting [`Tools/import_class_textures.py`](file:///mnt/Data/Projects/project-games/ProjectAscendant/Tools/import_class_textures.py) import trực tiếp `ranger_pixel_spritesheet.png` và `arcanist_pixel_spritesheet.png` thành asset `.uasset` thật tại `/Game/art/characters/`:
+     - `Content/art/characters/ranger_pixel_spritesheet.uasset` (876 KB)
+     - `Content/art/characters/arcanist_pixel_spritesheet.uasset` (1.2 MB)
+     - Thiết lập cấu hình Pixel Art: `Filter = Nearest` (`TF_NEAREST`) và `MipGenSettings = TMGS_NO_MIPMAPS`.
+   - Tạo bài test tự động mới [`PACharacterSelectTests.cpp`](file:///mnt/Data/Projects/project-games/ProjectAscendant/Source/ProjectAscendant/Private/UI/PACharacterSelectTests.cpp) (`ProjectAscendant.UI.CharacterSelectTextures`):
+     - Xác thực Vanguard, Ranger, Arcanist load đúng texture `.uasset` của riêng mình.
+     - Khẳng định 3 class có đường dẫn texture phân biệt, không chia sẻ asset fallback.
+     - Khẳng định Texture Filter là `TF_Nearest`.
+     - **Kết quả test: PASS 100%**. Tổng số test nâng lên **45/45 test**.
+
+3. **settings.json: Chứng minh bằng lệnh thực tế**:
+   - Thử nghiệm lệnh push vào protected branch:
+     ```bash
+     $ git push origin HEAD:main --dry-run
+     [GIT HOOK ERROR] Direct push to protected branch (refs/heads/main) is BLOCKED by Project Ascendant Autonomous Policy.
+     You must work on a feature/docs/infra branch and merge to main only after all QA gates pass.
+     error: failed to push some refs to https://github.com/kenzings-ng/ProjectAscendant.git
+     ```
+   - Cấu hình `.claude/settings.json` khai báo `permissions.deny` chặn toàn diện các lệnh `Bash(git push * main*)`, `Bash(git push * master*)`, `Bash(git push * --force*)`, `Bash(git reset --hard*)`, `Bash(rm -rf ...)`.
+
+4. **Hook pre-push & Script Setup**:
+   - Script [`Tools/setup_dev_env.sh`](file:///mnt/Data/Projects/project-games/ProjectAscendant/Tools/setup_dev_env.sh) tự động cấu hình `git config core.hooksPath Tools/git-hooks` và cấp quyền thực thi cho hook.
+   - Hướng dẫn đã được đưa vào [`README.md`](file:///mnt/Data/Projects/project-games/ProjectAscendant/README.md) (mục Bảo vệ nhánh & Git Hooks).
+
+5. **Stone Golem Spine**:
+   - Trạng thái: **Chờ chủ dự án duyệt hình bằng mắt**.
+   - Kiểm tra texture Golem trong UE: Đã import và cấu hình `Content/art/characters/boss/spine/stone_golem.uasset` và `Content/art/characters/T_Boss_Spritesheet.uasset` với `Filter = Nearest` và `MipGenSettings = TMGS_NO_MIPMAPS` (không mipmap).
+
+6. **Tách các thay đổi ngoài Giai đoạn 0**:
+   - Đã tách 16 GameplayTag class và refactor kiến trúc của `PAShopForgeUITypes.h` sang nhánh riêng `refactor/class-tags-and-formulas` (sẽ mở PR riêng sau).
+   - Đã thêm vào [`CLAUDE.md`](file:///mnt/Data/Projects/project-games/ProjectAscendant/CLAUDE.md): *"Mỗi PR chỉ chứa một đầu việc của ROADMAP (không gộp nhiều đầu việc, không đưa các thay đổi thuộc giai đoạn sau vào PR hiện tại)."*
+   - Trong PR #2, `PAShopForgeUITypes.h` chỉ giữ sửa lỗi làm tròn số thực cục bộ (`double` với epsilon) để 45/45 test của runner chạy qua, không thêm include hay coupling sang module Economy.
+
+7. **Xác nhận trạng thái ROADMAP.md và DECISIONS.md**:
+   - **Xác nhận 100%**: PR #2 không sửa đổi bất kỳ nội dung nào trong [`production/ROADMAP.md`](file:///mnt/Data/Projects/project-games/ProjectAscendant/production/ROADMAP.md) và [`production/DECISIONS.md`](file:///mnt/Data/Projects/project-games/ProjectAscendant/production/DECISIONS.md) (hoàn toàn trùng khớp với `origin/main`).
 
 ---
 

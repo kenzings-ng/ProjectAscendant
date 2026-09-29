@@ -211,7 +211,7 @@ private:
 
 	/** Chức nghiệp nhân vật đang được chọn */
 	UPROPERTY(Transient)
-	FName SelectedCharacterClass = FName(TEXT("Class.Line.Guard.Vanguard"));
+	FName SelectedCharacterClass = FName(TEXT("Class.Vanguard"));
 
 	/** Bộ nhớ lưu trữ giả lập các tài khoản đã đăng ký (Email -> Password) */
 	TMap<FString, FString> RegisteredCredentials;

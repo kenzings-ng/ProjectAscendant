@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Economy/PAMerchantTypes.h"
 #include "PAShopForgeUITypes.generated.h"
 
 /**
@@ -227,7 +226,7 @@ struct PROJECTASCENDANT_API FPAShopUIModel
 		{
 			Item.bHasSurcharge = bActive;
 			Item.FinalPrice = bActive
-				? FPAMerchantFormulas::CalculateWantedSurchargePrice(Item.PriceGold, 0.20f)
+				? FMath::CeilToInt(static_cast<double>(Item.PriceGold) * 1.2 - 1e-5)
 				: Item.PriceGold;
 		}
 	}

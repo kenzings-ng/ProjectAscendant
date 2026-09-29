@@ -10,7 +10,7 @@ FPACharacterClassInfo FPACharacterClassRegistry::GetClassInfo(EPACharacterClass 
 	switch (InClass)
 	{
 	case EPACharacterClass::Vanguard:
-		Info.ClassTag = TEXT("Class.Line.Guard.Vanguard");
+		Info.ClassTag = TEXT("Class.Vanguard");
 		Info.DisplayName = NSLOCTEXT("ProjectAscendant", "VanguardName", "Chiến Binh (Vanguard)");
 		Info.Tagline = NSLOCTEXT("ProjectAscendant", "VanguardTagline", "Bức Tường Thép Bất Hoại");
 		Info.LoreDescription = NSLOCTEXT("ProjectAscendant", "VanguardLore",
@@ -33,7 +33,7 @@ FPACharacterClassInfo FPACharacterClassRegistry::GetClassInfo(EPACharacterClass 
 		break;
 
 	case EPACharacterClass::Ranger:
-		Info.ClassTag = TEXT("Class.Line.Scout.Ranger");
+		Info.ClassTag = TEXT("Class.Ranger");
 		Info.DisplayName = NSLOCTEXT("ProjectAscendant", "RangerName", "Du Hiệp (Ranger)");
 		Info.Tagline = NSLOCTEXT("ProjectAscendant", "RangerTagline", "Bóng Ma Tật Phong & Thợ Săn Tử Thần");
 		Info.LoreDescription = NSLOCTEXT("ProjectAscendant", "RangerLore",
@@ -51,13 +51,12 @@ FPACharacterClassInfo FPACharacterClassRegistry::GetClassInfo(EPACharacterClass 
 			TEXT("Nhịp Lướt Tật Phong (Dash Cancel)"),
 			TEXT("Mưa Tên Tử Thần (Arrow Rain)")
 		};
-		// Fallback về T_Vanguard_Spritesheet do ranger_pixel_spritesheet chỉ có file .png, không có .uasset
-		Info.SpritesheetAssetPath = TEXT("/Game/art/characters/T_Vanguard_Spritesheet.T_Vanguard_Spritesheet");
+		Info.SpritesheetAssetPath = TEXT("/Game/art/characters/ranger_pixel_spritesheet.ranger_pixel_spritesheet");
 		Info.AnimBlueprintPath = TEXT("/Game/art/characters/vanguard/anim/ABP_Vanguard.ABP_Vanguard_C");
 		break;
 
 	case EPACharacterClass::Arcanist:
-		Info.ClassTag = TEXT("Class.Line.Caster.Arcanist");
+		Info.ClassTag = TEXT("Class.Arcanist");
 		Info.DisplayName = NSLOCTEXT("ProjectAscendant", "ArcanistName", "Thuật Sĩ (Arcanist)");
 		Info.Tagline = NSLOCTEXT("ProjectAscendant", "ArcanistTagline", "Bậc Thầy Thao Túng Chiến Trường");
 		Info.LoreDescription = NSLOCTEXT("ProjectAscendant", "ArcanistLore",
@@ -75,8 +74,7 @@ FPACharacterClassInfo FPACharacterClassRegistry::GetClassInfo(EPACharacterClass 
 			TEXT("Trượng Kích Năng Lượng"),
 			TEXT("Khiên Hộ Thể (Mana Shield)")
 		};
-		// Fallback về T_Vanguard_Spritesheet do arcanist_pixel_spritesheet chỉ có file .png, không có .uasset
-		Info.SpritesheetAssetPath = TEXT("/Game/art/characters/T_Vanguard_Spritesheet.T_Vanguard_Spritesheet");
+		Info.SpritesheetAssetPath = TEXT("/Game/art/characters/arcanist_pixel_spritesheet.arcanist_pixel_spritesheet");
 		Info.AnimBlueprintPath = TEXT("/Game/art/characters/vanguard/anim/ABP_Vanguard.ABP_Vanguard_C");
 		break;
 	}

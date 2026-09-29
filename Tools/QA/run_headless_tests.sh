@@ -102,15 +102,20 @@ if [ "${RUN_UE}" -eq 1 ]; then
             TOTAL_DISCOVERED=$(grep -oP "Found \K[0-9]+(?= automation tests based on)" "${LOG_FILE}" | head -n 1 || true)
             TOTAL_PASS=$(grep -c -E "Result={Success}|Automation Test Succeeded" "${LOG_FILE}" || true)
             TOTAL_FAIL=$(grep -c -E "Result={Fail}|Automation Test Failed" "${LOG_FILE}" || true)
-            QUEUE_EMPTY=$(grep -c "Automation Test Queue Empty" "${LOG_FILE}" || true)
+            QUEUE_EMPTY=$(grep -c -E "\.\.\.Automation Test Queue Empty [0-9]+ tests performed" "${LOG_FILE}" || true)
+            ERROR_COUNT=$(grep -c -E "\]Log[a-zA-Z0-9_]+: (Error|Fatal):" "${LOG_FILE}" || true)
 
-            echo "UE Automation Summary: Discovered=${TOTAL_DISCOVERED:-unknown}, Passed=${TOTAL_PASS}, Failed=${TOTAL_FAIL}, QueueFinished=${QUEUE_EMPTY}, ExitCode=${UE_EXIT}"
+            echo "UE Automation Summary: Discovered=${TOTAL_DISCOVERED:-unknown}, Passed=${TOTAL_PASS}, Failed=${TOTAL_FAIL}, Errors=${ERROR_COUNT}, QueueFinished=${QUEUE_EMPTY}, ExitCode=${UE_EXIT}"
 
             # Validate that tests executed and all discovered tests completed.
             # Note: On Linux, UE5's -TestExit calls FPlatformMisc::RequestExit(true) which terminates via _exit(1).
-            # When TOTAL_FAIL == 0, QUEUE_EMPTY > 0, and all discovered tests passed, ExitCode 1 is the expected exit signal.
+            # When TOTAL_FAIL == 0, ERROR_COUNT == 0, QUEUE_EMPTY > 0, and all discovered tests passed,
+            # ExitCode 1 is the expected Linux clean exit signal.
             if [ "${TOTAL_FAIL}" -gt 0 ] || [ "${TOTAL_PASS}" -le 0 ]; then
                 echo ">> [FAIL] UE Automation Gate (Passed=${TOTAL_PASS}, Failed=${TOTAL_FAIL}, ExitCode=${UE_EXIT})"
+                FAILED_GATES=$((FAILED_GATES + 1))
+            elif [ "${ERROR_COUNT}" -gt 0 ]; then
+                echo ">> [FAIL] UE Automation Gate: ${ERROR_COUNT} Error/Fatal log entries detected"
                 FAILED_GATES=$((FAILED_GATES + 1))
             elif [ "${UE_EXIT}" -ne 0 ] && [ "${UE_EXIT}" -ne 1 ]; then
                 echo ">> [FAIL] UE Automation Gate (Process crashed or terminated abnormally with ExitCode=${UE_EXIT})"
@@ -122,7 +127,11 @@ if [ "${RUN_UE}" -eq 1 ]; then
                 echo ">> [FAIL] UE Automation Gate: Automation Test Queue did not complete fully."
                 FAILED_GATES=$((FAILED_GATES + 1))
             else
-                echo ">> [PASS] UE Automation Gate (${TOTAL_PASS}/${TOTAL_DISCOVERED:-${TOTAL_PASS}} passed, queue finished completely)"
+                if [ "${UE_EXIT}" -eq 1 ]; then
+                    echo ">> [PASS] UE Automation Gate (${TOTAL_PASS}/${TOTAL_DISCOVERED:-${TOTAL_PASS}} passed, queue finished completely; ExitCode=1 confirmed as Linux UE5 -TestExit FPlatformMisc::RequestExit(true) clean exit with 0 errors/fatals)"
+                else
+                    echo ">> [PASS] UE Automation Gate (${TOTAL_PASS}/${TOTAL_DISCOVERED:-${TOTAL_PASS}} passed, queue finished completely)"
+                fi
             fi
         else
             if [ "${UE_EXIT}" -ne 0 ]; then

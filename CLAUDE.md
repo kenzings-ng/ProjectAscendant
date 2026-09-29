@@ -35,7 +35,7 @@ Each agent owns a specific domain, enforcing separation of concerns and quality.
 Mục tiêu: thực hiện tuần tự roadmap (Giai đoạn 0 → 6) và các quyết định thiết kế đã chốt, không cần tôi duyệt từng bước.
 
 ### Quy trình mỗi đầu việc
-1. Tạo nhánh riêng từ main. Làm việc nhỏ, commit nhỏ.
+1. Tạo nhánh riêng từ main. Làm việc nhỏ, commit nhỏ. Mỗi PR chỉ chứa một đầu việc của ROADMAP (không gộp nhiều đầu việc, không đưa các thay đổi thuộc giai đoạn sau vào PR hiện tại).
 2. Trước khi sửa file nào, đọc nội dung gốc của file đó. Nếu chỉ thị (kể cả của tôi) mâu thuẫn với file, ghi lại mâu thuẫn và chọn theo file; báo trong PROGRESS.md.
 3. Chạy toàn bộ cổng tự động: build, test ProjectAscendant.*, pixel-review (nếu có art), script kiểm tra nhất quán GDD (nếu sửa GDD), migration + test backend (nếu sửa backend).
 4. Gọi subagent "reviewer" với context mới: nhiệm vụ là TÌM LỖI, mỗi nhận xét phải trích file:dòng. Sửa hết lỗi reviewer nêu rồi chạy lại bước 3.
