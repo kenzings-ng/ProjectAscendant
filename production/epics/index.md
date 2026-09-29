@@ -66,6 +66,6 @@
 
 | Epic | Layer | System | Design Document (GDD) | Governing ADRs | Stories Status | Epic Status |
 |---|---|---|---|---|---|---|
-| [`presentation-character-visual`](presentation-character-visual/epic-overview.md) | Presentation | Character & NPC Visual Identity, 4 Master Rigs, 7 Weapon Families, 12 Class Idles & Civilian NPCs | [`character-visual-system.md`](../../design/gdd/character-visual-system.md) | SPEC-ART-2026-09-23-V2 | 3 Code Complete, 4 Placeholder-tier Art (1,595 proxies) | **In Progress (Placeholder Art)** |
+| [`presentation-character-visual`](presentation-character-visual/epic-overview.md) | Presentation | Character & NPC Visual Identity, 4 Master Rigs, 7 Weapon Families, 16 Class Idles & Civilian NPCs | [`character-visual-system.md`](../../design/gdd/character-visual-system.md) | SPEC-ART-2026-09-23-V2 | 3 Code Complete, 4 Placeholder-tier Art (1,735 proxies) | **In Progress (Placeholder Art)** |
 
 

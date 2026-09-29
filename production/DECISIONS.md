@@ -101,22 +101,40 @@ Tuyệt đối tuân thủ 2 thang độ hiếm riêng biệt:
 ## 6. Quy Tắc Kinh Tế & Giao Dịch Quyển Trục
 
 - **Giai đoạn MVP / Pre-Production / Alpha**:
-  - Không cho phép giao dịch P2P trực tiếp đối với Quyển Trục Thăng Chức.
-  - Bảo vệ cảm giác thành tựu tiến trình và chống botting nông trại sơ khai.
-  - Người chơi phân rã quyển trục không dùng thành Tàn Trang (`item_skill_shard`) và đổi lấy quyển trục mong muốn tại NPC Học Giả (Scholar).
+  - Không cho phép giao dịch P2P trực tiếp đối với Quyển Trục Thăng Chức (giao dịch giữa người chơi để sau MVP).
+  - MVP chỉ bán quyển trục cho NPC Thương nhân lấy vàng.
+  - Chợ Đen Cấm Địa được bán lại quyển trục (xoay vòng hàng hiếm hoặc mua lại).
+  - Phân rã quyển trục thành Tàn Trang (`item_skill_shard`) theo tỷ lệ trong `skill-progression-system.md`.
 - **Giai đoạn Post-MVP / Commercial**:
-  - Kích hoạt giao dịch Quyển Trục thông qua Nhà Đấu Giá / Sàn Giao Dịch (Auction House) khi cơ chế kiểm soát lạm phát và chống gian lận kinh tế hoàn thiện.
+  - Giao dịch giữa người chơi / Nhà Đấu Giá (Auction House) để sau MVP khi cơ chế kiểm soát lạm phát và chống gian lận kinh tế hoàn thiện.
 
 ---
 
-## 7. Quy Chuẩn Vũ Khí & Trang Bị Theo Class
+## 7. Quy Chuẩn Vũ Khí & Trang Bị Theo 16 Class
 
-Thống nhất dứt điểm mọi mâu thuẫn giữa các file GDD cũ:
-- **Vanguard**: Khiên Sắt Vuông (`Item.Shield.Square`) + Kiếm 1 tay (`Weapon.1H.Blade`).
-- **Templar**: Đại Thuẫn / Khiên Tháp (`Item.Shield.Tower`) + Chùy 1 tay (`Weapon.1H.Mace`).
-- **Inquisitor**: Chùy 1 tay (`Weapon.1H.Mace`). Bỏ hoàn toàn roi xích.
-- **Berserker**: Vũ khí 2 tay hạng nặng (`Weapon.2H.Heavy` - Đại Đao).
-- **Swordmaster**: Kiếm 1 tay (`Weapon.1H.Blade`), không dùng khiên. Tay trái tự do (Paperdoll tách biệt `Layer_Arms/Hands` khỏi `Layer_Equipment_Offhand`).
+Thống nhất dứt điểm mọi phân bổ weapon family cho toàn bộ 16 Class từ `character-visual-system.md` và `itemization.md`:
+
+1. **Nhánh Hộ Vệ (Guard Line)**:
+   - **Vanguard (T1)**: Khiên Sắt Vuông (`Item.Shield.Square`) + Kiếm 1 tay (`Weapon.1H.Blade`).
+   - **Templar (T2)**: Đại Thuẫn / Khiên Tháp (`Item.Shield.Tower`) + Chùy 1 tay (`Weapon.1H.Mace`).
+   - **Berserker (T2)**: Vũ khí 2 tay hạng nặng (`Weapon.2H.Heavy` - Đại Đao).
+   - **Swordmaster (T2)**: Kiếm 1 tay (`Weapon.1H.Blade`), không dùng khiên. Tay trái tự do (Paperdoll tách biệt `Layer_Arms/Hands` khỏi `Layer_Equipment_Offhand`).
+   - **Dragon Knight (T3)**: Vũ khí cán dài (`Weapon.2H.Polearm` - Chiến Kích). *(Lưu ý: `itemization.md` dòng 200 còn ghi thêm `Weapon.2H.Heavy`, đang trình duyệt xác nhận)*.
+   - **Void Blade (T3)**: Kiếm đơn Hư Không (`Weapon.1H.Blade`).
+2. **Nhánh Du Hiệp (Scout Line)**:
+   - **Ranger (T1)**: Cung 2 tay (`Weapon.2H.Bow`). *(Sub-set: Đoản đao `Weapon.Dual.Daggers` theo itemization.md)*.
+   - **Shadowblade (T2)**: Song đao / Dao găm (`Weapon.Dual.Daggers`).
+   - **Phantom Stalker (T3)**: Song đao ám khí (`Weapon.Dual.Daggers`). *(Lưu ý: `character-visual-system.md` ghi `Dual.Daggers / Cung ám khí`; `itemization.md:198-205` đang thiếu, đang trình duyệt)*.
+3. **Nhánh Pháp Sư (Caster Line)**:
+   - **Arcanist (T1)**: Pháp trượng (`Weapon.2H.Staff`).
+   - **Elementalist (T2)**: Pháp trượng (`Weapon.2H.Staff` / Orbs).
+   - **Chronomancer (T3)**: Thánh tích thời gian (`Weapon.1H.Mace` / `Relic` - Đồng Hồ Cát).
+4. **Nhánh Tín Đồ (Faith Line)**:
+   - **Acolyte (T1)**: Chùy chuông (`Weapon.1H.Mace` / `Relic`).
+   - **Inquisitor (T2)**: Chùy 1 tay (`Weapon.1H.Mace`). Bỏ hoàn toàn roi xích.
+   - **Seraph (T3)**: Chùy thánh / Thánh tích (`Weapon.1H.Mace` / `Relic`).
+5. **Nhánh Apex (Tối Cao)**:
+   - **God Slayer (T4)**: Kiếm 1 tay (`Weapon.1H.Blade`) và Vũ khí cán dài (`Weapon.2H.Polearm`).
 
 ---
 
@@ -143,9 +161,16 @@ Thống nhất dứt điểm mọi mâu thuẫn giữa các file GDD cũ:
 
 ---
 
-## 10. Tiêu Chuẩn Art Gate & Ngoại Lệ Boss Spine
+## 10. Tiêu Chuẩn Art Gate, Quy Chuẩn 5 Hướng & Nguồn Art Hybrid
 
 - Phong cách chủ đạo: **Action-First HD-2D**, kết hợp Paper2D/PaperZD cho nhân vật và Spine 4.3 cho boss.
+- **Nguồn Art Hybrid (Hybrid Asset Pipeline)**:
+  - Nhân vật: Thiết kế và sản xuất riêng bằng AI + Aseprite.
+  - Môi trường: Có thể sử dụng asset pack bên ngoài, nhưng bắt buộc phải qua kiểm tra bảng màu (palette check) và bản quyền (license check hợp lệ).
+- **Quy Chuẩn Hướng Nhìn Nhân Vật (5-Direction Isometric System)**:
+  - Nhân vật sử dụng **5 hướng nhìn** vẽ tay gốc: Nam (`S`), Đông Nam (`SE`), Đông (`E`), Đông Bắc (`NE`), Bắc (`N`).
+  - 3 hướng phía Tây (Tây Nam `SW`, Tây `W`, Tây Bắc `NW`) được tạo bằng cách **lật ngang (horizontal flip)** từ các hướng phía Đông tương ứng.
+  - Chấp nhận vật phẩm cầm tay (vũ khí/khiên) đổi tay khi lật hình (mirror flip trade-off) để tối ưu ngân sách vẽ và dung lượng bộ nhớ.
 - **Ngoại Lệ Art Gate**: Boss Stone Golem dùng Spine 4.3 được chấp nhận có rotation artifacts (nội suy xoay khớp xương), không bị cổng `pixel-review` đánh rớt.
 - **Vanguard Art Direction**: Chọn Phương án A (Iron Bastion) - Giáp trụ hiệp sĩ gothic nặng, khiên sắt vuông, phong thái kiên cường vững chãi.
 

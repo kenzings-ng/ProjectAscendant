@@ -28,8 +28,8 @@ Trong góc nhìn 2.5D Isometric nghiêng $-45^\circ$, với camera đặt cách 
    Hệ thống Itemization đã cố định màu sắc cho 5 bậc hiếm trang bị (`Common` xám, `Uncommon` lục, `Rare` lam, `Epic` tím, `Legendary` hoàng kim) thông qua các Material Instance tĩnh (`item-005`). Do đó, **tuyệt đối cấm dùng màu áo giáp để phân biệt Class**. Bản sắc của Class phải được neo cứng vào **Khối hình học tổng thể (Shape Grammar), Dáng đứng (Stance / Center of Gravity) và Cách cầm Vũ khí (Weapon Grip / Anchor Points)**.
 2. **Cảnh báo độ nguy hiểm quái vật bằng hình khối (Visual Threat Telegraphing)**:
    Không bắt người chơi phải dán mắt vào thanh máu UI. Quái vật từ *Trash Mob* đến *World Boss* phải truyền tải cấp độ nguy hiểm thông qua quy chuẩn tỷ lệ thể tích (Mass Scaling), mật độ gai góc bất đối xứng (Spikiness & Aggression Index) và biên độ chuyển động mở rộng (Extending Wind-up Silhouette).
-3. **Bài toán ngân sách sản xuất (The 8,400-Frame Mitigation)**:
-   Với 16 Class, 7 Weapon Families, 8 hướng nhìn và chuỗi đòn đánh đa tầng, nếu vẽ riêng từng frame cho từng class sẽ tạo ra hơn 8.400 frame vẽ tay—bất khả thi với quy mô studio tinh gọn. Giải pháp cốt lõi là **Kiến trúc 5 Master Animation Rigs kết hợp cơ chế phân tách chuyển động thân trên/thân dưới (Decoupled PaperZD State Machine)**, tái sử dụng hoạt ảnh đòn đánh theo Weapon Family nhưng vẫn giữ bản sắc Class bằng **Custom Idle Stances (3-4 frame) và Secondary Motion Props**.
+3. **Bài toán ngân sách sản xuất (The Frame Mitigation)**:
+   Với 16 Class, 7 Weapon Families, 5 hướng nhìn vẽ tay gốc (3 hướng phía Tây lật ngang) và chuỗi đòn đánh đa tầng, nếu vẽ riêng từng frame cho từng class sẽ tạo ra hàng ngàn frame vẽ tay—bất khả thi với quy mô studio tinh gọn. Giải pháp cốt lõi là **Kiến trúc 4 Master Animation Rigs kết hợp cơ chế phân tách chuyển động thân trên/thân dưới (Decoupled PaperZD State Machine)**, tái sử dụng hoạt ảnh đòn đánh theo Weapon Family nhưng vẫn giữ bản sắc Class bằng **Custom Idle Stances (4 frames) và Secondary Motion Props**.
 
 ---
 
@@ -153,11 +153,11 @@ Trong Unreal Engine 5.7 / 5.8, nhân vật được cấu hình với 2 State Ma
 1. **Lower Body State Machine (Chân & Thắt Lưng)**:
    - Chỉ chịu trách nhiệm cho: `Idle`, `Walk`, `Run`, `Dash` (I-frame dodge), `HitStun`.
    - Chia sẻ hoàn toàn giữa các Class thuộc cùng 1 Master Rig!
-   - 4 Master Rigs $\times$ 8 hướng $\times$ 24 frames cơ bản = **768 frames**.
+   - 4 Master Rigs $\times$ 5 hướng $\times$ 21 frames cơ bản (Idle 4f, Walk 6f, Run 6f, Dash 3f, HitStun 2f) = **420 frames** (khớp story-004).
 2. **Upper Body State Machine (Ngực, Tay & Đầu)**:
    - Gắn trực tiếp với **7 Weapon Families**, **HOÀN TOÀN ĐỘC LẬP VỚI CLASS**!
     - Khi một động tác chém kiếm `Weapon.1H.Blade` được vẽ, cả Vanguard, Swordmaster, Void Blade và God Slayer đều dùng chung chính xác bộ sprite đó!
-    - 7 Weapon Families $\times$ 8 hướng $\times$ 3 đòn combo $\times$ 4 frames = **672 frames**.
+    - 7 Weapon Families $\times$ 5 hướng $\times$ 16 frames (Combo 12f + Thủ/Phản đòn 4f) = **560 frames** (khớp story-005).
 
 ```mermaid
 flowchart TD
@@ -187,7 +187,7 @@ flowchart TD
 
 Làm thế nào để các class cùng dùng chung 1 Rig hoặc 1 Weapon Family (như Vanguard và Swordmaster cùng dùng Weapon.1H.Blade) trông không bị trùng lặp?
 1. **Custom Idle Stance (Chỉ tốn đúng 3-4 frames tĩnh cho mỗi class)**:
-   - Khi đứng yên chờ đòn, Vanguard vác khiên che ngực thở sâu, còn Swordmaster buông thõng kiếm đơn thanh thoát. Chỉ với 3-4 frames Idle độc nhất cho mỗi class (16 classes $\times$ 8 hướng $\times$ 4 frames = 512 frames), ấn tượng ban đầu về class đã được khắc sâu $100\%$.
+   - Khi đứng yên chờ đòn, Vanguard vác khiên che ngực thở sâu, còn Swordmaster buông thõng kiếm đơn thanh thoát. Chỉ với 3-4 frames Idle độc nhất cho mỗi class (16 classes $\times$ 5 hướng $\times$ 4 frames = 320 frames, khớp story-006), ấn tượng ban đầu về class đã được khắc sâu $100\%$.
 2. **Secondary Motion Bằng Lò Xo Vật Lý 2D (PaperZD Spring Bones)**:
    - Dải khăn Acolyte, tà áo Arcanist, lông vũ nón Ranger được gắn hệ thống xương lò xo ảo. Khi nhân vật chạy hoặc chém kiếm, các dải vải tự động vung vẩy theo quán tính vật lý thực—**Tốn 0 frame vẽ tay thêm**!
 3. **Niagara 2D Slash Trails & Shaders Tùy Biến**:

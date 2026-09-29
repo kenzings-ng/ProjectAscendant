@@ -12,7 +12,7 @@
 
 ## 1. Bối Cảnh & Mục Tiêu Kỹ Thuật
 
-Hiện tại nhân vật `APABaseCharacter` hiển thị đơn lớp qua `UPaperFlipbookComponent`. Để hỗ trợ hệ thống 12 Class và 7 Weapon Families mà không phải vẽ riêng 8.400 frame, story này kiến trúc hóa **Mô hình Hoạt Ảnh Đa Tầng Phân Tách (Decoupled Layered State Machine)** trong C++ và PaperZD:
+Hiện tại nhân vật `APABaseCharacter` hiển thị đơn lớp qua `UPaperFlipbookComponent`. Để hỗ trợ hệ thống 16 Class và 7 Weapon Families mà không phải vẽ riêng 8.400 frame, story này kiến trúc hóa **Mô hình Hoạt Ảnh Đa Tầng Phân Tách (Decoupled Layered State Machine)** trong C++ và PaperZD:
 - Phân chia nhân vật thành 2 kênh hoạt ảnh độc lập:
   1. **Lower Body (Chân & Thắt Lưng)**: Quản lý di chuyển (`Idle`, `Walk`, `Run`, `Dash`, `HitStun`), ánh xạ theo **4 Master Rigs** (`HeavyTank`, `Agility`, `Caster`, `Monk`).
   2. **Upper Body (Thân Trên & Tay)**: Quản lý chiến đấu (`AttackCombo`, `Parry`, `Charge`), ánh xạ trực tiếp theo **7 Weapon Families** (`1H.Blade`, `2H.Heavy`, `2H.Polearm`, `2H.Bow`, `Dual.Daggers`, `2H.Staff`, `1H.Mace`).

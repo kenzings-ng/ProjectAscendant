@@ -81,12 +81,61 @@
      - Vòng 1 & 2: Phát hiện các vị trí còn sót trong `character-visual-system.md` và `inventory-system.md`.
      - Vòng 3 (Sau khi hoàn tất khắc phục): Subagent đưa ra kết luận chính thức: **VERDICT: PASS**.
 
+### 2.2 Cập Nhật Bổ Sung PR #1 (Batch 2: Directions, Validator Nâng Cấp, Settings & CI Workflow)
+- **Mục tiêu**: Thực hiện chỉ thị bổ sung ngày 2026-09-29 trực tiếp trên nhánh `fix/audit-autonomous-setup` (PR #1).
+- **Nội dung thực hiện chi tiết**:
+  1. **Cập nhật `production/DECISIONS.md` theo chỉ thị trực tiếp**:
+     - **Mục 6**: Xóa bỏ quy tắc "đổi Tàn Trang lấy quyển trục tại NPC Học Giả". Thay bằng: MVP chỉ bán quyển trục cho NPC Thương nhân lấy vàng; Chợ Đen Cấm Địa được bán lại quyển trục; phân rã quyển trục thành Tàn Trang theo tỷ lệ trong `skill-progression-system.md`; giao dịch giữa người chơi để sau MVP.
+     - **Mục 7**: Bổ sung đầy đủ weapon family cho toàn bộ 16 class từ `character-visual-system.md` và `itemization.md`. Ghi nhận các điểm mâu thuẫn để người dùng lựa chọn:
+       - *Dragon Knight*: `character-visual-system.md` chỉ ghi `2H.Polearm`; `itemization.md` ghi cả `2H.Heavy` và `2H.Polearm`.
+       - *Phantom Stalker*: `character-visual-system.md` ghi `Dual.Daggers / Cung ám khí`; `itemization.md:198-205` chưa liệt kê vào bảng ánh xạ.
+     - **Mục 10**:
+       - *Nguồn Art Hybrid*: Nhân vật làm riêng bằng AI + Aseprite; môi trường có thể dùng asset pack, phải qua kiểm tra palette và license hợp lệ.
+       - *Quy Chuẩn 5 Hướng Nhìn*: Nhân vật chuẩn hóa 5 hướng nhìn gốc (S, SE, E, NE, N); 3 hướng phía Tây lấy bằng cách lật ngang (horizontal flip). Chấp nhận vật cầm tay đổi tay khi lật.
+  2. **Rà soát toàn bộ DECISIONS.md đối chiếu với chỉ thị gốc**:
+     - Phát hiện các nội dung do trợ lý soạn thảo bổ sung trước đây mà chưa có chỉ thị duyệt chính thức từ người dùng:
+       - *Mục 10*: Ngoại lệ Art Gate cho Spine Boss Stone Golem; Phong cách Vanguard Option A (Iron Bastion).
+       - *Mục 11*: Toàn bộ Mục 11 về Iris Replication (`net.Iris.UseIrisReplication=1`) và GAS Replication Mode (`Mixed` cho Player, `Minimal` cho Mob). Đã giữ nguyên và báo cáo để người dùng phê duyệt/chỉnh sửa.
+  3. **Chuẩn hóa 5 hướng nhìn & tính toán frame (`character-visual-system.md`)**:
+     - Sửa các dòng 32, 156, 160, 190 từ 8 hướng sang 5 hướng nhìn.
+     - Khớp chính xác số frame theo story-004 đến 007:
+       - Lower Body: 4 Master Rigs $\times$ 5 hướng $\times$ 21 frames = 420 frames (khớp `story-004`).
+       - Upper Body: 7 Weapon Families $\times$ 5 hướng $\times$ 16 frames = 560 frames (khớp `story-005`).
+       - Idle Stances: 16 Class $\times$ 5 hướng $\times$ 4 frames = 320 frames (khớp `story-006`).
+  4. **Cập nhật Story-006 và Sprint 7**:
+     - `story-006`: Nâng từ 12 lên 16 class. Tổng asset: 320 frames idle + 80 mào nón + 80 cờ ngực + 20 cánh Seraph = **500 assets**.
+     - `epic-overview.md` & `sprint-7.md`: Cập nhật tổng asset từ 1,595 lên **1,735 assets**.
+  5. **Chuẩn hóa `.claude/settings.json` theo chuẩn Claude Code chính thức**:
+     - Chuyển toàn bộ danh sách cấm sang cấu trúc chuẩn `permissions.deny` dạng `Bash(...)`.
+     - Loại bỏ các khối không có trong tài liệu chính thức (`safety`, `commands`).
+  6. **Cài đặt Git Hook & Script Thiết lập Môi trường (`Tools/setup_dev_env.sh` & `README.md`)**:
+     - Tạo `Tools/setup_dev_env.sh` thiết lập `git config core.hooksPath Tools/git-hooks`.
+     - Cập nhật hướng dẫn trong `README.md`.
+     - **Chứng minh hook chặn push vào main**: Chạy thử nghiệm giả lập push vào `refs/heads/main`, pre-push hook lập tức trả về Exit Code 1 với thông báo: `[GIT HOOK ERROR] Direct push to protected branch ('refs/heads/main') is BLOCKED by Project Ascendant Autonomous Policy.`
+  7. **Viết lại Bộ Kiểm Tra Quan Hệ (`Tools/QA/validate_gdd_consistency.py`)**:
+     - Đọc động 100% danh sách class, bậc, dòng vũ khí và số hướng nhìn từ `production/DECISIONS.md` (không hardcode).
+     - Rà soát toàn bộ các bảng Markdown và khối YAML ánh xạ class $\leftrightarrow$ weapon family trong GDD và Story files.
+     - Bắt lỗi tên "oracle" viết thường ở bất kỳ đâu ngoài ngữ cảnh phủ định.
+     - Kiểm tra mọi phép tính frame bắt buộc dùng đúng số hướng nhìn từ DECISIONS.md (5 hướng).
+     - **Chứng minh thực tế bắt 3 lỗi mới**:
+       - *Lỗi 1*: Thêm tạm `Berserker` vào dòng `Weapon.1H.Blade` (`itemization.md:199`).
+       - *Lỗi 2*: Thêm tạm `Seraph` vào dòng `Weapon.2H.Bow` (`itemization.md:202`).
+       - *Lỗi 3*: Đổi tạm phép tính thành `4 frames $\times 8$ hướng` (`story-006:21`).
+       - *Kết quả chạy*: Script báo chính xác **đủ 3 lỗi** và trả về Exit Code 1 (FAILED).
+       - Sau khi xóa 3 lỗi tạm, chạy lại: **92 files checked. Errors: 0 | Warnings: 0. [RESULT] Consistency Check PASSED.**
+  8. **Cập nhật CI Workflow (`.github/workflows/tests.yml`) & README.md**:
+     - Chuyển `ue-tests` sang **chỉ chạy thủ công qua `workflow_dispatch`**, không tự động chạy trên push hay pull_request để triệt tiêu lỗi Queued vĩnh viễn.
+     - Bổ sung điều kiện bảo mật: `github.repository == 'kenzings-ng/ProjectAscendant'` và commit từ repo gốc.
+     - Đổi đường dẫn Engine sang biến môi trường `UE_EDITOR_CMD`.
+     - Thêm vào `README.md`: Cảnh báo không dùng self-hosted runner trên repo public; hướng dẫn chạy `./Tools/QA/run_headless_tests.sh --ue` tại local.
+     - Trạng thái kiểm thử UE: **UE tests CHƯA CHẠY** (chưa chạy cục bộ vì đợt commit này chỉ bao gồm tài liệu GDD, story, config và công cụ QA, không thay đổi mã nguồn C++).
+
 ---
 
 ## 3. Danh Sách 16 Class Đã Được Duyệt Chính Thức
 *(Chi tiết đầy đủ xem tại [`DECISIONS.md`](file:///mnt/Data/Projects/project-games/ProjectAscendant/production/DECISIONS.md))*
 
-- **Nhánh Guard (Bảo hộ - 5 class)**:
+- **Nhánh Guard (Bảo hộ - 6 class)**:
   - T1: Vanguard
   - T2: Templar, Berserker, Swordmaster
   - T3: Dragon Knight (từ Templar/Berserker), Void Blade (từ Swordmaster)

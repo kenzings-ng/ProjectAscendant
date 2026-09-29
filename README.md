@@ -116,21 +116,41 @@ Các bộ test chính:
 - `ProjectAscendant.UI.FloatingCombatText` (Ballistic arc physics, pool recycling)
 - `ProjectAscendant.UI.ShopForgeUI` (2-column shop, FIFO buyback, hold-to-craft)
 
+### Thiết lập môi trường phát triển (Developer Setup)
+
+Trước khi thực hiện thay đổi, bắt buộc chạy script cấu hình môi trường hoặc cài đặt git hook để kích hoạt chính sách bảo vệ nhánh:
+```bash
+# Cách 1: Chạy script tự động cấu hình
+./Tools/setup_dev_env.sh
+
+# Cách 2: Cài đặt thủ công đường dẫn git hooks
+git config core.hooksPath Tools/git-hooks
+chmod +x Tools/git-hooks/pre-push
+```
+Hook `pre-push` sẽ tự động chặn mọi thao tác push trực tiếp vào các nhánh được bảo vệ (`main`, `master`) và cấm force push (`--force`, `-f`).
+
 ### CI / CD Pipeline (`.github/workflows/tests.yml`)
 
 Hệ thống CI được phân tách thành 2 jobs độc lập:
 1. **`gates` (Fast Gates - chạy trên `ubuntu-latest`)**:
-   - Tự động chạy trong môi trường GitHub Actions với `postgres:16-alpine` service container.
+   - Tự động chạy trong môi trường GitHub Actions với `postgres:16-alpine` service container trên mọi sự kiện push và pull request vào `main`.
    - Chạy script kiểm tra nhất quán GDD: `python Tools/QA/validate_gdd_consistency.py`.
    - Chạy kiểm thử Backend Database & Anti-Dupe PostgreSQL thực tế: `python Tools/QA/test_backend_postgres.py`.
-2. **`ue-tests` (UE Automation Tests - chạy trên `self-hosted`)**:
-   - **Yêu cầu Runner**: Cần GitHub Actions Runner tự host gắn nhãn `[self-hosted]`.
-   - **Môi trường máy runner**:
-     - Hệ điều hành: Linux (Ubuntu 22.04+ khuyến nghị).
-     - Cài đặt sẵn Unreal Engine 5.8+ tại đường dẫn cấu hình qua biến môi trường `UE_EDITOR_PATH` (mặc định: `/mnt/Data/Engine/Binaries/Linux/UnrealEditor`).
-     - Có GPU hoặc hỗ trợ `-nullrhi` cho headless testing.
-     - Đã cài đặt Git LFS (`git lfs install`).
-   - **Trạng thái**: *Chờ self-hosted runner được kích hoạt trên repository.* Không tính là PASS trên CI khi chưa chạy thật.
+2. **`ue-tests` (UE Automation Tests - CHỈ chạy thủ công qua `workflow_dispatch`)**:
+   - **Cơ chế kích hoạt an toàn**: Job này **KHÔNG** tự động chạy trên push hoặc pull_request để tránh tình trạng xếp hàng vĩnh viễn (Queued indefinitely). Chỉ kích hoạt thủ công qua giao diện GitHub Actions (`workflow_dispatch`).
+   - **Ràng buộc bảo mật nghiêm ngặt**: Chỉ chạy khi `github.repository == 'kenzings-ng/ProjectAscendant'` và commit thuộc repo gốc (chặn triệt để mọi pull request từ fork chạy trên máy self-hosted).
+   - > [!WARNING]
+   - > **Cảnh báo bảo mật**: TUYỆT ĐỐI KHÔNG sử dụng self-hosted runner cho repository công khai (public repository) do nguy cơ bị khai thác thực thi mã độc từ bên ngoài.
+   - **Cấu hình đường dẫn Engine (`UE_EDITOR_CMD`)**:
+     - Linux (mặc định): `export UE_EDITOR_CMD=/mnt/Data/Engine/Binaries/Linux/UnrealEditor-Cmd`
+     - Windows (ví dụ): `set UE_EDITOR_CMD="C:\Program Files\Epic Games\UE_5.8\Engine\Binaries\Win64\UnrealEditor-Cmd.exe"`
+   - **Chạy kiểm thử UE cục bộ (Local Testing)**:
+     ```bash
+     # Hướng dẫn chạy kiểm thử Unreal Engine headless tại máy local:
+     ./Tools/QA/run_headless_tests.sh --ue
+     ```
+   - **Quy tắc ghi nhận kết quả (Autonomous Mode Policy)**:
+     Từ nay, mỗi thay đổi code C++ phải chạy UE test local và dán log chi tiết (số test, pass, exit code) vào `production/PROGRESS.md`. Nếu không có log thực thi cục bộ, bắt buộc ghi rõ: *"UE tests CHƯA CHẠY"*, tuyệt đối không tự ý ghi PASS.
 
 ---
 
