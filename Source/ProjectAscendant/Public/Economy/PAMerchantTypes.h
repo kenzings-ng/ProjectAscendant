@@ -140,8 +140,8 @@ struct PROJECTASCENDANT_API FPAMerchantFormulas
 			return 0;
 		}
 
-		const float Raw = static_cast<float>(BasePrice) * (1.0f + SurchargeRatio);
-		return FMath::CeilToInt(Raw);
+		const double Raw = static_cast<double>(BasePrice) * (1.0 + static_cast<double>(SurchargeRatio));
+		return FMath::CeilToInt(Raw - 1e-5);
 	}
 
 	/**

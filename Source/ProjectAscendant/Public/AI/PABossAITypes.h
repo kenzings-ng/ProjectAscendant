@@ -543,7 +543,7 @@ struct PROJECTASCENDANT_API FPABossAIModel
 	/**
 	 * Cập nhật vòng đời đòn đánh qua từng frame.
 	 */
-	void Update(float DeltaTime, float DistanceToTarget = 300.0f, float AngleToTargetDegrees = 0.0f)
+	void Update(float DeltaTime, float DistanceToTarget = -1.0f, float AngleToTargetDegrees = 0.0f)
 	{
 		// Cập nhật cooldown của tất cả các đòn đánh
 		for (FPABossAttackData& Atk : Attacks)
@@ -560,7 +560,8 @@ struct PROJECTASCENDANT_API FPABossAIModel
 		switch (CurrentPhase)
 		{
 		case EPABossAttackPhase::Idle:
-			// Đang rảnh rỗi -> tự động tìm đòn đánh tốt nhất nếu có mục tiêu
+			// Đang rảnh rỗi -> tự động tìm đòn đánh tốt nhất nếu có mục tiêu hợp lệ
+			if (DistanceToTarget >= 0.0f)
 			{
 				const EPABossAttackType Best = SelectBestAction(DistanceToTarget, AngleToTargetDegrees);
 				if (Best != EPABossAttackType::None)
