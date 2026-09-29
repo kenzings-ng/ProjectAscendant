@@ -20,11 +20,17 @@
 
 | Hạng mục / Cổng kiểm tra | Trạng thái thực tế | Môi trường kiểm tra | Chi tiết & Ghi chú |
 | :--- | :--- | :--- | :--- |
+| **Git LFS Pointers** (`verify_git_lfs_pointers.py`) | **ĐÃ KIỂM CHỨNG - PASS** | Local & CI Gate | Cài đặt `git-lfs/3.5.1`, `git lfs install`, chuyển đổi 100% file nhị phân trong PR thành con trỏ LFS 131–132 byte; CI gate fail nếu phát hiện binary thô. |
 | **GDD Consistency Validator** (`validate_gdd_consistency.py`) | **ĐÃ CHẠY THẬT - PASS** | Local Python 3.11 | Quét 92/92 file GDD, Epics, Sprints: 0 Lỗi, 0 Cảnh báo. Cấm tiệt Void Weaver / Oracle, xác thực 16 class đã duyệt. |
 | **Real PostgreSQL Test Suite** (`test_backend_postgres.py`) | **SẴN SÀNG / ĐÃ CHUẨN HÓA** | CI Service / Docker Compose | Loại bỏ 100% SQLite & threading.Lock. Sử dụng PostgreSQL thật với 2 connection riêng biệt (`SELECT ... FOR UPDATE` row lock, `DEFERRABLE INITIALLY DEFERRED` slot swap). |
-| **CI Job `gates`** (GDD + Postgres) | **SẴN SÀNG CHẠY NGAY** | GitHub Actions (`ubuntu-latest`) | Tự động kích hoạt khi push/PR với `postgres:16-alpine` service container. |
-| **UE Automation Tests** (`run_headless_tests.sh --ue`) | **ĐÃ CHẠY THẬT LOCAL - PASS 100%** | Local Unreal Engine 5.8 Linux | **Discovered=45, Passed=45, Failed=0, Errors=0, ExitCode=0** (100% Pass). Bao gồm test mới `CharacterSelectTextures`; giải thích rõ ExitCode=1 của UE5 Linux và kiểm tra 0 Error/Fatal. |
+| **CI Job `gates`** (LFS + GDD + Postgres) | **SẴN SÀNG CHẠY NGAY** | GitHub Actions (`ubuntu-latest`) | Tự động kích hoạt khi push/PR với kiểm tra Git LFS pointer, GDD validator và `postgres:16-alpine` service container. |
+| **UE Automation Tests** (`run_headless_tests.sh --ue`) | **ĐÃ CHẠY THẬT LOCAL - PASS 100%** | Local Unreal Engine 5.8 Linux | **Discovered=45, Passed=45, Failed=0, Errors=0, ExitCode=0** (100% Pass). Queue hoàn tất trọn vẹn; ExitCode=1 xác định chuẩn từ `_exit(1)` UE5 Linux. |
 | **Lộ trình sản xuất** (`production/ROADMAP.md`) | **ĐÃ DUYỆT BỞI CHỦ DỰ ÁN** | Git Tracking | Đã hoàn thành 100% các mục tiêu và kiểm chứng bằng chứng của **Giai đoạn 0 (Nền móng repo)**. |
+
+> [!IMPORTANT]
+> **ĐÍNH CHÍNH QUAN TRỌNG VỀ BẰNG CHỨNG KIỂM THỬ**:  
+> Các kết quả "PASS" của bộ test Unreal Engine được báo cáo trước commit này đều là **chạy thiếu test do runner thoát sớm** (tham số `-ExecCmds="...; Quit"` khiến engine thoát ngay khi hàng đợi test vừa bắt đầu chạy, bỏ sót các test cuối cùng).  
+> **Chỉ có kết quả 45/45 test hiện tại** (sử dụng `-TestExit`, `QueueFinished=1`, 0 Error, 0 Fatal, `Passed == Discovered`) **mới là bằng chứng kiểm chứng thực tế và hợp lệ** cho các mục `[~]` của Giai đoạn 1 và 1.5 trong lộ trình `ROADMAP.md`.
 
 ---
 
@@ -228,8 +234,85 @@
 
 ### 2.3 Bổ Sung & Hoàn Thiện Theo Chỉ Thị Chủ Dự Án (PR #2)
 
-1. **Giải trình UE test ExitCode=1 và QueueFinished=4**:
-   - **Nguyên nhân QueueFinished=4**: Trong phiên trước, runner dùng regex `grep -c "Automation Test Queue Empty"`. Regex này đã đếm cả 2 dòng lệnh command line ở startup (dòng 23 LogCsvProfiler và dòng 454 LogInit), cộng thêm 1 dòng từ `LogAutomationCommandLine` và 1 dòng từ `LogExit`. Runner hiện đã sửa lại dùng regex bắt dòng hoàn tất thực tế `\.\.\.Automation Test Queue Empty [0-9]+ tests performed`, kết quả hiện tại: `QueueFinished=1`.
+1. **Khắc phục triệt để Git LFS & Chuyển đổi Binary Assets**:
+   - **Thực trạng ban đầu**: *Chưa đạt*. Các asset `.uasset` và `.png` trước đây được commit dưới dạng binary thô (ví dụ `ranger_pixel_spritesheet.uasset` chiếm 876 KB trong Git blob), do môi trường chưa cài đặt và khởi tạo `git-lfs`.
+   - **Khắc phục**:
+     - Cài đặt `git-lfs` v3.5.1 cho Linux x86_64 và thực thi `git lfs install`.
+     - Tích hợp `git lfs install` vào [`Tools/setup_dev_env.sh`](file:///mnt/Data/Projects/project-games/ProjectAscendant/Tools/setup_dev_env.sh).
+     - Gỡ bỏ cache nhị phân thô (`git rm --cached`) và commit lại toàn bộ asset nhị phân thuộc PR qua bộ lọc Git LFS.
+   - **Bằng chứng kiểm chứng**:
+     - Lệnh `git lfs ls-files` xác nhận các file đã vào danh mục theo dõi của Git LFS:
+       ```text
+       89a4a2f70c * Content/art/characters/T_Boss_Spritesheet.uasset
+       1d959a1405 * Content/art/characters/arcanist_pixel_spritesheet.png
+       141f871df9 * Content/art/characters/arcanist_pixel_spritesheet.uasset
+       d9a789d13b * Content/art/characters/boss/spine/stone_golem.uasset
+       bbe53596f5 * Content/art/characters/ranger_pixel_spritesheet.png
+       65a36b24ef * Content/art/characters/ranger_pixel_spritesheet.uasset
+       ```
+     - Kích thước blob trong Git object bằng lệnh `git cat-file -s` cho từng file:
+       - `Content/art/characters/T_Boss_Spritesheet.uasset`: **132 bytes**
+       - `Content/art/characters/arcanist_pixel_spritesheet.png`: **132 bytes**
+       - `Content/art/characters/arcanist_pixel_spritesheet.uasset`: **132 bytes**
+       - `Content/art/characters/boss/spine/stone_golem.uasset`: **131 bytes**
+       - `Content/art/characters/ranger_pixel_spritesheet.png`: **131 bytes**
+       - `Content/art/characters/ranger_pixel_spritesheet.uasset`: **131 bytes**
+     - Nội dung con trỏ LFS (`git cat-file -p`):
+       ```text
+       version https://git-lfs.github.com/spec/v1
+       oid sha256:...
+       size <kích thước file thật>
+       ```
+   - **Cổng CI Gate**: Tạo công cụ [`Tools/QA/verify_git_lfs_pointers.py`](file:///mnt/Data/Projects/project-games/ProjectAscendant/Tools/QA/verify_git_lfs_pointers.py) và tích hợp vào job `gates` trong [`.github/workflows/tests.yml`](file:///mnt/Data/Projects/project-games/ProjectAscendant/.github/workflows/tests.yml). CI sẽ lập tức đánh **FAIL** nếu bất kỳ file nào khớp `.gitattributes` (`filter=lfs`) được commit dạng binary thô thay vì con trỏ LFS.
+
+2. **Boss AI (`PABossAITypes.h`): Giải trình `DistanceToTarget = -1.0f` & Kiểm tra hành vi in-game**:
+   - **Lý do đổi mặc định từ 300.0f sang -1.0f**:
+     - Trong `FPABossAIModel::Update(DeltaTime, DistanceToTarget = 300.0f, ...)`, khi đòn đánh kết thúc và boss trở về pha `Idle`, nếu caller không truyền khoảng cách (như helper `AdvanceModelTime` trong unit test), giá trị 300.0f khiến Boss tự động coi như luôn có mục tiêu ở cự ly 300cm và ngay lập tức tự động chọn ra đòn mới (`SelectBestAction` -> `StartAttack`).
+     - Điều này khiến test case AC-1 (`ProjectAscendant.AI.BossAITelegraphs`) kiểm tra vòng đời đòn đánh không thể quan sát được trạng thái `Idle` sau khi kết thúc Recovery (bị nhảy ngay sang `Telegraph` của đòn đánh tiếp theo), dẫn đến test bị fail assertion.
+     - Giá trị `-1.0f` mang ngữ nghĩa chuẩn: "Không có mục tiêu hợp lệ / caller không truyền mục tiêu", boss chỉ tick cooldown và thời gian mà không tự động phát động tấn công trong hư không.
+   - **Liệt kê mọi nơi gọi `Update()` không truyền khoảng cách**:
+     - Trong toàn bộ codebase, **chỉ có duy nhất 1 chỗ** gọi `Update()` không truyền khoảng cách: [`Source/ProjectAscendant/Private/AI/PABossAITests.cpp:38`](file:///mnt/Data/Projects/project-games/ProjectAscendant/Source/ProjectAscendant/Private/AI/PABossAITests.cpp#L38) trong helper test `AdvanceModelTime(Model, Duration)`.
+   - **Xác nhận hành vi boss trong gameplay không đổi**:
+     - Nơi duy nhất gọi `Model.Update()` trong runtime gameplay là [`Source/ProjectAscendant/Private/AI/PABossAIComponent.cpp:24`](file:///mnt/Data/Projects/project-games/ProjectAscendant/Source/ProjectAscendant/Private/AI/PABossAIComponent.cpp#L24):
+       `Model.Update(DeltaTime, TargetDistance, TargetAngleDegrees);`
+     - Tại đây, `TargetDistance` là biến thành viên của `UPABossAIComponent` (khởi tạo `300.0f`, được AI Perception / Controller cập nhật liên tục qua `SetTargetInfo(Distance, AngleDegrees)`). Vì gameplay runtime **luôn luôn truyền tường minh** tham số `TargetDistance`, nên giá trị mặc định của hàm hoàn toàn không ảnh hưởng tới gameplay thật.
+   - **Phương án trình chủ dự án**:
+     - *Phương án A (Khuyến nghị - hiện tại)*: Giữ `DistanceToTarget = -1.0f` làm mặc định của `FPABossAIModel::Update`. Ngữ nghĩa trong sạch: không truyền mục tiêu = không tự đánh. Gameplay giữ nguyên 100%.
+     - *Phương án B*: Giữ nguyên mặc định `300.0f` trong `PABossAITypes.h`, sửa riêng file test `PABossAITests.cpp` truyền rõ ràng `Model.Update(Dt, -1.0f)` trong `AdvanceModelTime`.
+
+3. **Chuyển đổi công thức làm tròn phụ phí sang số học số nguyên**:
+   - Đã loại bỏ hoàn toàn cách trừ epsilon số thực (`- 1e-5` hay `double` với epsilon) tại [`PAMerchantTypes.h`](file:///mnt/Data/Projects/project-games/ProjectAscendant/Source/ProjectAscendant/Public/Economy/PAMerchantTypes.h) và [`PAShopForgeUITypes.h`](file:///mnt/Data/Projects/project-games/ProjectAscendant/Source/ProjectAscendant/Public/UI/PAShopForgeUITypes.h).
+   - Thay thế bằng số học số nguyên trần (integer ceiling division):
+     - `CalculateWantedSurchargePrice`:
+       ```cpp
+       const int32 SurchargePercent = FMath::RoundToInt(SurchargeRatio * 100.0f);
+       const int32 TotalPercent = 100 + SurchargePercent;
+       return (BasePrice * TotalPercent + 99) / 100;
+       ```
+     - `ApplyKarmaSurcharge`:
+       ```cpp
+       Item.FinalPrice = bActive ? ((Item.PriceGold * 120 + 99) / 100) : Item.PriceGold;
+       ```
+     - Đảm bảo $800 \times 1.2 = 960$, $150 \times 1.2 = 180$, $1 \times 1.2 = 2$, $50 \times 1.2 = 60$, triệt tiêu 100% rủi ro sai số dấu phẩy động.
+
+4. **Phân định rõ ràng `.claude/settings.json` vs Hook `pre-push`**:
+   - **Đính chính minh chứng**: Minh chứng lỗi `[GIT HOOK ERROR]` trước đó được sinh ra bởi hook `Tools/git-hooks/pre-push` tại tầng Git client/OS, **không phải** thông báo trực tiếp từ bộ lọc của Claude Code.
+   - **Bổ sung luật chặn vào `.claude/settings.json`**:
+     Thêm các quy tắc chặn lệnh push trần và dạng `HEAD:main`:
+     - `"Bash(git push)"` (chặn lệnh push không kèm tham số)
+     - `"Bash(git push origin)"`
+     - `"Bash(git push *HEAD:main*)"`
+     - `"Bash(git push *HEAD:master*)"`
+     - `"Bash(git push *:main*)"`
+     - `"Bash(git push *:master*)"`
+     - `"Bash(git push * --all*)"`
+     - `"Bash(git push * --mirror*)"`
+   - **Phân định 2 tầng bảo vệ**:
+     - *Tầng 1 (Claude Code / AI Assistant Level)*: Chặn trước khi lệnh bash được thực thi dựa trên danh sách cấm `permissions.deny` trong `.claude/settings.json`. Khi AI cố gắng chạy lệnh vi phạm, Claude Code từ chối điều phối tool call ngay lập tức.
+     - *Tầng 2 (Git/OS Level)*: Hook `Tools/git-hooks/pre-push` chặn tại tầng giao thức Git bất kể lệnh được chạy từ terminal nào (bởi AI, script tự động hay lập trình viên gõ tay), phân tích stdin để chặn đứng mọi hành động push/force-push vào `refs/heads/main` hoặc `refs/heads/master`.
+
+5. **Giải trình UE test ExitCode=1 và QueueFinished=4**:
+   - **Nguyên nhân QueueFinished=4**: Runner trước đây dùng regex `grep -c "Automation Test Queue Empty"`, đếm cả command-line echo lúc engine khởi động. Đã sửa lại regex đếm dòng thông báo hoàn tất thực tế `\.\.\.Automation Test Queue Empty [0-9]+ tests performed`, kết quả hiện tại: `QueueFinished=1`.
    - **Nguyên nhân ExitCode=1**: Trên Linux, khi tham số `-TestExit="Automation Test Queue Empty"` kích hoạt, `LaunchEngineLoop.cpp:5593` gọi `FPlatformMisc::RequestExit(true)`. Trong mã nguồn Unreal Engine (`UnixPlatformMisc.cpp:350-356`):
      ```cpp
      if (Force) {
@@ -241,7 +324,7 @@
    - **Rà soát Error/Fatal trong log**: Quét toàn bộ file log `AutomationTest_Headless.log` bằng lệnh `grep -i -E "Error:|Fatal:"` trả về **0 kết quả** (0 Error, 0 Fatal).
    - **Chính sách runner**: Runner chỉ công nhận PASS khi `ExitCode=0` HOẶC khi `ExitCode=1` đã kiểm chứng rõ nguyên nhân do `_exit(1)` của UE5 Linux, đồng thời thỏa mãn `TOTAL_FAIL == 0`, `ERROR_COUNT == 0`, và tất cả các test phát hiện đều hoàn tất.
 
-2. **Character Select: Import Asset Thật & Thêm Test Riêng Từng Class**:
+6. **Character Select: Import Asset Thật & Thêm Test Riêng Từng Class**:
    - Loại bỏ hoàn toàn fallback về `T_Vanguard_Spritesheet`.
    - Viết script Python Editor Scripting [`Tools/import_class_textures.py`](file:///mnt/Data/Projects/project-games/ProjectAscendant/Tools/import_class_textures.py) import trực tiếp `ranger_pixel_spritesheet.png` và `arcanist_pixel_spritesheet.png` thành asset `.uasset` thật tại `/Game/art/characters/`:
      - `Content/art/characters/ranger_pixel_spritesheet.uasset` (876 KB)
@@ -253,30 +336,16 @@
      - Khẳng định Texture Filter là `TF_Nearest`.
      - **Kết quả test: PASS 100%**. Tổng số test nâng lên **45/45 test**.
 
-3. **settings.json: Chứng minh bằng lệnh thực tế**:
-   - Thử nghiệm lệnh push vào protected branch:
-     ```bash
-     $ git push origin HEAD:main --dry-run
-     [GIT HOOK ERROR] Direct push to protected branch (refs/heads/main) is BLOCKED by Project Ascendant Autonomous Policy.
-     You must work on a feature/docs/infra branch and merge to main only after all QA gates pass.
-     error: failed to push some refs to https://github.com/kenzings-ng/ProjectAscendant.git
-     ```
-   - Cấu hình `.claude/settings.json` khai báo `permissions.deny` chặn toàn diện các lệnh `Bash(git push * main*)`, `Bash(git push * master*)`, `Bash(git push * --force*)`, `Bash(git reset --hard*)`, `Bash(rm -rf ...)`.
-
-4. **Hook pre-push & Script Setup**:
-   - Script [`Tools/setup_dev_env.sh`](file:///mnt/Data/Projects/project-games/ProjectAscendant/Tools/setup_dev_env.sh) tự động cấu hình `git config core.hooksPath Tools/git-hooks` và cấp quyền thực thi cho hook.
-   - Hướng dẫn đã được đưa vào [`README.md`](file:///mnt/Data/Projects/project-games/ProjectAscendant/README.md) (mục Bảo vệ nhánh & Git Hooks).
-
-5. **Stone Golem Spine**:
+7. **Stone Golem Spine**:
    - Trạng thái: **Chờ chủ dự án duyệt hình bằng mắt**.
    - Kiểm tra texture Golem trong UE: Đã import và cấu hình `Content/art/characters/boss/spine/stone_golem.uasset` và `Content/art/characters/T_Boss_Spritesheet.uasset` với `Filter = Nearest` và `MipGenSettings = TMGS_NO_MIPMAPS` (không mipmap).
 
-6. **Tách các thay đổi ngoài Giai đoạn 0**:
+8. **Tách các thay đổi ngoài Giai đoạn 0**:
    - Đã tách 16 GameplayTag class và refactor kiến trúc của `PAShopForgeUITypes.h` sang nhánh riêng `refactor/class-tags-and-formulas` (sẽ mở PR riêng sau).
    - Đã thêm vào [`CLAUDE.md`](file:///mnt/Data/Projects/project-games/ProjectAscendant/CLAUDE.md): *"Mỗi PR chỉ chứa một đầu việc của ROADMAP (không gộp nhiều đầu việc, không đưa các thay đổi thuộc giai đoạn sau vào PR hiện tại)."*
-   - Trong PR #2, `PAShopForgeUITypes.h` chỉ giữ sửa lỗi làm tròn số thực cục bộ (`double` với epsilon) để 45/45 test của runner chạy qua, không thêm include hay coupling sang module Economy.
+   - Trong PR #2, `PAShopForgeUITypes.h` chỉ giữ sửa công thức số học số nguyên cho phụ phí để 45/45 test của runner chạy qua, không thêm include hay coupling sang module Economy.
 
-7. **Xác nhận trạng thái ROADMAP.md và DECISIONS.md**:
+9. **Xác nhận trạng thái ROADMAP.md và DECISIONS.md**:
    - **Xác nhận 100%**: PR #2 không sửa đổi bất kỳ nội dung nào trong [`production/ROADMAP.md`](file:///mnt/Data/Projects/project-games/ProjectAscendant/production/ROADMAP.md) và [`production/DECISIONS.md`](file:///mnt/Data/Projects/project-games/ProjectAscendant/production/DECISIONS.md) (hoàn toàn trùng khớp với `origin/main`).
 
 ---
