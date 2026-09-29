@@ -1,4 +1,4 @@
-# Inventory & 5-Tier Item Database
+# Inventory & 5-Rarity Item Database
 
 > **Status**: Approved  
 > **Author**: Systems Designer & Lead Programmer  
@@ -10,11 +10,11 @@
 
 ## Overview
 
-Hệ thống Kho Đồ & Cơ Sở Dữ Liệu Vật Phẩm 5 Bậc (Inventory & 5-Tier Item Database) quản lý toàn bộ vòng lặp lưu trữ, nhặt đồ (loot), trang bị, rèn đúc và sử dụng vật phẩm trong Project Ascendant. Hệ thống cung cấp cơ sở dữ liệu đồng nhất theo chuẩn `PrimaryDataAsset` của Unreal Engine 5 cho:
+Hệ thống Kho Đồ & Cơ Sở Dữ Liệu Vật Phẩm 5 Cấp Độ Hiếm (Inventory & 5-Rarity Item Database) quản lý toàn bộ vòng lặp lưu trữ, nhặt đồ (loot), trang bị, rèn đúc và sử dụng vật phẩm trong Project Ascendant. Hệ thống cung cấp cơ sở dữ liệu đồng nhất theo chuẩn `PrimaryDataAsset` của Unreal Engine 5 cho:
 1. **Kho Đồ Dạng Ô (Slot-Based Grid):** Khởi đầu 30 ô, mở rộng tối đa 60 ô qua nâng cấp túi/thắt lưng tại Thợ rèn.
 2. **Khung Trang Bị Nhân Vật (Paperdoll):** 6 vị trí trang bị cốt lõi trực tiếp kích hoạt các `GameplayEffect` trong Gameplay Ability System (GAS).
 3. **Khay Phím Tắt Tiêu Hao (Quickbar 1–4):** Cho phép kích hoạt nhanh bình dược phẩm trong lúc giao chiến.
-4. **Cơ Sở Dữ Liệu 5 Bậc Hiếm (5-Tier Rarity):** Định nghĩa thuộc tính, màu sắc hiển thị và giá trị kinh tế.
+4. **Cơ Sở Dữ Liệu 5 Bậc Hiếm (5-Rarity Database):** Định nghĩa thuộc tính, màu sắc hiển thị và giá trị kinh tế.
 5. **Vật Phẩm Đặc Thù:** Tích hợp Sách Kỹ Năng (`item_skill_book`) với cơ chế Class-Lock và Bộ Phận Rơi Từ Boss (Part Breaking Drops).
 
 ---
@@ -27,17 +27,17 @@ Hệ thống Kho Đồ & Cơ Sở Dữ Liệu Vật Phẩm 5 Bậc (Inventory & 
 
 ---
 
-## 1. Hệ Thống Phân Cấp Vật Phẩm 5 Bậc (5-Tier Rarity)
+## 1. Hệ Thống Phân Cấp Vật Phẩm 5 Cấp Độ Hiếm (5-Rarity Scale)
 
-Mọi trang bị và vật phẩm quý trong game được chuẩn hóa theo 5 cấp độ màu sắc:
+Mọi trang bị và vật phẩm quý trong game được chuẩn hóa theo 5 cấp độ màu sắc (tuân thủ `itemization.md` và `DECISIONS.md` Mục 5):
 
-| Bậc (Tier) | Tên Bậc | Màu Sắc Nhận Diện | Đặc Tính & Chỉ Số | Hệ Số Định Giá (TierMultiplier) |
+| Cấp Độ Hiếm | Tên Độ Hiếm | Màu Sắc Nhận Diện | Đặc Tính & Chỉ Số | Hệ Số Định Giá (RarityMultiplier) |
 | :---: | :--- | :--- | :--- | :---: |
-| **Tier 1** | **Normal (Thường)** | Trắng / Xám (`#D1D5DB`) | Chỉ số cơ bản sạch, không có dòng bổ trợ, dễ rèn và mua ở Thương nhân. | $1.0\times$ |
-| **Tier 2** | **Rare (Hiếm)** | Xanh Lam (`#3B82F6`) | 1–2 dòng thuộc tính ngẫu nhiên (Affixes), tăng nhẹ chỉ số tốc độ/thể lực. | $2.5\times$ |
-| **Tier 3** | **Legendary (Huyền Thoại)** | Tím / Cam (`#F59E0B`) | 3 dòng ngẫu nhiên + 1 dòng hiệu ứng kỹ năng đặc thù (Combat Perk). | $6.0\times$ |
-| **Tier 4** | **Immortal (Bất Tử)** | Đỏ Thẫm (`#EF4444`) | Kỹ năng kích hoạt độc quyền của bộ trang bị, rơi từ Lãnh Chúa cấp cao. | $15.0\times$ |
-| **Tier 5** | **Divine (Thần Thánh)** | Hoàng Kim (`#EAB308`) | Cải biến cơ chế chiêu thức của Class, rèn từ Linh hồn Lãnh chúa cổ đại tại Thợ rèn cấm địa. | $40.0\times$ |
+| **Bậc 1** | **Common (Thường)** | Trắng / Xám (`#D1D5DB`) | Chỉ số cơ bản sạch, không có dòng bổ trợ, dễ rèn và mua ở Thương nhân. | $1.0\times$ |
+| **Bậc 2** | **Uncommon (Không phổ biến)** | Xanh Lục (`#10B981`) | 1 dòng thuộc tính ngẫu nhiên (Affixes). | $1.8\times$ |
+| **Bậc 3** | **Rare (Hiếm)** | Xanh Lam (`#3B82F6`) | 1–2 dòng thuộc tính ngẫu nhiên, tăng nhẹ chỉ số tốc độ/thể lực. | $3.0\times$ |
+| **Bậc 4** | **Epic (Sử Thi)** | Tím (`#8B5CF6`) | 2–3 dòng ngẫu nhiên + tăng cường chỉ số cốt lõi. | $7.0\times$ |
+| **Bậc 5** | **Legendary (Huyền Thoại)** | Cam Hoàng Kim (`#F59E0B`) | 3 dòng ngẫu nhiên + 1 dòng hiệu ứng kỹ năng đặc thù (Combat Perk). Rèn từ Linh hồn Boss tại Thợ rèn cấm địa. | $18.0\times$ |
 
 ---
 
@@ -94,7 +94,7 @@ Gồm 6 vị trí trang bị cố định, liên kết trực tiếp với `UAsc
 - **Cơ chế thi triển an toàn:** Khi bấm phím dùng bình dược phẩm, nhân vật trải qua thời gian hiệu ứng 0.8s (`potion_use_duration`), tốc độ di chuyển giảm 30% trong lúc uống, không thể bị hủy bởi đòn đánh thường nhưng nếu bị Boss hất ngã/choáng sẽ làm gián đoạn việc hồi phục.
 
 ### 3.4 Tính Năng Tiện Ích Chất Lượng Trải Nghiệm (QoL Features)
-- **Tự Động Sắp Xếp (Auto-Sort):** Nút bấm hoặc phím tắt `[R]` trong UI sắp xếp lại toàn bộ túi theo thứ tự: Tier giảm dần (Divine $\rightarrow$ Normal) $\rightarrow$ Danh mục (Vũ khí $\rightarrow$ Giáp $\rightarrow$ Tiêu hao $\rightarrow$ Nguyên liệu).
+- **Tự Động Sắp Xếp (Auto-Sort):** Nút bấm hoặc phím tắt `[R]` trong UI sắp xếp lại toàn bộ túi theo thứ tự: Độ hiếm giảm dần (Legendary $\rightarrow$ Common) $\rightarrow$ Danh mục (Vũ khí $\rightarrow$ Giáp $\rightarrow$ Tiêu hao $\rightarrow$ Nguyên liệu).
 - **Khóa Trang Bị (Item Lock - `bIsLocked`):** Nhấn phím `[L]` khi rê chuột lên trang bị để bật/tắt khóa. Vật phẩm bị khóa sẽ KHÔNG THỂ bị bán cho thương nhân, phân rã ở thợ rèn, hoặc vứt bỏ ra đất.
 - **Đánh Dấu Phế Phẩm (Mark Junk - `bIsJunk`):** Nhấn phím `[J]` để đánh dấu rác. Khi mở cửa hàng Thương nhân, nút "Bán Tất Cả Rác" xuất hiện cho phép thanh lý toàn bộ chỉ trong 1 thao tác.
 
@@ -145,7 +145,7 @@ Khi người chơi phá vỡ bộ phận Boss trong trận chiến, các vật p
 ```mermaid
 flowchart TD
     subgraph DropWorld["1. RƠI RA THẾ GIỚI (WORLD LOOT)"]
-        DropGround["Vật Phẩm Rơi Trên Đất<br/>(Hiển thị Cột Sáng theo Màu Tier)"]
+        DropGround["Vật Phẩm Rơi Trên Đất<br/>(Hiển thị Cột Sáng theo Màu Độ Hiếm)"]
         PickupAction{"Người chơi nhặt [E]<br/>Túi đồ còn ô trống?"}
         OverflowStash["Chuyển vào Rương Tạm (Mailbox)<br/>(Tối đa 20 ô - Lưu 3 lượt đi)"]
     end
@@ -181,12 +181,12 @@ flowchart TD
 
 ### 7.1 Công Thức Định Giá Mua Bán Trang Bị
 
-$$\text{BasePrice}(\text{Tier}) = 50 \times \text{TierMultiplier}$$
+$$\text{BasePrice}(\text{Rarity}) = 50 \times \text{RarityMultiplier}$$
 
 $$\text{SellValue} = \text{BasePrice} \times \text{VendorSellPenalty} \times \text{DurabilityPct}$$
 
 *Trong đó:*
-- `TierMultiplier`: $1.0$ (Normal), $2.5$ (Rare), $6.0$ (Legendary), $15.0$ (Immortal), $40.0$ (Divine).
+- `RarityMultiplier`: $1.0$ (Common), $2.5$ (Uncommon), $6.0$ (Rare), $15.0$ (Epic), $40.0$ (Legendary).
 - `VendorSellPenalty` = $0.30$ (Người chơi bán cho NPC chỉ thu lại 30% giá trị gốc).
 - `DurabilityPct`: Tỷ lệ độ bền còn lại ($0.0 \rightarrow 1.0$). Trang bị hỏng hoàn toàn chỉ bán được 10% giá trị.
 
@@ -244,11 +244,11 @@ $$\text{SellValue} = \text{BasePrice} \times \text{VendorSellPenalty} \times \te
 ## 11. Visual / Audio & UI Requirements
 
 ### Visual & VFX
-- **Cột Sáng Rơi Đồ (Loot Beam Niagara VFX):** Khi vật phẩm rơi trên sàn, cột sáng bốc lên thẳng đứng mang màu sắc chuẩn xác của Bậc (Trắng, Xanh Lam, Tím/Cam, Đỏ Thẫm, Hoàng Kim).
-- **Viền Hào Quang Trang Bị (Item Icon Border):** Trong giao diện ô đồ, viền ô phát sáng nhẹ theo màu Bậc. Bậc Immortal và Divine có hiệu ứng hạt phát sáng chạy quanh viền.
+- **Cột Sáng Rơi Đồ (Loot Beam Niagara VFX):** Khi vật phẩm rơi trên sàn, cột sáng bốc lên thẳng đứng mang màu sắc chuẩn xác của Độ Hiếm (Xám Slate, Xanh Lục, Xanh Lam, Tím Bí Ẩn, Hoàng Kim).
+- **Viền Hào Quang Trang Bị (Item Icon Border):** Trong giao diện ô đồ, viền ô phát sáng nhẹ theo màu Độ Hiếm. Bậc Epic và Legendary có hiệu ứng hạt phát sáng chạy quanh viền.
 
 ### Audio & SFX
-- **Âm Nhặt Đồ (Loot Pickup):** Âm thanh va chạm kim loại thanh mảnh (*Crisp Metallic Clink*), âm trầm bổng hơn khi nhặt đồ Tier cao.
+- **Âm Nhặt Đồ (Loot Pickup):** Âm thanh va chạm kim loại thanh mảnh (*Crisp Metallic Clink*), âm trầm bổng hơn khi nhặt đồ Độ Hiếm cao.
 - **Âm Trang Bị (Equip SFX):** Tiếng khóa lẫy giáp nặng nề (*Heavy Leather / Plate Clasp*).
 - **Âm Dùng Bình Thuốc:** Tiếng mở nắp chai và nuốt nước ừng ực (*Cork pop & Gulp*).
 

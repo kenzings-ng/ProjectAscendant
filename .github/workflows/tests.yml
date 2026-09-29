@@ -5,12 +5,62 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+  workflow_dispatch:
 
 jobs:
-  test:
-    name: Run UE Automation Tests
-    runs-on: self-hosted  # UE requires a runner with Unreal Engine 5.8.2 installed
+  gates:
+    name: Fast Gates (GDD & Backend QA)
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: project_ascendant
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Dependencies
+        run: |
+          pip install --upgrade pip
+          pip install psycopg2-binary
+
+      - name: Validate GDD Consistency
+        run: |
+          python Tools/QA/validate_gdd_consistency.py
+
+      - name: Run Backend PostgreSQL Tests
+        env:
+          PGHOST: localhost
+          PGPORT: 5432
+          PGDATABASE: project_ascendant
+          PGUSER: postgres
+          PGPASSWORD: password
+        run: |
+          python Tools/QA/test_backend_postgres.py
+
+  ue-tests:
+    name: Run UE Automation Tests (Manual Dispatch Only)
+    if: >-
+      github.event_name == 'workflow_dispatch' &&
+      github.repository == 'kenzings-ng/ProjectAscendant' &&
+      (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository)
+    runs-on: [self-hosted]
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -19,7 +69,7 @@ jobs:
 
       - name: Run Unreal Engine Automation Tests
         run: |
-          "${UE_EDITOR_PATH:-/mnt/Data/Engine/Binaries/Linux/UnrealEditor}" "${{ github.workspace }}/ProjectAscendant/ProjectAscendant.uproject" \
+          "${UE_EDITOR_CMD:-/mnt/Data/Engine/Binaries/Linux/UnrealEditor-Cmd}" "${{ github.workspace }}/ProjectAscendant/ProjectAscendant.uproject" \
             -nullrhi -nosound -unattended \
             -ExecCmds="Automation RunTests ProjectAscendant.; Quit" \
             -log=AutomationTest.log

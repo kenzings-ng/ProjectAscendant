@@ -28,18 +28,18 @@ Trong góc nhìn 2.5D Isometric nghiêng $-45^\circ$, với camera đặt cách 
    Hệ thống Itemization đã cố định màu sắc cho 5 bậc hiếm trang bị (`Common` xám, `Uncommon` lục, `Rare` lam, `Epic` tím, `Legendary` hoàng kim) thông qua các Material Instance tĩnh (`item-005`). Do đó, **tuyệt đối cấm dùng màu áo giáp để phân biệt Class**. Bản sắc của Class phải được neo cứng vào **Khối hình học tổng thể (Shape Grammar), Dáng đứng (Stance / Center of Gravity) và Cách cầm Vũ khí (Weapon Grip / Anchor Points)**.
 2. **Cảnh báo độ nguy hiểm quái vật bằng hình khối (Visual Threat Telegraphing)**:
    Không bắt người chơi phải dán mắt vào thanh máu UI. Quái vật từ *Trash Mob* đến *World Boss* phải truyền tải cấp độ nguy hiểm thông qua quy chuẩn tỷ lệ thể tích (Mass Scaling), mật độ gai góc bất đối xứng (Spikiness & Aggression Index) và biên độ chuyển động mở rộng (Extending Wind-up Silhouette).
-3. **Bài toán ngân sách sản xuất (The 8,400-Frame Mitigation)**:
-   Với 12 Class, 7 Weapon Families, 8 hướng nhìn và chuỗi đòn đánh đa tầng, nếu vẽ riêng từng frame cho từng class sẽ tạo ra hơn 8.400 frame vẽ tay—bất khả thi với quy mô studio tinh gọn. Giải pháp cốt lõi là **Kiến trúc 5 Master Animation Rigs kết hợp cơ chế phân tách chuyển động thân trên/thân dưới (Decoupled PaperZD State Machine)**, tái sử dụng hoạt ảnh đòn đánh theo Weapon Family nhưng vẫn giữ bản sắc Class bằng **Custom Idle Stances (3-4 frame) và Secondary Motion Props**.
+3. **Bài toán ngân sách sản xuất (The Frame Mitigation)**:
+   Với 16 Class, 7 Weapon Families, 5 hướng nhìn vẽ tay gốc (3 hướng phía Tây lật ngang) và chuỗi đòn đánh đa tầng, nếu vẽ riêng từng frame cho từng class sẽ tạo ra hàng ngàn frame vẽ tay—bất khả thi với quy mô studio tinh gọn. Giải pháp cốt lõi là **Kiến trúc 4 Master Animation Rigs kết hợp cơ chế phân tách chuyển động thân trên/thân dưới (Decoupled PaperZD State Machine)**, tái sử dụng hoạt ảnh đòn đánh theo Weapon Family nhưng vẫn giữ bản sắc Class bằng **Custom Idle Stances (4 frames) và Secondary Motion Props**.
 
 ---
 
-## 2. Ma Trận Silhouette Rule Cho 12 Class Nhân Vật
+## 2. Ma Trận Silhouette Rule Cho 16 Class Nhân Vật
 
-12 Class trong Project Ascendant trải dài qua 4 phân bậc độ hiếm chức nghiệp:
-- **Khởi Đầu (Normal - Tier 1)**: *Vanguard (Chiến Binh)*, *Ranger (Du Hiệp)*, *Arcanist (Thuật Sĩ)*, *Acolyte (Tu Sĩ)*.
-- **Hiếm (Rare - Tier 2)**: *Berserker (Cuồng Nộ)*, *Shadowblade (Thích Khách)*, *Elementalist (Nguyên Tố Sư)*, *Templar (Thánh Hiệp Sĩ)*.
-- **Sử Thi (Epic - Tier 3)**: *Void Blade (Hư Không Kiếm)*, *Chronomancer (Thời Không Pháp Sư)*, *Dragon Knight (Long Kỵ Sĩ)*.
-- **Thần Thoại Ẩn (Mythic Hidden - Tier 4)**: *God Slayer (Thần Thí Giả)*.
+Các Class trong Project Ascendant trải dài qua 4 Bậc Chức Nghiệp (Class Rank):
+- **Bậc T1 (Sơ cấp - Foundational)**: *Vanguard (Tiên Phong)*, *Ranger (Du Hiệp)*, *Arcanist (Thuật Sĩ)*, *Acolyte (Tu Sĩ)*.
+- **Bậc T2 (Trung cấp - Advanced)**: *Berserker (Cuồng Chiến Sĩ)*, *Templar (Thánh Hiệp Sĩ)*, *Swordmaster (Kiếm Sư)*, *Shadowblade (Thích Khách)*, *Elementalist (Nguyên Tố Sư)*, *Inquisitor (Thẩm Phán)*.
+- **Bậc T3 (Cao cấp - Master)**: *Dragon Knight (Long Kỵ Sĩ)*, *Void Blade (Hư Không Kiếm)*, *Phantom Stalker (Bóng Ma)*, *Chronomancer (Thời Không Pháp Sư)*, *Seraph (Thiên Sứ)*.
+- **Bậc T4 (Ẩn / Tối thượng - Apex)**: *God Slayer (Thần Thí Giả)*.
 
 ```mermaid
 flowchart TD
@@ -53,19 +53,23 @@ flowchart TD
     Blocky --> C5[Berserker: Lưng Gù Đao Khổng Lồ]
     Blocky --> C8[Templar: Cầu Vai Chữ Thập & Đại Thuẫn]
     Blocky --> C11[Dragon Knight: Sừng Rồng & Thương Dài]
+    Blocky --> C13[Inquisitor: Mũ Trùm Kín & Chùy Gai Định Tội]
 
     Sharp --> C2[Ranger: Cánh Cung Xiên Vượt Đỉnh Đầu]
     Sharp --> C6[Shadowblade: Cúi Rạp & Song Đao Chữ X]
+    Sharp --> C7[Swordmaster: Kiếm Đơn Chúc Đất Bờ Vai Tự Do]
     Sharp --> C9[Void Blade: Kiếm Hư Không Dốc 45° Tà Áo Xé]
+    Sharp --> C14[Phantom Stalker: Ám Khí Sương Độc Dáng Thấp]
     Sharp --> C12[God Slayer: Lưỡi Kích Bất Đối Xứng]
 
     Vertical --> C3[Arcanist: Pháp Trượng Đứng & Cầu Phép Lơ Lửng]
     Vertical --> C4[Acolyte: Chùy Chuông & Tràng Hạt Cân Bằng]
-    Vertical --> C7[Elementalist: Pháp Cầu Đôi Xoay Vần]
+    Vertical --> C15[Elementalist: Pháp Cầu Đôi Xoay Vần]
     Vertical --> C10[Chronomancer: Đồng Hồ Cát Con Lắc]
+    Vertical --> C16[Seraph: Thánh Thuẫn Quang Minh Chân Chạm Đất]
 ```
 
-### 2.1 Bảng Đặc Tả Dáng Đứng & Silhouette Anchor Của 12 Class
+### 2.1 Bảng Đặc Tả Dáng Đứng & Silhouette Anchor Của 16 Class
 
 | Class & Bậc | Weapon Family Mặc Định | Khối Hình Học Cơ Sở (Shape Grammar) | Trọng Tâm & Dáng Đứng (Line of Action & Stance) | Silhouette Anchor Độc Nhất (Nhận Diện Mù Màu) | Thử Nghiệm Thumbnail (16x16 / 32x32) |
 | :--- | :--- | :--- | :--- | :--- | :--- |
@@ -121,21 +125,22 @@ TIỂU THỂ (TRASH)      TINH ANH (ELITE)       THỦ LĨNH (MINI-BOSS)      L�
 
 ### 4.1 Phân Tích Bài Toán Ngân Sách "8.400 Frames"
 Nếu làm theo cách ngây thơ (Brute Force):
-$$\text{Chi phí} = 12\text{ Classes} \times 7\text{ Weapon Types} \times 8\text{ Directions} \times 10\text{ Actions} \times 10\text{ Frames} \approx \mathbf{67.200}\text{ frames (bất khả thi)}.$$
+$$\text{Chi phí} = 16\text{ Classes} \times 7\text{ Weapon Types} \times 8\text{ Directions} \times 10\text{ Actions} \times 10\text{ Frames} \approx \mathbf{89.600}\text{ frames (bất khả thi)}.$$
 Ngay cả khi cắt giảm chỉ cho mỗi class dùng 1-2 vũ khí:
-$$12\text{ Classes} \times 8\text{ Directions} \times \sim 90\text{ frames/class} \approx \mathbf{8.640}\text{ frames}.$$
+$$16\text{ Classes} \times 8\text{ Directions} \times \sim 90\text{ frames/class} \approx \mathbf{11.520}\text{ frames}.$$
 Con số này vẫn sẽ phá hủy tiến độ sản xuất của một đội ngũ indie nhỏ.
 
 ### 4.2 Giải Pháp: 4 Master Animation Rigs & Phân Tách Thân Trên/Thân Dưới
-Chúng ta chuẩn hóa toàn bộ chuyển động của 12 Class vào **4 Khung Xương Hoạt Ảnh Cốt Lõi (Master Rigs)**:
+Chúng ta chuẩn hóa toàn bộ chuyển động của 16 Class vào **4 Khung Xương Hoạt Ảnh Cốt Lõi (Master Rigs)**:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────────────────────┐
 │                             4 MASTER ANIMATION RIGS CỐT LÕI                                 │
 ├─────────────────────────┬─────────────────────────┬─────────────────────────┬───────────────┤
-│   RIG 1: HEAVY TANK     │    RIG 2: AGILITY       │    RIG 3: CASTER        │ RIG 4: MONK   │
-│ (Vanguard, Berserker,   │ (Ranger, Shadowblade,   │ (Arcanist, Elementalist,│   (Acolyte)   │
-│  Templar, Dragon Knight)│  Void Blade, God Slayer)│  Chronomancer)          │               │
+│   RIG 1: HEAVY TANK     │    RIG 2: AGILITY       │    RIG 3: CASTER        │ RIG 4: FAITH  │
+│ (Vanguard, Berserker,   │ (Ranger, Shadowblade,   │ (Arcanist, Elementalist,│ (Acolyte,     │
+│  Templar, Dragon Knight,│  Swordmaster, Void Blade│  Chronomancer)          │  Seraph)      │
+│  Inquisitor)            │  Phantom, God Slayer)   │                         │               │
 │ • Trọng tâm thấp, bước đầm│ • Trọng tâm kiễng mũi chân│ • Đứng thẳng, lướt nhẹ   │ • Tấn mã bộ,  │
 │ • Độ lắc hông: Nhỏ      │ • Độ lắc hông: Nhanh, linh│ • Chân ít gập, tà bay   │   trọng tâm   │
 │ • Bước sải: Dài, chắc   │ • Bước sải: Ngắn, bùng nổ│ • Bước sải: Thong thả   │   cân bằng    │
@@ -148,11 +153,11 @@ Trong Unreal Engine 5.7 / 5.8, nhân vật được cấu hình với 2 State Ma
 1. **Lower Body State Machine (Chân & Thắt Lưng)**:
    - Chỉ chịu trách nhiệm cho: `Idle`, `Walk`, `Run`, `Dash` (I-frame dodge), `HitStun`.
    - Chia sẻ hoàn toàn giữa các Class thuộc cùng 1 Master Rig!
-   - 4 Master Rigs $\times$ 8 hướng $\times$ 24 frames cơ bản = **768 frames**.
+   - 4 Master Rigs $\times$ 5 hướng $\times$ 21 frames cơ bản (Idle 4f, Walk 6f, Run 6f, Dash 3f, HitStun 2f) = **420 frames** (khớp story-004).
 2. **Upper Body State Machine (Ngực, Tay & Đầu)**:
    - Gắn trực tiếp với **7 Weapon Families**, **HOÀN TOÀN ĐỘC LẬP VỚI CLASS**!
-   - Khi một động tác chém kiếm `Weapon.1H.Blade` được vẽ, cả Vanguard, Templar, Void Blade và God Slayer đều dùng chung chính xác bộ sprite đó!
-   - 7 Weapon Families $\times$ 8 hướng $\times$ 3 đòn combo $\times$ 4 frames = **672 frames**.
+    - Khi một động tác chém kiếm `Weapon.1H.Blade` được vẽ, cả Vanguard, Swordmaster, Void Blade và God Slayer đều dùng chung chính xác bộ sprite đó!
+    - 7 Weapon Families $\times$ 5 hướng $\times$ 16 frames (Combo 12f + Thủ/Phản đòn 4f) = **560 frames** (khớp story-005).
 
 ```mermaid
 flowchart TD
@@ -180,15 +185,15 @@ flowchart TD
 
 ### 4.4 Kỹ Thuật "Zero-Frame Visual Distinctiveness" (Khác Biệt Mà Không Tốn Frame)
 
-Làm thế nào để 2 class cùng dùng chung 1 Rig và 1 Weapon Family (như Vanguard và Templar) trông không bị trùng lặp?
+Làm thế nào để các class cùng dùng chung 1 Rig hoặc 1 Weapon Family (như Vanguard và Swordmaster cùng dùng Weapon.1H.Blade) trông không bị trùng lặp?
 1. **Custom Idle Stance (Chỉ tốn đúng 3-4 frames tĩnh cho mỗi class)**:
-   - Khi đứng yên chờ đòn, Vanguard vác khiên che ngực thở sâu, còn Templar chống đại thuẫn xuống đất trang nghiêm. Chỉ với 3-4 frames Idle độc nhất cho mỗi class (12 classes $\times$ 8 hướng $\times$ 4 frames = 384 frames), ấn tượng ban đầu về class đã được khắc sâu $100\%$.
+   - Khi đứng yên chờ đòn, Vanguard vác khiên che ngực thở sâu, còn Swordmaster buông thõng kiếm đơn thanh thoát. Chỉ với 3-4 frames Idle độc nhất cho mỗi class (16 classes $\times$ 5 hướng $\times$ 4 frames = 320 frames, khớp story-006), ấn tượng ban đầu về class đã được khắc sâu $100\%$.
 2. **Secondary Motion Bằng Lò Xo Vật Lý 2D (PaperZD Spring Bones)**:
    - Dải khăn Acolyte, tà áo Arcanist, lông vũ nón Ranger được gắn hệ thống xương lò xo ảo. Khi nhân vật chạy hoặc chém kiếm, các dải vải tự động vung vẩy theo quán tính vật lý thực—**Tốn 0 frame vẽ tay thêm**!
 3. **Niagara 2D Slash Trails & Shaders Tùy Biến**:
    - Cùng là đòn chém `Weapon.1H.Blade`:
      - Vanguard: Vệt chém màu thép xám văng tia lửa cam.
-     - Templar: Vệt chém ánh sáng vàng thánh hóa (Holy Gold).
+     - Swordmaster: Vệt chém kiếm khí sắc bén ngân vang trong vắt (Pure Silver Arc).
      - Void Blade: Vệt chém xé rách không gian màu tím than kèm tàn tro hư không.
      - God Slayer: Vệt chém đen tuyền nuốt chửng ánh sáng.
    - Toàn bộ vệt chém này được render bằng Niagara Mesh Ribbon, không tốn bất kỳ một frame pixel vẽ tay nào của nhân vật.
@@ -248,7 +253,7 @@ Khi người chơi mặc full bộ giáp `Armor_Heavy_T1` (Sắt thô dã chiế
 > 
 > **Lý do kỹ thuật & mỹ thuật**:
 > 1. **Triệt tiêu hoàn toàn Mixels (Zero Mixels)**: Theo Điều răn số 5 trong `SPEC-ART-2026-09-23-V2`, co giãn trục X/Y không đồng dạng sẽ bóp méo hạt pixel (pixel hình chữ nhật thay vì hình vuông $1:1$), phá hủy tính thẩm mỹ HD-2D.
-> 2. **Bảo toàn tọa độ Hand Socket tuyệt đối**: Giữ nguyên `HandSocket_R` $(96, 76)$ và `HandSocket_L` $(32, 76)$ cố định so với Pivot chân $(64, 114)$ trên lưới $128 \times 128$. Không làm trôi lệch chuôi kiếm/khiên khỏi bàn tay nhân vật giữa 12 class.
+> 2. **Bảo toàn tọa độ Hand Socket tuyệt đối**: Giữ nguyên `HandSocket_R` $(96, 76)$ và `HandSocket_L` $(32, 76)$ cố định so với Pivot chân $(64, 114)$ trên lưới $128 \times 128$. Không làm trôi lệch chuôi kiếm/khiên khỏi bàn tay nhân vật giữa 16 class.
 > 3. **Bảo đảm hoạt ảnh Upper Body dùng chung không bị biến dạng**: Chuỗi đòn đánh của 7 Weapon Families khi áp lên Vanguard, Templar hay Void Blade đều giữ nguyên tỷ lệ pixel sắc nét tuyệt đối.
 
 Thay vì dùng Engine Scale, sự khác biệt về vóc dáng giữa các nhóm Class được **thể hiện thuần túy qua nét vẽ thủ công (Handcrafted Pixel Anatomy) bên trong cùng canvas $128 \times 128$**:
@@ -265,7 +270,7 @@ Thay vì dùng Engine Scale, sự khác biệt về vóc dáng giữa các nhóm
 
 ## 6. Hệ Thống NPC Dân Thường Khu Vực An Toàn (Civilian & Townsfolk Identity)
 
-Khu vực an toàn tại 3 Tòa Thành (*Verdant Bastion*, *Ashen Keep*, *Sanctum Fortress*) cần một quần thể NPC dân sự sống động nhằm truyền tải thế giới sống (*Living World*). Hệ thống NPC dân sự được thiết kế tách biệt hoàn toàn khỏi 12 Class chiến đấu và 4 bậc quái vật, tuân thủ nguyên tắc tối ưu ngân sách nghiêm ngặt.
+Khu vực an toàn tại 3 Tòa Thành (*Verdant Bastion*, *Ashen Keep*, *Sanctum Fortress*) cần một quần thể NPC dân sự sống động nhằm truyền tải thế giới sống (*Living World*). Hệ thống NPC dân sự được thiết kế tách biệt hoàn toàn khỏi 16 Class chiến đấu và 4 bậc quái vật, tuân thủ nguyên tắc tối ưu ngân sách nghiêm ngặt.
 
 ### 6.1 Bốn Nguyên Tắc Ràng Buộc Bắt Buộc
 
@@ -326,20 +331,20 @@ Silhouette của nhân vật có bị biến thành một "khối trụ vô hồ
 | :--- | :---: | :---: | :--- |
 | **Lower Body Combat** | $2.304\text{ frames}$ | **$420\text{ frames}$** | 4 Master Rigs $\times 5$ hướng $\times 21$ frames. |
 | **Upper Body Combat** | $3.456\text{ frames}$ | **$560\text{ frames}$** | 7 Weapon Families $\times 5$ hướng $\times 16$ frames. |
-| **Idle Stances (12 Class)** | $1.152\text{ frames}$ | **$240\text{ frames}$** | 12 Class $\times 5$ hướng $\times 4$ frames. |
-| **Helm Crest Sprites** | $600\text{ frames}$ | **$60\text{ sprites}$** | 12 Class $\times 5$ hướng tĩnh. |
-| **Tabard Overlay Sprites** | $600\text{ frames}$ | **$60\text{ sprites}$** | 12 Class $\times 5$ hướng tĩnh. |
+| **Idle Stances (16 Class)** | $1.536\text{ frames}$ | **$320\text{ frames}$** | 16 Class $\times 5$ hướng $\times 4$ frames. |
+| **Helm Crest Sprites** | $800\text{ frames}$ | **$80\text{ sprites}$** | 16 Class $\times 5$ hướng tĩnh. |
+| **Tabard Overlay Sprites** | $800\text{ frames}$ | **$80\text{ sprites}$** | 16 Class $\times 5$ hướng tĩnh. |
 | **NPC Dân Cư - Lower Body** | $1.200\text{ frames}$ | **$0\text{ frames (FREE)}$** | **Tái dùng $100\%$ Lower Body từ 4 Master Rigs**. |
 | **NPC Dân Cư - Upper Body** | $1.800\text{ frames}$ | **$205\text{ frames}$** | 5 vai trò $\times 5$ hướng $\times (8\text{f} \text{ đến } 9\text{f})$. |
 | **NPC Dân Cư - Prop Cầm Tay** | $600\text{ frames}$ | **$50\text{ sprites}$** | 10 loại đạo cụ $\times 5$ hướng xoay tĩnh. |
-| **TỔNG ASSET TOÀN BỘ GAME** | **$\approx 11.712\text{ FRAMES}$** | **$\mathbf{1.595\text{ ASSETS}}$** | **TIẾT KIỆM 86.4% TOÀN BỘ NGÂN SÁCH!** |
+| **TỔNG ASSET TOÀN BỘ GAME** | **$\approx 12.192\text{ FRAMES}$** | **$\mathbf{1.715\text{ ASSETS}}$** | **TIẾT KIỆM 85.9% TOÀN BỘ NGÂN SÁCH!** |
 
 ---
 
 ## 8. Kết Luận & Kế Hoạch Triển Khai (Action Plan)
 
 Đặc tả này đóng vai trò là **Hợp Đồng Kỹ Thuật Bắt Buộc** giữa Thiết Kế Hệ Thống (Game Systems) và Đội Ngũ Mỹ Thuật (Art Studio):
-1. **Art Director** căn cứ vào Mục 2 để vẽ bản phác thảo Silhouette (Bóng Đen) cho 12 Class, bảo đảm vượt qua bài kiểm tra Thumbnail Test trước khi đi vào vẽ chi tiết pixel.
+1. **Art Director** căn cứ vào Mục 2 để vẽ bản phác thảo Silhouette (Bóng Đen) cho 16 Class, bảo đảm vượt qua bài kiểm tra Thumbnail Test trước khi đi vào vẽ chi tiết pixel.
 2. **Technical Animator** thiết lập 4 Master Rigs trong PaperZD, chia tách xương thân trên và thân dưới theo đúng ma trận ở Mục 4.
 3. **VFX Artist** xây dựng hệ thống vệt chém Niagara Mesh Ribbon theo từng Class để tạo bản sắc thị giác độc nhất mà không cần tốn thêm frame vẽ nhân vật.
 4. **Gameplay Programmer** giữ vững tích hợp giữa `UPAPaperdollComponent` và các socket mào đầu/vũ khí để duy trì độ nhận diện tối thượng trong mọi tình huống giao tranh ác liệt.

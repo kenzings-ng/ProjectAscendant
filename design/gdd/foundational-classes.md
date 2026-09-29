@@ -135,7 +135,7 @@ Tất cả 4 Class cơ bản được mở khóa miễn phí ngay từ màn hìn
 #### 3. Hệ Thống Đặc Quyền Triết Lý A + C (Foundational Advantage Mechanics)
 Để bảo đảm 4 Class cơ bản luôn giữ vững vị thế chiến lược xuyên suốt game:
 1. **Ưu Đãi Chi Phí Nâng Cấp Kỹ Năng (-40% Sunk Cost):**  
-   Chi phí Vàng và Tàn Trang Kỹ Năng (`item_skill_shard`) để nâng cấp kỹ năng từ Cấp 1 lên Cấp 3 của 4 Class này luôn rẻ hơn **40%** so với các Class Bậc Rare/Epic.
+   Chi phí Vàng và Tàn Trang Kỹ Năng (`item_skill_shard`) để nâng cấp kỹ năng từ Cấp 1 lên Cấp 3 của 4 Class này luôn rẻ hơn **40%** so với các Class Bậc T2/T3.
 2. **Khả Năng Dung Nạp Bí Kíp Võ Học Chung (Universal Grimoire Compatibility):**  
    Ngoài sách độc quyền của Class, 4 Class cơ bản có thể học và trang bị toàn bộ **Bí Kíp Võ Học Chung** thuộc loại vũ khí tương ứng (Kiếm/Khiên, Cung/Song Đao, Trượng/Sách, Chùy/Khí Công).
 3. **Đột Phá Cấp 4 & 5 Bằng Sách Võ Học Chung (Mastery Substitution):**  
@@ -190,7 +190,7 @@ The `foundational_upgrade_cost` formula is defined as:
 | Variable | Symbol | Type | Range | Description |
 |---|:---:|:---:|:---:|---|
 | Target Level | $L$ | int | $2 - 3$ | Cấp độ kỹ năng muốn nâng tới (Cấp 2 hoặc Cấp 3). |
-| Base Gold Cost | $\text{BaseGold}$ | int | $100 - 500$ | Chi phí vàng gốc quy chuẩn cho Class Bậc Rare. |
+| Base Gold Cost | $\text{BaseGold}$ | int | $100 - 500$ | Chi phí vàng gốc quy chuẩn cho Class Bậc T2. |
 | Base Shard Cost | $\text{BaseShards}$ | int | $2 - 5$ | Số Tàn Trang Kỹ Năng gốc (`item_skill_shard`). |
 | Foundational Discount | $D$ | float | $0.40$ | Tỷ lệ ưu đãi giảm giá cố định cho 4 Class Cơ Bản (40%). |
 
@@ -208,16 +208,16 @@ The `foundational_upgrade_cost` formula is defined as:
 ### 2. Công Thức Phản Đòn Hoàn Hảo Của Chiến Binh (Vanguard Perfect Parry)
 The `vanguard_parry_reflection` formula is defined as:
 
-`ParryPostureDamage = BaseParryPosture * (1.0 + 0.10 * (ShieldTier - 1))`
+`ParryPostureDamage = BaseParryPosture * (1.0 + 0.10 * (ShieldRarity - 1))`
 
 **Variables:**
 | Variable | Symbol | Type | Range | Description |
 |---|:---:|:---:|:---:|---|
 | Base Parry Posture | $\text{BasePosture}$ | float | $40.0$ | Lượng Posture phản lại mặc định khi bấm trúng cửa sổ $0.15\text{s}$. |
-| Shield Tier | $\text{Tier}$ | int | $1 - 5$ | Bậc hiếm của chiếc khiên đang trang bị trên Paperdoll. |
+| Shield Rarity | $\text{ShieldRarity}$ | int | $1 - 5$ | Cấp độ hiếm của chiếc khiên trên Paperdoll (1: Common → 5: Legendary). |
 
 **Output Range:** $40.0 - 56.0$ điểm Posture gây ngược lại kẻ tấn công.  
-**Example:** Với Khiên Gỗ Bậc 1 ($Tier = 1$): Phản đúng $\mathbf{40.0}$ Posture vào Boss. Với Khiên Thần Thánh Bậc 5 ($Tier = 5$): Phản $40 \times (1 + 0.40) = \mathbf{56.0}$ Posture.
+**Example:** Với Khiên Gỗ Common ($ShieldRarity = 1$): Phản đúng $\mathbf{40.0}$ Posture vào Boss. Với Khiên Legendary Bậc 5 ($ShieldRarity = 5$): Phản $40 \times (1 + 0.40) = \mathbf{56.0}$ Posture.
 
 ---
 
@@ -440,7 +440,7 @@ Tích hợp trực tiếp vào thanh trạng thái CommonUI của người chơi
 - [ ] **AC-6 (Foundational 40% Upgrade Discount & Shared Grimoire Mastery):**
   - **GIVEN** kỹ năng của 4 Class Cơ Bản đang ở Cấp 1, 2 hoặc 4,
   - **WHEN** người chơi tiến hành nâng cấp tại NPC hoặc giao diện Grimoire,
-  - **THEN** chi phí Vàng và Tàn Trang Kỹ Năng từ Cấp 1 lên Cấp 3 được giảm chính xác $40\%$ so với giá quy chuẩn của Class Bậc Rare; và tại Cấp 4 $\rightarrow$ Cấp 5 (Mastery), nếu thiếu Sách Kỹ Năng Độc Quyền, người chơi có thể sử dụng hợp lệ 1 cuốn Sách Võ Học Chung cùng loại vũ khí để đột phá thành công.
+  - **THEN** chi phí Vàng và Tàn Trang Kỹ Năng từ Cấp 1 lên Cấp 3 được giảm chính xác $40\%$ so với giá quy chuẩn của Class Bậc T2; và tại Cấp 4 $\rightarrow$ Cấp 5 (Mastery), nếu thiếu Sách Kỹ Năng Độc Quyền, người chơi có thể sử dụng hợp lệ 1 cuốn Sách Võ Học Chung cùng loại vũ khí để đột phá thành công.
 
 - [ ] **AC-7 (Citadel Safe Zone Respec & Class Swap Safety):**
   - **GIVEN** người chơi đang ở trong Tòa Thành (Vùng an toàn / Safe Zone),

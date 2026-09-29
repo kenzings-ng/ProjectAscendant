@@ -34,7 +34,7 @@ flowchart TD
     end
 
     subgraph Macro["3. Vòng Lặp Tiến Trình (Macro Loop: Giờ / Ngày)"]
-        Forge["Rèn dã ngoại & Khảm Boss Soul"] --> ClassEvolve["Thăng tiến Kim tự tháp 12 Chức nghiệp"]
+        Forge["Rèn dã ngoại & Khảm Boss Soul"] --> ClassEvolve["Thăng tiến Cây 16 Chức nghiệp"]
         ClassEvolve --> OutpostEconomy["Giao thương, chợ đen Smuggler & Karma"]
         OutpostEconomy --> HighRiskZone["Tiến vào vùng hiểm địa cấp cao"]
     end
@@ -92,9 +92,9 @@ Vòng tuần hoàn giữ chân người chơi qua nhiều tuần và tháng:
    - Nguyên liệu rơi từ quái và boss được mang về Lò rèn dã ngoại.
    - Cường hóa trang bị từ $+1$ đến $+10$.
    - **Khảm linh hồn Boss (Boss Soul Socketing):** Biến đổi đặc tính vũ khí (ví dụ: khảm *Core of the Stone Golem* giúp đòn đánh thường có xác suất gây chấn động diện rộng).
-2. **Kim tự tháp 12 Chức nghiệp (12-Class Pyramid):**
-   - Khởi đầu với 4 Class cơ bản: **Vanguard** (Chiến binh trọng giáp), **Ranger** (Xạ thủ cơ động), **Arcanist** (Pháp sư nguyên tố), **Acolyte** (Hỗ trợ thánh tích).
-   - Mở khóa 7 Class nâng cao (Hiếm và Sử thi) và 1-2 Mythic Class thông qua việc tìm kiếm cổ tịch, hoàn thành kỳ ngộ và thử thách bí ẩn trong thế giới.
+2. **Cây Chức nghiệp 16 Class (16-Class Progression Tree):**
+   - Khởi đầu với 4 Class Sơ cấp (Bậc T1): **Vanguard** (Tiên phong), **Ranger** (Du hiệp), **Arcanist** (Thuật sĩ), **Acolyte** (Tu sĩ).
+   - Mở khóa các Class Trung cấp (Bậc T2), Cao cấp (Bậc T3) và Apex Class (Bậc T4 - God Slayer) thông qua việc tìm kiếm cổ tịch, hoàn thành kỳ ngộ và thử thách bí ẩn trong thế giới (chi tiết xem tại `advanced-classes.md`).
 3. **Hệ thống Kinh tế & Điểm Danh Dự (Karma & Smuggler Economy):**
    - Vàng là tiền tệ lưu thông chính, dùng sửa chữa, mua công thức và giao dịch.
    - Điểm **Karma**: Đo lường hành vi đạo đức giữa người chơi với người chơi (giúp đỡ người mới vs tấn công người khác ngoài vùng an toàn).

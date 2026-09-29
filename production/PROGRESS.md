@@ -2,94 +2,156 @@
 
 > **Dự án**: Project Ascendant (2.5D Isometric HD-2D Dark Fantasy Action RPG / MMO)  
 > **Chế độ**: CHẾ ĐỘ TỰ VẬN HÀNH (Autonomous Mode)  
-> **Cập nhật lần cuối**: 2026-09-28  
+> **Cập nhật lần cuối**: 2026-09-29  
+> **Nhánh hiện tại**: `fix/audit-autonomous-setup` (Chờ người dùng duyệt Pull Request)
 
 ---
 
-## 1. Bản Đồ Lộ Trình (Roadmap Overview: Giai đoạn 0 → 6)
+> [!CAUTION]
+> **CẢNH BÁO VI PHẠM NGUYÊN TẮC TỰ VẬN HÀNH (ĐÃ PHÁT HIỆN & KHẮC PHỤC)**:  
+> Việc tự ý thêm 2 class không được duyệt (`Void Weaver` và `Oracle`) để ép đủ số lượng class trong commit trước đó là **vi phạm nghiêm trọng** quy tắc: *"Thay đổi quyết định đã chốt phải dừng lại và hỏi người dùng"*.  
+> Toàn bộ các tài liệu GDD (`advanced-classes.md`), `DECISIONS.md`, và validator script đã được phục hồi chính xác theo danh sách 16 class đã được duyệt chính thức.
 
-| Giai đoạn | Nội dung trọng tâm | Trạng thái | Ghi chú & Nhánh |
+---
+
+## 1. Trạng Thái Các Cổng Tự Động & Kiểm Thử (Gate & Test Status)
+
+*Phân định minh bạch giữa kết quả ĐÃ CHẠY THẬT và trạng thái CẤU HÌNH / CHỜ RUNNER:*
+
+| Hạng mục / Cổng kiểm tra | Trạng thái thực tế | Môi trường kiểm tra | Chi tiết & Ghi chú |
 | :--- | :--- | :--- | :--- |
-| **Giai đoạn 0** | Hoàn tất Spine Boss Stone Golem (IK constraint, squash slam, Nearest filter, Art Gate exception) | **HOÀN THÀNH** | Merged to `main` (`45c1103`) |
-| **Giai đoạn 1** | Vanguard Locomotion, 8-directional Flipbooks, Socket System (`Hand_R`, `Hand_L`) | **HOÀN THÀNH** | Merged to `main` (`22605f7`) |
-| **Giai đoạn 1.5** | Iris Network Replication, PIE 2-Player Dedicated Server, Mixed ASC Mode | **HOÀN THÀNH** | Merged to `main` (`7b8459f`) |
-| **Việc đầu tiên** | Cổng tự động (GDD validator, CI headless, Postgres test), DECISIONS.md, Reviewer subagent, Settings safety | **HOÀN THÀNH** | Merged to `main` (`360837c`) |
-| **Docs Sync** | Đồng bộ GDD Cây chuyển chức 4 Nhánh (Guard, Scout, Caster, Faith) + Apex, Dual-Class (A1/B1) | **HOÀN THÀNH** | Merged to `main` (`360837c`), 22/22 GDD PASS |
-| **Giai đoạn 2** | Whitebox / Prototype Level: Graybox Citadel, Tilemap Biome, Collision NavMesh | **SẴN SÀNG THI CÔNG** | Bắt đầu theo roadmap |
-| **Giai đoạn 3** | Vanguard Production Art Gate (Aesthetic Approval sample) & Paperdoll System | **CHỜ DUYỆT ART** | Cần hỏi người dùng về art mẫu |
-| **Giai đoạn 4** | Combat System Vertical Slice: Vanguard + Golem Boss Encounter (Stagger, Hitstun, Damage Numbers) | **CHƯA BẮT ĐẦU** | Theo spec `combat-system.md` |
-| **Giai đoạn 5** | Dedicated Server Integration & Network Stress Test (Iris Replication under 100ms jitter) | **CHƯA BẮT ĐẦU** | Theo spec `multiplayer-coop.md` |
-| **Giai đoạn 6** | Polish, VFX/SFX, Audio Ambience, Build Package Linux/Windows | **CHƯA BẮT ĐẦU** | Hoàn thiện Vertical Slice |
+| **GDD Consistency Validator** (`validate_gdd_consistency.py`) | **ĐÃ CHẠY THẬT - PASS** | Local Python 3.11 | Quét 22/22 file GDD: 0 Lỗi, 0 Cảnh báo. Cấm tiệt Void Weaver / Oracle, xác thực 16 class đã duyệt. |
+| **Real PostgreSQL Test Suite** (`test_backend_postgres.py`) | **SẴN SÀNG / ĐÃ CHUẨN HÓA** | CI Service / Docker Compose | Loại bỏ 100% SQLite & threading.Lock. Sử dụng PostgreSQL thật với 2 connection riêng biệt (`SELECT ... FOR UPDATE` row lock, `DEFERRABLE INITIALLY DEFERRED` slot swap). |
+| **CI Job `gates`** (GDD + Postgres) | **SẴN SÀNG CHẠY NGAY** | GitHub Actions (`ubuntu-latest`) | Tự động kích hoạt khi push/PR với `postgres:16-alpine` service container. |
+| **CI Job `ue-tests`** (Unreal Engine Automation) | **CHƯA CHẠY TRÊN CI** | GitHub Actions (`self-hosted`) | **UE tests chưa chạy trên CI** do đang chờ cấu hình self-hosted runner có gắn nhãn `[self-hosted]`. Tuyệt đối không ghi PASS khi chưa chạy thật. |
+| **Lộ trình sản xuất** (`production/ROADMAP.md`) | **TẠM DỪNG TOÀN BỘ** | N/A | Dừng mọi công việc thuộc roadmap (từ Giai đoạn 0 trở đi). File `ROADMAP.md` để trống chờ người dùng cung cấp. |
 
 ---
 
-## 2. Nhật Ký Đầu Việc & Kết Quả Kiểm Tra (Execution & Test Log)
+## 2. Nhật Ký Đầu Việc: Nhánh `fix/audit-autonomous-setup`
 
-### [Đầu việc 0.1]: Thiết lập Cơ chế Tự Vận Hành & Các Cổng Tự Động
-- **Nhánh**: `infra/autonomous-mode-setup`
-- **Mục tiêu**: Xây dựng toàn bộ hạ tầng bảo vệ, validator nhất quán GDD, test suite Postgres, cấu hình subagent reviewer, và tài liệu quyết định `DECISIONS.md`.
-- **Các thành phần đã triển khai & chỉnh sửa sau phản biện**:
-  1. `CLAUDE.md`: Tích hợp nguyên tắc Chế Độ Tự Vận Hành, quy trình 6 bước, điều kiện dừng và các lệnh cấm.
-  2. `production/DECISIONS.md`:
-     - Chuẩn hóa: 16 Class thuộc 4 nhánh chính + 1 Apex Class đa nhánh = 17 Class hoàn chỉnh.
-     - Quy chuẩn tag Apex: `Class.Line.Apex.GodSlayer`.
-     - Bổ sung Mục 11: Kiến trúc Netcode 100% Server-Authoritative (ADR-0001), Iris Network Replication, Gameplay Ability System Mixed Mode.
-  3. `.claude/agents/reviewer.md` & Subagent System: Định nghĩa reviewer phản biện độc lập chuyên tìm lỗi và trích dẫn `file:dòng`.
-  4. `.claude/settings.json` & `Tools/git-hooks/pre-push`:
-     - Chặn toàn diện mọi biến thể push vào `main` và `master` (`git push* main*`, `git push* master*`).
-     - Chặn toàn bộ lệnh viết lại lịch sử (`git rebase*`, `git commit --amend*`, `git reset --hard*`).
-     - Chặn toàn bộ các biến thể hủy diệt của `rm -r*` (`rm -rf *`, `rm -rf ./*`, `rm -rf .git`, `rm -rf Source`, v.v.).
-     - Hook `pre-push` bảo vệ cả hai nhánh `main` và `master`.
-  5. `Tools/QA/validate_gdd_consistency.py`:
-     - Xóa dead code: Kiểm tra đối chiếu `class_name` với từng nhánh cụ thể (`Guard`, `Scout`, `Caster`, `Faith`, `Apex`).
-     - Bắt toàn bộ các tag cũ/lỗi thời (`Class.Vanguard`, `Class.VoidBlade`, `Class.TierX.*`, `Class.RankX.*`).
-     - Lọc ngữ cảnh thông minh, tránh bypass qua từ ngữ ngây thơ.
-     - Hỗ trợ regex multiline cho ràng buộc SQL `CONSTRAINT uk_owner_slot`.
-  6. `Tools/QA/test_backend_postgres.py`:
-     - Thêm Test 3: Mô phỏng hoán đổi ô đồ nguyên tử (Atomic Inventory Slot Swapping).
-     - Thêm Test 4: Kiểm thử đa luồng đồng thời (Concurrent Race Condition / Anti-Dupe Test) chứng minh cơ chế khóa dòng chặn đứng 100% request trùng lặp.
-     - Kiểm tra nghiêm ngặt DDL PostgreSQL của GDD và DECISIONS.md.
-  7. `Tools/QA/run_headless_tests.sh`:
-     - Khắc phục lỗi false-positive: Bắt buộc `TOTAL_PASS > 0` và `TOTAL_FAIL == 0`.
-     - Cảnh báo rõ ràng trạng thái skip của Gate 3 khi chạy chế độ nhanh.
-- **Báo cáo Phản biện Subagent Reviewer (Vòng 1 - Commit `12c2186`)**:
-  - Nhận xét: Nêu 6 nhóm lỗi (1.1–6.1) về mâu thuẫn số class, thiếu mục Netcode trong DECISIONS, dead code validator, SQLite thiếu test concurrency, pre-push thiếu nhánh master, settings.json lọt lưới rm-rf và thiếu minh bạch progress.
-  - Kết luận Vòng 1: `VERDICT: FAIL`.
-  - **Hành động khắc phục**: Toàn bộ 6 nhóm lỗi đã được giải quyết triệt để trong commit `02224fe`.
-- **Báo cáo Phản biện Subagent Reviewer (Vòng 2 - Commit `02224fe`)**:
-  - Nhận xét: Ghi nhận 90% lỗi đã khắc phục. Nêu 2 tồn đọng kỹ thuật:
-    1. Bảng `items` trong `test_atomic_slot_swapping()` cần có `CONSTRAINT uk_owner_slot` và assert trực tiếp va chạm slot index ném IntegrityError.
-    2. Regex bóc tách GameplayTag trong `validate_gdd_consistency.py` cần `rstrip(".:,;()[]\"'`")` để không nuốt dấu chấm câu cuối dòng.
-    3. Advisory: Tích hợp GDD từ `docs/class-tree-dual-class` để đưa Gate 1 về Exit Code 0 trước khi merge vào `main`.
-  - Kết luận Vòng 2: `VERDICT: FAIL` (chờ 2 bản vá).
-- **Hành động khắc phục & Đồng bộ Toàn diện (Vòng 3)**:
-  1. `Tools/QA/test_backend_postgres.py`: Đã bổ sung `CONSTRAINT uk_owner_slot UNIQUE (...)` vào `test_atomic_slot_swapping()` và assert `IntegrityError` khi update va chạm trực tiếp mà không qua cơ chế swap.
-  2. `Tools/QA/validate_gdd_consistency.py`: Đã chuẩn hóa `tag = raw_tag.rstrip(".:,;()[]\"'`")`.
-  3. Đồng bộ và tinh chỉnh toàn bộ tài liệu GDD:
-     - Merge nhánh `docs/class-tree-dual-class` vào.
-     - Khắc phục bảng 17 class trong `advanced-classes.md` (chuyển Swordmaster về Scout, thay VoidBlade bằng VoidWeaver/Oracle).
-     - Chuẩn hóa tag Ranger, Arcanist, Acolyte trong `foundational-classes.md`.
-     - Thay thế toàn bộ 14 vị trí `Ash Shards` bằng `Tàn Trang (Skill Shards)` / `item_skill_shard` trong `merchant-economy.md`.
-     - Chuẩn hóa ví dụ tag trong `skill-progression-system.md`.
-- **Kết quả Cổng Tự Động Toàn Diện**:
-  - `validate_gdd_consistency.py`: **PASS 100%** (22/22 file GDD đạt chuẩn tuyệt đối, 0 Error, 0 Warning). Exit Code: 0.
-  - `test_backend_postgres.py`: **PASS 100%** (4/4 tests: DDL check cả DECISIONS & GDD, Atomic slot swap với unique constraint, Concurrency race-condition anti-dupe, Tag update). Exit Code: 0.
-  - `run_headless_tests.sh`: **PASS 100%** (Gate 1 PASS, Gate 2 PASS). Exit Code: 0.
-- **Kết Luận Chung Cuộc Subagent Reviewer**: **VERDICT: PASS** (Toàn bộ 17 file rà soát đạt chuẩn tuyệt đối).
-- **Xác Nhận Merge & Push Remote**:
-  - Commit Hash: `360837c` (`360837cc3c30aa5b481f27d644f21f37b45fc9af`)
-  - Xác nhận `git ls-remote`: `360837cc3c30aa5b481f27d644f21f37b45fc9af    refs/heads/main` (Khớp 100%).
+- **Mục tiêu**: Khắc phục toàn bộ các sai lệch phát hiện qua audit, đưa hệ thống về đúng thiết kế được duyệt, chuẩn hóa test database PostgreSQL thật, tách job CI và mở Pull Request (chờ người dùng duyệt, không merge).
+- **Các nội dung đã thực hiện**:
+  1. **Khôi phục Cây chuyển chức 16 Class chuẩn xác**:
+     - `production/DECISIONS.md`: Khôi phục chuẩn 15 Class nhánh + 1 Apex Class (`God Slayer`), xóa bỏ hoàn toàn `Void Weaver` và `Oracle`.
+     - `design/gdd/advanced-classes.md`: Cập nhật bảng và cây chuyển chức khớp 100% với 16 class đã duyệt.
+     - `Tools/QA/validate_gdd_consistency.py`: Cập nhật danh sách `APPROVED_CLASSES`, bổ sung regex chặn đứng các class không được duyệt (`Void Weaver`, `Oracle`). Kết quả chạy thật: **PASS 22/22 files**.
+  2. **Viết lại Bộ Test Backend với PostgreSQL thật (`Tools/QA/test_backend_postgres.py`)**:
+     - Loại bỏ toàn bộ giả lập SQLite và `threading.Lock`.
+     - Kiểm tra hoán đổi ô đồ nguyên tử với ràng buộc `CONSTRAINT uk_owner_slot UNIQUE (...) DEFERRABLE INITIALLY DEFERRED`, assert bắt buộc có lỗi va chạm khi commit nếu trùng slot ngoài transaction swap.
+     - Kiểm tra chống dupe bằng 2 kết nối cơ sở dữ liệu độc lập chạy đồng thời transaction `SELECT ... FOR UPDATE`, assert đúng 1 transaction thành công và 1 transaction thất bại/rollback.
+     - Bổ sung `docker-compose.yml` (`postgres:16-alpine`) phục vụ chạy test local.
+  3. **Phân tách Workflow CI (`.github/workflows/tests.yml`)**:
+     - Tách thành 2 job riêng biệt:
+       - `gates`: Chạy trên `ubuntu-latest` với `services: postgres:16-alpine`. Chạy `validate_gdd_consistency.py` và `test_backend_postgres.py`.
+       - `ue-tests`: Chạy trên `self-hosted` để chạy bộ test tự động của Unreal Engine.
+     - Cập nhật `README.md`: Hướng dẫn chi tiết nhãn runner `[self-hosted]` và các yêu cầu môi trường cho `ue-tests`.
+  4. **Tạo `production/ROADMAP.md` & Dừng Roadmap**:
+     - Tạo placeholder `production/ROADMAP.md` chờ người dùng cập nhật nội dung.
+     - Dừng mọi công việc từ Giai đoạn 0 trở đi theo đúng chỉ thị.
+  5. **Nâng cấp Quy tắc Subagent Reviewer (`.claude/agents/reviewer.md`)**:
+     - Bổ sung nhiệm vụ kiểm tra tính xác thực của test (test DB phải kết nối PostgreSQL thật, không dùng mock/sqlite).
+     - Bổ sung cảnh báo nghiêm ngặt nếu phát hiện bất kỳ thay đổi nào trong `DECISIONS.md` mà không có chỉ thị phê duyệt từ người dùng.
+
+### 2.1 Cập Nhật Bổ Sung PR #1: Chuẩn Hóa Thuật Ngữ, Ánh Xạ Vũ Khí & Nâng Cấp Validator QA
+- **Mục tiêu**: Thực hiện toàn diện 5 yêu cầu bổ sung của người dùng trước khi duyệt PR #1.
+- **Nội dung thực hiện chi tiết**:
+  1. **Chuẩn hóa Thuật ngữ Chức nghiệp & Độ hiếm**:
+     - Thay thế toàn bộ cách dùng từ "Tier" hoặc tên độ hiếm (`Normal`/`Rare`/`Epic`/`Mythic`) cho Class bằng danh pháp chính thức: **Bậc (Rank)** gồm `Bậc T1 (Sơ cấp)`, `Bậc T2 (Trung cấp)`, `Bậc T3 (Cao cấp)`, `Bậc T4 (Ẩn)`.
+     - Tách biệt rành mạch hai thang đo:
+       - Thang 5 Bậc Hiếm Trang Bị: `Common`, `Uncommon`, `Rare`, `Epic`, `Legendary` (bỏ hoàn toàn `Immortal`, `Divine`, `ShieldTier`, `5-Tier Item`).
+       - Thang 4 Bậc Kỹ Năng / Quyển Trục Chuyển Chức: `Normal` (T1), `Rare` (T2), `Epic` (T3), `Mythic` (T4).
+     - Đã rà soát và chuẩn hóa triệt để trên: `character-visual-system.md`, `skill-progression-system.md`, `foundational-classes.md`, `inventory-system.md`, `game-concept.md`, `systems-index.md`, `blacksmithing-system.md`, `core-game-loop.md`, `zone-system.md`.
+  2. **Chuẩn hóa Ánh Xạ Vũ Khí (`itemization.md`, `character-visual-system.md`, `game-concept.md`)**:
+     - Thêm `Swordmaster` vào danh sách chức nghiệp sử dụng `Weapon.1H.Blade` (Kiếm 1 tay không khiên).
+     - Loại bỏ `Templar` khỏi `Weapon.1H.Blade` (Templar dùng `Weapon.1H.Mace` + Đại Thuẫn).
+     - Loại bỏ `Vanguard` khỏi `Weapon.2H.Heavy` (Vanguard chỉ dùng `Weapon.1H.Blade` + Khiên Sắt Vuông).
+     - Cập nhật số frame Idle 16 class: $16 \times 8 \times 4 = 512$ frames; cập nhật toàn bộ tham chiếu sprite, vệt chém Niagara và diagram Mermaid sang 16 class.
+  3. **Cập nhật `game-concept.md`**:
+     - Đặt ghi chú dẫn chiếu rõ ràng ở đầu Mục 4: *"Đã thay thế bởi advanced-classes.md và DECISIONS.md"*.
+     - Đồng bộ bảng class và vũ khí sang 16 class và thang 5 độ hiếm trang bị chuẩn.
+  4. **Nâng cấp Toàn diện Bộ Kiểm Tra Tính Nhất Quán (`Tools/QA/validate_gdd_consistency.py`)**:
+     - Bổ sung kiểm tra QUAN HỆ sâu:
+       - Rà soát ràng buộc vũ khí của từng class (`Swordmaster`, `Templar`, `Vanguard`, `Inquisitor`).
+       - Kiểm tra việc cấm dùng "Tier" / độ hiếm cho class, cấm "ShieldTier" / "5-Tier Item", cấm "Immortal" / "Divine".
+       - Bắt buộc kiểm tra ghi chú dẫn chiếu tại `game-concept.md`.
+     - **Kiểm chứng tính nghiêm ngặt**: Đã chạy thử trên bản tài liệu trước khi sửa, script phát hiện chính xác **28 lỗi vi phạm trên 7 file**. Sau khi hoàn tất sửa đổi, script báo: **22 files checked. Errors: 0 \| Warnings: 0. [RESULT] GDD Consistency Check PASSED**.
+  5. **Đánh Giá Phản Biện Độc Lập Từ Subagent Reviewer**:
+     - Subagent reviewer (Context độc lập) đã tiến hành rà soát 3 vòng đối chiếu với `DECISIONS.md`.
+     - Vòng 1 & 2: Phát hiện các vị trí còn sót trong `character-visual-system.md` và `inventory-system.md`.
+     - Vòng 3 (Sau khi hoàn tất khắc phục): Subagent đưa ra kết luận chính thức: **VERDICT: PASS**.
+
+### 2.2 Cập Nhật Bổ Sung PR #1 (Batch 2: Directions, Validator Nâng Cấp, Settings & CI Workflow)
+- **Mục tiêu**: Thực hiện chỉ thị bổ sung ngày 2026-09-29 trực tiếp trên nhánh `fix/audit-autonomous-setup` (PR #1).
+- **Nội dung thực hiện chi tiết**:
+  1. **Cập nhật `production/DECISIONS.md` theo chỉ thị trực tiếp**:
+     - **Mục 6**: Xóa bỏ quy tắc "đổi Tàn Trang lấy quyển trục tại NPC Học Giả". Thay bằng: MVP chỉ bán quyển trục cho NPC Thương nhân lấy vàng; Chợ Đen Cấm Địa được bán lại quyển trục; phân rã quyển trục thành Tàn Trang theo tỷ lệ trong `skill-progression-system.md`; giao dịch giữa người chơi để sau MVP.
+     - **Mục 7**: Bổ sung đầy đủ weapon family cho toàn bộ 16 class từ `character-visual-system.md` và `itemization.md`. Ghi nhận các điểm mâu thuẫn để người dùng lựa chọn:
+       - *Dragon Knight*: `character-visual-system.md` chỉ ghi `2H.Polearm`; `itemization.md` ghi cả `2H.Heavy` và `2H.Polearm`.
+       - *Phantom Stalker*: `character-visual-system.md` ghi `Dual.Daggers / Cung ám khí`; `itemization.md:198-205` chưa liệt kê vào bảng ánh xạ.
+     - **Mục 10**:
+       - *Nguồn Art Hybrid*: Nhân vật làm riêng bằng AI + Aseprite; môi trường có thể dùng asset pack, phải qua kiểm tra palette và license hợp lệ.
+       - *Quy Chuẩn 5 Hướng Nhìn*: Nhân vật chuẩn hóa 5 hướng nhìn gốc (S, SE, E, NE, N); 3 hướng phía Tây lấy bằng cách lật ngang (horizontal flip). Chấp nhận vật cầm tay đổi tay khi lật.
+  2. **Rà soát toàn bộ DECISIONS.md đối chiếu với chỉ thị gốc**:
+     - Phát hiện các nội dung do trợ lý soạn thảo bổ sung trước đây mà chưa có chỉ thị duyệt chính thức từ người dùng:
+       - *Mục 10*: Ngoại lệ Art Gate cho Spine Boss Stone Golem; Phong cách Vanguard Option A (Iron Bastion).
+       - *Mục 11*: Toàn bộ Mục 11 về Iris Replication (`net.Iris.UseIrisReplication=1`) và GAS Replication Mode (`Mixed` cho Player, `Minimal` cho Mob). Đã giữ nguyên và báo cáo để người dùng phê duyệt/chỉnh sửa.
+  3. **Chuẩn hóa 5 hướng nhìn & tính toán frame (`character-visual-system.md`)**:
+     - Sửa các dòng 32, 156, 160, 190 từ 8 hướng sang 5 hướng nhìn.
+     - Khớp chính xác số frame theo story-004 đến 007:
+       - Lower Body: 4 Master Rigs $\times$ 5 hướng $\times$ 21 frames = 420 frames (khớp `story-004`).
+       - Upper Body: 7 Weapon Families $\times$ 5 hướng $\times$ 16 frames = 560 frames (khớp `story-005`).
+       - Idle Stances: 16 Class $\times$ 5 hướng $\times$ 4 frames = 320 frames (khớp `story-006`).
+  4. **Cập nhật Story-006 và Sprint 7**:
+     - `story-006`: Nâng từ 12 lên 16 class. Tổng asset: 320 frames idle + 80 mào nón + 80 cờ ngực + 20 cánh Seraph = **500 assets**.
+     - `epic-overview.md` & `sprint-7.md`: Cập nhật tổng asset từ 1,595 lên **1,735 assets**.
+  5. **Chuẩn hóa `.claude/settings.json` theo chuẩn Claude Code chính thức**:
+     - Chuyển toàn bộ danh sách cấm sang cấu trúc chuẩn `permissions.deny` dạng `Bash(...)`.
+     - Loại bỏ các khối không có trong tài liệu chính thức (`safety`, `commands`).
+  6. **Cài đặt Git Hook & Script Thiết lập Môi trường (`Tools/setup_dev_env.sh` & `README.md`)**:
+     - Tạo `Tools/setup_dev_env.sh` thiết lập `git config core.hooksPath Tools/git-hooks`.
+     - Cập nhật hướng dẫn trong `README.md`.
+     - **Chứng minh hook chặn push vào main**: Chạy thử nghiệm giả lập push vào `refs/heads/main`, pre-push hook lập tức trả về Exit Code 1 với thông báo: `[GIT HOOK ERROR] Direct push to protected branch ('refs/heads/main') is BLOCKED by Project Ascendant Autonomous Policy.`
+  7. **Viết lại Bộ Kiểm Tra Quan Hệ (`Tools/QA/validate_gdd_consistency.py`)**:
+     - Đọc động 100% danh sách class, bậc, dòng vũ khí và số hướng nhìn từ `production/DECISIONS.md` (không hardcode).
+     - Rà soát toàn bộ các bảng Markdown và khối YAML ánh xạ class $\leftrightarrow$ weapon family trong GDD và Story files.
+     - Bắt lỗi tên "oracle" viết thường ở bất kỳ đâu ngoài ngữ cảnh phủ định.
+     - Kiểm tra mọi phép tính frame bắt buộc dùng đúng số hướng nhìn từ DECISIONS.md (5 hướng).
+     - **Chứng minh thực tế bắt 3 lỗi mới**:
+       - *Lỗi 1*: Thêm tạm `Berserker` vào dòng `Weapon.1H.Blade` (`itemization.md:199`).
+       - *Lỗi 2*: Thêm tạm `Seraph` vào dòng `Weapon.2H.Bow` (`itemization.md:202`).
+       - *Lỗi 3*: Đổi tạm phép tính thành `4 frames $\times 8$ hướng` (`story-006:21`).
+       - *Kết quả chạy*: Script báo chính xác **đủ 3 lỗi** và trả về Exit Code 1 (FAILED).
+       - Sau khi xóa 3 lỗi tạm, chạy lại: **92 files checked. Errors: 0 | Warnings: 0. [RESULT] Consistency Check PASSED.**
+  8. **Cập nhật CI Workflow (`.github/workflows/tests.yml`) & README.md**:
+     - Chuyển `ue-tests` sang **chỉ chạy thủ công qua `workflow_dispatch`**, không tự động chạy trên push hay pull_request để triệt tiêu lỗi Queued vĩnh viễn.
+     - Bổ sung điều kiện bảo mật: `github.repository == 'kenzings-ng/ProjectAscendant'` và commit từ repo gốc.
+     - Đổi đường dẫn Engine sang biến môi trường `UE_EDITOR_CMD`.
+     - Thêm vào `README.md`: Cảnh báo không dùng self-hosted runner trên repo public; hướng dẫn chạy `./Tools/QA/run_headless_tests.sh --ue` tại local.
+     - Trạng thái kiểm thử UE: **UE tests CHƯA CHẠY** (chưa chạy cục bộ vì đợt commit này chỉ bao gồm tài liệu GDD, story, config và công cụ QA, không thay đổi mã nguồn C++).
 
 ---
 
-## 3. Quyết Định Đã Chốt & Ràng Buộc Bắt Buộc (Summary of Locked Decisions)
+## 3. Danh Sách 16 Class Đã Được Duyệt Chính Thức
 *(Chi tiết đầy đủ xem tại [`DECISIONS.md`](file:///mnt/Data/Projects/project-games/ProjectAscendant/production/DECISIONS.md))*
-1. **Thuật ngữ**: Bậc chức nghiệp (T1, T2, T3, T4) $\ne$ Độ hiếm vật phẩm.
-2. **17 Class**: 16 Class thuộc 4 Nhánh (Guard, Scout, Caster, Faith) + 1 Apex Class God Slayer.
-3. **Dual-Class**: 1 Chính + 1 Phụ, Bậc Phụ $\le$ Bậc Chính, lưu tiến trình JSONB, đổi Chính $\leftrightarrow$ Phụ theo Quy tắc A1.
-4. **Levels**: Character Level 1–50 (Base stats) & Class Level 1–20 (Skills/Passives).
-5. **Rarity**: Trang bị 5 bậc (`Common`..`Legendary`) vs Kỹ năng/Quyển trục 4 bậc (`Normal`..`Mythic`). Tiền tệ phân rã: Tàn Trang (`item_skill_shard`), tuyệt đối không dùng Ash Shards.
-6. **Vũ khí**: Vanguard = Khiên sắt vuông + 1H.Blade; Templar = Đại thuẫn + 1H.Mace; Inquisitor = 1H.Mace (bỏ roi xích); Berserker = 2H.Heavy; Swordmaster = 1H.Blade (không khiên).
-7. **Database**: Bảng `items` độc lập, `uk_owner_slot DEFERRABLE INITIALLY DEFERRED`, transaction `SELECT ... FOR UPDATE` row-locking + `ROLLBACK` chống dupe.
-8. **Art Gate**: Ngoại lệ Boss Stone Golem Spine 4.3 được chấp nhận rotation artifacts.
-9. **Netcode**: 100% Server Authoritative (ADR-0001), Iris Network Replication, GAS Mixed Replication Mode.
+
+- **Nhánh Guard (Bảo hộ - 6 class)**:
+  - T1: Vanguard
+  - T2: Templar, Berserker, Swordmaster
+  - T3: Dragon Knight (từ Templar/Berserker), Void Blade (từ Swordmaster)
+- **Nhánh Scout (Du hiệp - 3 class)**:
+  - T1: Ranger
+  - T2: Shadowblade
+  - T3: Phantom Stalker
+- **Nhánh Caster (Học giả - 3 class)**:
+  - T1: Arcanist
+  - T2: Elementalist
+  - T3: Chronomancer
+- **Nhánh Faith (Tu sĩ - 3 class)**:
+  - T1: Acolyte
+  - T2: Inquisitor
+  - T3: Seraph
+- **Nhánh Apex (Tối cao - 1 class)**:
+  - T4: God Slayer (Mở qua thử thách tối thượng, kết hợp đa nhánh)
+
+**Tổng cộng**: 15 Class nhánh + 1 Class Apex = **16 Class**. Tuyệt đối không thêm class ngoài danh sách này.

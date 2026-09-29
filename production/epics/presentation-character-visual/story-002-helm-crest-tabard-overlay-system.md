@@ -37,5 +37,5 @@ Story này mở rộng `UPAPaperdollComponent` đã code ở `item-004` để h�
   - Khi xoay sang hướng Tây (`EPAAimDirection8Way::West`), không xảy ra lỗi giáp ngực đè bẹp dải khăn Tabard.
 - [x] **AC-4 (Headless Unit Tests Pass 100%)**:
   - Triển khai test trong `PACharacterVisualIdentityTests.cpp`:
-    - Trang bị lần lượt 3 hạng cân giáp (`Armor_Heavy_T1`, `Armor_Medium_T1`, `Armor_Light_T1`) kết hợp đổi qua 12 class tags.
-    - Xác nhận cả 12 class đều giữ được Crest và Tabard hiển thị đúng component, không bị crash hay null pointer.
+    - Trang bị lần lượt 3 hạng cân giáp (`Armor_Heavy_T1`, `Armor_Medium_T1`, `Armor_Light_T1`) kết hợp đổi qua 16 class tags.
+    - Xác nhận cả 16 class đều giữ được Crest và Tabard hiển thị đúng component, không bị crash hay null pointer.

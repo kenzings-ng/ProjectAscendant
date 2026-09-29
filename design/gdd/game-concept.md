@@ -64,86 +64,94 @@ Một thế giới nơi cấp độ không thể che giấu sự non nớt, và 
 
 ---
 
-## 4. Hệ Thống 12 Chức Nghiệp trong Thế Giới MMO (Class Architecture)
+## 4. Hệ Thống Chức Nghiệp trong Thế Giới MMO (Class Architecture)
+
+> [!NOTE]
+> **Đã thay thế bởi `advanced-classes.md` và `DECISIONS.md`**: Cấu trúc chức nghiệp chính thức gồm 16 Class phân bố qua 4 Nhánh (Guard, Scout, Caster, Faith) và 1 Apex Class (God Slayer) cùng cơ chế Dual-Class (Chính/Phụ). Chi tiết đầy đủ và ràng buộc tiến trình xem tại [`advanced-classes.md`](file:///mnt/Data/Projects/project-games/ProjectAscendant/design/gdd/advanced-classes.md) và [`DECISIONS.md`](file:///mnt/Data/Projects/project-games/ProjectAscendant/production/DECISIONS.md).
 
 ```
                      ┌───────────────────────────┐
-                     │   1-2 CLASS ẨN (MYTHIC)   │
+                     │   1 APEX CLASS (BẬC T4)   │
                      │  (Thí Thần Giả - No-Hit)  │
                      └─────────────┬─────────────┘
                                    │
                      ┌─────────────┴─────────────┐
-                     │   3 CLASS CAO CẤP (EPIC)  │
-                     │  (Di chỉ Lãnh Chúa / Boss)│
+                     │   5 CLASS CAO CẤP (BẬC T3)│
+                     │(Di chỉ Lãnh Chúa / Boss)  │
                      └─────────────┬─────────────┘
                                    │
                      ┌─────────────┴─────────────┐
-                     │    4 CLASS HIẾM (RARE)    │
+                     │  6 CLASS TRUNG CẤP (BẬC T2│
                      │ (Kỳ ngộ dã ngoại / Tàn tích)│
                      └─────────────┬─────────────┘
                                    │
         ┌──────────────────────────┴──────────────────────────┐
-        │              4 CLASS CƠ BẢN (NORMAL)                │
-        │  Chiến Binh  │   Du Hiệp   │  Thuật Sĩ   │   Tu Sĩ  │
-        │(4 Vai trò tổ đội cốt lõi: Tank, Ranged, CC, Support)│
+        │              4 CLASS SƠ CẤP (BẬC T1)                │
+        │  Vanguard    │   Ranger    │   Arcanist  │  Acolyte │
+        │(4 Nhánh cốt lõi: Guard,     Scout,        Caster,    Faith)  │
         └─────────────────────────────────────────────────────┘
 ```
 
-### Chi tiết 12 Chức Nghiệp:
+### Chi tiết 16 Chức Nghiệp:
 
-#### TẦNG 1: 4 Class Cơ Bản (Normal / Foundational)
+#### BẬC T1: 4 Class Sơ Cấp (Foundational)
 *Có sẵn ngay khi tạo nhân vật. Ưu thế: Cây kỹ năng đa dụng nhất, chi phí nâng cấp rẻ hơn 40%, dễ phối trang bị và mix skill, không bao giờ bị lỗi thời ở endgame.*
 
 | STT | Tên Class | Vũ Khí Đặc Trưng | Phong Cách Chiến Đấu & Kỹ Năng Độc Đáo |
 | :---: | :--- | :--- | :--- |
-| **1** | **Chiến Binh (Vanguard)** | Kiếm & Khiên / Đại Kiếm | **Bậc thầy cận chiến & Đỡ đòn:** Sở hữu kỹ năng **Phản Đòn (Parry)** đòn đánh thường; thể lực (Stamina) dồi dào, khả năng càn lướt và tạo thế đứng vững chắc trước boss. |
-| **2** | **Du Hiệp (Ranger)** | Cung Tên / Song Đao | **Cơ động tầm xa & Bẫy:** Nhịp lướt né nhanh nhất game; có khả năng bắn tiễn xuyên thấu làm chậm quái, đặt bẫy chông và găm tên nổ vào điểm yếu của mục tiêu. |
-| **3** | **Thuật Sĩ (Arcanist)** | Trượng Phép / Cổ Thư | **Kiểm soát diện rộng & Phép thuật:** Tầm đánh trung bình; các chiêu thức kéo dồn quái, đẩy lùi kẻ địch khi bị áp sát và dồn sát thương nguyên tố phép thuật bùng nổ. |
-| **4** | **Tu Sĩ (Acolyte)** | Chùy Chiến / Tràng Hạt Khí | **Hỗ trợ sinh tồn & Khí công:** Vừa cận chiến vừa tạo khiên ánh sáng; có kỹ năng thanh tẩy độc/chảy máu, hồi phục Stamina cho bản thân và đồng đội xung quanh trong thế giới mở / tổ đội. |
+| **1** | **Tiên Phong (Vanguard)** | Kiếm 1 tay & Khiên Sắt Vuông (`1H.Blade`) | **Bậc thầy cận chiến & Đỡ đòn:** Sở hữu kỹ năng **Phản Đòn (Parry)** đòn đánh thường; thể lực (Stamina) dồi dào, khả năng càn lướt và tạo thế đứng vững chắc trước boss. |
+| **2** | **Du Hiệp (Ranger)** | Cung Tên / Song Đao (`2H.Bow` / `Dual.Daggers`) | **Cơ động tầm xa & Bẫy:** Nhịp lướt né nhanh nhất game; có khả năng bắn tiễn xuyên thấu làm chậm quái, đặt bẫy chông và găm tên nổ vào điểm yếu của mục tiêu. |
+| **3** | **Thuật Sĩ (Arcanist)** | Trượng Ma Pháp (`2H.Staff`) | **Kiểm soát diện rộng & Phép thuật:** Tầm đánh trung bình; các chiêu thức kéo dồn quái, đẩy lùi kẻ địch khi bị áp sát và dồn sát thương nguyên tố phép thuật bùng nổ. |
+| **4** | **Tu Sĩ (Acolyte)** | Chùy Chiến / Pháp Bảo (`1H.Mace` / `Relic`) | **Hỗ trợ sinh tồn & Khí công:** Vừa cận chiến vừa tạo khiên ánh sáng; có kỹ năng thanh tẩy độc/chảy máu, hồi phục Stamina cho bản thân và đồng đội xung quanh trong thế giới mở / tổ đội. |
 
-#### TẦNG 2: 4 Class Hiếm (Rare / Specialization)
+#### BẬC T2: 6 Class Trung Cấp (Advanced)
 *Mở khóa qua các chuỗi thử thách dã ngoại, săn quái tinh anh hoặc khám phá tàn tích.*
 
 | STT | Tên Class | Vũ Khí Đặc Trưng | Phong Cách Chiến Đấu & Điều Kiện Mở Khóa |
 | :---: | :--- | :--- | :--- |
-| **5** | **Cuồng Chiến Sĩ (Berserker)** | Song Rìu / Búa Tạ | **Liều mạng đổi sát thương:** Máu càng tụt thì tốc độ đánh và sát thương càng tăng; đòn đánh sở hữu *Super Armor* (không bị ngắt chiêu).<br>📍 *Cách mở:* Sống sót qua đấu trường quái tinh anh tại *Hẻm Núi Máu*. |
-| **6** | **Ảo Ảnh Thích Khách (Shadowblade)** | Song Đoản Kiếm / Phi Tiêu | **Ám sát & Tàng hình:** Lướt né để lại phân thân đánh lạc hướng quái; đòn đánh từ sau lưng (Backstab) x3 sát thương bạo kích.<br>📍 *Cách mở:* Tìm thấy căn cứ hội sát thủ ẩn sâu trong hang động đầm lầy. |
-| **7** | **Nguyên Tố Sư (Elementalist)** | Cầu Phép (Orb) | **Phản ứng kết hợp:** Luân chuyển 3 nguyên tố Hỏa - Băng - Lôi. Băng làm đông cứng, Hỏa thiêu đốt, Lôi gây nổ giật sét lan sang đàn quái.<br>📍 *Cách mở:* Giải mã câu đố 4 trụ đá nguyên tố ở đền thờ cổ. |
-| **8** | **Thánh Hiệp Sĩ (Templar)** | Chiến Chùy & Đại Thuẫn | **Tanker thuần túy & Phản kích:** Thu hút hận thù quái (Taunt) cực mạnh trong giao tranh đông người; chặn đòn đánh tích năng lượng ánh sáng nổ tung phản sát thương.<br>📍 *Cách mở:* Thanh tẩy lăng mộ thánh địa bị ô uế. |
+| **5** | **Cuồng Chiến Sĩ (Berserker)** | Đại Đao 2 tay (`Weapon.2H.Heavy`) | **Liều mạng đổi sát thương:** Máu càng tụt thì tốc độ đánh và sát thương càng tăng; đòn đánh sở hữu *Super Armor* (không bị ngắt chiêu).<br>📍 *Cách mở:* Sống sót qua đấu trường quái tinh anh tại *Hẻm Núi Máu*. |
+| **6** | **Thánh Hiệp Sĩ (Templar)** | Chiến Chùy & Đại Thuẫn (`Weapon.1H.Mace`) | **Tanker thuần túy & Phản kích:** Thu hút hận thù quái (Taunt) cực mạnh trong giao tranh đông người; chặn đòn đánh tích năng lượng ánh sáng nổ tung phản sát thương.<br>📍 *Cách mở:* Thanh tẩy lăng mộ thánh địa bị ô uế. |
+| **7** | **Kiếm Sư (Swordmaster)** | Kiếm 1 tay (`Weapon.1H.Blade`, không khiên) | **Đoạt mệnh bằng kiếm đạo:** Bỏ khiên để tối ưu tốc độ vung kiếm và phản xạ, kiếm ý sắc bén tạo vết chém xuyên giáp.<br>📍 *Cách mở:* Giải mã tàn tích Kiếm Tông cổ xưa. |
+| **8** | **Ảo Ảnh Thích Khách (Shadowblade)** | Song Đoản Kiếm (`Weapon.Dual.Daggers`) | **Ám sát & Tàng hình:** Lướt né để lại phân thân đánh lạc hướng quái; đòn đánh từ sau lưng (Backstab) x3 sát thương bạo kích.<br>📍 *Cách mở:* Tìm thấy căn cứ hội sát thủ ẩn sâu trong hang động đầm lầy. |
+| **9** | **Nguyên Tố Sư (Elementalist)** | Trượng Phép / Cầu Phép (`Weapon.2H.Staff`) | **Phản ứng kết hợp:** Luân chuyển 3 nguyên tố Hỏa - Băng - Lôi. Băng làm đông cứng, Hỏa thiêu đốt, Lôi gây nổ giật sét lan sang đàn quái.<br>📍 *Cách mở:* Giải mã câu đố 4 trụ đá nguyên tố ở đền thờ cổ. |
+| **10** | **Thẩm Phán (Inquisitor)** | Chiến Chùy 1 tay (`Weapon.1H.Mace`) | **Trừng phạt dị giáo:** Giáng chùy thiêng định tội, thanh trừng tà linh và phá Posture kẻ địch cực mạnh.<br>📍 *Cách mở:* Thanh tẩy tu viện hắc ám bị giáo sĩ tha hóa chiếm đóng. |
 
-#### TẦNG 3: 3 Class Cao Cấp (Epic / High-Grade)
+#### BẬC T3: 5 Class Cao Cấp (Master)
 *Mở khóa sau khi đánh bại các Lãnh Chúa (Boss) hoặc giải mã bí cảnh cấp cao.*
 
 | STT | Tên Class | Vũ Khí Đặc Trưng | Phong Cách Chiến Đấu & Điều Kiện Mở Khóa |
 | :---: | :--- | :--- | :--- |
-| **9** | **Hư Không Kiếm Sư (Void Blade)** | Kiếm Katana Hư Không | **Chém xuyên không gian:** Cú lướt biến thành dịch chuyển tức thời; đòn đánh để lại các vết cắt không thời gian nổ sau 1 giây (*Judgement Cut*).<br>📍 *Cách mở:* Đánh bại *Lãnh Chúa Khe Nứt Hư Không*. |
-| **10** | **Thời Gian Ma Đạo (Chronomancer)** | Đồng Hồ Cát Ma Thuật | **Thao túng dòng thời gian:** Tạo bong bóng làm chậm chuyển động của quái vật; kỹ năng "Đảo ngược" đưa lượng máu và vị trí bản thân quay lại 3 giây trước.<br>📍 *Cách mở:* Vượt qua thử thách *Tháp Đồng Hồ Vĩnh Hằng*. |
-| **11** | **Long Kỵ Sĩ (Dragon Knight)** | Thương Dài (Halberd) | **Không chiến & Hỏa long:** Kỹ năng phóng vút lên không trung rồi giáng xuống gây sát thương phá thế (Posture) cực mạnh; phun lửa diện rộng.<br>📍 *Cách mở:* Hạ gục và chặt đứt sừng của *Hỏa Long Lãnh Chúa*. |
+| **11** | **Long Kỵ Sĩ (Dragon Knight)** | Thương Dài & Đại Khí (`2H.Polearm` / `2H.Heavy`) | **Không chiến & Hỏa long:** Kỹ năng phóng vút lên không trung rồi giáng xuống gây sát thương phá thế (Posture) cực mạnh; phun lửa diện rộng.<br>📍 *Cách mở:* Hạ gục và chặt đứt sừng của *Hỏa Long Lãnh Chúa*. |
+| **12** | **Hư Không Kiếm Sư (Void Blade)** | Kiếm Hư Không (`Weapon.1H.Blade`) | **Chém xuyên không gian:** Cú lướt biến thành dịch chuyển tức thời; đòn đánh để lại các vết cắt không thời gian nổ sau 1 giây (*Judgement Cut*).<br>📍 *Cách mở:* Đánh bại *Lãnh Chúa Khe Nứt Hư Không*. |
+| **13** | **Bóng Ma (Phantom Stalker)** | Song Đoản Kiếm (`Weapon.Dual.Daggers`) | **Ám tiễn & Tử khí:** Thoắt ẩn thoắt hiện trong sương mù độc, dồn sát thương bạo kích từ hư vô.<br>📍 *Cách mở:* Đánh bại *Lãnh Chúa Đầm Lầy Tử Khí*. |
+| **14** | **Thời Gian Ma Đạo (Chronomancer)** | Pháp Bảo Thời Gian (`1H.Mace` / `Relic`) | **Thao túng dòng thời gian:** Tạo bong bóng làm chậm chuyển động của quái vật; kỹ năng "Đảo ngược" đưa lượng máu và vị trí bản thân quay lại 3 giây trước.<br>📍 *Cách mở:* Vượt qua thử thách *Tháp Đồng Hồ Vĩnh Hằng*. |
+| **15** | **Thiên Sứ (Seraph)** | Pháp Bảo Thánh Quang (`1H.Mace` / `Relic`) | **Hộ trì ánh sáng & Cứu rỗi:** Ban phước lành hồi sinh, thánh thuẫn bảo hộ và ánh sáng thiêu đốt tà ma.<br>📍 *Cách mở:* Đánh bại *Lãnh Chúa Đền Thánh Ánh Sáng*. |
 
-#### TẦNG 4: 1 Class Ẩn (Hidden / Mythic)
+#### BẬC T4: 1 Class Ẩn / Tối Thượng (Apex)
 *Tấm huy chương danh dự tối thượng dành riêng cho người chơi có kỹ năng thượng thừa.*
 
 | STT | Tên Class | Vũ Khí Đặc Trưng | Phong Cách Chiến Đấu & Điều Kiện Mở Khóa |
 | :---: | :--- | :--- | :--- |
-| **12** | **Thí Thần Giả (God Slayer)** | Thần Binh Tự Biến Hình (Morphing Relic) | **Tước đoạt sức mạnh thần thánh:** <br>• Khi thực hiện **Né Hoàn Hảo (Perfect Dodge)**: Kích hoạt hiệu ứng "Ngưng Đọng Thời Gian" 1 giây để phản kích.<br>• Có khả năng sao chép 1 chiêu thức đặc trưng của Boss vừa bị hạ gục.<br>📍 *Cách mở:* **Solo hạ gục một Boss Lãnh chúa vượt ít nhất 15 cấp mà KHÔNG dính bất kỳ một đòn đánh nào (No-Hit Challenge).** |
+| **16** | **Thí Thần Giả (God Slayer)** | Thần Binh Tự Biến Hình (Morphing Relic) | **Tước đoạt sức mạnh thần thánh:** <br>• Khi thực hiện **Né Hoàn Hảo (Perfect Dodge)**: Kích hoạt hiệu ứng "Ngưng Đọng Thời Gian" 1 giây để phản kích.<br>• Có khả năng sao chép 1 chiêu thức đặc trưng của Boss vừa bị hạ gục.<br>📍 *Cách mở:* **Solo hạ gục một Boss Lãnh chúa vượt ít nhất 15 cấp mà KHÔNG dính bất kỳ một đòn đánh nào (No-Hit Challenge).** |
 
 ---
 
 ## 5. Hệ Thống Trang Bị & Vòng Lặp Kinh Tế NPC
 
-### Cấp bậc trang bị (Tiers)
-1. **Normal (Trắng):** Chỉ số cơ bản, không có dòng bổ trợ.
-2. **Rare (Xanh lam):** 1–2 dòng thuộc tính ngẫu nhiên (Tốc đánh, giảm tiêu hao thể lực).
-3. **Legendary (Cam):** 3 dòng ngẫu nhiên + 1 hiệu ứng đặc thù (ví dụ: né đòn để lại vệt lửa).
-4. **Immortal (Đỏ):** Kỹ năng kích hoạt độc quyền của dòng trang bị.
-5. **Divine / Thần Thánh (Hoàng kim):** Rèn từ Linh hồn Lãnh chúa cổ đại, thay đổi cơ chế chiêu thức của Class.
+### Thang Độ Hiếm Trang Bị (5 Bậc Rarity)
+*(Tuân thủ `itemization.md` và `DECISIONS.md` Mục 5)*
+1. **Common (Trắng):** Chỉ số cơ bản, không có dòng bổ trợ.
+2. **Uncommon (Xanh lá):** 1 dòng thuộc tính ngẫu nhiên.
+3. **Rare (Xanh lam):** 1–2 dòng thuộc tính ngẫu nhiên (Tốc đánh, giảm tiêu hao thể lực).
+4. **Epic (Tím):** 2–3 dòng thuộc tính ngẫu nhiên + tăng cường chỉ số cốt lõi.
+5. **Legendary (Cam):** 3 dòng ngẫu nhiên + 1 hiệu ứng đặc thù (Unique Affix).
 
 ### Bộ ba NPC Dã ngoại & Trung tâm:
 * **Thương Nhân (Merchant):** Cung cấp trang bị tiêu chuẩn (Base gear) và vật phẩm tiêu hao tức thời.
 * **Thợ Rèn (Blacksmith - Phân cấp theo vùng):**
-  - Vùng sơ cấp: Rèn và cường hóa đồ Normal -> Rare.
-  - Vùng trung/cao cấp: Mở khóa đúc đồ Legendary, Immortal và đục lỗ khảm Ngọc (Gem Sockets).
-  - Thợ rèn ẩn trong vùng Lãnh chúa: Nơi duy nhất rèn được trang bị Divine nếu người chơi mang đủ nguyên vật liệu sống sót tới nơi.
+  - Vùng sơ cấp (Tier 1): Rèn và cường hóa đồ Common -> Rare.
+  - Vùng trung cấp (Tier 2): Mở khóa nâng cấp đồ Epic và đục lỗ khảm Ngọc (Gem Sockets).
+  - Vùng cấm địa (Tier 3): Nơi duy nhất đúc Thần Binh Legendary từ Linh Hồn Boss nếu người chơi mang đủ nguyên vật liệu sống sót tới nơi.
 * **Dược Sư (Apothecary):**
   - Chế tạo Dầu tẩm vũ khí (Weapon Oils) để gia tăng sát thương phá thế lên từng loại quái vật.
   - Chế thuốc bổ trợ Stamina và dung dịch kháng hiệu ứng rút máu/độc của Boss.
@@ -156,8 +164,8 @@ Một thế giới nơi cấp độ không thể che giấu sự non nớt, và 
 | :--- | :--- | :--- |
 | **Quái Thường (Minion)** | Đòn đánh có thời gian chuẩn bị (Wind-up frames) rõ ràng, phục vụ luyện tập timing. | Nguyên liệu thô cơ bản, tiền tệ. |
 | **Thủ Lĩnh (Elite)** | Có hào quang cường hóa đàn em, miễn nhiễm choáng nhẹ, tấn công có nhịp trễ (delayed attacks). | Phôi trang bị Rare, ngọc khảm thô. |
-| **Lãnh Chúa (Boss)** | Chiến đấu nhiều giai đoạn (Multi-phase), vùng cảnh báo chiêu (AoE telegraphs), có cơ chế nộ (Enrage). | Linh hồn Lãnh chúa (Boss Soul), phôi đúc Legendary/Immortal. |
-| **Cổ Đại / Thần Thoại (World Boss)** | Đấu trường động, kỹ năng toàn bản đồ, đòi hỏi phối hợp phân chia vai trò trong Co-op. | Mảnh vỡ Thần thánh, chứng nhận mở khóa Class Ẩn. |
+| **Lãnh Chúa (Boss)** | Chiến đấu nhiều giai đoạn (Multi-phase), vùng cảnh báo chiêu (AoE telegraphs), có cơ chế nộ (Enrage). | Linh hồn Lãnh chúa (Boss Soul), phôi đúc Epic / Legendary. |
+| **Cổ Đại / Thần Thoại (World Boss)** | Đấu trường động, kỹ năng toàn bản đồ, đòi hỏi phối hợp phân chia vai trò trong Co-op. | Nguyên liệu chế tác tối thượng, chứng nhận mở khóa Class Ẩn (God Slayer). |
 
 ---
 
