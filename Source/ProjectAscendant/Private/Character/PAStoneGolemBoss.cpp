@@ -17,6 +17,7 @@
 #include "PaperFlipbook.h"
 #include "PaperZDAnimationComponent.h"
 #include "PaperZDAnimInstance.h"
+#include "Animation/PAPaperZDAnimInstance.h"
 #include "Engine/Blueprint.h"
 
 APAStoneGolemBoss::APAStoneGolemBoss(const FObjectInitializer& ObjectInitializer)
@@ -62,18 +63,31 @@ void APAStoneGolemBoss::BeginPlay()
 		}
 	}
 
-	// Nạp PaperZD Animation Blueprint cho Boss Stone Golem
+	// Nạp PaperZD Animation Blueprint cho Boss Stone Golem (hỗ trợ cả ABP_StoneGolem và ABP_Boss)
 	if (PaperZDAnimComponent)
 	{
-		UClass* BossAnimClass = StaticLoadClass(UPaperZDAnimInstance::StaticClass(), nullptr, TEXT("/Game/art/characters/boss/anim/ABP_Boss.ABP_Boss_C"));
+		if (!PaperZDAnimComponent->GetAnimInstanceClass())
+		{
+			PaperZDAnimComponent->SetAnimInstanceClass(UPAPaperZDAnimInstance::StaticClass());
+		}
+
+		UClass* BossAnimClass = StaticLoadClass(UPaperZDAnimInstance::StaticClass(), nullptr, TEXT("/Game/art/characters/boss/anim/ABP_StoneGolem.ABP_StoneGolem_C"), nullptr, LOAD_Quiet);
 		if (!BossAnimClass)
 		{
-			if (UBlueprint* BossBP = Cast<UBlueprint>(StaticLoadObject(UBlueprint::StaticClass(), nullptr, TEXT("/Game/art/characters/boss/anim/ABP_Boss.ABP_Boss"))))
+			BossAnimClass = StaticLoadClass(UPaperZDAnimInstance::StaticClass(), nullptr, TEXT("/Game/art/characters/boss/anim/ABP_Boss.ABP_Boss_C"), nullptr, LOAD_Quiet);
+		}
+		if (!BossAnimClass)
+		{
+			if (UBlueprint* BossBP = Cast<UBlueprint>(StaticLoadObject(UBlueprint::StaticClass(), nullptr, TEXT("/Game/art/characters/boss/anim/ABP_StoneGolem.ABP_StoneGolem"), nullptr, LOAD_Quiet)))
 			{
 				BossAnimClass = BossBP->GeneratedClass;
 			}
+			else if (UBlueprint* LegacyBossBP = Cast<UBlueprint>(StaticLoadObject(UBlueprint::StaticClass(), nullptr, TEXT("/Game/art/characters/boss/anim/ABP_Boss.ABP_Boss"), nullptr, LOAD_Quiet)))
+			{
+				BossAnimClass = LegacyBossBP->GeneratedClass;
+			}
 		}
-		if (BossAnimClass)
+		if (BossAnimClass && BossAnimClass->IsChildOf(UPaperZDAnimInstance::StaticClass()))
 		{
 			PaperZDAnimComponent->SetAnimInstanceClass(BossAnimClass);
 		}

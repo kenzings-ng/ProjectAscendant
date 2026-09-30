@@ -348,6 +348,18 @@
 9. **Xác nhận trạng thái ROADMAP.md và DECISIONS.md**:
    - **Xác nhận 100%**: PR #2 không sửa đổi bất kỳ nội dung nào trong [`production/ROADMAP.md`](file:///mnt/Data/Projects/project-games/ProjectAscendant/production/ROADMAP.md) và [`production/DECISIONS.md`](file:///mnt/Data/Projects/project-games/ProjectAscendant/production/DECISIONS.md) (hoàn toàn trùng khớp với `origin/main`).
 
+10. **Khắc phục cảnh báo PaperZD Animation Component (`No animation class defined`) & Nạp AnimBP (`ABP_Vanguard`)**:
+   - **Nguyên nhân**:
+     - Trong constructor của `APABaseCharacter`, `PaperZDAnimComponent` được tạo mới nhưng chưa thiết lập `AnimInstanceClass`. Khi `APABaseCharacter::BeginPlay` gọi `Super::BeginPlay()`, component `PaperZDAnimationComponent::BeginPlay()` thực thi và gọi `CreateAnimInstance()`. Do chưa có class gán sẵn, PaperZD bắn warning: `LogTemp: Warning: No animation class defined on 'PaperZDAnimComponent', cannot create instance.`.
+     - Ngay sau `Super::BeginPlay()`, code gọi `StaticLoadClass(UPaperZDAnimInstance::StaticClass(), nullptr, TEXT("/Game/art/characters/vanguard/anim/ABP_Vanguard.ABP_Vanguard_C"))`. Do `ABP_Vanguard` là asset dạng editor/uncooked chưa sinh class `_C` trong bộ nhớ, `StaticLoadClass` ghi nhận warning: `LogUObjectGlobals: Warning: Failed to find object 'Class /Game/art/characters/vanguard/anim/ABP_Vanguard.ABP_Vanguard_C'`.
+   - **Khắc phục**:
+     - Gọi `PaperZDAnimComponent->InitAnimInstanceClass(UPAPaperZDAnimInstance::StaticClass())` ngay trong constructor của `APABaseCharacter`. Lớp C++ `UPAPaperZDAnimInstance` chứa toàn bộ biến trạng thái State Machine và logic đổi hướng 8 chiều, đảm bảo component luôn có Animation Instance hợp lệ ngay khi `BeginPlay` chạy, triệt tiêu 100% warning `No animation class defined`.
+     - Thêm cờ `LOAD_Quiet` vào các hàm `StaticLoadClass` và `StaticLoadObject` trong cả `PABaseCharacter.cpp` và `PAStoneGolemBoss.cpp`. Cờ này ngăn engine in warning nếu file Blueprint chưa được sinh class lúc nạp runtime. Đồng thời cập nhật `PAStoneGolemBoss.cpp` trỏ đúng vào `ABP_StoneGolem` có sẵn trong Content.
+     - Bổ sung kiểm thử tự động `AC-5` trong `Source/ProjectAscendant/Private/Character/PAVanguardRuntimeWiringTests.cpp`: Xác nhận `PaperZDAnimComponent` trên `APABaseCharacter` luôn có class mặc định là `UPAPaperZDAnimInstance`.
+   - **Bằng chứng kiểm chứng**:
+     - Đã chạy kiểm tra standalone client (`-game`) vào map `L_VerdantFrontier_Outpost`: Cả 2 warning trên đã biến mất hoàn toàn khỏi log (`Saved/Logs/GameStandaloneCheck.log`).
+     - Chạy lại toàn bộ `Tools/QA/run_headless_tests.sh --ue`: **PASS 45/45 tests (0 Failed, 0 Errors, QueueFinished=1, ExitCode=1)**.
+
 ---
 
 ## 3. Danh Sách 16 Class Đã Được Duyệt Chính Thức

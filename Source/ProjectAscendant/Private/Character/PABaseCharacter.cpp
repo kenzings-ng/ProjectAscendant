@@ -12,6 +12,7 @@
 #include "PaperFlipbook.h"
 #include "PaperZDAnimationComponent.h"
 #include "PaperZDAnimInstance.h"
+#include "Animation/PAPaperZDAnimInstance.h"
 #include "AbilitySystemBlueprintLibrary.h"
 #include "CollisionQueryParams.h"
 #include "Components/CapsuleComponent.h"
@@ -98,6 +99,7 @@ APABaseCharacter::APABaseCharacter(const FObjectInitializer& ObjectInitializer)
 	PaperZDAnimComponent->PrimaryComponentTick.bStartWithTickEnabled = true;
 	PaperZDAnimComponent->PrimaryComponentTick.bAllowTickOnDedicatedServer = true; // ADR-0002: Đảm bảo AnimBP tick trên Dedicated Server
 	PaperZDAnimComponent->InitRenderComponent(SpriteComponent);
+	PaperZDAnimComponent->InitAnimInstanceClass(UPAPaperZDAnimInstance::StaticClass());
 
 	bReplicates = true;
 	SetReplicatingMovement(true);
@@ -165,18 +167,25 @@ void APABaseCharacter::BeginPlay()
 		}
 	}
 
-	if (PaperZDAnimComponent && !PaperZDAnimComponent->GetAnimInstanceClass())
+	if (PaperZDAnimComponent)
 	{
-		UClass* LoadedAnimBPClass = StaticLoadClass(UPaperZDAnimInstance::StaticClass(), nullptr, TEXT("/Game/art/characters/vanguard/anim/ABP_Vanguard.ABP_Vanguard_C"));
+		// Đảm bảo luôn có AnimInstance class hợp lệ (mặc định là UPAPaperZDAnimInstance)
+		if (!PaperZDAnimComponent->GetAnimInstanceClass())
+		{
+			PaperZDAnimComponent->SetAnimInstanceClass(UPAPaperZDAnimInstance::StaticClass());
+		}
+
+		// Nạp AnimBP Blueprint nếu được cung cấp và có GeneratedClass hợp lệ
+		UClass* LoadedAnimBPClass = StaticLoadClass(UPaperZDAnimInstance::StaticClass(), nullptr, TEXT("/Game/art/characters/vanguard/anim/ABP_Vanguard.ABP_Vanguard_C"), nullptr, LOAD_Quiet);
 		if (!LoadedAnimBPClass)
 		{
-			if (UBlueprint* AnimBP = Cast<UBlueprint>(StaticLoadObject(UBlueprint::StaticClass(), nullptr, TEXT("/Game/art/characters/vanguard/anim/ABP_Vanguard.ABP_Vanguard"))))
+			if (UBlueprint* AnimBP = Cast<UBlueprint>(StaticLoadObject(UBlueprint::StaticClass(), nullptr, TEXT("/Game/art/characters/vanguard/anim/ABP_Vanguard.ABP_Vanguard"), nullptr, LOAD_Quiet)))
 			{
 				LoadedAnimBPClass = AnimBP->GeneratedClass;
 			}
 		}
 
-		if (LoadedAnimBPClass)
+		if (LoadedAnimBPClass && LoadedAnimBPClass->IsChildOf(UPaperZDAnimInstance::StaticClass()))
 		{
 			PaperZDAnimComponent->SetAnimInstanceClass(LoadedAnimBPClass);
 		}

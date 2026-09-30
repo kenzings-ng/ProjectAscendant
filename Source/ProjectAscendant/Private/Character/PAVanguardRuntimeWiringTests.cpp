@@ -3,6 +3,8 @@
 #include "Misc/AutomationTest.h"
 #include "Animation/PAPaperZDAnimInstance.h"
 #include "Animation/PAPaper2DSocketUtility.h"
+#include "Character/PABaseCharacter.h"
+#include "PaperZDAnimationComponent.h"
 #include "PaperSprite.h"
 
 #if WITH_DEV_AUTOMATION_TESTS
@@ -120,6 +122,27 @@ bool FPAVanguardRuntimeWiringTests::RunTest(const FString& Parameters)
 		{
 			TestEqual(TEXT("AC-4: Helm X is 0"), SockHelm->LocalTransform.GetLocation().X, 0.0);
 			TestEqual(TEXT("AC-4: Helm Z is +70"), SockHelm->LocalTransform.GetLocation().Z, 70.0);
+		}
+	}
+
+	// =========================================================================
+	// AC-5: APABaseCharacter PaperZD Animation Component Initialization
+	// =========================================================================
+	{
+		const APABaseCharacter* DefaultCharacter = GetDefault<APABaseCharacter>();
+		TestNotNull(TEXT("AC-5: APABaseCharacter CDO exists"), DefaultCharacter);
+		if (DefaultCharacter)
+		{
+			const UPaperZDAnimationComponent* AnimComp = DefaultCharacter->GetPaperZDAnimComponent();
+			TestNotNull(TEXT("AC-5: PaperZDAnimComponent exists on APABaseCharacter"), AnimComp);
+			if (AnimComp)
+			{
+				TestEqual(
+					TEXT("AC-5: PaperZDAnimComponent AnimInstanceClass defaults to UPAPaperZDAnimInstance"),
+					AnimComp->GetAnimInstanceClass(),
+					TSubclassOf<UPaperZDAnimInstance>(UPAPaperZDAnimInstance::StaticClass())
+				);
+			}
 		}
 	}
 
