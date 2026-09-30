@@ -140,8 +140,11 @@ struct PROJECTASCENDANT_API FPAMerchantFormulas
 			return 0;
 		}
 
-		const float Raw = static_cast<float>(BasePrice) * (1.0f + SurchargeRatio);
-		return FMath::CeilToInt(Raw);
+		// Tính toán số học số nguyên chính xác (tránh sai số dấu phẩy động của float/double):
+		// Ceil(BasePrice * (1 + SurchargeRatio)) = (BasePrice * TotalPercent + 99) / 100
+		const int32 SurchargePercent = FMath::RoundToInt(SurchargeRatio * 100.0f);
+		const int32 TotalPercent = 100 + SurchargePercent;
+		return (BasePrice * TotalPercent + 99) / 100;
 	}
 
 	/**

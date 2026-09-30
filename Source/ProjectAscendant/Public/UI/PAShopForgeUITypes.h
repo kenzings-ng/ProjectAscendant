@@ -226,7 +226,7 @@ struct PROJECTASCENDANT_API FPAShopUIModel
 		{
 			Item.bHasSurcharge = bActive;
 			Item.FinalPrice = bActive
-				? FMath::CeilToInt(Item.PriceGold * 1.20f)
+				? ((Item.PriceGold * 120 + 99) / 100)
 				: Item.PriceGold;
 		}
 	}
