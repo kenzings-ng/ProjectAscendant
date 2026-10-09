@@ -79,18 +79,21 @@ bool FPAPaperdollGASEquipmentTest::RunTest(const FString& Parameters)
 		TestEqual(TEXT("AC-2: Máu tối đa khởi điểm = 500.0f"), AttrSet->GetMaxHealth(), 500.0f);
 
 		// Giả lập hiệu ứng mặc Giáp Thân: +50 Armor, +100 Max Health
+		// X12: Set*() needs an owning ASC actor (CastChecked fatal on a transient AttrSet) -> Init*().
+		// X12 NOTE: tautology - the test adds/subtracts the bonus itself; it never equips an item through
+		// UPAEquipmentComponent or applies an item GameplayEffect, so it does not prove the GAS binding.
 		const float ArmorBonus = 50.0f;
 		const float MaxHealthBonus = 100.0f;
 
-		AttrSet->SetArmor(AttrSet->GetArmor() + ArmorBonus);
-		AttrSet->SetMaxHealth(AttrSet->GetMaxHealth() + MaxHealthBonus);
+		AttrSet->InitArmor(AttrSet->GetArmor() + ArmorBonus);
+		AttrSet->InitMaxHealth(AttrSet->GetMaxHealth() + MaxHealthBonus);
 
 		TestEqual(TEXT("AC-2: Khi mặc Giáp Thân, Armor tăng lên chính xác 50.0f"), AttrSet->GetArmor(), 50.0f);
 		TestEqual(TEXT("AC-2: Khi mặc Giáp Thân, MaxHealth tăng lên chính xác 600.0f"), AttrSet->GetMaxHealth(), 600.0f);
 
 		// Giả lập tháo Giáp Thân: lập tức hoàn trả chỉ số gốc
-		AttrSet->SetArmor(AttrSet->GetArmor() - ArmorBonus);
-		AttrSet->SetMaxHealth(AttrSet->GetMaxHealth() - MaxHealthBonus);
+		AttrSet->InitArmor(AttrSet->GetArmor() - ArmorBonus);
+		AttrSet->InitMaxHealth(AttrSet->GetMaxHealth() - MaxHealthBonus);
 
 		TestEqual(TEXT("AC-2: Khi tháo Giáp Thân, Armor lập tức hoàn về 0.0f"), AttrSet->GetArmor(), 0.0f);
 		TestEqual(TEXT("AC-2: Khi tháo Giáp Thân, MaxHealth lập tức hoàn về 500.0f"), AttrSet->GetMaxHealth(), 500.0f);

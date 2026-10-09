@@ -100,6 +100,8 @@ bool FPAAttributesReplicationTest::RunTest(const FString& Parameters)
 
     // -------------------------------------------------------------------------
     // Test 3: AC-3 (Delegates and Combat Event Broadcast)
+    // X12 NOTE: this block is a tautology - it broadcasts the delegates itself and then checks they fired.
+    // It does not prove that the AttributeSet broadcasts OnOutOfHealth/OnPostureBroken on its own.
     // -------------------------------------------------------------------------
     {
         UAscendantAttributeSet* AttrSet = NewObject<UAscendantAttributeSet>();
@@ -120,12 +122,12 @@ bool FPAAttributesReplicationTest::RunTest(const FString& Parameters)
             });
 
             // 3.1: Kích hoạt sự kiện tử trận bằng cách giả lập rút cạn máu về 0
-            AttrSet->SetHealth(0.0f);
+            AttrSet->InitHealth(0.0f); // X12: SetHealth() needs an owning ASC actor (CastChecked fatal on a transient AttrSet); InitHealth sets the value directly
             AttrSet->OnOutOfHealth.Broadcast(nullptr);
             TestTrue(TEXT("AC-3: Delegate OnOutOfHealth phải phát tín hiệu thành công khi máu cạn về 0"), bDeathBroadcastFired);
 
             // 3.2: Kích hoạt sự kiện phá vỡ thế đứng Posture khi đạt 100%
-            AttrSet->SetPosture(100.0f);
+            AttrSet->InitPosture(100.0f); // X12: see InitHealth note above
             AttrSet->OnPostureBroken.Broadcast(nullptr);
             TestTrue(TEXT("AC-3: Delegate OnPostureBroken phải phát tín hiệu thành công khi Posture đạt đỉnh"), bPostureBreakFired);
         }

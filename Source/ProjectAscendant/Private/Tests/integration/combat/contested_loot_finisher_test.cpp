@@ -5,6 +5,8 @@
 #include "Combat/PAPostureSyncComponent.h"
 #include "Network/PALootDistributionSubsystem.h"
 #include "Network/PALootDropletActor.h"
+#include "Engine/Engine.h"
+#include "Engine/World.h"
 
 #if WITH_DEV_AUTOMATION_TESTS
 
@@ -79,7 +81,7 @@ bool FPAContestedLootFinisherTest::RunTest(const FString& Parameters)
 	// Test 2: AC-6 (Instanced Loot Contribution Threshold & Droplet Isolation)
 	// =========================================================================
 	{
-		UPALootDistributionSubsystem* LootSubsystem = NewObject<UPALootDistributionSubsystem>();
+		UPALootDistributionSubsystem* LootSubsystem = NewObject<UPALootDistributionSubsystem>(GEngine->GetWorldContexts()[0].World()) /* X12: WorldSubsystem needs a UWorld outer */;
 		const FString EncounterId = TEXT("Boss_StoneGolem_01");
 		const float BossMaxHP = 10000.0f;
 		const float BossMaxPosture = 1000.0f;
@@ -139,7 +141,7 @@ bool FPAContestedLootFinisherTest::RunTest(const FString& Parameters)
 	// Test 3: AC-8 (Party EXP Sharing with Morale Bonus & 3000 cm Radius Culling)
 	// =========================================================================
 	{
-		UPALootDistributionSubsystem* LootSubsystem = NewObject<UPALootDistributionSubsystem>();
+		UPALootDistributionSubsystem* LootSubsystem = NewObject<UPALootDistributionSubsystem>(GEngine->GetWorldContexts()[0].World()) /* X12: WorldSubsystem needs a UWorld outer */;
 		const int32 BaseMonsterExp = 1000;
 		const FVector MobDeathLocation = FVector(0.0f, 0.0f, 0.0f);
 
@@ -183,7 +185,7 @@ bool FPAContestedLootFinisherTest::RunTest(const FString& Parameters)
 	// Test 4: Performance & Guardrails (<= 1.0ms server game thread budget)
 	// =========================================================================
 	{
-		UPALootDistributionSubsystem* LootSubsystem = NewObject<UPALootDistributionSubsystem>();
+		UPALootDistributionSubsystem* LootSubsystem = NewObject<UPALootDistributionSubsystem>(GEngine->GetWorldContexts()[0].World()) /* X12: WorldSubsystem needs a UWorld outer */;
 		const FString BenchmarkEncounter = TEXT("Encounter_RaidBoss_32P");
 		const float BossMaxHP = 100000.0f;
 		const float BossMaxPosture = 10000.0f;

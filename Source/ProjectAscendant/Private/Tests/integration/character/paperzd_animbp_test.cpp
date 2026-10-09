@@ -6,6 +6,7 @@
 #include "Character/PABaseCharacter.h"
 #include "Controller/PAIsometricMovementMath.h"
 #include "PaperFlipbookComponent.h"
+#include "PaperZDAnimationComponent.h" // X12: complete type for TScriptInterface<IPaperZDAnimInstanceManager>
 #include "AbilitySystemComponent.h"
 #include "GameplayTagContainer.h"
 
@@ -47,6 +48,11 @@ bool FPAPaperZDAnimBPIntegrationTest::RunTest(const FString& Parameters)
     {
         return false;
     }
+
+    // X12: bind the instance to the character's PaperZD animation component (what the
+    // component does at runtime). Without a manager, GetOwningActor() returns null and the
+    // Hitbox notify in Test 3 can never reach the character.
+    AnimInstance->Init(TestCharacter->GetPaperZDAnimComponent());
 
     // -------------------------------------------------------------------------
     // Test 1: AC-1 (State Machine Architecture & Tag Bindings)

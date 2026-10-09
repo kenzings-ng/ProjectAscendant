@@ -8,6 +8,9 @@
 #include "Character/PABaseCharacter.h"
 #include "AbilitySystemComponent.h"
 #include "GameplayTagContainer.h"
+#include "Engine/Engine.h"
+#include "Engine/World.h"
+#include "Misc/ScopeExit.h"
 
 #if WITH_DEV_AUTOMATION_TESTS
 
@@ -138,12 +141,28 @@ bool FPAGASDashAbilityIntegrationTest::RunTest(const FString& Parameters)
     // 2. Kiểm thử Tích hợp GAS Ability Component & Actor (UPAGameplayAbility_Dash)
     // =========================================================================
 
-    APABaseCharacter* TestCharacter = NewObject<APABaseCharacter>();
+    // X12: spawn into the editor world (same approach as PAProgressionTests). A bare
+    // NewObject<APABaseCharacter>() never registers its components, so the ASC has no
+    // AbilityActorInfo and InitAbilityActorInfo/GiveAbility assert.
+    UWorld* World = (GEngine && GEngine->GetWorldContexts().Num() > 0) ? GEngine->GetWorldContexts()[0].World() : nullptr;
+    TestNotNull(TEXT("Cần một UWorld để spawn APABaseCharacter"), World);
+    if (!World)
+    {
+        return false;
+    }
+
+    FActorSpawnParameters SpawnParams;
+    SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+    APABaseCharacter* TestCharacter = World->SpawnActor<APABaseCharacter>(APABaseCharacter::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator, SpawnParams);
     TestNotNull(TEXT("APABaseCharacter phải được khởi tạo"), TestCharacter);
     if (!TestCharacter)
     {
         return false;
     }
+    ON_SCOPE_EXIT
+    {
+        TestCharacter->Destroy();
+    };
 
     UAbilitySystemComponent* ASC = TestCharacter->GetAbilitySystemComponent();
     TestNotNull(TEXT("AbilitySystemComponent trên nhân vật phải tồn tại"), ASC);
@@ -159,21 +178,32 @@ bool FPAGASDashAbilityIntegrationTest::RunTest(const FString& Parameters)
         return false;
     }
 
-    // Khởi tạo kỹ năng Dash
-    UPAGameplayAbility_Dash* DashAbility = NewObject<UPAGameplayAbility_Dash>(TestCharacter);
-    TestNotNull(TEXT("UPAGameplayAbility_Dash phải được khởi tạo"), DashAbility);
+    // X12: in the editor world the ASC's InitializeComponent (which picks up the owner's
+    // default-subobject AttributeSets) never runs, so register the set explicitly; otherwise
+    // AttrSet->SetStamina() silently does nothing.
+    if (!ASC->GetAttributeSet(UAscendantAttributeSet::StaticClass()))
+    {
+        ASC->AddSpawnedAttribute(AttrSet);
+    }
+
+    // X12: GAS requires the spec to reference the ability CDO (GiveAbility asserts
+    // Ability->HasAllFlags(RF_ClassDefaultObject)); passing a NewObject instance crashed
+    // the editor. Give the ability by class, like APABaseCharacter does, and use the
+    // InstancedPerActor primary instance that GAS creates.
+    ASC->InitAbilityActorInfo(TestCharacter, TestCharacter);
+    const FGameplayAbilitySpecHandle AbilityHandle = ASC->GiveAbility(
+        FGameplayAbilitySpec(UPAGameplayAbility_Dash::StaticClass(), 1, INDEX_NONE, TestCharacter));
+    TestTrue(TEXT("GiveAbility cho UPAGameplayAbility_Dash phải trả về Handle hợp lệ"), AbilityHandle.IsValid());
+
+    FGameplayAbilitySpec* DashSpec = ASC->FindAbilitySpecFromHandle(AbilityHandle);
+    UPAGameplayAbility_Dash* DashAbility = DashSpec ? Cast<UPAGameplayAbility_Dash>(DashSpec->GetPrimaryInstance()) : nullptr;
+    TestNotNull(TEXT("UPAGameplayAbility_Dash (primary instance) phải được khởi tạo"), DashAbility);
     if (!DashAbility)
     {
         return false;
     }
 
-    // Đăng ký Ability vào ASC
-    const FGameplayAbilitySpec AbilitySpec(DashAbility, 1);
-    const FGameplayAbilitySpecHandle AbilityHandle = ASC->GiveAbility(AbilitySpec);
-    TestTrue(TEXT("GiveAbility cho UPAGameplayAbility_Dash phải trả về Handle hợp lệ"), AbilityHandle.IsValid());
-
-    FGameplayAbilityActorInfo ActorInfo;
-    ActorInfo.InitFromActor(TestCharacter, TestCharacter, ASC);
+    const FGameplayAbilityActorInfo& ActorInfo = *ASC->AbilityActorInfo;
 
     // -------------------------------------------------------------------------
     // Test 2.1: AC-1 CanActivateAbility Stamina & Exhaustion Checks

@@ -3,6 +3,7 @@
 #include "Misc/AutomationTest.h"
 #include "Account/PAAccountSubsystem.h"
 #include "Subsystems/SubsystemCollection.h"
+#include "Engine/GameInstance.h"
 
 #if WITH_DEV_AUTOMATION_TESTS
 
@@ -62,7 +63,7 @@ bool FPAAccountAuthTest::RunTest(const FString& Parameters)
 	// Test 3: Quy trình đăng ký tài khoản (RegisterAccount)
 	// -------------------------------------------------------------------------
 	{
-		UPAAccountSubsystem* Subsystem = NewObject<UPAAccountSubsystem>();
+		UPAAccountSubsystem* Subsystem = NewObject<UPAAccountSubsystem>(NewObject<UGameInstance>()) /* X12: GameInstance subsystem needs a UGameInstance outer */;
 		FSubsystemCollection<UGameInstanceSubsystem> TestCollection; // X12: real empty collection (was a nullptr reference, UB)
 		Subsystem->Initialize(TestCollection);
 
@@ -88,7 +89,7 @@ bool FPAAccountAuthTest::RunTest(const FString& Parameters)
 	// Test 4: Chế độ Dev Fast Playtest 1-Click (LoginFastPlaytest)
 	// -------------------------------------------------------------------------
 	{
-		UPAAccountSubsystem* Subsystem = NewObject<UPAAccountSubsystem>();
+		UPAAccountSubsystem* Subsystem = NewObject<UPAAccountSubsystem>(NewObject<UGameInstance>()) /* X12: GameInstance subsystem needs a UGameInstance outer */;
 		FSubsystemCollection<UGameInstanceSubsystem> TestCollection; // X12: real empty collection (was a nullptr reference, UB)
 		Subsystem->Initialize(TestCollection);
 
@@ -107,7 +108,7 @@ bool FPAAccountAuthTest::RunTest(const FString& Parameters)
 	// Test 5: Đăng nhập chuẩn & Cơ chế lưu phiên (Remember Me)
 	// -------------------------------------------------------------------------
 	{
-		UPAAccountSubsystem* Subsystem = NewObject<UPAAccountSubsystem>();
+		UPAAccountSubsystem* Subsystem = NewObject<UPAAccountSubsystem>(NewObject<UGameInstance>()) /* X12: GameInstance subsystem needs a UGameInstance outer */;
 		FSubsystemCollection<UGameInstanceSubsystem> TestCollection; // X12: real empty collection (was a nullptr reference, UB)
 		Subsystem->Initialize(TestCollection);
 
@@ -139,7 +140,7 @@ bool FPAAccountAuthTest::RunTest(const FString& Parameters)
 	// Test 6: Xử lý thông báo lỗi đăng nhập (Sai mật khẩu, tài khoản không tồn tại)
 	// -------------------------------------------------------------------------
 	{
-		UPAAccountSubsystem* Subsystem = NewObject<UPAAccountSubsystem>();
+		UPAAccountSubsystem* Subsystem = NewObject<UPAAccountSubsystem>(NewObject<UGameInstance>()) /* X12: GameInstance subsystem needs a UGameInstance outer */;
 		FSubsystemCollection<UGameInstanceSubsystem> TestCollection; // X12: real empty collection (was a nullptr reference, UB)
 		Subsystem->Initialize(TestCollection);
 
