@@ -360,7 +360,7 @@ items:
     stackable: true
     max_stack: 10
     attributes:
-      used_for_divine_crafting: true
+      used_for_boss_soul_forging: true  # X7 2026-10-10: renamed from used_for_divine_crafting (Divine is not a rarity)
     added: 2026-09-15
     revised: ""
 

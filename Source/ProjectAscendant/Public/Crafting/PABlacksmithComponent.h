@@ -35,7 +35,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FPAOnBackpackExpanded, int32, Old
  * Story crft-002 (Enhancement Pipeline +4 to +10 & Socketing):
  * - AC-1: Cường hóa +4 đến +6 (Tier 2 Forge, 70%-50% success, failure preserves level).
  * - AC-2: Cường hóa +7 đến +10 (Tier 3 Forge, 40%-15% success, failure drops 1 level unless protected by ward).
- * - AC-3: Đục tối đa 2 Lỗ Khảm Ngọc (Tier 2 Forge, Bậc Rare trở lên), khảm ngọc và tháo ngọc hoàn trả vào kho đồ (phí 100 Vàng).
+ * - AC-3: Đục tối đa 2 Lỗ Khảm Ngọc (Tier 2 Forge, độ hiếm Rare trở lên), khảm ngọc và tháo ngọc hoàn trả vào kho đồ (phí 100 Vàng).
  */
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class PROJECTASCENDANT_API UPABlacksmithComponent : public UActorComponent
@@ -91,7 +91,7 @@ public:
 
 	/**
 	 * AC-3 (crft-002): Đục thêm 1 lỗ khảm ngọc trên trang bị (tối đa 2 lỗ tại Tier 2 Forge).
-	 * Chỉ áp dụng cho trang bị Bậc Rare trở lên.
+	 * Chỉ áp dụng cho trang bị độ hiếm Rare trở lên.
 	 */
 	UFUNCTION(BlueprintCallable, Category = "ProjectAscendant|Crafting")
 	bool UnlockSocket(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex, EPACraftingError& OutError);
@@ -111,7 +111,7 @@ public:
 	bool UnsocketGem(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 EquipmentSlotIndex, int32 SocketIndex, EPACraftingError& OutError);
 
 	/**
-	 * AC-1 (crft-003): Rèn đúc Thần Binh Bậc 5 (Divine Equipment) từ Linh Hồn Boss.
+	 * AC-1 (crft-003): Rèn đúc trang bị độ hiếm Legendary từ Linh Hồn Boss.
 	 * Độc quyền tại Tier 3 Ancient Sanctuary Forge.
 	 * Yêu cầu: 1x Linh Hồn Boss, 4x Mảnh vỡ Boss, 5x Quặng Hư Không, 5,000 Vàng.
 	 */
@@ -119,7 +119,7 @@ public:
 	bool ForgeBossSoulEquipment(
 		UPAInventoryComponent* Inventory,
 		UPACurrencyComponent* Wallet,
-		UItemStaticDataAsset* DivineItemData,
+		UItemStaticDataAsset* BossSoulItemData,
 		FName BossSoulItemId,
 		FName BossPartItemId,
 		FName VoidOreItemId,
@@ -167,7 +167,7 @@ public:
 	void Server_RequestForgeBossSoul(
 		UPAInventoryComponent* Inventory,
 		UPACurrencyComponent* Wallet,
-		UItemStaticDataAsset* DivineItemData,
+		UItemStaticDataAsset* BossSoulItemData,
 		FName BossSoulItemId,
 		FName BossPartItemId,
 		FName VoidOreItemId);

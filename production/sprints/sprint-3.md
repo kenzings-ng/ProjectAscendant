@@ -37,7 +37,7 @@ Triển khai hệ thống Song Tiền Tệ (**Vàng & Tàn Trang - Gold & Skill 
 
 | ID | Task | Owner | Est. Days | Dependencies | Acceptance Criteria |
 |---|---|---|---|---|---|
-| `crft-003` | [Boss Soul Forging & Divine Equipment](file:///mnt/Data/Projects/project-games/production/epics/expansion-crafting/story-003-boss-soul-forging.md) | `gameplay-programmer` | 1.0 (8h) | `crft-002`, `pzd-003` | AC-1: Đúc Thần Binh Immortal/Divine từ Linh Hồn Lãnh Chúa (Stone Golem Core) tại Lò Rèn Cấm Địa Tier 3; AC-2: Cấp kỹ năng nội tại biến đổi cơ chế đòn đánh. |
+| `crft-003` | [Boss Soul Forging & Legendary Equipment](file:///mnt/Data/Projects/project-games/production/epics/expansion-crafting/story-003-boss-soul-forging.md) | `gameplay-programmer` | 1.0 (8h) | `crft-002`, `pzd-003` | AC-1: Đúc Thần Binh Legendary từ Linh Hồn Lãnh Chúa (Stone Golem Core) tại Lò Rèn Cấm Địa Tier 3; AC-2: Cấp kỹ năng nội tại biến đổi cơ chế đòn đánh. *(Cập nhật 2026-10-10 (X7): bỏ "Immortal/Divine" — không phải độ hiếm; đồ đúc từ Linh Hồn Boss là Legendary, DECISIONS.md §1.)* |
 
 ---
 

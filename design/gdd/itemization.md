@@ -22,15 +22,15 @@ Hệ thống được thiết kế theo triết lý **"Chất lượng đồ h�
 
 ## Player Fantasy
 
-*"Bước ra khỏi trận tử chiến nghẹt thở với Lãnh Chúa Hỏa Long ở Cấm Địa Núi Lửa, trên tay bạn là thanh Trảm Kiếm Bậc Legendary vừa nhặt được. Dù mang cùng khung xương đại kiếm bạn từng dùng ở Cấp 15, thanh kiếm giờ đây khoác lên mình hình thái kim loại tôi luyện rực lửa của Lò Rèn Cấm Địa, bao quanh bởi luồng plasma tím-vàng bập bùng.*
+*"Bước ra khỏi trận tử chiến nghẹt thở với Lãnh Chúa Hỏa Long ở Cấm Địa Núi Lửa, trên tay bạn là thanh Trảm Kiếm Legendary vừa nhặt được. Dù mang cùng khung xương đại kiếm bạn từng dùng ở Cấp 15, thanh kiếm giờ đây khoác lên mình hình thái kim loại tôi luyện rực lửa của Lò Rèn Cấm Địa, bao quanh bởi luồng plasma tím-vàng bập bùng.*
 
 *Khi mở bảng thuộc tính, bạn mỉm cười mãn nguyện: các dòng Affix đã lăn trúng chỉ số tối đa (God-roll) về Sát thương Phản đòn (Parry Damage) và Tốc độ Hồi Thể Lực. Bạn lập tức dùng số Tàn Trang Kỹ Năng tích lũy được để đục thêm ô khảm ngọc Prismatic thứ 3. Mỗi món trang bị trong hành trang không chỉ là những con số vô hồn—chúng là minh chứng sống cho kỹ năng sinh tồn và hành trình vượt qua hiểm nguy của chính bạn."*
 
 ---
 
-## 1. Hệ Thống 5 Bậc Hiếm (5-Tier Rarity Matrix)
+## 1. Hệ Thống 5 Độ Hiếm (5-Rarity Matrix)
 
-Mọi trang bị trong Project Ascendant được phân loại thành **5 Bậc Hiếm** chuẩn RPG. 
+Mọi trang bị trong Project Ascendant được phân loại thành **5 Độ Hiếm** chuẩn RPG. *(Cập nhật 2026-10-10 (X7): "Bậc Hiếm/Tier" → "Độ Hiếm", DECISIONS.md §1.)* 
 
 > 🛑 **QUY TẮC MỸ THUẬT CỐT LÕI (Art Budget Rule):**  
 > **Độ hiếm (Rarity) KHÔNG sinh ra art vẽ tay riêng biệt!**  
@@ -39,7 +39,7 @@ Mọi trang bị trong Project Ascendant được phân loại thành **5 Bậc 
 > - Bảng màu chất liệu (Material Palette LUT Swap): Kim loại xỉn $\rightarrow$ Thép sáng $\rightarrow$ Thép rune xanh $\rightarrow$ Tinh thể tím $\rightarrow$ Hoàng kim.
 > - Hào quang hạt Niagara In-Game (Particle Glow / Weapon Trail Overlay).
 
-| Bậc Hiếm (Rarity) | Mã Màu Nhận Diện | Quy Tắc Affix (Dòng Thuộc Tính) | Lỗ Khảm Ngọc (Sockets) | Hiệu Ứng Trực Quan (In-Game VFX Overlay) | Hệ Số Giá Bán (Value Mult) |
+| Độ Hiếm (Rarity) | Mã Màu Nhận Diện | Quy Tắc Affix (Dòng Thuộc Tính) | Lỗ Khảm Ngọc (Sockets) | Hiệu Ứng Trực Quan (In-Game VFX Overlay) | Hệ Số Giá Bán (Value Mult) |
 | :--- | :---: | :--- | :---: | :--- | :---: |
 | **Common (Thường)** | `#9CA3AF`<br>(Xám Slate) | **0 Affix**.<br>Chỉ mang chỉ số gốc (Implicit Base Stat) sạch theo $iLvl$. | 0 | Không hào quang, bề mặt kim loại mộc mạc. | $1.0\times$ |
 | **Uncommon (Khá)** | `#22C55E`<br>(Xanh Lục) | **1–2 Affixes** (1 Prefix hoặc 1 Suffix).<br>Chỉ số ngẫu nhiên trong dải Tier 1–2. | 0 | Viền sáng xanh ngọc nhẹ trên giao diện, không phát hạt. | $2.5\times$ |
@@ -108,7 +108,7 @@ $$\text{AffixValue} = \text{RandomRound}(\text{MinVal}_{T}, \text{MaxVal}_{T})$$
 | `suffix_leech_on_stagger` | Huyết Tế Đoạt Hồn | Forbidden (T3) | — | — | +8–12% Leech | +14–20% Leech |
 
 ### 2.3 Dòng Đặc Quyền Huyền Thoại (Legendary Combat Perks)
-Chỉ xuất hiện trên trang bị Bậc Legendary. Thay vì chỉ tăng số liệu thuần túy, dòng này can thiệp và biến đổi cơ chế chiêu thức của Gameplay Ability System (GAS):
+Chỉ xuất hiện trên trang bị Legendary. Thay vì chỉ tăng số liệu thuần túy, dòng này can thiệp và biến đổi cơ chế chiêu thức của Gameplay Ability System (GAS): *(Cập nhật 2026-10-10 (X7): bỏ cách đánh số độ hiếm bằng "Tier/Bậc" — độ hiếm gọi bằng tên (DECISIONS.md §1).)*
 - **Gươm Lãnh Chúa Hỏa Ngục (Vanguard):** Kỹ năng *Blade Arc* phóng ra một luồng sóng dung nham thiêu đốt mặt đất trong 3 giây.
 - **Cung Phong Bão Cổ Thụ (Ranger):** Phát bắn *Piercing Shot* khi xuyên qua kẻ địch thứ 2 sẽ tự động tách thành 3 mũi tên phụ.
 - **Pháp Trượng Hư Không Cấm Thuật (Arcanist):** Kỹ năng *Gravity Pull* tăng 40% bán kính hút và làm câm lặng quái nhỏ trong 1.5 giây.
@@ -581,7 +581,7 @@ Các thực thể mới được đăng ký chính thức vào [`design/registry
 
 > **Phụ trách**: Lead Technical Art Director  
 > **Tham chiếu**: [`design/art/art-bible.md`](file:///mnt/Data/Projects/project-games/ProjectAscendant/design/art/art-bible.md) (Mục 1, 2, 4) & [`references/anti-ai-craft-guide.md`](file:///home/kenzings/.gemini/config/skills/game-art-studio/references/anti-ai-craft-guide.md)  
-> **Mục tiêu**: Thiết lập hệ thống mã màu, hiệu ứng hạt Niagara, và cơ chế chuyển đổi Palette LUT cho 5 Bậc Hiếm (Common $\rightarrow$ Legendary) đảm bảo tính thẩm mỹ HD-2D, chống nhầm lẫn với cơ chế chiến đấu, tối ưu hóa hiệu năng MMO, và hỗ trợ người chơi mù màu (Colorblind Accessibility).
+> **Mục tiêu**: Thiết lập hệ thống mã màu, hiệu ứng hạt Niagara, và cơ chế chuyển đổi Palette LUT cho 5 Độ Hiếm (Common $\rightarrow$ Legendary) đảm bảo tính thẩm mỹ HD-2D, chống nhầm lẫn với cơ chế chiến đấu, tối ưu hóa hiệu năng MMO, và hỗ trợ người chơi mù màu (Colorblind Accessibility).
 
 ---
 
@@ -593,12 +593,12 @@ Các thực thể mới được đăng ký chính thức vào [`design/registry
 
 ---
 
-### 10.2 Bảng Mã Màu 5 Bậc Hiếm & Giải Pháp Tương Phản 3 Vùng Thế Giới
+### 10.2 Bảng Mã Màu 5 Độ Hiếm & Giải Pháp Tương Phản 3 Vùng Thế Giới
 
 Để các vật phẩm rơi ngoài thế giới (Loot Drops) và icon giao diện không bị "chìm màu" hay hòa lẫn vào bối cảnh của 3 đại địa khu (Verdant Frontier, Ashen Wilderness, Forbidden Sanctum):
 
 ```
-BẢNG MÃ MÀU CHUẨN HÓA CHO 5 BẬC HIẾM:
+BẢNG MÃ MÀU CHUẨN HÓA CHO 5 ĐỘ HIẾM:
 [Common]    #E8ECEB (Sacred Bone White) / #9CA3AF (Slate) ── Tương phản cao trên đá xỉn
 [Uncommon]  #10B981 (Electric Emerald)                    ── Tươi sáng, rực rỡ hơn cỏ xanh
 [Rare]      #3B82F6 (Cobalt Sapphire)                     ── Sắc xanh dương đậm, tách biệt tuyệt đối
@@ -608,7 +608,7 @@ BẢNG MÃ MÀU CHUẨN HÓA CHO 5 BẬC HIẾM:
 
 #### Ma Trận Xử Lý Tương Phản Đa Bối Cảnh (Multi-Biome Contrast Matrix):
 
-| Bậc Hiếm | Mã Hex Chuẩn | Thử Thách Bối Cảnh (Biome Stress Test) | Giải Pháp Xử Lý Đồ Họa Của Studio (Art Direction Fix) |
+| Độ Hiếm | Mã Hex Chuẩn | Thử Thách Bối Cảnh (Biome Stress Test) | Giải Pháp Xử Lý Đồ Họa Của Studio (Art Direction Fix) |
 | :--- | :---: | :--- | :--- |
 | **Common** | `#E8ECEB` | **Ashen Wilderness:** Bụi tro xám và đá đen dễ nuốt chửng màu xám thường `#9CA3AF`. | Không dùng màu xám đục. Dùng **Trắng Xương Khô (`#E8ECEB`)** có độ sáng Value $V \ge 90\%$ kết hợp viền ngoài than chì 1px `#121316`. |
 | **Uncommon** | `#10B981` | **Verdant Frontier:** Cỏ cây xanh tươi làm chìm màu xanh lá cây tiêu chuẩn `#22C55E`. | Nâng quang phổ sang **Ngọc Lục Bảo Điện Tử (Electric Mint `#10B981`)** có độ bão hòa cao, pha thêm hạt lân tinh trắng ở tâm icon. |

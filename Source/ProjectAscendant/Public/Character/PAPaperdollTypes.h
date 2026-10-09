@@ -110,6 +110,10 @@ struct PROJECTASCENDANT_API FPAPaperdollConstants
 
 	static FName GetDefaultCrestAssetForClass(FName ClassName);
 	static FName GetDefaultTabardAssetForClass(FName ClassName);
+	/** Tên tag chuẩn Class.Line.<Nhánh>.<Class> cho tên class (DECISIONS.md §8); NAME_None nếu không thuộc 16 class. */
+	static FName GetClassTagNameForClass(FName ClassName);
+	/** Toàn bộ 16 tag class chuẩn Class.Line.* (DECISIONS.md §2/§8). */
+	static TArray<FName> GetAllClassTagNames();
 	static FGameplayTag GetTagForClass(FName ClassName);
 	static FName GetClassNameFromTag(FGameplayTag ClassTag);
 };
@@ -132,7 +136,7 @@ public:
 /**
  * FPARarityMaterialPreset
  *
- * Cấu hình Static Material Instance cho 5 bậc hiếm (Story item-005, EPIC-ITEMIZATION-001):
+ * Cấu hình Static Material Instance cho 5 độ hiếm (Story item-005, EPIC-ITEMIZATION-001):
  * - Common: Emissive = 0.0f, Tint = #E8ECEB
  * - Uncommon: Emissive = 0.5f, Tint = #10B981 (Electric Emerald)
  * - Rare: Emissive = 1.8f, Tint = #3B82F6 (Cobalt Sapphire)

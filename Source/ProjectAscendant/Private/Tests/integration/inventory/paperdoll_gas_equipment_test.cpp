@@ -125,15 +125,19 @@ bool FPAPaperdollGASEquipmentTest::RunTest(const FString& Parameters)
 	{
 		UItemStaticDataAsset* VanguardSkillBook = NewObject<UItemStaticDataAsset>();
 		VanguardSkillBook->Category = EPAItemCategory::SkillBook;
-		VanguardSkillBook->RequiredClassTag = FGameplayTag::RequestGameplayTag(FName("Class.Vanguard"), false);
+		VanguardSkillBook->RequiredClassTag = FGameplayTag::RequestGameplayTag(FName("Class.Line.Guard.Vanguard"), false);
 
 		UItemStaticDataAsset* RangerSkillBook = NewObject<UItemStaticDataAsset>();
 		RangerSkillBook->Category = EPAItemCategory::SkillBook;
-		RangerSkillBook->RequiredClassTag = FGameplayTag::RequestGameplayTag(FName("Class.Ranger"), false);
+		RangerSkillBook->RequiredClassTag = FGameplayTag::RequestGameplayTag(FName("Class.Line.Scout.Ranger"), false);
+
+		// Tag class chuẩn Class.Line.* phải được đăng ký (DECISIONS.md §8), nếu không phép so khớp bên dưới vô nghĩa.
+		TestTrue(TEXT("AC-4: Class.Line.Guard.Vanguard là tag đã đăng ký"), VanguardSkillBook->RequiredClassTag.IsValid());
+		TestTrue(TEXT("AC-4: Class.Line.Scout.Ranger là tag đã đăng ký"), RangerSkillBook->RequiredClassTag.IsValid());
 
 		// Mô phỏng ASC của nhân vật Ranger
 		UAbilitySystemComponent* RangerASC = NewObject<UAbilitySystemComponent>();
-		const FGameplayTag RangerTag = FGameplayTag::RequestGameplayTag(FName("Class.Ranger"), false);
+		const FGameplayTag RangerTag = FGameplayTag::RequestGameplayTag(FName("Class.Line.Scout.Ranger"), false);
 		if (RangerTag.IsValid())
 		{
 			RangerASC->AddLooseGameplayTag(RangerTag);

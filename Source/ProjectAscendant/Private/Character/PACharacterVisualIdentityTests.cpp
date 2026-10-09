@@ -99,6 +99,8 @@ bool FPACharacterVisualIdentityTest::RunTest(const FString& Parameters)
 			// Test binding by Gameplay Tag
 			const FGameplayTag Tag = FPAPaperdollConstants::GetTagForClass(Spec.ClassName);
 			TestTrue(FString::Printf(TEXT("AC-2: [%s] GameplayTag is valid"), *Spec.ClassName.ToString()), Tag.IsValid());
+			TestTrue(FString::Printf(TEXT("AC-2: [%s] GameplayTag uses Class.Line.<Line>.<Class> form"), *Spec.ClassName.ToString()),
+				Tag.ToString().StartsWith(TEXT("Class.Line.")) && Tag.ToString().EndsWith(FString(TEXT(".")) + Spec.ClassName.ToString()));
 
 			const bool bTagSet = Model.SetClassIdentityByTag(Tag);
 			TestTrue(FString::Printf(TEXT("AC-2: [%s] SetClassIdentityByTag succeeded"), *Spec.ClassName.ToString()), bTagSet);
@@ -220,18 +222,18 @@ bool FPACharacterVisualIdentityTest::RunTest(const FString& Parameters)
 		};
 
 		const FName ClassTags[] = {
-			FName(TEXT("Class.Vanguard")),
-			FName(TEXT("Class.Ranger")),
-			FName(TEXT("Class.Arcanist")),
-			FName(TEXT("Class.Acolyte")),
-			FName(TEXT("Class.Berserker")),
-			FName(TEXT("Class.Shadowblade")),
-			FName(TEXT("Class.Elementalist")),
-			FName(TEXT("Class.Templar")),
-			FName(TEXT("Class.VoidBlade")),
-			FName(TEXT("Class.Chronomancer")),
-			FName(TEXT("Class.DragonKnight")),
-			FName(TEXT("Class.GodSlayer"))
+			FName(TEXT("Class.Line.Guard.Vanguard")),
+			FName(TEXT("Class.Line.Scout.Ranger")),
+			FName(TEXT("Class.Line.Caster.Arcanist")),
+			FName(TEXT("Class.Line.Faith.Acolyte")),
+			FName(TEXT("Class.Line.Guard.Berserker")),
+			FName(TEXT("Class.Line.Scout.Shadowblade")),
+			FName(TEXT("Class.Line.Caster.Elementalist")),
+			FName(TEXT("Class.Line.Guard.Templar")),
+			FName(TEXT("Class.Line.Guard.VoidBlade")),
+			FName(TEXT("Class.Line.Caster.Chronomancer")),
+			FName(TEXT("Class.Line.Guard.DragonKnight")),
+			FName(TEXT("Class.Line.Apex.GodSlayer"))
 		};
 
 		int32 MatrixEvaluations = 0;
@@ -249,7 +251,9 @@ bool FPACharacterVisualIdentityTest::RunTest(const FString& Parameters)
 
 			for (const FName& ClassTag : ClassTags)
 			{
-				const FGameplayTag Tag = UGameplayTagsManager::Get().AddNativeGameplayTag(ClassTag);
+				// Tag phải đã được đăng ký trong DefaultGameplayTags.ini (không tự thêm native tag).
+				const FGameplayTag Tag = FGameplayTag::RequestGameplayTag(ClassTag, false);
+				TestTrue(FString::Printf(TEXT("AC-4: [%s] is a registered Class.Line tag"), *ClassTag.ToString()), Tag.IsValid());
 				const bool bSuccess = Comp->SetClassIdentityByTag(Tag);
 				TestTrue(FString::Printf(TEXT("AC-4: SetClassIdentityByTag [%s] under [%s]"), *ClassTag.ToString(), *ArmorTier.ToString()), bSuccess);
 

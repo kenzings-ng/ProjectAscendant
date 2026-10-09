@@ -134,17 +134,81 @@ FName FPAPaperdollConstants::GetDefaultTabardAssetForClass(FName ClassName)
 	return FName(TEXT("FB_Tabard_Vanguard"));
 }
 
+namespace
+{
+	/** 16 class theo DECISIONS.md §2, tag chuẩn Class.Line.<Nhánh>.<Class> (§8). */
+	struct FPAClassLineEntry
+	{
+		const TCHAR* ClassName;
+		const TCHAR* TagName;
+	};
+
+	static const FPAClassLineEntry GPAClassLineTable[] = {
+		{ TEXT("Vanguard"),       TEXT("Class.Line.Guard.Vanguard") },
+		{ TEXT("Templar"),        TEXT("Class.Line.Guard.Templar") },
+		{ TEXT("Berserker"),      TEXT("Class.Line.Guard.Berserker") },
+		{ TEXT("Swordmaster"),    TEXT("Class.Line.Guard.Swordmaster") },
+		{ TEXT("DragonKnight"),   TEXT("Class.Line.Guard.DragonKnight") },
+		{ TEXT("VoidBlade"),      TEXT("Class.Line.Guard.VoidBlade") },
+		{ TEXT("Ranger"),         TEXT("Class.Line.Scout.Ranger") },
+		{ TEXT("Shadowblade"),    TEXT("Class.Line.Scout.Shadowblade") },
+		{ TEXT("PhantomStalker"), TEXT("Class.Line.Scout.PhantomStalker") },
+		{ TEXT("Arcanist"),       TEXT("Class.Line.Caster.Arcanist") },
+		{ TEXT("Elementalist"),   TEXT("Class.Line.Caster.Elementalist") },
+		{ TEXT("Chronomancer"),   TEXT("Class.Line.Caster.Chronomancer") },
+		{ TEXT("Acolyte"),        TEXT("Class.Line.Faith.Acolyte") },
+		{ TEXT("Inquisitor"),     TEXT("Class.Line.Faith.Inquisitor") },
+		{ TEXT("Seraph"),         TEXT("Class.Line.Faith.Seraph") },
+		{ TEXT("GodSlayer"),      TEXT("Class.Line.Apex.GodSlayer") },
+	};
+
+	/** Lấy phần tên class (đoạn cuối sau dấu '.'), bỏ khoảng trắng. */
+	FString ExtractClassShortName(const FString& InName)
+	{
+		FString CleanName = InName;
+		int32 LastDot = INDEX_NONE;
+		if (CleanName.FindLastChar(TEXT('.'), LastDot))
+		{
+			CleanName = CleanName.RightChop(LastDot + 1);
+		}
+		CleanName.RemoveSpacesInline();
+		return CleanName;
+	}
+}
+
+FName FPAPaperdollConstants::GetClassTagNameForClass(FName ClassName)
+{
+	const FString CleanName = ExtractClassShortName(ClassName.ToString());
+	for (const FPAClassLineEntry& Entry : GPAClassLineTable)
+	{
+		if (CleanName.Equals(Entry.ClassName, ESearchCase::IgnoreCase))
+		{
+			return FName(Entry.TagName);
+		}
+	}
+	return NAME_None;
+}
+
+TArray<FName> FPAPaperdollConstants::GetAllClassTagNames()
+{
+	TArray<FName> Result;
+	Result.Reserve(UE_ARRAY_COUNT(GPAClassLineTable));
+	for (const FPAClassLineEntry& Entry : GPAClassLineTable)
+	{
+		Result.Add(FName(Entry.TagName));
+	}
+	return Result;
+}
+
 FGameplayTag FPAPaperdollConstants::GetTagForClass(FName ClassName)
 {
-	FString CleanName = ClassName.ToString();
-	if (CleanName.StartsWith(TEXT("Class.")))
+	// Tag class được đăng ký trong Config/DefaultGameplayTags.ini (Class.Line.<Nhánh>.<Class>).
+	// Không tự dựng "Class.<Tên>" (bị cấm theo DECISIONS.md §8).
+	const FName TagName = GetClassTagNameForClass(ClassName);
+	if (TagName.IsNone())
 	{
-		CleanName = CleanName.RightChop(6);
+		return FGameplayTag();
 	}
-	CleanName.RemoveSpacesInline();
-
-	const FName TagName = FName(*FString::Printf(TEXT("Class.%s"), *CleanName));
-	UGameplayTagsManager::Get().AddNativeGameplayTag(TagName);
 	return FGameplayTag::RequestGameplayTag(TagName, false);
 }
 
@@ -155,12 +219,7 @@ FName FPAPaperdollConstants::GetClassNameFromTag(FGameplayTag ClassTag)
 		return FName(TEXT("Vanguard"));
 	}
 
-	FString TagStr = ClassTag.ToString();
-	if (TagStr.StartsWith(TEXT("Class.")))
-	{
-		TagStr = TagStr.RightChop(6);
-	}
-	return FName(*TagStr);
+	return FName(*ExtractClassShortName(ClassTag.ToString()));
 }
 
 bool FPAPaperdollSortKey::IsMirroredDirection(EPAAimDirection8Way Direction)

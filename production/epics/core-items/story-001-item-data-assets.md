@@ -27,4 +27,4 @@
 - [x] **AC-2 (Consumable Quickbar DataAssets)**:
   - `DA_Potion_Health`: Slot `Quickbar_1`, ConsumableDuration 0.8s, SpeedDebuff 30%, Restores 100 HP, MaxStack 20.
 - [x] **AC-3 (Skill Book DataAsset)**:
-  - `DA_SkillBook_Dash`: ItemType `SkillBook`, `RequiredClassTag = Class.Vanguard`, `GrantedAbilityClass = UGA_Dash`, MaxStack 1.
+  - `DA_SkillBook_Dash`: ItemType `SkillBook`, `RequiredClassTag = Class.Line.Guard.Vanguard`, `GrantedAbilityClass = UGA_Dash`, MaxStack 1. *(Cập nhật 2026-10-10 (X7): tag class theo chuẩn `Class.Line.<Nhánh>.<Class>`, DECISIONS.md §8.)*

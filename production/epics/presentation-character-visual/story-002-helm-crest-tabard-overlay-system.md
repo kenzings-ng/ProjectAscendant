@@ -28,7 +28,7 @@ Story này mở rộng `UPAPaperdollComponent` đã code ở `item-004` để h�
     - `Socket_Tabard = TEXT("Socket_Tabard")` tại $(64, 60)$.
   - Tự động tạo 2 `UPaperFlipbookComponent` phụ trợ trong `Initialize9SlotSubcomponents()` với `SnapToTargetNotIncludingScale`.
 - [x] **AC-2 (Auto Class Identity Binding)**:
-  - Khi nhân vật nhận thẻ Gameplay Tag Chức Nghiệp (vd `Class.Vanguard`, `Class.Templar`, `Class.Acolyte`), hệ thống tự động gán đúng Asset ID của Crest và Tabard tương ứng mà không cần người chơi phải trang bị thủ công.
+  - Khi nhân vật nhận thẻ Gameplay Tag Chức Nghiệp (vd `Class.Line.Guard.Vanguard`, `Class.Line.Guard.Templar`, `Class.Line.Faith.Acolyte`), hệ thống tự động gán đúng Asset ID của Crest và Tabard tương ứng mà không cần người chơi phải trang bị thủ công. *(Cập nhật 2026-10-10 (X7): tag class theo chuẩn `Class.Line.<Nhánh>.<Class>`, DECISIONS.md §8.)*
   - Khi người chơi tháo/mặc giáp `Helm` hoặc `Chest`, các phụ kiện Crest và Tabard vẫn duy trì hiển thị, không bị ẩn theo giáp.
 - [x] **AC-3 (Directional Sort Key & Mirroring)**:
   - Tích hợp vào `FPAPaperdollSortKey`:

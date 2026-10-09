@@ -14,7 +14,7 @@ Hệ thống Kho Đồ & Cơ Sở Dữ Liệu Vật Phẩm 5 Cấp Độ Hiếm 
 1. **Kho Đồ Dạng Ô (Slot-Based Grid):** Khởi đầu 30 ô, mở rộng tối đa 60 ô qua nâng cấp túi/thắt lưng tại Thợ rèn.
 2. **Khung Trang Bị Nhân Vật (Paperdoll):** 6 vị trí trang bị cốt lõi trực tiếp kích hoạt các `GameplayEffect` trong Gameplay Ability System (GAS).
 3. **Khay Phím Tắt Tiêu Hao (Quickbar 1–4):** Cho phép kích hoạt nhanh bình dược phẩm trong lúc giao chiến.
-4. **Cơ Sở Dữ Liệu 5 Bậc Hiếm (5-Rarity Database):** Định nghĩa thuộc tính, màu sắc hiển thị và giá trị kinh tế.
+4. **Cơ Sở Dữ Liệu 5 Độ Hiếm (5-Rarity Database):** Định nghĩa thuộc tính, màu sắc hiển thị và giá trị kinh tế.
 5. **Vật Phẩm Đặc Thù:** Tích hợp Sách Kỹ Năng (`item_skill_book`) với cơ chế Class-Lock và Bộ Phận Rơi Từ Boss (Part Breaking Drops).
 
 ---
@@ -31,13 +31,15 @@ Hệ thống Kho Đồ & Cơ Sở Dữ Liệu Vật Phẩm 5 Cấp Độ Hiếm 
 
 Mọi trang bị và vật phẩm quý trong game được chuẩn hóa theo 5 cấp độ màu sắc (tuân thủ `itemization.md` và `DECISIONS.md` Mục 5):
 
-| Cấp Độ Hiếm | Tên Độ Hiếm | Màu Sắc Nhận Diện | Đặc Tính & Chỉ Số | Hệ Số Định Giá (RarityMultiplier) |
+| Thứ Tự | Tên Độ Hiếm | Màu Sắc Nhận Diện | Đặc Tính & Chỉ Số | Hệ Số Định Giá (RarityMultiplier) |
 | :---: | :--- | :--- | :--- | :---: |
-| **Bậc 1** | **Common (Thường)** | Trắng / Xám (`#D1D5DB`) | Chỉ số cơ bản sạch, không có dòng bổ trợ, dễ rèn và mua ở Thương nhân. | $1.0\times$ |
-| **Bậc 2** | **Uncommon (Không phổ biến)** | Xanh Lục (`#10B981`) | 1 dòng thuộc tính ngẫu nhiên (Affixes). | $1.8\times$ |
-| **Bậc 3** | **Rare (Hiếm)** | Xanh Lam (`#3B82F6`) | 1–2 dòng thuộc tính ngẫu nhiên, tăng nhẹ chỉ số tốc độ/thể lực. | $3.0\times$ |
-| **Bậc 4** | **Epic (Sử Thi)** | Tím (`#8B5CF6`) | 2–3 dòng ngẫu nhiên + tăng cường chỉ số cốt lõi. | $7.0\times$ |
-| **Bậc 5** | **Legendary (Huyền Thoại)** | Cam Hoàng Kim (`#F59E0B`) | 3 dòng ngẫu nhiên + 1 dòng hiệu ứng kỹ năng đặc thù (Combat Perk). Rèn từ Linh hồn Boss tại Thợ rèn cấm địa. | $18.0\times$ |
+| **1** | **Common (Thường)** | Trắng / Xám (`#D1D5DB`) | Chỉ số cơ bản sạch, không có dòng bổ trợ, dễ rèn và mua ở Thương nhân. | $1.0\times$ |
+| **2** | **Uncommon (Không phổ biến)** | Xanh Lục (`#10B981`) | 1 dòng thuộc tính ngẫu nhiên (Affixes). | $1.8\times$ |
+| **3** | **Rare (Hiếm)** | Xanh Lam (`#3B82F6`) | 1–2 dòng thuộc tính ngẫu nhiên, tăng nhẹ chỉ số tốc độ/thể lực. | $3.0\times$ |
+| **4** | **Epic (Sử Thi)** | Tím (`#8B5CF6`) | 2–3 dòng ngẫu nhiên + tăng cường chỉ số cốt lõi. | $7.0\times$ |
+| **5** | **Legendary (Huyền Thoại)** | Cam Hoàng Kim (`#F59E0B`) | 3 dòng ngẫu nhiên + 1 dòng hiệu ứng kỹ năng đặc thù (Combat Perk). Rèn từ Linh hồn Boss tại Thợ rèn cấm địa. | $18.0\times$ |
+
+*(Cập nhật 2026-10-10 (X7): bỏ cách đánh số độ hiếm bằng "Tier/Bậc" — độ hiếm gọi bằng tên (DECISIONS.md §1).)*
 
 ---
 
@@ -205,7 +207,7 @@ $$\text{SellValue} = \text{BasePrice} \times \text{VendorSellPenalty} \times \te
 ## 8. Edge Cases & Xử Lý Ngoại Lệ
 
 1. **Túi Đầy Khi Diệt Boss Rơi Nhiều Đồ:**  
-   Nếu túi đồ không còn ô trống khi đồ Boss rơi ra đất, đồ sẽ tồn tại trên sàn đấu vô thời hạn cho đến khi người chơi rời khỏi map. Khi chuyển vùng hoặc chết, toàn bộ vật phẩm từ bậc Rare trở lên chưa nhặt sẽ tự động được gửi về **Rương Tạm Thất Lạc (Overflow Stash / Mailbox)** tại Lửa trại (sức chứa tối đa 20 ô, lưu trữ trong vòng 3 lần thám hiểm kế tiếp).
+   Nếu túi đồ không còn ô trống khi đồ Boss rơi ra đất, đồ sẽ tồn tại trên sàn đấu vô thời hạn cho đến khi người chơi rời khỏi map. Khi chuyển vùng hoặc chết, toàn bộ vật phẩm từ độ hiếm Rare trở lên chưa nhặt sẽ tự động được gửi về **Rương Tạm Thất Lạc (Overflow Stash / Mailbox)** tại Lửa trại (sức chứa tối đa 20 ô, lưu trữ trong vòng 3 lần thám hiểm kế tiếp).
 2. **Tháo Trang Bị Khi Túi Đồ Đã Đầy:**  
    Nếu người chơi cố tình tháo một món đồ trên Paperdoll xuống túi khi túi đang $30/30$ ô, hệ thống chặn thao tác, phát âm thanh cảnh báo lỗi và hiển thị thông báo *"Túi đồ đã đầy, không thể tháo trang bị!"*.
 3. **Hoán Đổi Vũ Khí Trong Khi Đang Giao Chiến (Combat Weapon Swap):**  
@@ -247,7 +249,7 @@ $$\text{SellValue} = \text{BasePrice} \times \text{VendorSellPenalty} \times \te
 
 ### Visual & VFX
 - **Cột Sáng Rơi Đồ (Loot Beam Niagara VFX):** Khi vật phẩm rơi trên sàn, cột sáng bốc lên thẳng đứng mang màu sắc chuẩn xác của Độ Hiếm (Xám Slate, Xanh Lục, Xanh Lam, Tím Bí Ẩn, Hoàng Kim).
-- **Viền Hào Quang Trang Bị (Item Icon Border):** Trong giao diện ô đồ, viền ô phát sáng nhẹ theo màu Độ Hiếm. Bậc Epic và Legendary có hiệu ứng hạt phát sáng chạy quanh viền.
+- **Viền Hào Quang Trang Bị (Item Icon Border):** Trong giao diện ô đồ, viền ô phát sáng nhẹ theo màu Độ Hiếm. Trang bị Epic và Legendary có hiệu ứng hạt phát sáng chạy quanh viền. *(Cập nhật 2026-10-10 (X7): bỏ cách đánh số độ hiếm bằng "Tier/Bậc" — độ hiếm gọi bằng tên (DECISIONS.md §1).)*
 
 ### Audio & SFX
 - **Âm Nhặt Đồ (Loot Pickup):** Âm thanh va chạm kim loại thanh mảnh (*Crisp Metallic Clink*), âm trầm bổng hơn khi nhặt đồ Độ Hiếm cao.
@@ -270,4 +272,4 @@ $$\text{SellValue} = \text{BasePrice} \times \text{VendorSellPenalty} \times \te
 - [ ] **AC-3 (Quickbar Functional):** Nhấn các phím `[1]`, `[2]`, `[3]`, `[4]` kích hoạt đúng bình dược phẩm gán trong ô tương ứng, áp dụng hiệu ứng uống thuốc 0.8s và giảm 1 số lượng trong ngăn xếp.
 - [ ] **AC-4 (QoL Safety Checks):** Vật phẩm được gắn cờ `bIsLocked = true` không thể bị kéo thả vào ô bán của Thương nhân hoặc nút phân rã của Thợ rèn; bấm nút Bán Rác chỉ thanh lý các vật phẩm có cờ `bIsJunk = true`.
 - [ ] **AC-5 (Skill Book Class-Lock Integration):** Nhấp chuột phải vào Sách Kỹ Năng trong túi đồ kiểm tra đúng điều kiện `RequiredClassTag` và `!State.InCombat`, sau đó tiêu hao 1 sách và nạp chiêu thức vào Thư viện Grimoire.
-- [ ] **AC-6 (Overflow Stash Safety Net):** Khi diệt Boss với túi đồ đầy $30/30$, các vật phẩm bậc Rare trở lên bị bỏ lại trên sàn sẽ xuất hiện đầy đủ trong Rương Tạm tại Lửa trại khi chuyển cảnh.
+- [ ] **AC-6 (Overflow Stash Safety Net):** Khi diệt Boss với túi đồ đầy $30/30$, các vật phẩm độ hiếm Rare trở lên bị bỏ lại trên sàn sẽ xuất hiện đầy đủ trong Rương Tạm tại Lửa trại khi chuyển cảnh. *(Cập nhật 2026-10-10 (X7): "bậc Rare" → "độ hiếm Rare".)*

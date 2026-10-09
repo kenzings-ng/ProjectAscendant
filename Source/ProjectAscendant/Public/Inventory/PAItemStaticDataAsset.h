@@ -89,7 +89,7 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Item|SkillBook")
 	TSubclassOf<class UGameplayAbility> GrantedAbilityClass;
 
-	/** Thẻ chức nghiệp yêu cầu để học kỹ năng (ví dụ: Class.Ranger, Class.Vanguard - AC-4) */
+	/** Thẻ chức nghiệp yêu cầu để học kỹ năng (ví dụ: Class.Line.Scout.Ranger, Class.Line.Guard.Vanguard - AC-4) */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Item|SkillBook")
 	FGameplayTag RequiredClassTag;
 

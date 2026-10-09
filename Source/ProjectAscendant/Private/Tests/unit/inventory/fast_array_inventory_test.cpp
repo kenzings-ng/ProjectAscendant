@@ -62,13 +62,13 @@ bool FPAFastArrayInventoryTest::RunTest(const FString& Parameters)
 		UItemStaticDataAsset* TestSword = NewObject<UItemStaticDataAsset>();
 		TestSword->ItemId = FName(TEXT("Item_Sword_AncientSteel"));
 		TestSword->ItemName = FText::FromString(TEXT("Ancient Steel Sword"));
-		TestSword->RarityTier = EPAItemRarity::Epic; // Tier 4 Epic
+		TestSword->RarityTier = EPAItemRarity::Epic;
 		TestSword->Category = EPAItemCategory::Equipment;
 		TestSword->MaxStackSize = 1;
 		TestSword->BaseSellPrice = 250;
 
 		TestEqual(TEXT("AC-2: ItemId khớp dữ liệu"), TestSword->ItemId, FName(TEXT("Item_Sword_AncientSteel")));
-		TestEqual(TEXT("AC-2: Cấp độ hiếm phải là Tier 4 Epic"), TestSword->RarityTier, EPAItemRarity::Epic);
+		TestEqual(TEXT("AC-2: Cấp độ hiếm phải là Epic"), TestSword->RarityTier, EPAItemRarity::Epic);
 		TestEqual(TEXT("AC-2: PrimaryAssetId hợp lệ"), TestSword->GetPrimaryAssetId().PrimaryAssetType, FPrimaryAssetType(TEXT("Item")));
 		TestEqual(TEXT("AC-2: Giới hạn chồng mặc định cho Equipment là 1"),
 			UItemStaticDataAsset::GetDefaultMaxStackForCategory(EPAItemCategory::Equipment), 1);

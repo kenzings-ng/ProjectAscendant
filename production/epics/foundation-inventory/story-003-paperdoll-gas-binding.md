@@ -89,7 +89,7 @@
   - Edge cases: When stack reaches 0, quickbar slot clears automatically.
 
 - **AC-4 Test: Skill Book Class Lock Validation**:
-  - Given: Ranger character (has tag `Class.Ranger`) with a Vanguard Skill Book (`Class.Vanguard`).
+  - Given: Ranger character (has tag `Class.Line.Scout.Ranger`) with a Vanguard Skill Book (`Class.Line.Guard.Vanguard`). *(Cập nhật 2026-10-10 (X7): tag class theo chuẩn `Class.Line.<Nhánh>.<Class>`, DECISIONS.md §8.)*
   - When: Player attempts to use Skill Book.
   - Then: Server rejects request, book remains in backpack, and UI displays "Chức nghiệp không phù hợp".
 

@@ -12,7 +12,7 @@
  * FPAMaterialRarityTest
  *
  * Kiểm thử tự động cho Story item-005 (Static Material Instance, EPIC-ITEMIZATION-001, Sprint 6):
- * - AC-1: 5 Static Material Instance presets theo Bậc Hiếm (Common -> Legendary) với độ phát quang Emissive
+ * - AC-1: 5 Static Material Instance presets theo Độ Hiếm (Common -> Legendary) với độ phát quang Emissive
  *         và tint màu chuẩn xác.
  * - AC-2: Hiệu năng Draw Call chuẩn hóa thực nghiệm (PeakCombat50.utrace): 446-462 calls tổng scene,
  *         bác bỏ tiêu chí cũ ≤5 calls.

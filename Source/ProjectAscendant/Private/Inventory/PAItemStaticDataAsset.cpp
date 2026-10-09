@@ -156,7 +156,8 @@ void FPAItemDataAssetPresets::ConfigureSkillBookDash(UItemStaticDataAsset* Asset
 	Asset->RarityTier = EPAItemRarity::None;
 	Asset->SkillRarity = EPASkillRarity::Normal;
 	Asset->Category = EPAItemCategory::SkillBook;
-	Asset->RequiredClassTag = UGameplayTagsManager::Get().AddNativeGameplayTag(FName(TEXT("Class.Vanguard")), TEXT("Vanguard warrior class"));
+	// Tag đã đăng ký trong Config/DefaultGameplayTags.ini (DECISIONS.md §8); ErrorIfNotFound = true.
+	Asset->RequiredClassTag = FGameplayTag::RequestGameplayTag(FName(TEXT("Class.Line.Guard.Vanguard")), true);
 	Asset->GrantedAbilityClass = UPAGameplayAbility_Dash::StaticClass();
 	Asset->MaxStackSize = 1;
 	Asset->BaseSellPrice = 250;
