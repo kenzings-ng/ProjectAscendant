@@ -58,7 +58,7 @@ Toàn bộ hệ thống được xây dựng theo chuẩn **100% Server-Authorit
 ### 3. Kinh tế & Chế tạo (Expansion Layer — Sprint 3)
 - **Dual Currency Economy**: Hệ thống ví Tiền Vàng (Gold) giao dịch tự do và Tàn Trang (Skill Shards) gắn liền nhân vật. Mạng lưới thương nhân tiền trạm và Thương buôn lang thang (Wandering Smuggler).
 - **Blacksmithing Forge**: Cường hóa trang bị 3 cấp độ (Tier 1 Outpost $\to$ Tier 2 Dã ngoại $\to$ Tier 3 Vùng cấm), khảm ngọc Gem Socketing, Đá bảo hộ Blacksmith Ward chống tụt cấp, và Rèn vũ khí thần thánh từ Boss Soul.
-- **Progression & Mastery**: Cấp độ nhân vật 1–50, Mastery bảng nhánh kỹ năng, ràng buộc Talent Tree.
+- **Progression**: Cấp độ nhân vật 1–50 (đường cong XP, tăng chỉ số mỗi cấp). Talent Tree / Skill Point đã gỡ (DECISIONS §12, 2026-10-10); tiến trình kỹ năng theo Skill Book.
 
 ### 4. Nền tảng cốt lõi (Foundation & Core Layers — Sprint 1 & 2)
 - **Isometric Controller**: Điều khiển 8 hướng màn hình, ngắm bắn độc lập tách rời thân dưới (Decoupled Aiming), Camera góc nhìn $-45^\circ / 45^\circ$ với Lookahead $250\text{cm}$ và làm mờ vật cản che khuất (Occlusion Dithering).
@@ -80,7 +80,7 @@ ProjectAscendant/
 │   │   ├── Crafting/             # Blacksmith Forge, Socketing, Boss Soul Craft
 │   │   ├── Inventory/            # FastArray Grid Inventory, Paperdoll Binding
 │   │   ├── Network/              # Iris Netcode, Threat Table, Lag Compensation
-│   │   ├── Progression/          # XP Leveling, Talent Trees, Class Mastery
+│   │   ├── Progression/          # XP Leveling
 │   │   ├── UI/                   # CommonUI Widgets & Models (Vitals, Boss, Shop)
 │   │   └── Character/            # Base Characters, PaperZD AnimBP State Machines
 ├── Content/                      # Tài nguyên Unreal Engine (.uasset, .umap, flipbooks)

@@ -17,7 +17,6 @@ void UPAProgressionComponent::GetLifetimeReplicatedProps(TArray<FLifetimePropert
 
 	DOREPLIFETIME(UPAProgressionComponent, CurrentLevel);
 	DOREPLIFETIME(UPAProgressionComponent, CurrentXP);
-	DOREPLIFETIME(UPAProgressionComponent, AvailableSkillPoints);
 }
 
 // -------------------------------------------------------------------------
@@ -58,7 +57,6 @@ EPAProgressionError UPAProgressionComponent::GrantXP(int32 XPAmount)
 
 		// Tính và áp dụng phần thưởng
 		FPALevelUpReward Reward = FPAProgressionFormulas::GetLevelUpReward();
-		AvailableSkillPoints += Reward.SkillPointsAwarded;
 
 		// Áp dụng stat bonus lên AttributeSet
 		ApplyLevelUpStatBonus(Reward);
@@ -79,54 +77,9 @@ EPAProgressionError UPAProgressionComponent::GrantXP(int32 XPAmount)
 	return EPAProgressionError::None;
 }
 
-EPAProgressionError UPAProgressionComponent::SpendSkillPoint()
-{
-	AActor* Owner = GetOwner();
-	if (!Owner || !Owner->HasAuthority())
-	{
-		return EPAProgressionError::NotAuthoritative;
-	}
-
-	if (AvailableSkillPoints <= 0)
-	{
-		return EPAProgressionError::InsufficientSkillPoints;
-	}
-
-	AvailableSkillPoints--;
-	return EPAProgressionError::None;
-}
-
-void UPAProgressionComponent::RefundSkillPoints(int32 Amount)
-{
-	AActor* Owner = GetOwner();
-	if (!Owner || !Owner->HasAuthority())
-	{
-		return;
-	}
-
-	if (Amount > 0)
-	{
-		AvailableSkillPoints += Amount;
-	}
-}
-
 int32 UPAProgressionComponent::GetXPToNextLevel() const
 {
 	return FPAProgressionFormulas::GetXPRequiredForLevel(CurrentLevel);
-}
-
-// -------------------------------------------------------------------------
-// Server RPC
-// -------------------------------------------------------------------------
-
-bool UPAProgressionComponent::Server_SpendSkillPoint_Validate()
-{
-	return true;
-}
-
-void UPAProgressionComponent::Server_SpendSkillPoint_Implementation()
-{
-	SpendSkillPoint();
 }
 
 // -------------------------------------------------------------------------

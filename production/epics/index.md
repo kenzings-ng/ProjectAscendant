@@ -34,7 +34,7 @@
 |---|---|---|---|---|---|---|
 | [`expansion-economy`](expansion-economy/EPIC.md) | Expansion | Dual Currency Economy & Merchant Network | [`merchant-economy.md`](../../design/gdd/merchant-economy.md) | ADR-0001, ADR-0003 | 3 stories | **Done** |
 | [`expansion-crafting`](expansion-crafting/EPIC.md) | Expansion | 3-Tier Blacksmithing & Enhancement Forge | [`blacksmithing-system.md`](../../design/gdd/blacksmithing-system.md) | ADR-0001, ADR-0003 | 3 stories | **Done** |
-| [`expansion-progression`](expansion-progression/EPIC.md) | Expansion | Character XP, Leveling & Class Mastery | [`skill-progression-system.md`](../../design/gdd/skill-progression-system.md) | ADR-0001, ADR-0002 | 2 stories | **Done** |
+| [`expansion-progression`](expansion-progression/EPIC.md) | Expansion | Character XP, Leveling & Class Mastery | [`skill-progression-system.md`](../../design/gdd/skill-progression-system.md) | ADR-0001, ADR-0002 | 2 stories (prog-002 Talent Tree: Removed — DECISIONS §12, 2026-10-10) | **Done** |
 
 ---
 
