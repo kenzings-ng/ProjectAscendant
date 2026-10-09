@@ -185,6 +185,10 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "ProjectAscendant|Combat|Dash|Tags")
 	FGameplayTag TagStateExhausted;
 
+	/** Thẻ khóa lướt do PAStaminaComponent gắn khi kiệt sức (Ability.Block.Dash) - ActivationBlockedTags */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "ProjectAscendant|Combat|Dash|Tags")
+	FGameplayTag TagAbilityBlockDash;
+
 	/** Áp dụng GameplayEffect tiêu hao thể lực (AC-1) */
 	void ApplyCostEffect();
 

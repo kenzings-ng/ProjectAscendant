@@ -120,6 +120,7 @@ UPAGameplayAbility_Dash::UPAGameplayAbility_Dash()
 	TagStateInvulnerable = FGameplayTag::RequestGameplayTag(FName("State.Invulnerable"), false);
 	TagCooldownDash = FGameplayTag::RequestGameplayTag(FName("Cooldown.Dash"), false);
 	TagStateExhausted = FGameplayTag::RequestGameplayTag(FName("State.Exhausted"), false);
+	TagAbilityBlockDash = FGameplayTag::RequestGameplayTag(FName("Ability.Block.Dash"), false);
 
 	if (TagAbilityDash.IsValid())
 	{
@@ -132,6 +133,12 @@ UPAGameplayAbility_Dash::UPAGameplayAbility_Dash()
 	if (TagStateDashing.IsValid())
 	{
 		ActivationOwnedTags.AddTag(TagStateDashing);
+	}
+
+	// Chặn kích hoạt Dash khi PAStaminaComponent gắn Ability.Block.Dash (kiệt sức) bằng ActivationBlockedTags chuẩn của GAS
+	if (TagAbilityBlockDash.IsValid())
+	{
+		ActivationBlockedTags.AddTag(TagAbilityBlockDash);
 	}
 }
 
