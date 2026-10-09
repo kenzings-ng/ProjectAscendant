@@ -154,7 +154,7 @@ Mảng túi đồ được quản lý bởi `FInventoryFastArray` tích hợp c�
 
 | GDD System | Yêu Cầu Cụ Thể | Cách Thức ADR-0003 Giải Quyết |
 |---|---|---|
-| `inventory-system.md` | Lưới 6x5 (30 ô), chia tách chồng, 5 Độ Hiếm. | `SlotIndex` từ 0 đến 29, `Quantity` quản lý cộng dồn/tách chồng, `ItemDefId` trỏ sang Asset có Tier. |
+| `inventory-system.md` | Lưới 6x5 (30 ô), chia tách chồng, 5 Độ Hiếm. | `SlotIndex` từ 0 đến 29, `Quantity` quản lý cộng dồn/tách chồng, `ItemDefId` trỏ sang Asset có độ hiếm (`RarityTier`). |
 | `blacksmithing-system.md` | Cấp cường hóa +1 đến +10, trừ độ bền, khảm ngọc. | `EnhancementLevel`, `CurrentDurability` và `SocketedGemIds` được lưu trữ trực tiếp trong struct. |
 | `merchant-economy.md` | Bộ đệm mua lại (Buyback FIFO 10 ô). | Thành phần `UInventoryComponent` tái sử dụng `FInventoryFastArray` riêng cho danh mục Buyback. |
 
