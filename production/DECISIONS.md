@@ -2,7 +2,7 @@
 
 > **Status**: APPROVED & LOCKED  
 > **Authority**: System Architect & Project Lead  
-> **Last Updated**: 2026-09-28  
+> **Last Updated**: 2026-10-09 (bổ sung §12)  
 > **Scope**: Bắt buộc tuân thủ tuyệt đối trong toàn bộ quá trình phát triển (Giai đoạn 0 → 6). Mọi sửa đổi phải có sự chấp thuận trực tiếp từ Project Lead.
 
 ---
@@ -184,3 +184,15 @@ Thống nhất dứt điểm mọi phân bổ weapon family cho toàn bộ 16 Cl
   - Nhân vật người chơi (Player Characters / Pawns): Sử dụng `EGameplayEffectReplicationMode::Mixed` (Replicate GameplayEffects tới Owner Client để hiển thị UI/HUD lập tức; chỉ Replicate GameplayTags và GameplayCues tới các Simulated Proxies khác để tối ưu đường truyền).
   - Quái vật / Boss / NPC: Sử dụng `EGameplayEffectReplicationMode::Minimal` (Chỉ replicate GameplayTags và GameplayCues).
 - **Kiểm thử tự động mạng**: Mọi tính năng gameplay/combat đều phải có bài test headless replication xác thực tính nhất quán giữa Server và ít nhất 2 Clients.
+
+---
+
+## 12. Quyết Định Bổ Sung Sau Rà Soát Plan ↔ Code (2026-10-09)
+
+> **Nguồn**: lựa chọn của chủ dự án, lưu lúc 2026-10-09 11:49 UTC trên trang "Ascendant Review Decisions", sau báo cáo `production/qa/review-plan-vs-code-2026-10-09.md`. Kế hoạch thực thi: `production/plans/execution-owner-decisions-2026-10-09.md`.
+
+- **ROADMAP**: Khôi phục `production/ROADMAP.md` theo bản ở commit `493a442`.
+- **Talent Tree / Skill Point / Respec**: **Gỡ bỏ** khỏi code và story. Đây là hệ thống không có trong GDD, nên không được phát triển tiếp. Tiến trình kỹ năng vẫn theo Skill Book như `skill-progression-system.md` mô tả.
+- **Thông số Dash / Combo / Finisher**: Giá trị đang có trong code runtime (`PAGameplayAbility_Dash`, `PAGameplayAbility_MeleeAttack`, `PAGameplayAbility_Finisher`) là **chuẩn**. GDD, `control-manifest.md`, `tr-registry.yaml` và story phải sửa cho khớp code. Chủ dự án chấp nhận cảm giác chơi tương ứng với các giá trị này.
+- **Epic Class Chính / Phụ & Thăng Chức** (§3, §4): lập epic và story trong **Giai đoạn 2B** của ROADMAP, không lập trước đó.
+- **`item_skill_shard` (Tàn Trang)**: là **tiền tệ thứ hai** theo `merchant-economy.md` (giới hạn 99.999). Mọi chỗ còn dùng "Ash Shards" đều đổi sang `item_skill_shard`, đúng với §5.
