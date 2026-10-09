@@ -68,7 +68,7 @@
   - Wallet with 100 Gold pays 30 Gold (balance becomes 70 Gold); item durability restores to 100.0%.
   - Attempting to repair an item already at 100% durability returns `MaxDurabilityAlready`.
 - **Test 2: Salvage Equipment & Skill Books**:
-  - Salvaging a Rare (Tier 3) chestplate yields 10 Skill Shards; item is removed from slot.
+  - Salvaging a Rare chestplate yields 10 Skill Shards; item is removed from slot. *(Cập nhật 2026-10-10 (X7): bỏ "(Tier 3)" — độ hiếm không đánh số Tier, DECISIONS.md §1.)*
   - Salvaging a Skill Book yields shards by skill rarity: Normal 1 / Rare 3 / Epic 8 / Mythic 25 *(corrected 2026-10-09, X6; was flat 5)*.
   - Salvaging a locked item (`bIsLocked == true`) returns `ItemLocked` and leaves item intact.
 - **Test 3: Safe Enhancement +1 to +3**:

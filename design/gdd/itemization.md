@@ -22,7 +22,7 @@ Hệ thống được thiết kế theo triết lý **"Chất lượng đồ h�
 
 ## Player Fantasy
 
-*"Bước ra khỏi trận tử chiến nghẹt thở với Lãnh Chúa Hỏa Long ở Cấm Địa Núi Lửa, trên tay bạn là thanh Trảm Kiếm Bậc Legendary vừa nhặt được. Dù mang cùng khung xương đại kiếm bạn từng dùng ở Cấp 15, thanh kiếm giờ đây khoác lên mình hình thái kim loại tôi luyện rực lửa của Lò Rèn Cấm Địa, bao quanh bởi luồng plasma tím-vàng bập bùng.*
+*"Bước ra khỏi trận tử chiến nghẹt thở với Lãnh Chúa Hỏa Long ở Cấm Địa Núi Lửa, trên tay bạn là thanh Trảm Kiếm Legendary vừa nhặt được. Dù mang cùng khung xương đại kiếm bạn từng dùng ở Cấp 15, thanh kiếm giờ đây khoác lên mình hình thái kim loại tôi luyện rực lửa của Lò Rèn Cấm Địa, bao quanh bởi luồng plasma tím-vàng bập bùng.*
 
 *Khi mở bảng thuộc tính, bạn mỉm cười mãn nguyện: các dòng Affix đã lăn trúng chỉ số tối đa (God-roll) về Sát thương Phản đòn (Parry Damage) và Tốc độ Hồi Thể Lực. Bạn lập tức dùng số Tàn Trang Kỹ Năng tích lũy được để đục thêm ô khảm ngọc Prismatic thứ 3. Mỗi món trang bị trong hành trang không chỉ là những con số vô hồn—chúng là minh chứng sống cho kỹ năng sinh tồn và hành trình vượt qua hiểm nguy của chính bạn."*
 
@@ -108,7 +108,7 @@ $$\text{AffixValue} = \text{RandomRound}(\text{MinVal}_{T}, \text{MaxVal}_{T})$$
 | `suffix_leech_on_stagger` | Huyết Tế Đoạt Hồn | Forbidden (T3) | — | — | +8–12% Leech | +14–20% Leech |
 
 ### 2.3 Dòng Đặc Quyền Huyền Thoại (Legendary Combat Perks)
-Chỉ xuất hiện trên trang bị Bậc Legendary. Thay vì chỉ tăng số liệu thuần túy, dòng này can thiệp và biến đổi cơ chế chiêu thức của Gameplay Ability System (GAS):
+Chỉ xuất hiện trên trang bị Legendary. Thay vì chỉ tăng số liệu thuần túy, dòng này can thiệp và biến đổi cơ chế chiêu thức của Gameplay Ability System (GAS): *(Cập nhật 2026-10-10 (X7): bỏ cách đánh số độ hiếm bằng "Tier/Bậc" — độ hiếm gọi bằng tên (DECISIONS.md §1).)*
 - **Gươm Lãnh Chúa Hỏa Ngục (Vanguard):** Kỹ năng *Blade Arc* phóng ra một luồng sóng dung nham thiêu đốt mặt đất trong 3 giây.
 - **Cung Phong Bão Cổ Thụ (Ranger):** Phát bắn *Piercing Shot* khi xuyên qua kẻ địch thứ 2 sẽ tự động tách thành 3 mũi tên phụ.
 - **Pháp Trượng Hư Không Cấm Thuật (Arcanist):** Kỹ năng *Gravity Pull* tăng 40% bán kính hút và làm câm lặng quái nhỏ trong 1.5 giây.

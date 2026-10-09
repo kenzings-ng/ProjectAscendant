@@ -31,7 +31,7 @@ This epic implements the zone-tiered blacksmithing and item enhancement engine f
 |---|---|---|---|---|
 | 001 | [`Blacksmith Tier 1 Outpost Forge & Item Repair`](story-001-tier1-outpost-forge.md) | Logic | Done | ADR-0001, ADR-0003 |
 | 002 | [`Enhancement Pipeline +4 to +10 & Socketing`](story-002-enhancement-socketing.md) | Logic | Done | ADR-0001, ADR-0003 |
-| 003 | [`Boss Soul Forging & Divine Equipment`](story-003-boss-soul-forging.md) | Integration | Done | ADR-0001, ADR-0003 |
+| 003 | [`Boss Soul Forging & Legendary Equipment`](story-003-boss-soul-forging.md) | Integration | Done | ADR-0001, ADR-0003 |
 
 ## Definition of Done
 
