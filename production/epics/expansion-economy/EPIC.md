@@ -8,7 +8,7 @@
 
 ## Overview
 
-This epic implements the server-authoritative dual currency economy, merchant trading network, and transactional safeguards for *Project Ascendant*. It establishes the `UPACurrencyComponent` managing Gold and Ash Shards with FastArray delta replication (`FFastArraySerializer`), atomic server transaction RPCs for trading and transfers, 3-tier merchant vendor interaction with stock rotation, buyback window FIFO management, and the high-stakes PvE death penalty (dropping 50% Gold into an Ash Remnant upon defeat).
+This epic implements the server-authoritative dual currency economy, merchant trading network, and transactional safeguards for *Project Ascendant*. It establishes the `UPACurrencyComponent` managing Gold and Skill Shards (Tàn Trang, `item_skill_shard`) with FastArray delta replication (`FFastArraySerializer`), atomic server transaction RPCs for trading and transfers, 3-tier merchant vendor interaction with stock rotation, buyback window FIFO management, and the high-stakes PvE death penalty (dropping 50% Gold into an Ash Remnant upon defeat).
 
 ## Governing ADRs
 
@@ -21,9 +21,9 @@ This epic implements the server-authoritative dual currency economy, merchant tr
 
 | TR-ID | Requirement | ADR Coverage |
 |---|---|---|
-| **TR-econ-001** | Dual currency wallet (Gold & Ash Shards) with FastArray replication and atomic server RPCs (Add, Deduct, Transfer) preventing duping | ADR-0001, ADR-0003 ✅ |
+| **TR-econ-001** | Dual currency wallet (Gold & Skill Shards) with FastArray replication and atomic server RPCs (Add, Deduct, Transfer) preventing duping | ADR-0001, ADR-0003 ✅ |
 | **TR-econ-002** | 3-tier merchant vendor network with distance checks (≤300cm), out-of-combat enforcement, and FIFO buyback window (10 slots) | ADR-0001 ✅ |
-| **TR-econ-003** | PvE death penalty dropping 50% Gold into an Ashen Remnant droplet while retaining 100% Ash Shards | ADR-0001 ✅ |
+| **TR-econ-003** | PvE death penalty dropping 50% Gold into an Ashen Remnant droplet while retaining 100% Skill Shards | ADR-0001 ✅ |
 
 ## Stories
 
@@ -36,7 +36,7 @@ This epic implements the server-authoritative dual currency economy, merchant tr
 ## Definition of Done
 
 This epic is complete when:
-- `UPACurrencyComponent` replicates Gold and Ash Shards via `FFastArraySerializer` with minimal delta overhead ($\le 0.5\text{ms}$).
+- `UPACurrencyComponent` replicates Gold and Skill Shards via `FFastArraySerializer` with minimal delta overhead ($\le 0.5\text{ms}$).
 - Atomic transaction RPCs ensure money cannot be duplicated or lost across concurrent operations, packet loss, or server desyncs.
-- PvE death penalty drops exactly 50% carried Gold into a world droplet, retaining 100% Ash Shards.
+- PvE death penalty drops exactly 50% carried Gold into a world droplet, retaining 100% Skill Shards.
 - 100% automated test coverage for currency operations passes cleanly.

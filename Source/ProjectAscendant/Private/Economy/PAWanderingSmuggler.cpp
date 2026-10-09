@@ -149,7 +149,7 @@ void APAWanderingSmuggler::EnsureDefaultRotatingPool()
 	};
 
 	// Placeholder pool entries (5 items → 4 will be randomly selected each restock)
-	AddPool(300);  // Dungeon Map (Ash Shards in prod, Gold placeholder here)
+	AddPool(300);  // Dungeon Map (Skill Shards in prod, Gold placeholder here)
 	AddPool(200);  // Tier-2 crafting material
 	AddPool(250);  // Tier-2 gem
 	AddPool(400);  // Emergency Warp Scroll

@@ -318,12 +318,20 @@ items:
     referenced_by:
       - design/gdd/skill-progression-system.md
       - design/gdd/inventory-system.md
-    category: crafting_material
+      - design/gdd/merchant-economy.md
+      - design/gdd/zone-system.md
+      - design/gdd/itemization.md
+      - design/gdd/foundational-classes.md
+      - design/gdd/advanced-classes.md
+      - design/gdd/blacksmithing-system.md
+    # 2026-10-09 (DECISIONS.md §12): tiền tệ thứ hai theo merchant-economy.md.
+    # Cũ: category: crafting_material, max_stack: 999.
+    category: currency
     stackable: true
-    max_stack: 999
+    carry_limit: 99999  # skill_shards_carry_limit
     salvage_source: "Phân rã Sách Kỹ Năng khác Class tại NPC"
     added: 2026-09-15
-    revised: ""
+    revised: "2026-10-09"
 
   - name: item_blacksmith_ward
     display_name: "Đá Bảo Hộ Cổ Xưa (Blacksmith Ward)"
@@ -2058,14 +2066,29 @@ constants:
     added: 2026-09-16
     revised: ""
 
+  # 2026-10-09 (DECISIONS.md §5/§12): tên "Ash Shards" bị cấm; thay bằng
+  # skill_shards_carry_limit (merchant-economy.md Tuning Knobs). Giữ entry cũ ở
+  # trạng thái deprecated theo quy tắc "Never delete entries".
   - name: ash_shards_carry_limit
-    status: active
+    status: deprecated
+    # replaced_by: skill_shards_carry_limit
     source: design/gdd/merchant-economy.md
     referenced_by:
       - design/gdd/merchant-economy.md
     value: 99999
     unit: shards
     added: 2026-09-16
+    revised: "2026-10-09"
+
+  - name: skill_shards_carry_limit
+    status: active
+    source: design/gdd/merchant-economy.md
+    referenced_by:
+      - design/gdd/merchant-economy.md
+      - design/gdd/inventory-system.md
+    value: 99999
+    unit: item_skill_shard
+    added: 2026-10-09
     revised: ""
 
   # ─── MULTIPLAYER NETCODE & AGGRO CONSTANTS ─────────────────────

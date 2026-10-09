@@ -165,7 +165,7 @@ public:
 		EPACraftingError& OutError);
 
 	/**
-	 * AC-2 (item-007): Tẩy lại 1 dòng Affix trên trang bị tiêu hao 2,000 Gold + 5 Skill Shards (Ash Shards) (GDD §7.2).
+	 * AC-2 (item-007): Tẩy lại 1 dòng Affix trên trang bị tiêu hao 2,000 Gold + 5 Skill Shards (Tàn Trang) (GDD §7.2).
 	 * Kiểm tra số dư song tiền tệ nguyên tử. Nếu thiếu bất kỳ loại nào: trả về mã lỗi tương ứng, rollback 100%, affixes giữ nguyên.
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Itemization|Blacksmith")

@@ -110,7 +110,7 @@ bool FPAItemizationEpicIntegrationTest::RunTest(const FString& Parameters)
 	UPACurrencyComponent* Wallet = NewObject<UPACurrencyComponent>();
 	EPACurrencyTransactionError CurrErr;
 	Wallet->AddCurrency(EPACurrencyType::Gold, 10000, CurrErr);
-	Wallet->AddCurrency(EPACurrencyType::AshShards, 20, CurrErr);
+	Wallet->AddCurrency(EPACurrencyType::SkillShards, 20, CurrErr);
 
 	EPACraftingError SocketErr = EPACraftingError::None;
 	bool bSocketUnlocked = Blacksmith->ServerAddSocket(
@@ -118,7 +118,7 @@ bool FPAItemizationEpicIntegrationTest::RunTest(const FString& Parameters)
 	TestTrue(TEXT("Step 3: ServerAddSocket at Field Forge succeeds"), bSocketUnlocked);
 	TestTrue(TEXT("Step 3: Socket 0 is unlocked"), GeneratedItem.SocketSlots[0].bIsUnlocked);
 	TestEqual(TEXT("Step 3: Gold deducted 1,000 -> 9,000"), Wallet->GetGold(), 9000LL);
-	TestEqual(TEXT("Step 3: Shards deducted 3 -> 17"), Wallet->GetAshShards(), 17LL);
+	TestEqual(TEXT("Step 3: Shards deducted 3 -> 17"), Wallet->GetSkillShards(), 17LL);
 
 	// =========================================================================
 	// BƯỚC 4: Khảm Gem (Ruby) và cộng chỉ số vào AttributeSet (item-003 AC-4)
@@ -142,7 +142,7 @@ bool FPAItemizationEpicIntegrationTest::RunTest(const FString& Parameters)
 		GeneratedItem, 0, 2000, 5, EPAForgeTier::Tier2_Field, Wallet, ItemGenerator, ReforgeErr);
 	TestTrue(TEXT("Step 5: ServerReforgeAffix succeeds"), bReforged);
 	TestEqual(TEXT("Step 5: Gold deducted 2,000 -> 7,000"), Wallet->GetGold(), 7000LL);
-	TestEqual(TEXT("Step 5: Shards deducted 5 -> 12"), Wallet->GetAshShards(), 12LL);
+	TestEqual(TEXT("Step 5: Shards deducted 5 -> 12"), Wallet->GetSkillShards(), 12LL);
 	TestTrue(TEXT("Step 5: Reforged Affix 0 has valid ID"), !GeneratedItem.ActiveAffixes[0].AffixId.IsNone());
 	TestTrue(TEXT("Step 5: Reforged Affix 0 has positive value"), GeneratedItem.ActiveAffixes[0].RolledValue > 0.0f);
 

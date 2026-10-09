@@ -16,7 +16,7 @@
  *
  * Automated unit tests for Story crft-001 (Blacksmith Tier 1 Outpost Forge & Item Repair):
  *  - AC-1: Durability repair calculation and restoration to 100.0% with Gold deduction.
- *  - AC-2: Item & Skill Book salvaging into Ash Shards and locked-item protection.
+ *  - AC-2: Item & Skill Book salvaging into Skill Shards and locked-item protection.
  *  - AC-3: Safe 100% enhancement from +0 up to +3, respecting Tier 1 Outpost Forge cap.
  *  - AC-4: Interaction distance and validation guardrails.
  */
@@ -83,7 +83,7 @@ bool FPABlacksmithTests::RunTest(const FString& Parameters)
 	}
 
 	// =========================================================================
-	// AC-2: Item & Skill Book Salvaging into Ash Shards
+	// AC-2: Item & Skill Book Salvaging into Skill Shards
 	// =========================================================================
 	{
 		UPABlacksmithComponent* Blacksmith = NewObject<UPABlacksmithComponent>();
@@ -92,13 +92,13 @@ bool FPABlacksmithTests::RunTest(const FString& Parameters)
 
 		if (Blacksmith && Inventory && Wallet)
 		{
-			// Rare Equipment asset (yields 10 Ash Shards)
+			// Rare Equipment asset (yields 10 Skill Shards)
 			UItemStaticDataAsset* RareArmor = NewObject<UItemStaticDataAsset>();
 			RareArmor->ItemId = FName("item_rare_plate");
 			RareArmor->Category = EPAItemCategory::Equipment;
 			RareArmor->RarityTier = EPAItemRarity::Rare;
 
-			// Skill Book asset (yields 5 Ash Shards)
+			// Skill Book asset (yields 5 Skill Shards)
 			UItemStaticDataAsset* SkillBook = NewObject<UItemStaticDataAsset>();
 			SkillBook->ItemId = FName("item_skill_book");
 			SkillBook->Category = EPAItemCategory::SkillBook;
@@ -112,15 +112,15 @@ bool FPABlacksmithTests::RunTest(const FString& Parameters)
 			EPACraftingError CraftErr = EPACraftingError::None;
 			bool bSalvaged = Blacksmith->SalvageItem(Inventory, Wallet, 0, ShardsGained, CraftErr);
 			TestTrue(TEXT("AC-2: Salvaging Rare armor succeeds"), bSalvaged);
-			TestEqual(TEXT("AC-2: Rare armor yields 10 Ash Shards"), ShardsGained, 10);
-			TestEqual(TEXT("AC-2: Wallet Ash Shards is 10"), Wallet->GetAshShards(), 10LL);
+			TestEqual(TEXT("AC-2: Rare armor yields 10 Skill Shards"), ShardsGained, 10);
+			TestEqual(TEXT("AC-2: Wallet Skill Shards is 10"), Wallet->GetSkillShards(), 10LL);
 			TestNull(TEXT("AC-2: Rare armor consumed and slot 0 is now empty"), Inventory->GetItemAtSlot(0));
 
 			// Salvage Skill Book in Slot 1
 			bSalvaged = Blacksmith->SalvageItem(Inventory, Wallet, 1, ShardsGained, CraftErr);
 			TestTrue(TEXT("AC-2: Salvaging Skill Book succeeds"), bSalvaged);
-			TestEqual(TEXT("AC-2: Skill Book yields 5 Ash Shards"), ShardsGained, 5);
-			TestEqual(TEXT("AC-2: Total Ash Shards is 15"), Wallet->GetAshShards(), 15LL);
+			TestEqual(TEXT("AC-2: Skill Book yields 5 Skill Shards"), ShardsGained, 5);
+			TestEqual(TEXT("AC-2: Total Skill Shards is 15"), Wallet->GetSkillShards(), 15LL);
 			TestNull(TEXT("AC-2: Skill Book consumed and slot 1 is now empty"), Inventory->GetItemAtSlot(1));
 
 			// Locked Item Protection: create locked item in Slot 2

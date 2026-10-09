@@ -16,9 +16,9 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FPAOnCurrencyTransactionFailed, EPA
  * Component quản lý ví song tiền tệ (Vàng & Tàn Trang) theo chuẩn Server-Authoritative (Story econ-001, ADR-0001, ADR-0003).
  *
  * Tiêu chuẩn nghiệm thu Story econ-001:
- * - AC-1 (Dual Currency FastArray Replication): Quản lý Gold (max 9,999,999) và Ash Shards (max 99,999) với delta serialization.
+ * - AC-1 (Dual Currency FastArray Replication): Quản lý Gold (max 9,999,999) và Skill Shards (max 99,999) với delta serialization.
  * - AC-2 (Atomic Transaction RPCs & Anti-Duping): Server RPCs thực hiện giao dịch nguyên tử, chống duping, kiểm tra số dư và giới hạn.
- * - AC-3 (PvE Death Penalty): Khi tử trận trong PvE, khấu trừ chính xác 50% số Gold hiện mang theo, bảo toàn 100% Ash Shards.
+ * - AC-3 (PvE Death Penalty): Khi tử trận trong PvE, khấu trừ chính xác 50% số Gold hiện mang theo, bảo toàn 100% Skill Shards.
  */
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class PROJECTASCENDANT_API UPACurrencyComponent : public UActorComponent
@@ -39,7 +39,7 @@ public:
 	int64 GetGold() const;
 
 	UFUNCTION(BlueprintPure, Category = "ProjectAscendant|Economy")
-	int64 GetAshShards() const;
+	int64 GetSkillShards() const;
 
 	UFUNCTION(BlueprintPure, Category = "ProjectAscendant|Economy")
 	int64 GetCurrency(EPACurrencyType Type) const;

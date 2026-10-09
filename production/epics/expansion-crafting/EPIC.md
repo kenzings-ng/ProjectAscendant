@@ -8,7 +8,7 @@
 
 ## Overview
 
-This epic implements the zone-tiered blacksmithing and item enhancement engine for *Project Ascendant*. Spanning 3 world hazard tiers—from the safe Outpost Forge to the deep Wilderness Forge and the dangerous Ancient Sanctuary Forge—it establishes durability repair mechanisms, equipment and skill book salvaging into Ash Shards, 100% loss-free item enhancement (+1 to +10), gem socketing, and boss soul crafting, strictly bound to Dedicated Server Authority.
+This epic implements the zone-tiered blacksmithing and item enhancement engine for *Project Ascendant*. Spanning 3 world hazard tiers—from the safe Outpost Forge to the deep Wilderness Forge and the dangerous Ancient Sanctuary Forge—it establishes durability repair mechanisms, equipment and skill book salvaging into Skill Shards (Tàn Trang, `item_skill_shard`), 100% loss-free item enhancement (+1 to +10), gem socketing, and boss soul crafting, strictly bound to Dedicated Server Authority.
 
 ## Governing ADRs
 
@@ -21,7 +21,7 @@ This epic implements the zone-tiered blacksmithing and item enhancement engine f
 
 | TR-ID | Requirement | ADR Coverage |
 |---|---|---|
-| **TR-crft-001** | Tier 1 Outpost Forge: Durability repair formula (`repair_cost = ceil(base_price * 0.25 * (1 - durability_pct))`), item/skill-book salvaging to Ash Shards, and 100% safe enhancement (+1 to +3) | ADR-0001, ADR-0003 ✅ |
+| **TR-crft-001** | Tier 1 Outpost Forge: Durability repair formula (`repair_cost = ceil(base_price * 0.25 * (1 - durability_pct))`), item/skill-book salvaging to Skill Shards, and 100% safe enhancement (+1 to +3) | ADR-0001, ADR-0003 ✅ |
 | **TR-crft-002** | Tier 2 Wilderness Forge: Enhancement +4 to +6 with failure level retention, up to 2 gem socket expansions | ADR-0001, ADR-0003 ✅ |
 | **TR-crft-003** | Tier 3 Ancient Sanctuary Forge: Enhancement +7 to +10 (fail drops 1 level, no destruction), Prismatic sockets, Boss Soul divine forging | ADR-0001, ADR-0003 ✅ |
 
@@ -38,6 +38,6 @@ This epic implements the zone-tiered blacksmithing and item enhancement engine f
 This epic is complete when:
 - `UPABlacksmithComponent` correctly resolves Tier 1, 2, and 3 capabilities, enforcing proximity ($\le 300\text{cm}$) and out-of-combat states.
 - Equipment repair accurately calculates costs and restores durability to 100%.
-- Salvaging equipment or skill books generates the exact expected quantity of Ash Shards and destroys the input item.
+- Salvaging equipment or skill books generates the exact expected quantity of Skill Shards and destroys the input item.
 - Enhancement strictly adheres to non-destructive design (weapons NEVER shatter or disappear on failure).
 - 100% automated tests for crafting calculations, item mutations, and server validations pass cleanly.

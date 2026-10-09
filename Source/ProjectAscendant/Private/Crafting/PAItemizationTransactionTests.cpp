@@ -116,7 +116,7 @@ bool FPAItemizationTransactionTest::RunTest(const FString& Parameters)
 		// 1. Trường hợp thiếu Vàng (Chỉ có 1,000 Gold, nhưng đủ 10 Shards)
 		EPACurrencyTransactionError CurrErr;
 		Wallet->AddCurrency(EPACurrencyType::Gold, 1000, CurrErr);
-		Wallet->AddCurrency(EPACurrencyType::AshShards, 10, CurrErr);
+		Wallet->AddCurrency(EPACurrencyType::SkillShards, 10, CurrErr);
 
 		EPACraftingError ReforgeErr = EPACraftingError::None;
 		bool bReforgeFailGold = Blacksmith->ServerReforgeAffix(
@@ -124,30 +124,30 @@ bool FPAItemizationTransactionTest::RunTest(const FString& Parameters)
 		TestFalse(TEXT("AC-2: Reforge without sufficient gold must fail"), bReforgeFailGold);
 		TestEqual(TEXT("AC-2: Error code is InsufficientGold"), ReforgeErr, EPACraftingError::InsufficientGold);
 		TestEqual(TEXT("AC-2: Atomic rollback - Gold unchanged"), Wallet->GetGold(), 1000LL);
-		TestEqual(TEXT("AC-2: Atomic rollback - Shards unchanged"), Wallet->GetAshShards(), 10LL);
+		TestEqual(TEXT("AC-2: Atomic rollback - Shards unchanged"), Wallet->GetSkillShards(), 10LL);
 		TestEqual(TEXT("AC-2: Affix 0 unchanged"), RareItem.ActiveAffixes[0].AffixId, OriginalAffixId);
 		TestEqual(TEXT("AC-2: Affix value unchanged"), RareItem.ActiveAffixes[0].RolledValue, OriginalValue);
 
 		// 2. Trường hợp thiếu Tàn Trang (Có 5,000 Gold, nhưng chỉ có 2 Shards < 5)
 		Wallet->AddCurrency(EPACurrencyType::Gold, 4000, CurrErr); // Tổng 5000 Gold
-		Wallet->DeductCurrency(EPACurrencyType::AshShards, 8, CurrErr); // Còn lại 2 Shards
+		Wallet->DeductCurrency(EPACurrencyType::SkillShards, 8, CurrErr); // Còn lại 2 Shards
 
 		bool bReforgeFailShards = Blacksmith->ServerReforgeAffix(
 			RareItem, 0, 2000, 5, EPAForgeTier::Tier2_Field, Wallet, ItemGenerator, ReforgeErr);
 		TestFalse(TEXT("AC-2: Reforge without sufficient shards must fail"), bReforgeFailShards);
 		TestEqual(TEXT("AC-2: Error code is InsufficientSkillShards"), ReforgeErr, EPACraftingError::InsufficientSkillShards);
 		TestEqual(TEXT("AC-2: Atomic rollback - Gold unchanged at 5000"), Wallet->GetGold(), 5000LL);
-		TestEqual(TEXT("AC-2: Atomic rollback - Shards unchanged at 2"), Wallet->GetAshShards(), 2LL);
+		TestEqual(TEXT("AC-2: Atomic rollback - Shards unchanged at 2"), Wallet->GetSkillShards(), 2LL);
 		TestEqual(TEXT("AC-2: Affix 0 still unchanged"), RareItem.ActiveAffixes[0].AffixId, OriginalAffixId);
 
 		// 3. Trường hợp đủ cả hai (5,000 Gold và 12 Shards) -> Thành công
-		Wallet->AddCurrency(EPACurrencyType::AshShards, 10, CurrErr); // Giờ có 12 Shards
+		Wallet->AddCurrency(EPACurrencyType::SkillShards, 10, CurrErr); // Giờ có 12 Shards
 
 		bool bReforgeSuccess = Blacksmith->ServerReforgeAffix(
 			RareItem, 0, 2000, 5, EPAForgeTier::Tier2_Field, Wallet, ItemGenerator, ReforgeErr);
 		TestTrue(TEXT("AC-2: Reforge with sufficient dual currency must succeed"), bReforgeSuccess);
 		TestEqual(TEXT("AC-2: Wallet deducted 2000 Gold -> 3000 remaining"), Wallet->GetGold(), 3000LL);
-		TestEqual(TEXT("AC-2: Wallet deducted 5 Shards -> 7 remaining"), Wallet->GetAshShards(), 7LL);
+		TestEqual(TEXT("AC-2: Wallet deducted 5 Shards -> 7 remaining"), Wallet->GetSkillShards(), 7LL);
 		TestTrue(TEXT("AC-2: Reforged affix has valid name"), !RareItem.ActiveAffixes[0].AffixId.IsNone());
 		TestTrue(TEXT("AC-2: Reforged affix has positive rolled value"), RareItem.ActiveAffixes[0].RolledValue > 0.0f);
 
@@ -168,7 +168,7 @@ bool FPAItemizationTransactionTest::RunTest(const FString& Parameters)
 		UPACurrencyComponent* Wallet = NewObject<UPACurrencyComponent>();
 		EPACurrencyTransactionError CurrErr;
 		Wallet->AddCurrency(EPACurrencyType::Gold, 25000, CurrErr);
-		Wallet->AddCurrency(EPACurrencyType::AshShards, 50, CurrErr);
+		Wallet->AddCurrency(EPACurrencyType::SkillShards, 50, CurrErr);
 
 		FPASavedItemInstance RareItem = ItemGenerator->GenerateItemInstance(
 			FName("ShadowDagger"), 25, EPAItemRarity::Rare, EPAForgeTier::Tier1_Outpost);
@@ -180,13 +180,13 @@ bool FPAItemizationTransactionTest::RunTest(const FString& Parameters)
 		TestFalse(TEXT("AC-3: Outpost Forge must reject AddSocket"), bOutpostSocket);
 		TestEqual(TEXT("AC-3: Error is MaxTierLevelReached"), SocketErr, EPACraftingError::MaxTierLevelReached);
 		TestEqual(TEXT("AC-3: Gold untouched at 25000"), Wallet->GetGold(), 25000LL);
-		TestEqual(TEXT("AC-3: Shards untouched at 50"), Wallet->GetAshShards(), 50LL);
+		TestEqual(TEXT("AC-3: Shards untouched at 50"), Wallet->GetSkillShards(), 50LL);
 		TestFalse(TEXT("AC-3: Socket 0 remains locked"), RareItem.SocketSlots[0].bIsUnlocked);
 
 		// 2. Field Forge (Tier 2): Thiếu tiền -> Thất bại và không mở socket
 		UPACurrencyComponent* PoorWallet = NewObject<UPACurrencyComponent>();
 		PoorWallet->AddCurrency(EPACurrencyType::Gold, 500, CurrErr); // Thiếu (< 1000)
-		PoorWallet->AddCurrency(EPACurrencyType::AshShards, 5, CurrErr);
+		PoorWallet->AddCurrency(EPACurrencyType::SkillShards, 5, CurrErr);
 
 		bool bPoorSocket = Blacksmith->ServerAddSocket(
 			RareItem, 1000, 3, EPAForgeTier::Tier2_Field, PoorWallet, SocketErr);
@@ -201,7 +201,7 @@ bool FPAItemizationTransactionTest::RunTest(const FString& Parameters)
 		TestTrue(TEXT("AC-3: Field Forge AddSocket 1 succeeds on Rare item"), bSocket1Success);
 		TestTrue(TEXT("AC-3: RareItem Socket 0 is now unlocked"), RareItem.SocketSlots[0].bIsUnlocked);
 		TestEqual(TEXT("AC-3: Wallet deducted 1000 Gold -> 24000 remaining"), Wallet->GetGold(), 24000LL);
-		TestEqual(TEXT("AC-3: Wallet deducted 3 Shards -> 47 remaining"), Wallet->GetAshShards(), 47LL);
+		TestEqual(TEXT("AC-3: Wallet deducted 3 Shards -> 47 remaining"), Wallet->GetSkillShards(), 47LL);
 
 		// 4. RareItem chỉ có 1 socket capacity -> Thử mở tiếp socket 2 phải bị từ chối MaxSocketsReached
 		bool bSocket2Rare = Blacksmith->ServerAddSocket(
@@ -223,7 +223,7 @@ bool FPAItemizationTransactionTest::RunTest(const FString& Parameters)
 		TestTrue(TEXT("AC-3: Epic Socket 1 unlocked"), bEpicSocket2);
 		TestTrue(TEXT("AC-3: Epic Socket 1 is unlocked"), EpicItem.SocketSlots[1].bIsUnlocked);
 		TestEqual(TEXT("AC-3: Wallet deducted 4000 Gold total -> 20000 remaining"), Wallet->GetGold(), 20000LL);
-		TestEqual(TEXT("AC-3: Wallet deducted 11 Shards total -> 36 remaining"), Wallet->GetAshShards(), 36LL);
+		TestEqual(TEXT("AC-3: Wallet deducted 11 Shards total -> 36 remaining"), Wallet->GetSkillShards(), 36LL);
 
 		// 6. Forbidden Forge (Tier 3): Đồ Legendary mở Socket 3 Prismatic (15,000 Gold + 20 Shards)
 		FPASavedItemInstance LegendaryItem = ItemGenerator->GenerateItemInstance(
@@ -236,7 +236,7 @@ bool FPAItemizationTransactionTest::RunTest(const FString& Parameters)
 
 		// Mở Socket Prismatic thứ 3 tại Forbidden Forge
 		const int64 GoldBeforePrismatic = Wallet->GetGold();
-		const int64 ShardsBeforePrismatic = Wallet->GetAshShards();
+		const int64 ShardsBeforePrismatic = Wallet->GetSkillShards();
 
 		bool bPrismaticSuccess = Blacksmith->ServerAddSocket(
 			LegendaryItem, 15000, 20, EPAForgeTier::Tier3_Forbidden, Wallet, SocketErr);
@@ -244,7 +244,7 @@ bool FPAItemizationTransactionTest::RunTest(const FString& Parameters)
 		TestTrue(TEXT("AC-3: Socket 2 (Prismatic) is unlocked"), LegendaryItem.SocketSlots[2].bIsUnlocked);
 		TestEqual(TEXT("AC-3: Socket 2 type is Prismatic"), LegendaryItem.SocketSlots[2].SocketType, EPASocketType::Prismatic);
 		TestEqual(TEXT("AC-3: Deducted exactly 15000 Gold"), Wallet->GetGold(), GoldBeforePrismatic - 15000LL);
-		TestEqual(TEXT("AC-3: Deducted exactly 20 Shards"), Wallet->GetAshShards(), ShardsBeforePrismatic - 20LL);
+		TestEqual(TEXT("AC-3: Deducted exactly 20 Shards"), Wallet->GetSkillShards(), ShardsBeforePrismatic - 20LL);
 	}
 
 	return true;

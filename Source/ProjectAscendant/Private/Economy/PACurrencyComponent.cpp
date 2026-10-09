@@ -58,7 +58,7 @@ void UPACurrencyComponent::InitializeDefaultCurrencies()
 	if (Currencies.Entries.Num() == 0)
 	{
 		Currencies.Entries.Add(FPACurrencyEntry(EPACurrencyType::Gold, 0));
-		Currencies.Entries.Add(FPACurrencyEntry(EPACurrencyType::AshShards, 0));
+		Currencies.Entries.Add(FPACurrencyEntry(EPACurrencyType::SkillShards, 0));
 		Currencies.MarkArrayDirty();
 	}
 }
@@ -92,9 +92,9 @@ int64 UPACurrencyComponent::GetGold() const
 	return GetCurrency(EPACurrencyType::Gold);
 }
 
-int64 UPACurrencyComponent::GetAshShards() const
+int64 UPACurrencyComponent::GetSkillShards() const
 {
-	return GetCurrency(EPACurrencyType::AshShards);
+	return GetCurrency(EPACurrencyType::SkillShards);
 }
 
 int64 UPACurrencyComponent::GetCurrency(EPACurrencyType Type) const

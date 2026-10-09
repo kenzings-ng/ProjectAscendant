@@ -113,15 +113,15 @@ struct PROJECTASCENDANT_API FPABlacksmithFormulas
 	}
 
 	/**
-	 * AC-2: Sản lượng Tàn Trang (Ash Shards) khi phân rã trang bị hoặc Sách Kỹ Năng:
-	 * - Skill Book: Cố định 5 Ash Shards
-	 * - Common (Tier 1): 1 Ash Shards
-	 * - Uncommon (Tier 2): 3 Ash Shards
-	 * - Rare (Tier 3): 10 Ash Shards
-	 * - Epic (Tier 4): 25 Ash Shards
-	 * - Legendary (Tier 5): 75 Ash Shards
+	 * AC-2: Sản lượng Tàn Trang (Skill Shards) khi phân rã trang bị hoặc Sách Kỹ Năng:
+	 * - Skill Book: Cố định 5 Skill Shards
+	 * - Common (Tier 1): 1 Skill Shards
+	 * - Uncommon (Tier 2): 3 Skill Shards
+	 * - Rare (Tier 3): 10 Skill Shards
+	 * - Epic (Tier 4): 25 Skill Shards
+	 * - Legendary (Tier 5): 75 Skill Shards
 	 */
-	static int32 GetSalvageAshShards(EPAItemRarity Rarity, EPAItemCategory Category)
+	static int32 GetSalvageSkillShards(EPAItemRarity Rarity, EPAItemCategory Category)
 	{
 		if (Category == EPAItemCategory::SkillBook)
 		{

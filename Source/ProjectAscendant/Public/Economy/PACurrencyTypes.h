@@ -13,13 +13,13 @@ class UPACurrencyComponent;
  *
  * Hai loại tiền tệ cốt lõi của Project Ascendant theo GDD (merchant-economy.md):
  * - Gold: Vàng giao thương vĩ mô (chợ, thợ rèn, sửa đồ, phạt chết 50%). Giới hạn: 9,999,999.
- * - Ash Shards: Tàn Trang linh hồn (boss drops, nâng cấp kỹ năng, thần binh). Giới hạn: 99,999.
+ * - Skill Shards (item_skill_shard): Tàn Trang Kỹ Năng (boss drops, nâng cấp kỹ năng, thần binh). Giới hạn: 99,999.
  */
 UENUM(BlueprintType)
 enum class EPACurrencyType : uint8
 {
 	Gold        = 0 UMETA(DisplayName = "Gold / Vàng"),
-	AshShards   = 1 UMETA(DisplayName = "Ash Shards / Tàn Trang")
+	SkillShards = 1 UMETA(DisplayName = "Skill Shards / Tàn Trang")
 };
 
 /**
@@ -28,7 +28,7 @@ enum class EPACurrencyType : uint8
 namespace PACurrencyLimits
 {
 	inline constexpr int64 MaxGold = 9999999LL;
-	inline constexpr int64 MaxAshShards = 99999LL;
+	inline constexpr int64 MaxSkillShards = 99999LL;
 
 	inline int64 GetMaxLimit(EPACurrencyType Type)
 	{
@@ -36,8 +36,8 @@ namespace PACurrencyLimits
 		{
 		case EPACurrencyType::Gold:
 			return MaxGold;
-		case EPACurrencyType::AshShards:
-			return MaxAshShards;
+		case EPACurrencyType::SkillShards:
+			return MaxSkillShards;
 		default:
 			return 0LL;
 		}

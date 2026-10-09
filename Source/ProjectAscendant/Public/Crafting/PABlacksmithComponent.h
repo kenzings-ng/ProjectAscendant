@@ -28,7 +28,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FPAOnBackpackExpanded, int32, Old
  * Component quản lý nghiệp vụ Thợ Rèn Phân Vùng (Zone-tiered Blacksmithing System).
  * Story crft-001 (Tier 1 Outpost Forge):
  * - AC-1: Sửa chữa độ bền trang bị về 100%, trừ Vàng theo công thức chuẩn.
- * - AC-2: Phân rã trang bị và Sách Kỹ Năng ra Tàn Trang (Ash Shards); bảo vệ đồ khóa (bIsLocked).
+ * - AC-2: Phân rã trang bị và Sách Kỹ Năng ra Tàn Trang (Skill Shards); bảo vệ đồ khóa (bIsLocked).
  * - AC-3: Cường hóa an toàn 100% (+0 -> +3) tiêu hao Vàng và Quặng Sắt; chặn vượt mốc Tier 1.
  * - AC-4: Kiểm tra khoảng cách tương tác (<= 300cm), cấm rèn khi đang giao chiến (In-Combat), đảm bảo Server Authority.
  *
@@ -71,7 +71,7 @@ public:
 	bool RepairItem(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex, EPACraftingError& OutError);
 
 	/**
-	 * AC-2: Phân rã trang bị hoặc Sách Kỹ Năng thừa thành Tàn Trang (Ash Shards).
+	 * AC-2: Phân rã trang bị hoặc Sách Kỹ Năng thừa thành Tàn Trang (Skill Shards).
 	 */
 	UFUNCTION(BlueprintCallable, Category = "ProjectAscendant|Crafting")
 	bool SalvageItem(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex, int32& OutShardsGained, EPACraftingError& OutError);

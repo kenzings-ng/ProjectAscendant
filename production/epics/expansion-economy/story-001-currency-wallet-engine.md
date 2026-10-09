@@ -30,16 +30,16 @@
 
 ## Acceptance Criteria
 
-- [x] **AC-1 (Dual Currency FastArray Replication)**: `UPACurrencyComponent` manages Gold (`EPACurrencyType::Gold`, max 9,999,999) and Ash Shards (`EPACurrencyType::AshShards`, max 99,999) replicating state changes to owning client via `FFastArraySerializer` delta serialization.
+- [x] **AC-1 (Dual Currency FastArray Replication)**: `UPACurrencyComponent` manages Gold (`EPACurrencyType::Gold`, max 9,999,999) and Skill Shards / Tàn Trang (`item_skill_shard`, `EPACurrencyType::SkillShards`, max 99,999) replicating state changes to owning client via `FFastArraySerializer` delta serialization.
 - [x] **AC-2 (Atomic Transaction RPCs & Anti-Duping)**: Server RPCs (`Server_AddCurrency`, `Server_DeductCurrency`, `Server_TransferCurrency`) validate sender authority, enforce non-negative balances, clamp to maximum capacity, and reject unauthorized or invalid operations with specific error codes (`EPACurrencyTransactionError`).
-- [x] **AC-3 (PvE Death Penalty)**: Upon player death in PvE (`HandlePvEDeathPenalty`), exactly 50% of carried Gold (`floor(Gold * 0.50)`) is deducted and prepared for world droplet drop, while 100% of Ash Shards are safeguarded.
+- [x] **AC-3 (PvE Death Penalty)**: Upon player death in PvE (`HandlePvEDeathPenalty`), exactly 50% of carried Gold (`floor(Gold * 0.50)`) is deducted and prepared for world droplet drop, while 100% of Skill Shards are safeguarded.
 
 ---
 
 ## Implementation Notes
 
 1. **Currency Types (`PACurrencyTypes.h`)**:
-   - `EPACurrencyType`: `Gold`, `AshShards`.
+   - `EPACurrencyType`: `Gold`, `SkillShards`.
    - `EPACurrencyTransactionError`: `None`, `InsufficientFunds`, `ExceedsMaxCapacity`, `InvalidAmount`, `TargetNotFound`, `ServerRejected`.
    - `FPACurrencyEntry : public FFastArraySerializerItem` containing `CurrencyType`, `Amount`.
    - `FPACurrencyList : public FFastArraySerializer` wrapping `TArray<FPACurrencyEntry> Entries`.
@@ -65,7 +65,7 @@
 - **Test 1: Balance Queries & Limits**:
   - Given a fresh `UPACurrencyComponent`, default balances are 0.
   - Adding Gold up to limit (9,999,999) succeeds; adding beyond limit clamps to 9,999,999.
-  - Adding Ash Shards up to limit (99,999) succeeds; clamps to 99,999.
+  - Adding Skill Shards up to limit (99,999) succeeds; clamps to 99,999.
 - **Test 2: Atomic Deductions & Insufficient Funds**:
   - Wallet with 500 Gold attempting to deduct 600 Gold returns `InsufficientFunds` error; balance remains 500 Gold.
   - Deducting 300 Gold succeeds; balance becomes 200 Gold.
@@ -75,6 +75,6 @@
     - Player B becomes 250 Gold.
   - Invalid amounts ($\le 0$) or insufficient funds reject atomically with zero side-effects.
 - **Test 4: PvE Death Penalty**:
-  - Character with 1,000 Gold and 50 Ash Shards dies in PvE.
-  - Death penalty triggers: Gold becomes 500 (`floor(1000 * 0.5)`), Ash Shards remains 50.
+  - Character with 1,000 Gold and 50 Skill Shards dies in PvE.
+  - Death penalty triggers: Gold becomes 500 (`floor(1000 * 0.5)`), Skill Shards remains 50.
   - Character with 1 Gold dies: Gold becomes 0 (`floor(1 * 0.5)` = 0), drops 1 Gold.
