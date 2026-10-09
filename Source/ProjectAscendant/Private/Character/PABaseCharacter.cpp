@@ -78,6 +78,8 @@ APABaseCharacter::APABaseCharacter(const FObjectInitializer& ObjectInitializer)
 	// -------------------------------------------------------------------------
 	AbilitySystemComponent = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("AbilitySystemComponent"));
 	AbilitySystemComponent->SetIsReplicated(true);
+	// DECISIONS.md §11: nhân vật người chơi dùng Mixed. Lớp con không phải người chơi
+	// (Boss / quái / NPC, ví dụ APAStoneGolemBoss) ghi đè sang Minimal trong constructor của mình.
 	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Mixed);
 
 	AttributeSet = CreateDefaultSubobject<UAscendantAttributeSet>(TEXT("AttributeSet"));

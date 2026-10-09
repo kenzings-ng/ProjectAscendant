@@ -25,6 +25,14 @@ APAStoneGolemBoss::APAStoneGolemBoss(const FObjectInitializer& ObjectInitializer
 {
 	PrimaryActorTick.bCanEverTick = true;
 
+	// DECISIONS.md §11: Quái vật / Boss / NPC dùng GAS replication mode Minimal
+	// (client chỉ nhận Attributes + GameplayTags + GameplayCues, không nhận GE spec).
+	// APABaseCharacter mặc định Mixed cho nhân vật người chơi.
+	if (AbilitySystemComponent)
+	{
+		AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Minimal);
+	}
+
 	// Tạo Leash Component và cấu hình thông số theo AC-2
 	LeashComponent = CreateDefaultSubobject<UPAMonsterLeashComponent>(TEXT("LeashComponent"));
 	if (LeashComponent)
