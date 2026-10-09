@@ -21,7 +21,7 @@
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(
 	FPANetLagCompensationTest,
 	"ProjectAscendant.Foundation.Netcode.LocomotionLagCompensation",
-	EAutomationTestFlags::ApplicationContextMask | EAutomationTestFlags::ProductFilter)
+	EAutomationTestFlags_ApplicationContextMask | EAutomationTestFlags::ProductFilter)
 
 bool FPANetLagCompensationTest::RunTest(const FString& Parameters)
 {
@@ -62,9 +62,9 @@ bool FPANetLagCompensationTest::RunTest(const FString& Parameters)
 		const bool bSuccess = HistoryBuffer.GetInterpolatedSnapshot(10.05f, InterpSnap);
 
 		TestTrue(TEXT("AC-1: Truy vấn snapshot nội suy trong khoảng thời gian hợp lệ phải thành công"), bSuccess);
-		TestNearlyEqual(TEXT("AC-1: Tọa độ X nội suy tại 50% phải là 50.0 cm"), InterpSnap.Location.X, 50.0f, 0.01f);
-		TestNearlyEqual(TEXT("AC-1: Tọa độ Y nội suy tại 50% phải là 100.0 cm"), InterpSnap.Location.Y, 100.0f, 0.01f);
-		TestNearlyEqual(TEXT("AC-1: Góc Yaw nội suy tại 50% phải là 45.0 độ"), InterpSnap.Rotation.Yaw, 45.0f, 0.01f);
+		TestNearlyEqual(TEXT("AC-1: Tọa độ X nội suy tại 50% phải là 50.0 cm"), static_cast<double>(InterpSnap.Location.X), static_cast<double>(50.0f), static_cast<double>(0.01f));
+		TestNearlyEqual(TEXT("AC-1: Tọa độ Y nội suy tại 50% phải là 100.0 cm"), static_cast<double>(InterpSnap.Location.Y), static_cast<double>(100.0f), static_cast<double>(0.01f));
+		TestNearlyEqual(TEXT("AC-1: Góc Yaw nội suy tại 50% phải là 45.0 độ"), static_cast<double>(InterpSnap.Rotation.Yaw), static_cast<double>(45.0f), static_cast<double>(0.01f));
 	}
 
 	// -------------------------------------------------------------------------
@@ -141,11 +141,11 @@ bool FPANetLagCompensationTest::RunTest(const FString& Parameters)
 
 		// Tại nửa thời gian làm mịn (Elapsed = 0.075s / 0.15s)
 		const FPASoftReconciliationResult MajorMid = UPANetcodeMath::CalculateSoftReconciliation(ClientPosMajor, ServerPos, 0.075f, 0.15f);
-		TestNearlyEqual(TEXT("AC-12: Tại 50% thời gian blend, vị trí phải được nội suy mượt về 12.5 cm"), MajorMid.SmoothedPosition.X, 12.5f, 0.01f);
+		TestNearlyEqual(TEXT("AC-12: Tại 50% thời gian blend, vị trí phải được nội suy mượt về 12.5 cm"), static_cast<double>(MajorMid.SmoothedPosition.X), static_cast<double>(12.5f), static_cast<double>(0.01f));
 
 		// Khi kết thúc làm mịn (Elapsed = 0.15s)
 		const FPASoftReconciliationResult MajorEnd = UPANetcodeMath::CalculateSoftReconciliation(ClientPosMajor, ServerPos, 0.15f, 0.15f);
-		TestNearlyEqual(TEXT("AC-12: Khi kết thúc thời gian blend (0.15s), sai lệch vị trí phải triệt tiêu về 0 cm"), MajorEnd.SmoothedPosition.X, 0.0f, 0.01f);
+		TestNearlyEqual(TEXT("AC-12: Khi kết thúc thời gian blend (0.15s), sai lệch vị trí phải triệt tiêu về 0 cm"), static_cast<double>(MajorEnd.SmoothedPosition.X), static_cast<double>(0.0f), static_cast<double>(0.01f));
 	}
 
 	// -------------------------------------------------------------------------

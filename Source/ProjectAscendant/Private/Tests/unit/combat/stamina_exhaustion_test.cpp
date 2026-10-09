@@ -22,7 +22,7 @@
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(
     FPAStaminaExhaustionTest,
     "ProjectAscendant.Foundation.Combat.StaminaExhaustionPipeline",
-    EAutomationTestFlags::ApplicationContextMask | EAutomationTestFlags::ProductFilter)
+    EAutomationTestFlags_ApplicationContextMask | EAutomationTestFlags::ProductFilter)
 
 bool FPAStaminaExhaustionTest::RunTest(const FString& Parameters)
 {

@@ -19,7 +19,7 @@
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(
     FPADamageExecutionCalcTest,
     "ProjectAscendant.Foundation.Combat.DamageExecutionCalculations",
-    EAutomationTestFlags::ApplicationContextMask | EAutomationTestFlags::ProductFilter)
+    EAutomationTestFlags_ApplicationContextMask | EAutomationTestFlags::ProductFilter)
 
 bool FPADamageExecutionCalcTest::RunTest(const FString& Parameters)
 {

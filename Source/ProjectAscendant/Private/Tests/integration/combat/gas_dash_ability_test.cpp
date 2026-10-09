@@ -33,23 +33,23 @@ bool FPAGASDashAbilityIntegrationTest::RunTest(const FString& Parameters)
 
     // 1.1: AC-1 Stamina Validation Formula
     {
+        // X12: FPADashPipeline::CanActivateDash no longer takes a bBlocked argument
+        // (signature is now (Stamina, bIsExhausted, Cost)). The Ability.Block.Dash case
+        // is covered at GAS level in Test 2.1 case 4 below.
         TestTrue(TEXT("AC-1 Pipeline: Stamina = 100, không kiệt sức -> Cho phép Dash"),
-            FPADashPipeline::CanActivateDash(100.0f, false, false, 25.0f));
+            FPADashPipeline::CanActivateDash(100.0f, false, 25.0f));
 
         TestTrue(TEXT("AC-1 Pipeline: Stamina = 25.0f vừa đủ -> Cho phép Dash"),
-            FPADashPipeline::CanActivateDash(25.0f, false, false, 25.0f));
+            FPADashPipeline::CanActivateDash(25.0f, false, 25.0f));
 
         TestFalse(TEXT("AC-1 Pipeline: Stamina = 24.9f (< 25) -> Chặn tuyệt đối"),
-            FPADashPipeline::CanActivateDash(24.9f, false, false, 25.0f));
+            FPADashPipeline::CanActivateDash(24.9f, false, 25.0f));
 
         TestFalse(TEXT("AC-1 Pipeline: Stamina = 0.0f -> Chặn tuyệt đối"),
-            FPADashPipeline::CanActivateDash(0.0f, false, false, 25.0f));
+            FPADashPipeline::CanActivateDash(0.0f, false, 25.0f));
 
         TestFalse(TEXT("AC-1 Pipeline: Stamina = 100 nhưng bị State.Exhausted -> Chặn tuyệt đối"),
-            FPADashPipeline::CanActivateDash(100.0f, true, false, 25.0f));
-
-        TestFalse(TEXT("AC-1 Pipeline: Stamina = 100 nhưng có Tag Block Dash -> Chặn tuyệt đối"),
-            FPADashPipeline::CanActivateDash(100.0f, false, true, 25.0f));
+            FPADashPipeline::CanActivateDash(100.0f, true, 25.0f));
     }
 
     // 1.2: AC-2 I-Frame Window Formula (0.05s -> 0.25s)
@@ -119,19 +119,19 @@ bool FPAGASDashAbilityIntegrationTest::RunTest(const FString& Parameters)
 
         const FVector ResolvedFromMove = FPADashPipeline::ResolveDashDirection(MoveDir, AimDir, FwdDir);
         TestNearlyEqual(TEXT("AC-3 Pipeline: Khi đang di chuyển, hướng lướt theo Movement Vector (+X)"),
-            ResolvedFromMove.X, 1.0, 0.01);
+            static_cast<double>(ResolvedFromMove.X), static_cast<double>(1.0), 0.01);
         TestNearlyEqual(TEXT("AC-3 Pipeline: Khi đang di chuyển, Y = 0"),
-            ResolvedFromMove.Y, 0.0, 0.01);
+            static_cast<double>(ResolvedFromMove.Y), static_cast<double>(0.0), 0.01);
 
         // Ưu tiên 2: Aim Direction khi đứng yên
         const FVector ResolvedFromAim = FPADashPipeline::ResolveDashDirection(FVector::ZeroVector, AimDir, FwdDir);
         TestNearlyEqual(TEXT("AC-3 Pipeline: Khi đứng yên, hướng lướt theo Aim Direction (+Y)"),
-            ResolvedFromAim.Y, 1.0, 0.01);
+            static_cast<double>(ResolvedFromAim.Y), static_cast<double>(1.0), 0.01);
 
         // Ưu tiên 3: Forward Vector khi không có aim
         const FVector ResolvedFromFwd = FPADashPipeline::ResolveDashDirection(FVector::ZeroVector, FVector::ZeroVector, FVector(1.0, 0.0, 0.0));
         TestNearlyEqual(TEXT("AC-3 Pipeline: Khi không có move và aim, hướng lướt theo Forward (+X)"),
-            ResolvedFromFwd.X, 1.0, 0.01);
+            static_cast<double>(ResolvedFromFwd.X), static_cast<double>(1.0), 0.01);
     }
 
     // =========================================================================
@@ -268,9 +268,21 @@ bool FPAGASDashAbilityIntegrationTest::RunTest(const FString& Parameters)
         TestTrue(TEXT("AC-3 GAS: OnDashCompleted phải gắn thẻ Cooldown.Dash"),
             ASC->HasMatchingGameplayTag(TagCooldownDash));
 
-        // Hết thời gian hồi chiêu 0.5s
-        DashAbility->OnCooldownExpired();
-        TestFalse(TEXT("AC-3 GAS: OnCooldownExpired phải gỡ bỏ thẻ Cooldown.Dash"),
+        // X12: OnCooldownExpired() was removed; the cooldown is now a HasDuration GameplayEffect
+        // (ApplyCooldownEffect, CooldownDuration = 0.5s) that GAS expires on its own.
+        // Check the duration of the active cooldown effect, then simulate expiry by removing it.
+        const FGameplayEffectQuery CooldownQuery = FGameplayEffectQuery::MakeQuery_MatchAnyOwningTags(FGameplayTagContainer(TagCooldownDash));
+        const TArray<float> CooldownDurations = ASC->GetActiveEffectsDuration(CooldownQuery);
+        TestEqual(TEXT("AC-3 GAS: Đúng 1 GameplayEffect hồi chiêu Cooldown.Dash đang hoạt động"), CooldownDurations.Num(), 1);
+        if (CooldownDurations.Num() == 1)
+        {
+            TestNearlyEqual(TEXT("AC-3 GAS: GE hồi chiêu Cooldown.Dash kéo dài đúng GetCooldownDuration()"),
+                CooldownDurations[0], DashAbility->GetCooldownDuration(), 0.001f);
+        }
+
+        // Hết thời gian hồi chiêu: GE hết hạn -> thẻ Cooldown.Dash phải biến mất
+        ASC->RemoveActiveEffects(CooldownQuery);
+        TestFalse(TEXT("AC-3 GAS: Khi GE hồi chiêu hết hạn, thẻ Cooldown.Dash phải được gỡ bỏ"),
             ASC->HasMatchingGameplayTag(TagCooldownDash));
     }
 

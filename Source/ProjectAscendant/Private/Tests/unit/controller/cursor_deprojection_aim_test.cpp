@@ -18,7 +18,7 @@
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(
     FPACursorDeprojectionAimTest,
     "ProjectAscendant.Foundation.Controller.CursorDeprojectionAndAiming",
-    EAutomationTestFlags::ApplicationContextMask | EAutomationTestFlags::ProductFilter)
+    EAutomationTestFlags_ApplicationContextMask | EAutomationTestFlags::ProductFilter)
 
 bool FPACursorDeprojectionAimTest::RunTest(const FString& Parameters)
 {
@@ -38,9 +38,9 @@ bool FPACursorDeprojectionAimTest::RunTest(const FString& Parameters)
         const bool bHit = UPAIsometricMovementMath::DeprojectRayToGroundPlane(RayOrigin, RayDirection, GroundZ, IntersectionPoint);
 
         TestTrue(TEXT("AC-1: Tia raycast phải cắt mặt phẳng ngang thành công"), bHit);
-        TestEqual(TEXT("AC-1: Cao độ Z của giao điểm phải bằng đúng GroundZ (0.0f)"), IntersectionPoint.Z, 0.0f);
-        TestNearlyEqual(TEXT("AC-1: Tọa độ X giao điểm phải là 0.0f"), IntersectionPoint.X, 0.0f, 0.1f);
-        TestNearlyEqual(TEXT("AC-1: Tọa độ Y giao điểm phải là 0.0f (tâm màn hình)"), IntersectionPoint.Y, 0.0f, 0.1f);
+        TestEqual(TEXT("AC-1: Cao độ Z của giao điểm phải bằng đúng GroundZ (0.0f)"), static_cast<double>(IntersectionPoint.Z), static_cast<double>(0.0f));
+        TestNearlyEqual(TEXT("AC-1: Tọa độ X giao điểm phải là 0.0f"), static_cast<double>(IntersectionPoint.X), static_cast<double>(0.0f), static_cast<double>(0.1f));
+        TestNearlyEqual(TEXT("AC-1: Tọa độ Y giao điểm phải là 0.0f (tâm màn hình)"), static_cast<double>(IntersectionPoint.Y), static_cast<double>(0.0f), static_cast<double>(0.1f));
 
         // Trường hợp tia gần như song song với mặt đất (RayDirection.Z ~ 0)
         const FVector ParallelRayOrigin(100.0f, 100.0f, 50.0f);
@@ -60,9 +60,9 @@ bool FPACursorDeprojectionAimTest::RunTest(const FString& Parameters)
 
         // Tính toán vector hướng ngắm
         const FVector AimDirection = UPAIsometricMovementMath::CalculateAimDirection2D(CharacterLocation, TargetLocation);
-        TestNearlyEqual(TEXT("AC-2: AimDirection.X phải là +sqrt(2)/2"), AimDirection.X, Sqrt2Over2, 0.001f);
-        TestNearlyEqual(TEXT("AC-2: AimDirection.Y phải là +sqrt(2)/2"), AimDirection.Y, Sqrt2Over2, 0.001f);
-        TestEqual(TEXT("AC-2: AimDirection.Z phải bằng 0.0f"), AimDirection.Z, 0.0f);
+        TestNearlyEqual(TEXT("AC-2: AimDirection.X phải là +sqrt(2)/2"), static_cast<double>(AimDirection.X), static_cast<double>(Sqrt2Over2), static_cast<double>(0.001f));
+        TestNearlyEqual(TEXT("AC-2: AimDirection.Y phải là +sqrt(2)/2"), static_cast<double>(AimDirection.Y), static_cast<double>(Sqrt2Over2), static_cast<double>(0.001f));
+        TestEqual(TEXT("AC-2: AimDirection.Z phải bằng 0.0f"), static_cast<double>(AimDirection.Z), static_cast<double>(0.0f));
 
         // Tính góc ngắm theo độ
         const float AimAngle = UPAIsometricMovementMath::CalculateAimAngleDegrees(AimDirection);
@@ -129,8 +129,8 @@ bool FPACursorDeprojectionAimTest::RunTest(const FString& Parameters)
         const FVector2D ActiveInput(0.6f, 0.8f);
         const FVector2D FilteredActive = UPAIsometricMovementMath::FilterGamepadAimInput(ActiveInput, Deadzone);
         TestFalse(TEXT("AC-3: Input vượt vùng chết phải được xử lý và khác ZeroVector"), FilteredActive.IsNearlyZero());
-        TestNearlyEqual(TEXT("AC-3: Hướng của vector sau khi lọc phải trùng khớp với hướng ban đầu"), (FilteredActive.GetSafeNormal() - ActiveInput.GetSafeNormal()).Size(), 0.0f, 0.001f);
-        TestEqual(TEXT("AC-3: Độ lớn sau khi tái chuẩn hóa ở cực đại (Size 1.0) phải là 1.0"), FilteredActive.Size(), 1.0f);
+        TestNearlyEqual(TEXT("AC-3: Hướng của vector sau khi lọc phải trùng khớp với hướng ban đầu"), static_cast<double>((FilteredActive.GetSafeNormal() - ActiveInput.GetSafeNormal()).Size()), static_cast<double>(0.0f), static_cast<double>(0.001f));
+        TestEqual(TEXT("AC-3: Độ lớn sau khi tái chuẩn hóa ở cực đại (Size 1.0) phải là 1.0"), static_cast<double>(FilteredActive.Size()), static_cast<double>(1.0f));
     }
 
     return true;

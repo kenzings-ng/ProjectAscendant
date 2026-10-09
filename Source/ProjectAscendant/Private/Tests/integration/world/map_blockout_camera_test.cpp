@@ -23,7 +23,7 @@
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(
     FPAMapBlockoutCameraIntegrationTest,
     "ProjectAscendant.Core.World.MapBlockoutCameraIntegration",
-    EAutomationTestFlags::ApplicationContextMask | EAutomationTestFlags::ProductFilter)
+    EAutomationTestFlags_ApplicationContextMask | EAutomationTestFlags::ProductFilter)
 
 bool FPAMapBlockoutCameraIntegrationTest::RunTest(const FString& Parameters)
 {

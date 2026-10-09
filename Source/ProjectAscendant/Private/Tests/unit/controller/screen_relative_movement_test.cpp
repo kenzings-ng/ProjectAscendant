@@ -18,7 +18,7 @@
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(
     FPAScreenRelativeMovementTest,
     "ProjectAscendant.Foundation.Controller.ScreenRelativeMovement",
-    EAutomationTestFlags::ApplicationContextMask | EAutomationTestFlags::ProductFilter)
+    EAutomationTestFlags_ApplicationContextMask | EAutomationTestFlags::ProductFilter)
 
 bool FPAScreenRelativeMovementTest::RunTest(const FString& Parameters)
 {
@@ -35,32 +35,32 @@ bool FPAScreenRelativeMovementTest::RunTest(const FString& Parameters)
         // Với Yaw = 45 độ:
         // Forward vector = (cos 45, sin 45, 0) = (+0.7071, +0.7071, 0)
         // Vector thế giới kết quả phải chạy chéo theo trục tọa độ thế giới (tiến thẳng lên góc nhìn màn hình)
-        TestNearlyEqual(TEXT("AC-1 [W]: WorldDirection.X phải xấp xỉ +sqrt(2)/2"), WorldDirUp.X, Sqrt2Over2, 0.001f);
-        TestNearlyEqual(TEXT("AC-1 [W]: WorldDirection.Y phải xấp xỉ +sqrt(2)/2"), WorldDirUp.Y, Sqrt2Over2, 0.001f);
-        TestEqual(TEXT("AC-1 [W]: WorldDirection.Z phải bằng 0.0 (chặt chẽ trên mặt phẳng ngang)"), WorldDirUp.Z, 0.0f);
-        TestNearlyEqual(TEXT("AC-1 [W]: Độ dài vector phải bằng đúng 1.0"), WorldDirUp.Size(), 1.0f, 0.001f);
+        TestNearlyEqual(TEXT("AC-1 [W]: WorldDirection.X phải xấp xỉ +sqrt(2)/2"), static_cast<double>(WorldDirUp.X), static_cast<double>(Sqrt2Over2), static_cast<double>(0.001f));
+        TestNearlyEqual(TEXT("AC-1 [W]: WorldDirection.Y phải xấp xỉ +sqrt(2)/2"), static_cast<double>(WorldDirUp.Y), static_cast<double>(Sqrt2Over2), static_cast<double>(0.001f));
+        TestEqual(TEXT("AC-1 [W]: WorldDirection.Z phải bằng 0.0 (chặt chẽ trên mặt phẳng ngang)"), static_cast<double>(WorldDirUp.Z), static_cast<double>(0.0f));
+        TestNearlyEqual(TEXT("AC-1 [W]: Độ dài vector phải bằng đúng 1.0"), static_cast<double>(WorldDirUp.Size()), static_cast<double>(1.0f), static_cast<double>(0.001f));
 
         // 1.2: Nhấn phím S (Input lùi thẳng xuống màn hình: X = 0, Y = -1)
         const FVector2D InputDown(0.0f, -1.0f);
         const FVector WorldDirDown = UPAIsometricMovementMath::CalculateWorldDirection(InputDown, 45.0f);
-        TestNearlyEqual(TEXT("AC-1 [S]: WorldDirection.X phải xấp xỉ -sqrt(2)/2"), WorldDirDown.X, -Sqrt2Over2, 0.001f);
-        TestNearlyEqual(TEXT("AC-1 [S]: WorldDirection.Y phải xấp xỉ -sqrt(2)/2"), WorldDirDown.Y, -Sqrt2Over2, 0.001f);
-        TestNearlyEqual(TEXT("AC-1 [S]: Độ dài vector phải bằng đúng 1.0"), WorldDirDown.Size(), 1.0f, 0.001f);
+        TestNearlyEqual(TEXT("AC-1 [S]: WorldDirection.X phải xấp xỉ -sqrt(2)/2"), static_cast<double>(WorldDirDown.X), static_cast<double>(-Sqrt2Over2), static_cast<double>(0.001f));
+        TestNearlyEqual(TEXT("AC-1 [S]: WorldDirection.Y phải xấp xỉ -sqrt(2)/2"), static_cast<double>(WorldDirDown.Y), static_cast<double>(-Sqrt2Over2), static_cast<double>(0.001f));
+        TestNearlyEqual(TEXT("AC-1 [S]: Độ dài vector phải bằng đúng 1.0"), static_cast<double>(WorldDirDown.Size()), static_cast<double>(1.0f), static_cast<double>(0.001f));
 
         // 1.3: Nhấn phím D (Input sang phải màn hình: X = +1, Y = 0)
         const FVector2D InputRight(1.0f, 0.0f);
         const FVector WorldDirRight = UPAIsometricMovementMath::CalculateWorldDirection(InputRight, 45.0f);
         // Right vector với Yaw = 45 độ: (-sin 45, cos 45, 0) = (-0.7071, +0.7071, 0)
-        TestNearlyEqual(TEXT("AC-1 [D]: WorldDirection.X phải xấp xỉ -sqrt(2)/2"), WorldDirRight.X, -Sqrt2Over2, 0.001f);
-        TestNearlyEqual(TEXT("AC-1 [D]: WorldDirection.Y phải xấp xỉ +sqrt(2)/2"), WorldDirRight.Y, Sqrt2Over2, 0.001f);
-        TestNearlyEqual(TEXT("AC-1 [D]: Độ dài vector phải bằng đúng 1.0"), WorldDirRight.Size(), 1.0f, 0.001f);
+        TestNearlyEqual(TEXT("AC-1 [D]: WorldDirection.X phải xấp xỉ -sqrt(2)/2"), static_cast<double>(WorldDirRight.X), static_cast<double>(-Sqrt2Over2), static_cast<double>(0.001f));
+        TestNearlyEqual(TEXT("AC-1 [D]: WorldDirection.Y phải xấp xỉ +sqrt(2)/2"), static_cast<double>(WorldDirRight.Y), static_cast<double>(Sqrt2Over2), static_cast<double>(0.001f));
+        TestNearlyEqual(TEXT("AC-1 [D]: Độ dài vector phải bằng đúng 1.0"), static_cast<double>(WorldDirRight.Size()), static_cast<double>(1.0f), static_cast<double>(0.001f));
 
         // 1.4: Nhấn phím A (Input sang trái màn hình: X = -1, Y = 0)
         const FVector2D InputLeft(-1.0f, 0.0f);
         const FVector WorldDirLeft = UPAIsometricMovementMath::CalculateWorldDirection(InputLeft, 45.0f);
-        TestNearlyEqual(TEXT("AC-1 [A]: WorldDirection.X phải xấp xỉ +sqrt(2)/2"), WorldDirLeft.X, Sqrt2Over2, 0.001f);
-        TestNearlyEqual(TEXT("AC-1 [A]: WorldDirection.Y phải xấp xỉ -sqrt(2)/2"), WorldDirLeft.Y, -Sqrt2Over2, 0.001f);
-        TestNearlyEqual(TEXT("AC-1 [A]: Độ dài vector phải bằng đúng 1.0"), WorldDirLeft.Size(), 1.0f, 0.001f);
+        TestNearlyEqual(TEXT("AC-1 [A]: WorldDirection.X phải xấp xỉ +sqrt(2)/2"), static_cast<double>(WorldDirLeft.X), static_cast<double>(Sqrt2Over2), static_cast<double>(0.001f));
+        TestNearlyEqual(TEXT("AC-1 [A]: WorldDirection.Y phải xấp xỉ -sqrt(2)/2"), static_cast<double>(WorldDirLeft.Y), static_cast<double>(-Sqrt2Over2), static_cast<double>(0.001f));
+        TestNearlyEqual(TEXT("AC-1 [A]: Độ dài vector phải bằng đúng 1.0"), static_cast<double>(WorldDirLeft.Size()), static_cast<double>(1.0f), static_cast<double>(0.001f));
     }
 
     // -------------------------------------------------------------------------
@@ -74,11 +74,11 @@ bool FPAScreenRelativeMovementTest::RunTest(const FString& Parameters)
 
         // Chuẩn hóa vector input
         const FVector2D NormalizedInput = UPAIsometricMovementMath::NormalizeInputVector(RawDiagonalInput);
-        TestNearlyEqual(TEXT("AC-2: Vector sau khi chuẩn hóa phải có độ dài chính xác 1.000"), NormalizedInput.Size(), 1.0f, 0.001f);
+        TestNearlyEqual(TEXT("AC-2: Vector sau khi chuẩn hóa phải có độ dài chính xác 1.000"), static_cast<double>(NormalizedInput.Size()), static_cast<double>(1.0f), static_cast<double>(0.001f));
 
         // Tính hướng thế giới 3D từ vector đường chéo
         const FVector WorldDiagonalDir = UPAIsometricMovementMath::CalculateWorldDirection(RawDiagonalInput, 45.0f);
-        TestNearlyEqual(TEXT("AC-2: Vector hướng thế giới đường chéo phải được kẹp độ dài đúng 1.0"), WorldDiagonalDir.Size(), 1.0f, 0.001f);
+        TestNearlyEqual(TEXT("AC-2: Vector hướng thế giới đường chéo phải được kẹp độ dài đúng 1.0"), static_cast<double>(WorldDiagonalDir.Size()), static_cast<double>(1.0f), static_cast<double>(0.001f));
 
         // Kiểm tra vận tốc di chuyển đường chéo
         const float BaseMoveSpeed = 550.0f;
@@ -92,18 +92,18 @@ bool FPAScreenRelativeMovementTest::RunTest(const FString& Parameters)
     {
         // 3.1: Người chơi nhấn W và S cùng lúc (Tiến + Lùi)
         const FVector2D OpposingVertical = UPAIsometricMovementMath::ResolveOpposingInputs(true, true, false, false);
-        TestEqual(TEXT("AC-3: Nhấn đồng thời W + S phải triệt tiêu trục dọc về 0.0"), OpposingVertical.Y, 0.0f);
+        TestEqual(TEXT("AC-3: Nhấn đồng thời W + S phải triệt tiêu trục dọc về 0.0"), static_cast<double>(OpposingVertical.Y), static_cast<double>(0.0f));
         TestTrue(TEXT("AC-3: Vector sau khi triệt tiêu W+S phải là ZeroVector (chuyển Idle ngay)"), OpposingVertical.IsNearlyZero());
 
         // 3.2: Người chơi nhấn A và D cùng lúc (Trái + Phải)
         const FVector2D OpposingHorizontal = UPAIsometricMovementMath::ResolveOpposingInputs(false, false, true, true);
-        TestEqual(TEXT("AC-3: Nhấn đồng thời A + D phải triệt tiêu trục ngang về 0.0"), OpposingHorizontal.X, 0.0f);
+        TestEqual(TEXT("AC-3: Nhấn đồng thời A + D phải triệt tiêu trục ngang về 0.0"), static_cast<double>(OpposingHorizontal.X), static_cast<double>(0.0f));
         TestTrue(TEXT("AC-3: Vector sau khi triệt tiêu A+D phải là ZeroVector (chuyển Idle ngay)"), OpposingHorizontal.IsNearlyZero());
 
         // 3.3: Người chơi giữ W nhưng nhấn cả A lẫn D (W + A + D)
         const FVector2D PartialOpposing = UPAIsometricMovementMath::ResolveOpposingInputs(true, false, true, true);
-        TestEqual(TEXT("AC-3 [W+A+D]: Trục ngang A+D bị triệt tiêu về 0"), PartialOpposing.X, 0.0f);
-        TestEqual(TEXT("AC-3 [W+A+D]: Trục dọc W vẫn bảo lưu 1.0"), PartialOpposing.Y, 1.0f);
+        TestEqual(TEXT("AC-3 [W+A+D]: Trục ngang A+D bị triệt tiêu về 0"), static_cast<double>(PartialOpposing.X), static_cast<double>(0.0f));
+        TestEqual(TEXT("AC-3 [W+A+D]: Trục dọc W vẫn bảo lưu 1.0"), static_cast<double>(PartialOpposing.Y), static_cast<double>(1.0f));
 
         // Vector hướng thế giới khi triệt tiêu hoàn toàn
         const FVector ResultingWorldDir = UPAIsometricMovementMath::CalculateWorldDirection(OpposingVertical, 45.0f);

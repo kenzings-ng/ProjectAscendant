@@ -20,7 +20,7 @@
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(
 	FPAFastArrayInventoryTest,
 	"ProjectAscendant.Foundation.Inventory.FastArrayGridInventory",
-	EAutomationTestFlags::ApplicationContextMask | EAutomationTestFlags::ProductFilter)
+	EAutomationTestFlags_ApplicationContextMask | EAutomationTestFlags::ProductFilter)
 
 bool FPAFastArrayInventoryTest::RunTest(const FString& Parameters)
 {

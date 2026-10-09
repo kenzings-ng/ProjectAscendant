@@ -20,7 +20,7 @@
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(
     FPAAttributesReplicationTest,
     "ProjectAscendant.Foundation.Combat.AttributesAndReplication",
-    EAutomationTestFlags::ApplicationContextMask | EAutomationTestFlags::ProductFilter)
+    EAutomationTestFlags_ApplicationContextMask | EAutomationTestFlags::ProductFilter)
 
 bool FPAAttributesReplicationTest::RunTest(const FString& Parameters)
 {

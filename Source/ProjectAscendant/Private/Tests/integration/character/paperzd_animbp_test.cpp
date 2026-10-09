@@ -22,7 +22,7 @@
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(
     FPAPaperZDAnimBPIntegrationTest,
     "ProjectAscendant.Core.Character.PaperZDAnimBPIntegration",
-    EAutomationTestFlags::ApplicationContextMask | EAutomationTestFlags::ProductFilter)
+    EAutomationTestFlags_ApplicationContextMask | EAutomationTestFlags::ProductFilter)
 
 bool FPAPaperZDAnimBPIntegrationTest::RunTest(const FString& Parameters)
 {
@@ -119,7 +119,7 @@ bool FPAPaperZDAnimBPIntegrationTest::RunTest(const FString& Parameters)
         TestTrue(TEXT("AC-2: Ngắm hướng Phải màn hình (+CameraRight) phải giữ bFacingRight = true"), AnimInstance->bFacingRight);
         if (Sprite)
         {
-            TestEqual(TEXT("AC-2: Sprite RelativeRotation Yaw phải là 0 độ khi nhìn Phải màn hình"), Sprite->GetRelativeRotation().Yaw, 0.0f);
+            TestEqual(TEXT("AC-2: Sprite RelativeRotation Yaw phải là 0 độ khi nhìn Phải màn hình"), static_cast<double>(Sprite->GetRelativeRotation().Yaw), static_cast<double>(0.0));
         }
 
         // 2. Ngắm theo hướng Trái màn hình (-CameraRight) -> bFacingRight = false, Sprite Yaw = 180 độ
@@ -129,7 +129,7 @@ bool FPAPaperZDAnimBPIntegrationTest::RunTest(const FString& Parameters)
         TestFalse(TEXT("AC-2: Ngắm hướng Trái màn hình (-CameraRight) phải lật bFacingRight = false"), AnimInstance->bFacingRight);
         if (Sprite)
         {
-            TestEqual(TEXT("AC-2: Sprite RelativeRotation Yaw phải là 180 độ khi nhìn Trái màn hình"), Sprite->GetRelativeRotation().Yaw, 180.0f);
+            TestEqual(TEXT("AC-2: Sprite RelativeRotation Yaw phải là 180 độ khi nhìn Trái màn hình"), static_cast<double>(Sprite->GetRelativeRotation().Yaw), static_cast<double>(180.0));
         }
 
         // 3. Fallback theo hướng di chuyển khi không ngắm chủ động (HasActiveAimInput = false)

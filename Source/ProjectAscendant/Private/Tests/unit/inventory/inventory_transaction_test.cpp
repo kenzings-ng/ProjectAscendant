@@ -20,7 +20,7 @@
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(
 	FPAInventoryTransactionTest,
 	"ProjectAscendant.Foundation.Inventory.TransactionalRPCsAndSafeguards",
-	EAutomationTestFlags::ApplicationContextMask | EAutomationTestFlags::ProductFilter)
+	EAutomationTestFlags_ApplicationContextMask | EAutomationTestFlags::ProductFilter)
 
 bool FPAInventoryTransactionTest::RunTest(const FString& Parameters)
 {

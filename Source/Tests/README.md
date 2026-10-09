@@ -34,7 +34,7 @@ Every test must be wrapped in `#if WITH_DEV_AUTOMATION_TESTS` and use a name sta
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(
     FProjectAscendantSampleTest,
     "ProjectAscendant.Foundation.SampleVerification",
-    EAutomationTestFlags::ApplicationContextMask | EAutomationTestFlags::ProductFilter)
+    EAutomationTestFlags_ApplicationContextMask | EAutomationTestFlags::ProductFilter)
 
 bool FProjectAscendantSampleTest::RunTest(const FString& Parameters)
 {

@@ -2,6 +2,7 @@
 
 #include "Misc/AutomationTest.h"
 #include "Account/PAAccountSubsystem.h"
+#include "Subsystems/SubsystemCollection.h"
 
 #if WITH_DEV_AUTOMATION_TESTS
 
@@ -21,7 +22,7 @@
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(
 	FPAAccountAuthTest,
 	"ProjectAscendant.Foundation.Account.AuthAndIdentityPipeline",
-	EAutomationTestFlags::ApplicationContextMask | EAutomationTestFlags::ProductFilter)
+	EAutomationTestFlags_ApplicationContextMask | EAutomationTestFlags::ProductFilter)
 
 bool FPAAccountAuthTest::RunTest(const FString& Parameters)
 {
@@ -62,7 +63,8 @@ bool FPAAccountAuthTest::RunTest(const FString& Parameters)
 	// -------------------------------------------------------------------------
 	{
 		UPAAccountSubsystem* Subsystem = NewObject<UPAAccountSubsystem>();
-		Subsystem->Initialize(*static_cast<FSubsystemCollectionBase*>(nullptr));
+		FSubsystemCollection<UGameInstanceSubsystem> TestCollection; // X12: real empty collection (was a nullptr reference, UB)
+		Subsystem->Initialize(TestCollection);
 
 		FString ErrorMsg;
 
@@ -87,7 +89,8 @@ bool FPAAccountAuthTest::RunTest(const FString& Parameters)
 	// -------------------------------------------------------------------------
 	{
 		UPAAccountSubsystem* Subsystem = NewObject<UPAAccountSubsystem>();
-		Subsystem->Initialize(*static_cast<FSubsystemCollectionBase*>(nullptr));
+		FSubsystemCollection<UGameInstanceSubsystem> TestCollection; // X12: real empty collection (was a nullptr reference, UB)
+		Subsystem->Initialize(TestCollection);
 
 		const bool bFastSuccess = Subsystem->LoginFastPlaytest(TEXT("AlphaTester_99"));
 		TestTrue(TEXT("Chế độ Dev Fast Playtest phải đăng nhập thành công tức thì"), bFastSuccess);
@@ -105,7 +108,8 @@ bool FPAAccountAuthTest::RunTest(const FString& Parameters)
 	// -------------------------------------------------------------------------
 	{
 		UPAAccountSubsystem* Subsystem = NewObject<UPAAccountSubsystem>();
-		Subsystem->Initialize(*static_cast<FSubsystemCollectionBase*>(nullptr));
+		FSubsystemCollection<UGameInstanceSubsystem> TestCollection; // X12: real empty collection (was a nullptr reference, UB)
+		Subsystem->Initialize(TestCollection);
 
 		FString ErrorMsg;
 
@@ -136,7 +140,8 @@ bool FPAAccountAuthTest::RunTest(const FString& Parameters)
 	// -------------------------------------------------------------------------
 	{
 		UPAAccountSubsystem* Subsystem = NewObject<UPAAccountSubsystem>();
-		Subsystem->Initialize(*static_cast<FSubsystemCollectionBase*>(nullptr));
+		FSubsystemCollection<UGameInstanceSubsystem> TestCollection; // X12: real empty collection (was a nullptr reference, UB)
+		Subsystem->Initialize(TestCollection);
 
 		FString ErrorMsg;
 

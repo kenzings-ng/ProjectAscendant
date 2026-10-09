@@ -22,7 +22,7 @@
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(
     FPACameraLookAheadOcclusionIntegrationTest,
     "ProjectAscendant.Foundation.Controller.CameraLookAheadAndOcclusion",
-    EAutomationTestFlags::ApplicationContextMask | EAutomationTestFlags::ProductFilter)
+    EAutomationTestFlags_ApplicationContextMask | EAutomationTestFlags::ProductFilter)
 
 bool FPACameraLookAheadOcclusionIntegrationTest::RunTest(const FString& Parameters)
 {
@@ -59,9 +59,9 @@ bool FPACameraLookAheadOcclusionIntegrationTest::RunTest(const FString& Paramete
 
                 // Kiểm tra góc xoay tương đối ban đầu
                 const FRotator BoomRot = Boom->GetRelativeRotation();
-                TestNearlyEqual(TEXT("AC-1: Boom Relative Pitch phải là -45 độ"), BoomRot.Pitch, -45.0f, 0.1f);
-                TestNearlyEqual(TEXT("AC-1: Boom Relative Yaw phải là 45 độ"), BoomRot.Yaw, 45.0f, 0.1f);
-                TestNearlyEqual(TEXT("AC-1: Boom Relative Roll phải là 0 độ"), BoomRot.Roll, 0.0f, 0.1f);
+                TestNearlyEqual(TEXT("AC-1: Boom Relative Pitch phải là -45 độ"), static_cast<double>(BoomRot.Pitch), static_cast<double>(-45.0f), static_cast<double>(0.1f));
+                TestNearlyEqual(TEXT("AC-1: Boom Relative Yaw phải là 45 độ"), static_cast<double>(BoomRot.Yaw), static_cast<double>(45.0f), static_cast<double>(0.1f));
+                TestNearlyEqual(TEXT("AC-1: Boom Relative Roll phải là 0 độ"), static_cast<double>(BoomRot.Roll), static_cast<double>(0.0f), static_cast<double>(0.1f));
             }
 
             UCameraComponent* Cam = DummyCharacter->GetFollowCamera();
@@ -83,14 +83,14 @@ bool FPACameraLookAheadOcclusionIntegrationTest::RunTest(const FString& Paramete
         const FVector FarCursorLocation(1500.0f, 0.0f, 0.0f);
         const FVector TargetOffsetFar = UPAIsometricMovementMath::CalculateLookAheadTargetOffset(CharacterLocation, FarCursorLocation, 250.0f, 0.35f);
 
-        TestNearlyEqual(TEXT("AC-2: TargetOffset.X khi chuột ở xa phải bị chặn trên ở mức tối đa 250.0 cm"), TargetOffsetFar.X, 250.0f, 0.01f);
-        TestNearlyEqual(TEXT("AC-2: TargetOffset.Y phải là 0.0 khi chuột nằm thẳng trục X"), TargetOffsetFar.Y, 0.0f, 0.01f);
-        TestEqual(TEXT("AC-2: TargetOffset.Z phải luôn bằng 0.0f (trên mặt phẳng ngang)"), TargetOffsetFar.Z, 0.0f);
+        TestNearlyEqual(TEXT("AC-2: TargetOffset.X khi chuột ở xa phải bị chặn trên ở mức tối đa 250.0 cm"), static_cast<double>(TargetOffsetFar.X), static_cast<double>(250.0f), static_cast<double>(0.01f));
+        TestNearlyEqual(TEXT("AC-2: TargetOffset.Y phải là 0.0 khi chuột nằm thẳng trục X"), static_cast<double>(TargetOffsetFar.Y), static_cast<double>(0.0f), static_cast<double>(0.01f));
+        TestEqual(TEXT("AC-2: TargetOffset.Z phải luôn bằng 0.0f (trên mặt phẳng ngang)"), static_cast<double>(TargetOffsetFar.Z), static_cast<double>(0.0f));
 
         // Trường hợp 2: Chuột rê cự ly gần (+300 cm) -> TargetDist = 300 * 0.35 = 105 cm (< 250 cm)
         const FVector NearCursorLocation(300.0f, 0.0f, 0.0f);
         const FVector TargetOffsetNear = UPAIsometricMovementMath::CalculateLookAheadTargetOffset(CharacterLocation, NearCursorLocation, 250.0f, 0.35f);
-        TestNearlyEqual(TEXT("AC-2: TargetOffset.X khi chuột ở gần phải bằng 300 * 0.35 = 105.0 cm"), TargetOffsetNear.X, 105.0f, 0.01f);
+        TestNearlyEqual(TEXT("AC-2: TargetOffset.X khi chuột ở gần phải bằng 300 * 0.35 = 105.0 cm"), static_cast<double>(TargetOffsetNear.X), static_cast<double>(105.0f), static_cast<double>(0.01f));
 
         // Trường hợp 3: Chuột di chuyển chéo góc Đông Bắc (+500, +500)
         const FVector DiagonalCursorLocation(500.0f, 500.0f, 0.0f);
@@ -98,8 +98,8 @@ bool FPACameraLookAheadOcclusionIntegrationTest::RunTest(const FString& Paramete
         const float Sqrt2Over2 = FMath::Sqrt(2.0f) / 2.0f;
         // Dist2D = ~707.1 cm -> 707.1 * 0.35 = 247.48 cm (< 250 cm)
         const float ExpectedOffset = 707.10678f * 0.35f;
-        TestNearlyEqual(TEXT("AC-2: Vector đón đầu chéo X phải đúng hướng sqrt(2)/2"), TargetOffsetDiag.X, ExpectedOffset * Sqrt2Over2, 0.5f);
-        TestNearlyEqual(TEXT("AC-2: Vector đón đầu chéo Y phải đúng hướng sqrt(2)/2"), TargetOffsetDiag.Y, ExpectedOffset * Sqrt2Over2, 0.5f);
+        TestNearlyEqual(TEXT("AC-2: Vector đón đầu chéo X phải đúng hướng sqrt(2)/2"), static_cast<double>(TargetOffsetDiag.X), static_cast<double>(ExpectedOffset * Sqrt2Over2), static_cast<double>(0.5f));
+        TestNearlyEqual(TEXT("AC-2: Vector đón đầu chéo Y phải đúng hướng sqrt(2)/2"), static_cast<double>(TargetOffsetDiag.Y), static_cast<double>(ExpectedOffset * Sqrt2Over2), static_cast<double>(0.5f));
 
         // Trường hợp 4: Kiểm tra nội suy làm mượt VInterpTo và hồi tâm khi chuột về (0, 0)
         FVector CurrentOffset(250.0f, 0.0f, 0.0f);
@@ -115,7 +115,7 @@ bool FPACameraLookAheadOcclusionIntegrationTest::RunTest(const FString& Paramete
         {
             CurrentOffset = UPAIsometricMovementMath::InterpolateLookAheadOffset(CurrentOffset, ZeroTarget, DeltaTime, InterpSpeed);
         }
-        TestNearlyEqual(TEXT("AC-2: Sau 1 giây hồi tâm, SocketOffset phải trở về xấp xỉ 0.0 cm"), CurrentOffset.X, 0.0f, 0.1f);
+        TestNearlyEqual(TEXT("AC-2: Sau 1 giây hồi tâm, SocketOffset phải trở về xấp xỉ 0.0 cm"), static_cast<double>(CurrentOffset.X), static_cast<double>(0.0f), static_cast<double>(0.1f));
     }
 
     // -------------------------------------------------------------------------

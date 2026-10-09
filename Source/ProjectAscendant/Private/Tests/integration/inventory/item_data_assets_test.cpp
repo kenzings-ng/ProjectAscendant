@@ -29,7 +29,7 @@
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(
 	FPACoreItemDataAssetsIntegrationTest,
 	"ProjectAscendant.Core.Items.ItemDataAssetsIntegration",
-	EAutomationTestFlags::ApplicationContextMask | EAutomationTestFlags::ProductFilter)
+	EAutomationTestFlags_ApplicationContextMask | EAutomationTestFlags::ProductFilter)
 
 bool FPACoreItemDataAssetsIntegrationTest::RunTest(const FString& Parameters)
 {

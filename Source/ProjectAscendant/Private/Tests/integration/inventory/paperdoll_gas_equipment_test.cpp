@@ -26,7 +26,7 @@
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(
 	FPAPaperdollGASEquipmentTest,
 	"ProjectAscendant.Foundation.Inventory.PaperdollGASEquipmentIntegration",
-	EAutomationTestFlags::ApplicationContextMask | EAutomationTestFlags::ProductFilter)
+	EAutomationTestFlags_ApplicationContextMask | EAutomationTestFlags::ProductFilter)
 
 bool FPAPaperdollGASEquipmentTest::RunTest(const FString& Parameters)
 {

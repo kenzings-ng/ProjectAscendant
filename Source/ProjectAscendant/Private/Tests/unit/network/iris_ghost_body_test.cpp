@@ -3,6 +3,7 @@
 #include "Misc/AutomationTest.h"
 #include "Network/PAIrisSpatialFilter.h"
 #include "Network/PAGhostBodySubsystem.h"
+#include "Subsystems/SubsystemCollection.h"
 
 #if WITH_DEV_AUTOMATION_TESTS
 
@@ -20,7 +21,7 @@
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(
 	FPAIrisGhostBodyTest,
 	"ProjectAscendant.Foundation.Netcode.IrisSpatialAndGhostBody",
-	EAutomationTestFlags::ApplicationContextMask | EAutomationTestFlags::ProductFilter)
+	EAutomationTestFlags_ApplicationContextMask | EAutomationTestFlags::ProductFilter)
 
 bool FPAIrisGhostBodyTest::RunTest(const FString& Parameters)
 {
@@ -83,7 +84,8 @@ bool FPAIrisGhostBodyTest::RunTest(const FString& Parameters)
 	// -------------------------------------------------------------------------
 	{
 		UPAGhostBodySubsystem* GhostSubsystem = NewObject<UPAGhostBodySubsystem>();
-		GhostSubsystem->Initialize(*static_cast<FSubsystemCollectionBase*>(nullptr));
+		FSubsystemCollection<UWorldSubsystem> TestCollection; // X12: real empty collection (was a nullptr reference, UB)
+		GhostSubsystem->Initialize(TestCollection);
 
 		const FString SafePlayerId = TEXT("Player_Peaceful_01");
 		const bool bInCombat = false;
@@ -100,7 +102,8 @@ bool FPAIrisGhostBodyTest::RunTest(const FString& Parameters)
 	// -------------------------------------------------------------------------
 	{
 		UPAGhostBodySubsystem* GhostSubsystem = NewObject<UPAGhostBodySubsystem>();
-		GhostSubsystem->Initialize(*static_cast<FSubsystemCollectionBase*>(nullptr));
+		FSubsystemCollection<UWorldSubsystem> TestCollection; // X12: real empty collection (was a nullptr reference, UB)
+		GhostSubsystem->Initialize(TestCollection);
 
 		const FString CombatPlayerId = TEXT("Player_Combat_99");
 		const bool bInCombat = true;
@@ -122,7 +125,8 @@ bool FPAIrisGhostBodyTest::RunTest(const FString& Parameters)
 	// -------------------------------------------------------------------------
 	{
 		UPAGhostBodySubsystem* GhostSubsystem = NewObject<UPAGhostBodySubsystem>();
-		GhostSubsystem->Initialize(*static_cast<FSubsystemCollectionBase*>(nullptr));
+		FSubsystemCollection<UWorldSubsystem> TestCollection; // X12: real empty collection (was a nullptr reference, UB)
+		GhostSubsystem->Initialize(TestCollection);
 
 		const FString ReconnectingPlayerId = TEXT("Player_Reconnect_42");
 		GhostSubsystem->RegisterDisconnect(ReconnectingPlayerId, true, 15.0f);
@@ -141,7 +145,8 @@ bool FPAIrisGhostBodyTest::RunTest(const FString& Parameters)
 	// -------------------------------------------------------------------------
 	{
 		UPAGhostBodySubsystem* GhostSubsystem = NewObject<UPAGhostBodySubsystem>();
-		GhostSubsystem->Initialize(*static_cast<FSubsystemCollectionBase*>(nullptr));
+		FSubsystemCollection<UWorldSubsystem> TestCollection; // X12: real empty collection (was a nullptr reference, UB)
+		GhostSubsystem->Initialize(TestCollection);
 
 		// 7.1: Hết hạn 15s -> Giải phóng an toàn
 		const FString TimeoutPlayerId = TEXT("Player_Timeout_01");

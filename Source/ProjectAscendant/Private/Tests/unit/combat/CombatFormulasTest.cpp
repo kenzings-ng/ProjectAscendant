@@ -11,7 +11,7 @@
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(
     FCombatFormulasTest,
     "ProjectAscendant.Combat.Formulas.DamageAndPostureCalculations",
-    EAutomationTestFlags::ApplicationContextMask | EAutomationTestFlags::ProductFilter)
+    EAutomationTestFlags_ApplicationContextMask | EAutomationTestFlags::ProductFilter)
 
 bool FCombatFormulasTest::RunTest(const FString& Parameters)
 {

@@ -19,7 +19,7 @@
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(
     FPAPaper2DFlipbooksIntegrationTest,
     "ProjectAscendant.Core.Character.Paper2DFlipbooksIntegration",
-    EAutomationTestFlags::ApplicationContextMask | EAutomationTestFlags::ProductFilter)
+    EAutomationTestFlags_ApplicationContextMask | EAutomationTestFlags::ProductFilter)
 
 bool FPAPaper2DFlipbooksIntegrationTest::RunTest(const FString& Parameters)
 {

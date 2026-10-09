@@ -1,6 +1,7 @@
 // Copyright Project Ascendant. All Rights Reserved.
 
 #include "Misc/AutomationTest.h"
+#include "Character/PABaseCharacter.h" // X12: full type needed for TWeakObjectPtr<APABaseCharacter> in PALootDistributionSubsystem.h
 #include "Combat/PAPostureSyncComponent.h"
 #include "Network/PALootDistributionSubsystem.h"
 #include "Network/PALootDropletActor.h"
@@ -22,7 +23,7 @@
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(
 	FPAContestedLootFinisherTest,
 	"ProjectAscendant.Foundation.Netcode.ContestedLootFinisherIntegration",
-	EAutomationTestFlags::ApplicationContextMask | EAutomationTestFlags::ProductFilter)
+	EAutomationTestFlags_ApplicationContextMask | EAutomationTestFlags::ProductFilter)
 
 bool FPAContestedLootFinisherTest::RunTest(const FString& Parameters)
 {
