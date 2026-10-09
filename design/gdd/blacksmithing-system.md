@@ -164,7 +164,7 @@ flowchart TD
 | Hệ Thống Tương Tác | Dữ Liệu Trao Đổi Vào (Data In) | Dữ Liệu Xuất Ra (Data Out) | Trách Nhiệm Sở Hữu (Ownership) |
 | :--- | :--- | :--- | :--- |
 | **Inventory System** | Danh sách Item, Quặng rèn, Đá quý, Mảnh vỡ Boss trong túi đồ | Trừ nguyên liệu; cập nhật cấp độ $+N$, dòng khảm ngọc và chỉ số trang bị | Inventory quản lý lưu trữ; Blacksmith sở hữu logic công thức và tỷ lệ rèn. |
-| **Stagger System (Part Breaking)** | Mảnh vỡ Sừng, Đuôi, Giáp, Cánh Boss thu được sau khi phá bộ phận | Chuyển hóa các mảnh vỡ thành nguyên liệu bắt buộc để đúc đồ Rare và Thần Binh Legendary | Stagger quản lý tỷ lệ rơi mảnh vỡ; Blacksmith sở hữu công thức phối trộn. |
+| **Stagger System (Part Breaking)** | Mảnh vỡ Sừng, Đuôi, Giáp, Cánh Boss thu được sau khi phá bộ phận | Chuyển hóa các mảnh vỡ thành nguyên liệu bắt buộc để đúc đồ Epic và Thần Binh Legendary | Stagger quản lý tỷ lệ rơi mảnh vỡ; Blacksmith sở hữu công thức phối trộn. |
 | **Zone System (World Openness)** | Tọa độ và trạng thái khám phá lò rèn dã ngoại của người chơi | Mở khóa dịch vụ tương ứng với cấp độ lò rèn người chơi đã tiếp cận | Zone quản lý vị trí địa lý; Blacksmith quản lý quyền mở menu dịch vụ. |
 | **Attributes Engine (GAS)** | Chỉ số cơ bản của trang bị | Cấp thêm các `GameplayEffect` cộng chỉ số theo cấp $+N$ và ngọc khảm | Attributes tính toán chỉ số cuối; Blacksmith cấp thông số Modifier. |
 
@@ -199,12 +199,12 @@ The `enhancement_stat_scaling` formula is defined as:
 ### 2. Công Thức Chi Phí Vàng Cường Hóa (Enhancement Gold Cost)
 The `enhancement_gold_cost` formula is defined as:
 
-`EnhanceGold(Level, Tier) = round(BaseForgeFee(Tier) * (1.0 + 0.35 * (Level)^1.4))`
+`EnhanceGold(Level, Rarity) = round(BaseForgeFee(Rarity) * (1.0 + 0.35 * (Level)^1.4))`
 
 **Variables:**
 | Variable | Symbol | Type | Range | Description |
 |---|:---:|:---:|:---:|---|
-| Base Forge Fee | $\text{BaseFee}$ | int | $50 - 500$ | Phí rèn cơ sở theo Bậc Hiếm: Common (50), Uncommon (100), Rare (200), Epic (350), Legendary (500). |
+| Base Forge Fee | $\text{BaseFee}$ | int | $50 - 500$ | Phí rèn cơ sở theo Độ Hiếm: Common (50), Uncommon (100), Rare (200), Epic (350), Legendary (500). |
 | Current Level | $\text{Level}$ | int | $0 - 9$ | Cấp độ hiện tại của món đồ trước khi đập lên cấp kế tiếp. |
 
 **Output Range:** $50 - 5,200$ Vàng mỗi lần thử nghiệm rèn.  
@@ -234,12 +234,12 @@ $$\text{Penalty}(\text{Fail}) = \begin{cases}
 ### 4. Công Thức Chi Phí Sửa Chữa Độ Bền (Repair Cost Formula)
 The `repair_cost_formula` is defined as:
 
-`RepairCost = ceil(BaseItemPrice(Tier) * 0.25 * (1.0 - DurabilityPct))`
+`RepairCost = ceil(BaseItemPrice(Rarity) * 0.25 * (1.0 - DurabilityPct))`
 
 **Variables:**
 | Variable | Symbol | Type | Range | Description |
 |---|:---:|:---:|:---:|---|
-| Base Item Price | $\text{Price}$ | int | $50 - 2,000$ | Giá trị cơ sở của trang bị theo Bậc (đã chuẩn hóa trong `inventory-system.md`). |
+| Base Item Price | $\text{Price}$ | int | $50 - 2,000$ | Giá trị cơ sở của trang bị theo Độ Hiếm (đã chuẩn hóa trong `inventory-system.md`). |
 | Current Durability Pct | $\text{DurPct}$ | float | $0.0 - 0.99$ | Tỷ lệ độ bền còn lại của món đồ ($0\% \rightarrow 99\%$). |
 
 **Output Range:** $1 - 500$ Vàng để phục hồi hoàn toàn $100\%$ độ bền.  
@@ -253,7 +253,7 @@ The `salvage_yield_formula` is defined as:
 
 `OreYield = 2 + (EnhancementLevel >= 5 ? 1 : 0) + (EnhancementLevel >= 9 ? 1 : 0)`
 
-- **Loại quặng thu hồi tương ứng với Bậc:**
+- **Loại quặng thu hồi tương ứng với Độ Hiếm:**
   - Common $\rightarrow$ Quặng Đồng.
   - Uncommon $\rightarrow$ Quặng Sắt.
   - Rare $\rightarrow$ Quặng Sắt Đen.
@@ -301,7 +301,7 @@ The `salvage_yield_formula` is defined as:
 | Hệ Thống Thượng Nguồn | Bản Tả Thiết Kế (GDD) | Bản Chất Phụ Thuộc | Giao Diện Dữ Liệu Trao Đổi (Interface Contract) |
 | :--- | :--- | :---: | :--- |
 | **Inventory & Item Database** | [`inventory-system.md`](file:///mnt/Data/Projects/project-games/design/gdd/inventory-system.md) | **Bắt Buộc (Hard)** | Đọc danh mục trang bị, quặng rèn, đá quý; trừ tài nguyên khi rèn; cập nhật cấp độ $+N$, số lỗ ngọc (`GemSockets`) và trạng thái độ bền; quản lý 3 mốc mở rộng ô đồ (30 $\rightarrow$ 60 ô). |
-| **Stagger & Part Breaking** | [`stagger-system.md`](file:///mnt/Data/Projects/project-games/design/gdd/stagger-system.md) | **Bắt Buộc (Hard)** | Tiếp nhận 4 mảnh vỡ bộ phận rơi từ Boss (Sừng, Vảy Đuôi, Giáp Ngực, Cánh) cùng Linh Hồn Lãnh Chúa (`item_boss_soul_*`) làm nguyên liệu chế tác đồ Bậc Epic và Thần Binh Legendary (Boss Soul). |
+| **Stagger & Part Breaking** | [`stagger-system.md`](file:///mnt/Data/Projects/project-games/design/gdd/stagger-system.md) | **Bắt Buộc (Hard)** | Tiếp nhận 4 mảnh vỡ bộ phận rơi từ Boss (Sừng, Vảy Đuôi, Giáp Ngực, Cánh) cùng Linh Hồn Lãnh Chúa (`item_boss_soul_*`) làm nguyên liệu chế tác đồ Epic và Thần Binh Legendary (Boss Soul). |
 | **Attributes Engine (GAS)** | [`attributes-system.md`](file:///mnt/Data/Projects/project-games/design/gdd/attributes-system.md) | **Bắt Buộc (Hard)** | Cập nhật các giá trị bổ trợ (Attributes Modifiers) khi nhân vật trang bị vũ khí/giáp đã cường hóa hoặc khảm ngọc vào `UAscendantAttributeSet`. |
 
 ---
@@ -340,7 +340,7 @@ Bảng tổng hợp các biến số cân bằng kinh tế và rèn đúc dành 
 ### 1. Hiệu Ứng Hình Ảnh & Niagara VFX (Visual & VFX)
 - **Thao Tác Nện Búa (Hammer Strike):** Khi bấm nút Rèn, hoạt ảnh búa đập xuống đe 3 nhịp dứt khoát, mỗi nhịp bắn ra chùm tia lửa nóng đỏ (*Fiery Spark Splash*) văng tung tóe trên mặt đất.
 - **Cường Hóa Thành Công (Enhance Success):**
-  - Vầng hào quang ánh sáng bùng nổ theo màu sắc nhận diện của Bậc trang bị (Trắng, Xanh Lam, Cam, Đỏ Thẫm, Hoàng Kim).
+  - Vầng hào quang ánh sáng bùng nổ theo màu nhận diện độ hiếm của trang bị (bảng màu Common → Legendary trong `inventory-system.md` §1). *(Cập nhật 2026-10-10 (X7): bỏ dãy màu 5 bậc cũ gắn với thang Immortal/Divine.)*
   - *Tại mốc +10 (Đỉnh Phong):* Kích hoạt vệt hào quang bao bọc vũ khí vĩnh viễn (*Weapon Aura Glow Niagara*), vũ khí tỏa ra các hạt ánh sáng chuyển động nhịp nhàng dọc theo lưỡi kiếm/thân cung.
 - **Cường Hóa Thất Bại (Enhance Failure):**
   - Đe rèn xì ra một đám khói đen u ám (*Sizzling Black Smoke*), tia lửa tắt ngấm, tạo phản hồi thị giác rõ ràng về sự thất bại mà không gây cảm giác trang bị bị vỡ nát.

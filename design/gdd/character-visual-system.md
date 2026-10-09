@@ -25,7 +25,7 @@ Trong góc nhìn 2.5D Isometric nghiêng $-45^\circ$, với camera đặt cách 
 
 ### 1.1 Ba Vấn Đề Lớn Được Giải Quyết Triệt Để:
 1. **Tránh xung đột màu với Rarity System (Color Decoupling)**:
-   Hệ thống Itemization đã cố định màu sắc cho 5 bậc hiếm trang bị (`Common` xám, `Uncommon` lục, `Rare` lam, `Epic` tím, `Legendary` hoàng kim) thông qua các Material Instance tĩnh (`item-005`). Do đó, **tuyệt đối cấm dùng màu áo giáp để phân biệt Class**. Bản sắc của Class phải được neo cứng vào **Khối hình học tổng thể (Shape Grammar), Dáng đứng (Stance / Center of Gravity) và Cách cầm Vũ khí (Weapon Grip / Anchor Points)**.
+   Hệ thống Itemization đã cố định màu sắc cho 5 độ hiếm trang bị (`Common` xám, `Uncommon` lục, `Rare` lam, `Epic` tím, `Legendary` hoàng kim) thông qua các Material Instance tĩnh (`item-005`). Do đó, **tuyệt đối cấm dùng màu áo giáp để phân biệt Class**. Bản sắc của Class phải được neo cứng vào **Khối hình học tổng thể (Shape Grammar), Dáng đứng (Stance / Center of Gravity) và Cách cầm Vũ khí (Weapon Grip / Anchor Points)**.
 2. **Cảnh báo độ nguy hiểm quái vật bằng hình khối (Visual Threat Telegraphing)**:
    Không bắt người chơi phải dán mắt vào thanh máu UI. Quái vật từ *Trash Mob* đến *World Boss* phải truyền tải cấp độ nguy hiểm thông qua quy chuẩn tỷ lệ thể tích (Mass Scaling), mật độ gai góc bất đối xứng (Spikiness & Aggression Index) và biên độ chuyển động mở rộng (Extending Wind-up Silhouette).
 3. **Bài toán ngân sách sản xuất (The Frame Mitigation)**:

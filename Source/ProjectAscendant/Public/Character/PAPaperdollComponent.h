@@ -123,7 +123,7 @@ public:
 	EPAAimDirection8Way GetCurrentOrientation() const { return CurrentOrientation; }
 
 	/**
-	 * Gán Static Material Instance theo Bậc Hiếm (Common -> Legendary) cho WeaponFlipbookComponent (Story item-005).
+	 * Gán Static Material Instance theo Độ Hiếm (Common -> Legendary) cho WeaponFlipbookComponent (Story item-005).
 	 * Áp dụng cơ chế Zero-Cost Material Swap với 5 preset MI tĩnh.
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Paperdoll|Material")
@@ -136,7 +136,7 @@ public:
 	bool SetWeaponMaterialForRarityEnum(EPAItemRarity Rarity);
 
 	/**
-	 * Lấy thông tin preset của bậc hiếm chỉ định.
+	 * Lấy thông tin preset của độ hiếm chỉ định.
 	 */
 	UFUNCTION(BlueprintPure, Category = "Paperdoll|Material")
 	static FPARarityMaterialPreset GetRarityMaterialPreset(EPAItemRarity Rarity);

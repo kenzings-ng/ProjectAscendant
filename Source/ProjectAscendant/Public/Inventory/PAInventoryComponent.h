@@ -25,7 +25,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FPAOnInventoryTransactionRejected, 
  * - AC-1 (Atomic Move & Swap Validation): Di chuyển / hoán đổi nguyên tử (atomic) trên Server, kiểm tra UID chống duping.
  * - AC-2 (Split Stack Validation): Tách chồng đồ trên Server, kiểm tra ô đích rỗng và lượng tách hợp lệ.
  * - AC-3 (QoL Item Lock & Junk Flags): Khóa vật phẩm (bIsLocked) chống bán/vứt/hủy nhầm; Đánh dấu rác (bIsJunk) để bán nhanh.
- * - AC-4 (Overflow Stash Routing): Túi đầy 30/30 -> Vật phẩm Tier Rare trở lên rơi từ Boss tự động chuyển vào Hòm Đệm (20 ô).
+ * - AC-4 (Overflow Stash Routing): Túi đầy 30/30 -> Vật phẩm độ hiếm Rare trở lên rơi từ Boss tự động chuyển vào Hòm Đệm (20 ô).
  */
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class PROJECTASCENDANT_API UPAInventoryComponent : public UActorComponent
@@ -171,7 +171,7 @@ public:
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Chuyển vật phẩm quý (Tier Rare trở lên) vào Hòm Đệm Lửa Trại (20 ô) khi túi đầy (AC-4).
+	 * Chuyển vật phẩm quý (độ hiếm Rare trở lên) vào Hòm Đệm Lửa Trại (20 ô) khi túi đầy (AC-4).
 	 */
 	UFUNCTION(BlueprintCallable, Category = "ProjectAscendant|Inventory")
 	bool RouteToOverflowStash(UItemStaticDataAsset* ItemData, int32 Quantity, const FPAItemInstanceData& DynamicData = FPAItemInstanceData());

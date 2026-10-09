@@ -28,9 +28,9 @@ Hệ thống được thiết kế theo triết lý **"Chất lượng đồ h�
 
 ---
 
-## 1. Hệ Thống 5 Bậc Hiếm (5-Tier Rarity Matrix)
+## 1. Hệ Thống 5 Độ Hiếm (5-Rarity Matrix)
 
-Mọi trang bị trong Project Ascendant được phân loại thành **5 Bậc Hiếm** chuẩn RPG. 
+Mọi trang bị trong Project Ascendant được phân loại thành **5 Độ Hiếm** chuẩn RPG. *(Cập nhật 2026-10-10 (X7): "Bậc Hiếm/Tier" → "Độ Hiếm", DECISIONS.md §1.)* 
 
 > 🛑 **QUY TẮC MỸ THUẬT CỐT LÕI (Art Budget Rule):**  
 > **Độ hiếm (Rarity) KHÔNG sinh ra art vẽ tay riêng biệt!**  
@@ -39,7 +39,7 @@ Mọi trang bị trong Project Ascendant được phân loại thành **5 Bậc 
 > - Bảng màu chất liệu (Material Palette LUT Swap): Kim loại xỉn $\rightarrow$ Thép sáng $\rightarrow$ Thép rune xanh $\rightarrow$ Tinh thể tím $\rightarrow$ Hoàng kim.
 > - Hào quang hạt Niagara In-Game (Particle Glow / Weapon Trail Overlay).
 
-| Bậc Hiếm (Rarity) | Mã Màu Nhận Diện | Quy Tắc Affix (Dòng Thuộc Tính) | Lỗ Khảm Ngọc (Sockets) | Hiệu Ứng Trực Quan (In-Game VFX Overlay) | Hệ Số Giá Bán (Value Mult) |
+| Độ Hiếm (Rarity) | Mã Màu Nhận Diện | Quy Tắc Affix (Dòng Thuộc Tính) | Lỗ Khảm Ngọc (Sockets) | Hiệu Ứng Trực Quan (In-Game VFX Overlay) | Hệ Số Giá Bán (Value Mult) |
 | :--- | :---: | :--- | :---: | :--- | :---: |
 | **Common (Thường)** | `#9CA3AF`<br>(Xám Slate) | **0 Affix**.<br>Chỉ mang chỉ số gốc (Implicit Base Stat) sạch theo $iLvl$. | 0 | Không hào quang, bề mặt kim loại mộc mạc. | $1.0\times$ |
 | **Uncommon (Khá)** | `#22C55E`<br>(Xanh Lục) | **1–2 Affixes** (1 Prefix hoặc 1 Suffix).<br>Chỉ số ngẫu nhiên trong dải Tier 1–2. | 0 | Viền sáng xanh ngọc nhẹ trên giao diện, không phát hạt. | $2.5\times$ |
@@ -581,7 +581,7 @@ Các thực thể mới được đăng ký chính thức vào [`design/registry
 
 > **Phụ trách**: Lead Technical Art Director  
 > **Tham chiếu**: [`design/art/art-bible.md`](file:///mnt/Data/Projects/project-games/ProjectAscendant/design/art/art-bible.md) (Mục 1, 2, 4) & [`references/anti-ai-craft-guide.md`](file:///home/kenzings/.gemini/config/skills/game-art-studio/references/anti-ai-craft-guide.md)  
-> **Mục tiêu**: Thiết lập hệ thống mã màu, hiệu ứng hạt Niagara, và cơ chế chuyển đổi Palette LUT cho 5 Bậc Hiếm (Common $\rightarrow$ Legendary) đảm bảo tính thẩm mỹ HD-2D, chống nhầm lẫn với cơ chế chiến đấu, tối ưu hóa hiệu năng MMO, và hỗ trợ người chơi mù màu (Colorblind Accessibility).
+> **Mục tiêu**: Thiết lập hệ thống mã màu, hiệu ứng hạt Niagara, và cơ chế chuyển đổi Palette LUT cho 5 Độ Hiếm (Common $\rightarrow$ Legendary) đảm bảo tính thẩm mỹ HD-2D, chống nhầm lẫn với cơ chế chiến đấu, tối ưu hóa hiệu năng MMO, và hỗ trợ người chơi mù màu (Colorblind Accessibility).
 
 ---
 
@@ -593,7 +593,7 @@ Các thực thể mới được đăng ký chính thức vào [`design/registry
 
 ---
 
-### 10.2 Bảng Mã Màu 5 Bậc Hiếm & Giải Pháp Tương Phản 3 Vùng Thế Giới
+### 10.2 Bảng Mã Màu 5 Độ Hiếm & Giải Pháp Tương Phản 3 Vùng Thế Giới
 
 Để các vật phẩm rơi ngoài thế giới (Loot Drops) và icon giao diện không bị "chìm màu" hay hòa lẫn vào bối cảnh của 3 đại địa khu (Verdant Frontier, Ashen Wilderness, Forbidden Sanctum):
 
@@ -608,7 +608,7 @@ BẢNG MÃ MÀU CHUẨN HÓA CHO 5 BẬC HIẾM:
 
 #### Ma Trận Xử Lý Tương Phản Đa Bối Cảnh (Multi-Biome Contrast Matrix):
 
-| Bậc Hiếm | Mã Hex Chuẩn | Thử Thách Bối Cảnh (Biome Stress Test) | Giải Pháp Xử Lý Đồ Họa Của Studio (Art Direction Fix) |
+| Độ Hiếm | Mã Hex Chuẩn | Thử Thách Bối Cảnh (Biome Stress Test) | Giải Pháp Xử Lý Đồ Họa Của Studio (Art Direction Fix) |
 | :--- | :---: | :--- | :--- |
 | **Common** | `#E8ECEB` | **Ashen Wilderness:** Bụi tro xám và đá đen dễ nuốt chửng màu xám thường `#9CA3AF`. | Không dùng màu xám đục. Dùng **Trắng Xương Khô (`#E8ECEB`)** có độ sáng Value $V \ge 90\%$ kết hợp viền ngoài than chì 1px `#121316`. |
 | **Uncommon** | `#10B981` | **Verdant Frontier:** Cỏ cây xanh tươi làm chìm màu xanh lá cây tiêu chuẩn `#22C55E`. | Nâng quang phổ sang **Ngọc Lục Bảo Điện Tử (Electric Mint `#10B981`)** có độ bão hòa cao, pha thêm hạt lân tinh trắng ở tâm icon. |

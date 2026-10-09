@@ -56,7 +56,7 @@
 ## Out of Scope
 
 - Story 002: Tier 2 Wilderness Forge (+4 to +6 enhancement failure retention, gem sockets).
-- Story 003: Tier 3 Ancient Sanctuary Forge (+7 to +10, Prismatic socket, Boss Soul divine forging).
+- Story 003: Tier 3 Ancient Sanctuary Forge (+7 to +10, Prismatic socket, Boss Soul Legendary forging).
 
 ---
 

@@ -15,7 +15,7 @@
  *  - AC-1 (Atomic Move & Swap Validation): Di chuyển / Hoán đổi nguyên tử, chống nhân bản (Anti-duping) khi spam lệnh.
  *  - AC-2 (Split Stack Validation): Tách chồng đồ, kiểm tra ô đích rỗng và số lượng tách hợp lệ.
  *  - AC-3 (QoL Item Lock & Junk Flags): Khóa vật phẩm (bIsLocked) ngăn chặn vứt hoặc bán nhầm; Đánh dấu rác (bIsJunk).
- *  - AC-4 (Overflow Stash Routing): Định tuyến vật phẩm quý (Tier Rare trở lên) vào Hòm Đệm 20 ô khi ba lô đầy.
+ *  - AC-4 (Overflow Stash Routing): Định tuyến vật phẩm quý (độ hiếm Rare trở lên) vào Hòm Đệm 20 ô khi ba lô đầy.
  */
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(
 	FPAInventoryTransactionTest,
@@ -132,7 +132,7 @@ bool FPAInventoryTransactionTest::RunTest(const FString& Parameters)
 
 		UItemStaticDataAsset* BossRing = NewObject<UItemStaticDataAsset>();
 		BossRing->ItemId = FName(TEXT("Item_Ring_DemonLord"));
-		BossRing->RarityTier = EPAItemRarity::Rare; // Tier Rare
+		BossRing->RarityTier = EPAItemRarity::Rare; // độ hiếm Rare
 
 		// 4.0: Túi đồ còn chỗ trống -> Không được chuyển vào Hòm Đệm
 		TestFalse(TEXT("AC-4: Túi đồ còn chỗ trống thì không chuyển vào Hòm Đệm"), InventoryComp->RouteToOverflowStash(BossRing, 1));
@@ -148,7 +148,7 @@ bool FPAInventoryTransactionTest::RunTest(const FString& Parameters)
 		}
 		TestEqual(TEXT("AC-4: Toàn bộ 30 ô đã bị chiếm dụng"), InventoryComp->FindFirstEmptySlot(), INDEX_NONE);
 
-		// 4.1: Vật phẩm Tier Common rơi khi túi đầy -> Bị từ chối
+		// 4.1: Vật phẩm độ hiếm Common rơi khi túi đầy -> Bị từ chối
 		UItemStaticDataAsset* JunkItem = NewObject<UItemStaticDataAsset>();
 		JunkItem->ItemId = FName(TEXT("Item_Junk_BrokenBone"));
 		JunkItem->RarityTier = EPAItemRarity::Common;
@@ -157,7 +157,7 @@ bool FPAInventoryTransactionTest::RunTest(const FString& Parameters)
 		TestFalse(TEXT("AC-4: Đồ Common không được đưa vào Hòm Đệm khi túi đầy"), bJunkRouted);
 		TestEqual(TEXT("AC-4: Hòm đệm vẫn rỗng"), InventoryComp->GetOverflowStashCount(), 0);
 
-		// 4.2: Boss rơi nhẫn quý Tier Rare (3) khi túi đầy -> Chuyển vào Hòm Đệm
+		// 4.2: Boss rơi nhẫn quý độ hiếm Rare khi túi đầy -> Chuyển vào Hòm Đệm
 		const bool bRingRouted = InventoryComp->RouteToOverflowStash(BossRing, 1);
 		TestTrue(TEXT("AC-4: Nhẫn quý của Boss được chuyển an toàn vào Hòm Đệm"), bRingRouted);
 		TestEqual(TEXT("AC-4: Hòm đệm có 1 vật phẩm"), InventoryComp->GetOverflowStashCount(), 1);

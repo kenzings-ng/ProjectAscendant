@@ -136,7 +136,7 @@ public:
 /**
  * FPARarityMaterialPreset
  *
- * Cấu hình Static Material Instance cho 5 bậc hiếm (Story item-005, EPIC-ITEMIZATION-001):
+ * Cấu hình Static Material Instance cho 5 độ hiếm (Story item-005, EPIC-ITEMIZATION-001):
  * - Common: Emissive = 0.0f, Tint = #E8ECEB
  * - Uncommon: Emissive = 0.5f, Tint = #10B981 (Electric Emerald)
  * - Rare: Emissive = 1.8f, Tint = #3B82F6 (Cobalt Sapphire)

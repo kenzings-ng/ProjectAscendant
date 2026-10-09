@@ -23,7 +23,7 @@ This epic implements the zone-tiered blacksmithing and item enhancement engine f
 |---|---|---|
 | **TR-crft-001** | Tier 1 Outpost Forge: Durability repair formula (`repair_cost = ceil(base_price * 0.25 * (1 - durability_pct))`), item/skill-book salvaging to Skill Shards, and 100% safe enhancement (+1 to +3) | ADR-0001, ADR-0003 ✅ |
 | **TR-crft-002** | Tier 2 Wilderness Forge: Enhancement +4 to +6 with failure level retention, up to 2 gem socket expansions | ADR-0001, ADR-0003 ✅ |
-| **TR-crft-003** | Tier 3 Ancient Sanctuary Forge: Enhancement +7 to +10 (fail drops 1 level, no destruction), Prismatic sockets, Boss Soul divine forging | ADR-0001, ADR-0003 ✅ |
+| **TR-crft-003** | Tier 3 Ancient Sanctuary Forge: Enhancement +7 to +10 (fail drops 1 level, no destruction), Prismatic sockets, Boss Soul Legendary forging | ADR-0001, ADR-0003 ✅ |
 
 ## Stories
 
