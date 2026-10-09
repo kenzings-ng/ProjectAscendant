@@ -46,8 +46,10 @@ Mọi trang bị và vật phẩm quý trong game được chuẩn hóa theo 5 c
 Kho đồ phân chia thành 4 ngăn danh mục chính:
 1. **Trang Bị (Equipment):** Vũ khí chính, Vũ khí phụ/Khiên, Áo giáp thân, Nhẫn $\times 2$, Dây chuyền.
 2. **Tiêu Hao (Consumables):** Bình máu/mana tức thời, Dược liệu của Dược sư, Dầu tẩm vũ khí.
-3. **Nguyên Liệu (Materials):** Quặng rèn, Da thú, Mảnh vỡ bộ phận Boss (Sừng/Đuôi/Giáp/Cánh), Tàn Trang Kỹ Năng (`item_skill_shard`).
+3. **Nguyên Liệu (Materials):** Quặng rèn, Da thú, Mảnh vỡ bộ phận Boss (Sừng/Đuôi/Giáp/Cánh).
 4. **Sách Bí Kíp (Skill Books):** Chủng loại vật phẩm học kỹ năng đặc thù có điều kiện khóa Class/Vũ khí.
+
+> **Tàn Trang Kỹ Năng (`item_skill_shard`)** không thuộc ngăn Nguyên Liệu: đây là **tiền tệ thứ hai** cùng với Vàng (`currency_gold`), giới hạn mang theo 99,999 (`skill_shards_carry_limit`) theo [`merchant-economy.md`](merchant-economy.md) (DECISIONS.md §12).
 
 ---
 
@@ -59,7 +61,7 @@ Kho đồ phân chia thành 4 ngăn danh mục chính:
 - **Quy tắc xếp chồng (Stacking Rules):**
   - Trang bị (Equipment) & Sách Kỹ Năng (Skill Books): Không xếp chồng (`MaxStack = 1`).
   - Vật phẩm tiêu hao (Consumables): Xếp chồng tối đa 20 cái/ô (`max_consumable_stack = 20`).
-  - Nguyên liệu rèn & Tàn trang kỹ năng: Xếp chồng tối đa 999 cái/ô (`max_material_stack = 999`).
+  - Nguyên liệu rèn: Xếp chồng tối đa 999 cái/ô (`max_material_stack = 999`). Tàn Trang Kỹ Năng là tiền tệ nên áp dụng giới hạn mang theo 99,999 (`skill_shards_carry_limit`) thay cho quy tắc xếp chồng này (xem ghi chú ở §2).
 
 ### 3.2 Khung Trang Bị Nhân Vật (Paperdoll Slots)
 Gồm 6 vị trí trang bị cố định, liên kết trực tiếp với `UAscendantAttributeSet`:

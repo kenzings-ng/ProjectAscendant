@@ -50,7 +50,7 @@ Mỗi Tòa Thành (Citadel) là một trung tâm kiên cố đại diện cho t�
    * **Cấm Giao Tranh PvP Tuyệt Đối**: Toàn bộ kỹ năng và vũ khí của người chơi tự động đưa vào trạng thái Pacified (`State.Pacified`), ngăn chặn hoàn toàn các hành vi PK, gank điểm dịch chuyển hoặc quấy phá.
 2. **Cơ Chế Tự Động Lưu (Citadel Auto-Save on Entry)**:
    * **Kích hoạt tức thì**: Ngay khi người chơi vượt qua cổng thành và bước vào vùng an toàn, máy chủ tự động kích hoạt `ExecuteAutoSave()`.
-   * **Dữ liệu được lưu trữ**: Ghi nhận `LastVisitedCitadelId` (Tòa thành người chơi vào gần nhất), lưu vị trí xuất hiện, cấp độ, kinh nghiệm, túi đồ (Inventory), trang bị, số lượng tiền tệ (Vàng & Void Shards), điểm kỹ năng và Karma.
+   * **Dữ liệu được lưu trữ**: Ghi nhận `LastVisitedCitadelId` (Tòa thành người chơi vào gần nhất), lưu vị trí xuất hiện, cấp độ, kinh nghiệm, túi đồ (Inventory), trang bị, số lượng tiền tệ (Vàng & Tàn Trang Kỹ Năng `item_skill_shard`), điểm kỹ năng và Karma.
    * **Hồi phục tài nguyên trọn vẹn**: Tức thì khôi phục 100% Max HP, 100% Max Mana, 100% Max Stamina, và nạp đầy số lượt dùng của Bình Dược Phẩm (5/5 Flask charges).
 3. **Cơ Chế Thoát Game & Đăng Nhập Lại (Relog Return to Last Visited Citadel)**:
    * Khi người chơi thoát game (Quit, Disconnect, ngắt kết nối mạng hoặc treo máy) ở bất kỳ đâu ngoài hoang dã hay trong dungeon:
