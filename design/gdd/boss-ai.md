@@ -35,7 +35,7 @@ Hệ thống AI Boss được xây dựng dựa trên Unreal Engine `BehaviorTre
 
 #### 1. Thông Số Cơ Bản Của Prototype Boss (*Lãnh Chúa Thiết Giáp*)
 - `MaxHealth`: **10,000 HP** (được thiết kế cho cơ chế đánh vượt cấp thông qua 4 lần kết liễu Posture: $25\% \times 4$).
-- `MaxPosture`: **800 điểm** (tích lũy từ đòn thường 10–25, Dash Attack 25 và Heavy Charged 60).
+- `MaxPosture`: **800 điểm** (tích lũy từ đòn thường 10–25, Dash Attack 25 (chưa triển khai trong code) và Heavy Charged 60).
 - `MoveSpeed`: **420 cm/s** (chậm hơn người chơi 550 cm/s, nhưng sở hữu các đòn lao/húc áp sát cực nhanh).
 
 #### 2. Quy Chuẩn Vùng Báo Chiêu (Standardized Telegraph System)

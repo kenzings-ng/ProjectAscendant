@@ -185,4 +185,4 @@ Các biến số có thể tinh chỉnh trực tiếp trong GameplayEffect hoặ
 
 ## Open Questions
 
-- **Q1:** Có nên cho phép trang bị cấp cao (như Cấp Thần / Divine) tăng nhẹ thời lượng I-frame hay giữ nguyên 0.20s cố định xuyên suốt game để bảo toàn tính công bằng kỹ năng? *(Đề xuất: Giữ cố định 0.20s, trang bị chỉ nên giảm lượng Stamina tiêu hao thay vì kéo dài I-frame).* *(Cập nhật 2026-10-09: mốc cũ 0.28s → 0.32s đổi theo I-frame code 0.20s.)*
+- **Q1:** Có nên cho phép trang bị cấp cao (như Cấp Thần / Divine) tăng nhẹ thời lượng I-frame hay giữ nguyên 0.20s cố định xuyên suốt game để bảo toàn tính công bằng kỹ năng? *(Đề xuất: Giữ cố định 0.20s, trang bị chỉ nên giảm lượng Stamina tiêu hao thay vì kéo dài I-frame).* *(Cập nhật 2026-10-09: bỏ ví dụ cũ "0.28s → 0.32s"; mốc gốc nay là I-frame 0.20s của code.)*

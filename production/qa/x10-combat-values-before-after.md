@@ -38,7 +38,7 @@
 
 | Tham số | Giá trị code (file:dòng) | Giá trị cũ trong tài liệu (file:dòng) | Giá trị mới |
 |---|---|---|---|
-| Bất tử người kết liễu | 1.5s `State.Invulnerable` — `Public/Combat/PAGameplayAbility_Finisher.h:91`; `Private/Combat/PAGameplayAbility_Finisher.cpp:379` | 1.2s — `stagger-system.md:46,77,130,156,188`; `encounter-boss/EPIC.md:13`; `encounter-boss/story-002:30,41,51`; `sprint-5.md:13,24`; `README.md:24` | 1.5s |
+| Bất tử người kết liễu | 1.5s `State.Invulnerable` — `Public/Combat/PAGameplayAbility_Finisher.h:91`; `Private/Combat/PAGameplayAbility_Finisher.cpp:379` | 1.2s — `stagger-system.md:46,77,130,156,188`; `encounter-boss/EPIC.md:13`; `encounter-boss/story-002:30,41,51`; `sprint-5.md:13,24`; `README.md:24`; `itemization.md:125` | 1.5s |
 | Choáng mục tiêu | 1.5s `State.Stunned` — `PAGameplayAbility_Finisher.h:91`; `.cpp:414`; kết thúc chuỗi sau 1.5s `.cpp:241` | Không ghi (GDD chỉ có cửa sổ Stagger 3.0s trước kết liễu) | 1.5s (bổ sung vào `stagger-system.md`, story/sprint liên quan) |
 | Miễn nhiễm Posture sau kết liễu | **Không có** trong code (Finisher chỉ reset Posture về 0 — `.cpp:337`) | 2.0s `State.PostureImmune` — `stagger-system.md:47,79`; `encounter-boss/story-002:31,41,51`; `README.md:48` | Giữ ý đồ, đánh dấu "chưa triển khai trong code (…)" |
 | Sát thương kết liễu | `MaxHP × 0.25` — `PAGameplayAbility_Finisher.h:95`; `PAGameplayAbility_MeleeAttack.cpp:104-108`; dùng tại `PAGameplayAbility_Finisher.cpp:312` | `(MaxHP × 0.25) + (BaseDamage × 3.0)` — `attributes-system.md:98`; `foundation-attributes/story-002:41,89` | `MaxHP × 0.25` |
@@ -57,7 +57,7 @@
 
 ## 5. File tài liệu đã sửa
 
-- `design/gdd/dash-evasion.md`, `combat-system.md`, `stagger-system.md`, `attributes-system.md`, `boss-ai.md`, `core-game-loop.md`, `foundational-classes.md`, `isometric-controller.md`
+- `design/gdd/dash-evasion.md`, `combat-system.md`, `stagger-system.md`, `attributes-system.md`, `boss-ai.md`, `core-game-loop.md`, `foundational-classes.md`, `isometric-controller.md`, `itemization.md`
 - `design/registry/entities.yaml` (`iframe_duration` 0.28 → 0.20, `dash_total_duration` 0.45 → 0.35, ghi chú `ranger_dash_duration`)
 - `design/accessibility-requirements.md` (đánh dấu input buffer)
 - `docs/architecture/control-manifest.md`, `tr-registry.yaml` (TR-dash-001, TR-combat-002), `requirements-traceability.md`, `adr-0001-open-world-mmo-combat-networking.md`, `adr-0002-gas-integration-paperzd-pixel-sprites.md`

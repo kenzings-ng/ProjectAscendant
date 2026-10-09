@@ -94,7 +94,7 @@ stateDiagram-v2
 - **Attributes System (`attributes-system.md`):**
   - Đọc `Posture`, `MaxPosture`, `PostureDecayRate`, `PostureDecayDelay` và thực thi trừ thẳng 25% vào `Health` qua `stagger_execution_hp_pct`.
 - **Core Combat System (`combat-system.md`):**
-  - Tiếp nhận sát thương Posture từ chuỗi combo đòn đánh thường (10–25), Dash Attack (25) và Heavy Charged Attack (60).
+  - Tiếp nhận sát thương Posture từ chuỗi combo đòn đánh thường (10–25), Dash Attack (25, chưa triển khai trong code) và Heavy Charged Attack (60).
 - **Prototype Boss AI (`boss-ai.md`):**
   - Khi `State.Staggered` được gán: Ép Behavior Tree của Boss ngắt mọi Task đang chạy và chuyển sang nhánh `Staggered Recovery`.
   - Khi một bộ phận bị phá hủy (`Part_Broken`): Gửi sự kiện Blackboard làm mới điều kiện chọn kỹ năng (ví dụ: `bCanUseHornCharge = false`).

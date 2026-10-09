@@ -125,7 +125,7 @@ requirements:
     gdd: design/gdd/combat-system.md
     # X10 2026-10-09: was "250ms input buffer queue". Production code has no input buffer
     # (chưa triển khai trong code (theo quyết định 2026-10-09: giá trị code là chuẩn)); buffer value to be settled on implementation.
-    requirement: "Multi-hit combo state machine with 1.2s combo reset window, input buffer queue (not yet implemented in code) and recovery cancel windows"
+    requirement: "Multi-hit combo state machine with 1.2s combo reset window, input buffer queue (not yet implemented in code) and recovery cancel windows (not yet implemented in code)"
     layer: Core
     created: 2026-09-16
     revised: "2026-10-09"
