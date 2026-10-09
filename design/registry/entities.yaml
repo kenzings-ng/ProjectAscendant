@@ -1407,10 +1407,14 @@ constants:
       - design/gdd/attributes-system.md
       - design/gdd/dash-evasion.md
       - design/gdd/combat-system.md
-    value: 0.28
+    # Old value: 0.28 (attributes-system.md). Changed 2026-10-09 by X10 to match runtime code
+    # UPAGameplayAbility_Dash (IFrameStartTime 0.05s, IFrameDuration 0.20s -> window 0.05s-0.25s),
+    # per DECISIONS.md §12. Note: UAscendantAttributeSet still inits IFrameDuration = 0.28 but the
+    # Dash ability does not read it (code-code discrepancy, recorded in production/qa/x10-combat-values-before-after.md).
+    value: 0.20
     unit: seconds
     added: 2026-09-14
-    revised: ""
+    revised: "2026-10-09"
 
   - name: stagger_execution_hp_pct
     status: active
@@ -1450,10 +1454,12 @@ constants:
     referenced_by:
       - design/gdd/dash-evasion.md
       - design/gdd/combat-system.md
-    value: 0.45
+    # Old value: 0.45 (dash-evasion.md). Changed 2026-10-09 by X10 to match runtime code
+    # UPAGameplayAbility_Dash::DashDuration (0.35s), per DECISIONS.md §12.
+    value: 0.35
     unit: seconds
     added: 2026-09-15
-    revised: ""
+    revised: "2026-10-09"
 
   - name: perfect_dodge_stamina_refund
     status: active
@@ -1691,6 +1697,9 @@ constants:
     referenced_by:
       - design/gdd/foundational-classes.md
       - design/gdd/dash-evasion.md
+    # X10 (2026-10-09): value derived from the old base dash 0.45s - 0.05s. Base dash is now 0.35s
+    # (runtime code, DECISIONS.md §12); Ranger dash is not implemented in code. Value left unchanged
+    # pending owner decision (see foundational-classes.md Open Questions Q1).
     value: 0.40
     unit: seconds
     added: 2026-09-15

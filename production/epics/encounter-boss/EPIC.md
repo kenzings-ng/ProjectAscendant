@@ -10,9 +10,9 @@
 
 Hiện thực hóa toàn bộ vòng lặp giao chiến với Trùm (**Boss Encounter Loop**) và cơ chế khắc chế đòn đánh cấp độ cao cho *Project Ascendant*:
 1. **Boss AI & Telegraph System (`boss-001`)**: Triển khai Behavior Tree trùm **Ironclad Warlord** với 4 pha ra chiêu chuẩn hóa (Telegraph 0.5-0.8s → Flash Cue 0.10s → Hitbox 0.15-0.25s → Recovery 0.6-1.0s), 5 kỹ năng chiến đấu, EQS chọn hành động theo góc và cự ly, trạng thái Wall Crash Stun 1.8s.
-2. **Posture Stagger & Execution (`stgr-001`)**: Xử lý logic phá vỡ thế trận (Posture Break tại 100%), trùm quỳ gối 3.0s (`State.Staggered`), Motion Warping kéo người chơi vào điểm yếu cự ly <250cm, tung đòn kết liễu gây **25% Max HP True Damage**, cấp I-Frame 1.2s và hồi 50% Posture nếu bỏ lỡ.
+2. **Posture Stagger & Execution (`stgr-001`)**: Xử lý logic phá vỡ thế trận (Posture Break tại 100%), trùm quỳ gối 3.0s (`State.Staggered`), Motion Warping kéo người chơi vào điểm yếu cự ly <250cm, tung đòn kết liễu gây **25% Max HP True Damage**, cấp I-Frame 1.5s cho người kết liễu và khóa choáng mục tiêu 1.5s (theo code runtime `UPAGameplayAbility_Finisher`; trước 2026-10-09 ghi I-Frame 1.2s) và hồi 50% Posture nếu bỏ lỡ.
 3. **Anatomical Part Breaking (`stgr-002`)**: Theo dõi sát thương độc lập cho các bộ phận (Sừng 20% HP, Đuôi 15% HP, Giáp ngực 25% HP), loại bỏ vĩnh viễn các kỹ năng tương ứng khỏi Behavior Tree khi bộ phận gãy, kích hoạt điểm yếu ngực (+50% sát thương) và sinh vật phẩm rơi đặc thù.
-4. **Dash I-Frame & Perfect Dodge (`dash-001`)**: Hoàn thiện kỹ năng Dash 0.45s với 0.28s bất tử (`State.Invulnerable`), cửa sổ phản xạ hoàng kim (Sweet Spot 0.05s–0.15s) kích hoạt Perfect Dodge (+15 thể lực hoàn lại, 0.08s hitstop toàn cục, banner "PERFECT!"), cùng cơ chế chống trượt mép vực.
+4. **Dash I-Frame & Perfect Dodge (`dash-001`)**: Hoàn thiện kỹ năng Dash 0.35s với 0.20s bất tử từ t = 0.05s đến 0.25s (`State.Invulnerable`, theo code runtime `UPAGameplayAbility_Dash`; trước 2026-10-09 ghi 0.45s / 0.28s), cửa sổ phản xạ hoàng kim (Sweet Spot 0.05s–0.15s) kích hoạt Perfect Dodge (+15 thể lực hoàn lại, 0.08s hitstop toàn cục, banner "PERFECT!"), cùng cơ chế chống trượt mép vực. *(Perfect Dodge, hitstop, chống trượt mép vực và Dash Attack Cancel: chưa triển khai trong code (theo quyết định 2026-10-09: giá trị code là chuẩn) — chỉ có trong `FPADashModel`, không dùng ở runtime.)*
 
 ## Stories
 

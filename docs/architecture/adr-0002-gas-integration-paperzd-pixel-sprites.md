@@ -157,7 +157,7 @@ public:
 
 | GDD System | Yêu Cầu Cụ Thể | Cách Thức ADR-0002 Giải Quyết |
 |---|---|---|
-| `dash-evasion.md` | Thời gian lướt 0.35s, I-frame 0.20s từ frame 2 đến frame 8. | Sử dụng `UPaperZDAnimNotifyState_AbilityEvent` gắn tag `State.Invulnerable` từ frame 2 đến frame 8. |
+| `dash-evasion.md` | Thời gian lướt 0.35s, I-frame 0.20s từ frame 2 đến frame 8 (mốc thời gian theo code runtime: t = 0.05s → 0.25s, `UPAGameplayAbility_Dash`; runtime hiện mở/đóng I-frame bằng timer, chưa dùng AnimNotifyState — ghi nhận 2026-10-09). | Sử dụng `UPaperZDAnimNotifyState_AbilityEvent` gắn tag `State.Invulnerable` từ frame 2 đến frame 8. |
 | `combat-system.md` | Chuỗi 3 combo đòn đánh, hitbox quét hình quạt theo vệt kiếm. | Notify kích hoạt `SweepMultiByChannel` trong không gian 3D tại frame vung kiếm cao trào. |
 | `stagger-system.md` | Đòn kết liễu Finisher khóa góc camera và kích hoạt hoạt ảnh tất sát. | `UAbilityTask_PlayPaperZDAnimAndWait` đảm bảo animation kết liễu phát trọn vẹn không bị ngắt quãng. |
 | `attributes-system.md` | Khấu trừ Thể Lực (Stamina Cost) khi tung đòn. | Chi phí được GAS trừ thông qua `UGameplayEffect` gắn kèm trước khi task phát hoạt ảnh. |

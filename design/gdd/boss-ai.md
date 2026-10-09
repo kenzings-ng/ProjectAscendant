@@ -2,7 +2,7 @@
 
 > **Status**: Approved  
 > **Author**: Systems Designer & Gameplay Programmer  
-> **Last Updated**: 2026-09-15  
+> **Last Updated**: 2026-10-09 (X10: đồng bộ thông số I-frame / combo theo code runtime)  
 > **Implements Pillar**: True Skill Expression & Responsive Combat  
 > **Target Engine**: Unreal Engine 5 (Behavior Tree, EQS, Decals & Niagara)
 
@@ -35,7 +35,7 @@ Hệ thống AI Boss được xây dựng dựa trên Unreal Engine `BehaviorTre
 
 #### 1. Thông Số Cơ Bản Của Prototype Boss (*Lãnh Chúa Thiết Giáp*)
 - `MaxHealth`: **10,000 HP** (được thiết kế cho cơ chế đánh vượt cấp thông qua 4 lần kết liễu Posture: $25\% \times 4$).
-- `MaxPosture`: **800 điểm** (tích lũy từ đòn thường 10–30, Dash Attack 25 và Heavy Charged 60).
+- `MaxPosture`: **800 điểm** (tích lũy từ đòn thường 10–25, Dash Attack 25 (chưa triển khai trong code) và Heavy Charged 60).
 - `MoveSpeed`: **420 cm/s** (chậm hơn người chơi 550 cm/s, nhưng sở hữu các đòn lao/húc áp sát cực nhanh).
 
 #### 2. Quy Chuẩn Vùng Báo Chiêu (Standardized Telegraph System)
@@ -109,7 +109,7 @@ stateDiagram-v2
 
 ### Interactions with Other Systems
 
-- **Dash & Evasion (`dash-evasion.md`):** Đòn Telegraph của Boss là mục tiêu để người chơi kích hoạt `State.Invulnerable` (0.28s) và `State.PerfectDodgeTriggered` (0.05s-0.15s).
+- **Dash & Evasion (`dash-evasion.md`):** Đòn Telegraph của Boss là mục tiêu để người chơi kích hoạt `State.Invulnerable` (0.20s, từ 0.05s đến 0.25s của cú lướt — theo code `UPAGameplayAbility_Dash`) và `State.PerfectDodgeTriggered` (0.05s-0.15s; Perfect Dodge chưa triển khai trong code (theo quyết định 2026-10-09: giá trị code là chuẩn)).
 - **Core Combat System (`combat-system.md`):** Cửa sổ Recovery của Boss là thời điểm người chơi tung chuỗi Combo 3 nhịp và đòn tụ lực Heavy Charged.
 - **Stagger & Part Breaking (`stagger-system.md`):** Nhận sự kiện bộ phận bị vỡ để cập nhật Blackboard (`bIsHornBroken = true`, `bIsTailBroken = true`), khóa chiêu thức tương ứng khỏi Selector.
 
@@ -139,7 +139,7 @@ $$\text{Damage}_{\text{ChestWeakpoint}} = \text{IncomingDamage} \times 1.50$$
 - **Boss Tông Vào Tường Khi Húc Càn (Wall Crash Stun):**
   - Nếu người chơi lướt né sang bên và Boss lao đâm sầm vào góc tường đá của đấu trường: Boss lập tức bị dội lực ngã khựng trong **1.8 giây** (`State.WallStunned`), mở ra thời cơ vàng cho người chơi phản công.
 - **Người Chơi Né Quá Sớm (Early Dodge Punishment):**
-  - Nếu người chơi hoảng loạn bấm Lướt né ngay khi Decal vừa xuất hiện ($t = 0.10\text{s}$), khung I-frame 0.28s sẽ kết thúc ở $t = 0.38\text{s}$. Khi Hitbox Boss quét trúng ở $t = 0.50\text{s}$, người chơi đã hết I-frame và sẽ lãnh trọn toàn bộ sát thương (trừng phạt nghiêm khắc thói quen né non).
+  - Nếu người chơi hoảng loạn bấm Lướt né ngay khi Decal vừa xuất hiện ($t = 0.10\text{s}$), khung I-frame 0.20s (bắt đầu 0.05s sau khi bấm) chỉ kéo dài từ $t = 0.15\text{s}$ đến $t = 0.35\text{s}$. Khi Hitbox Boss quét trúng ở $t = 0.50\text{s}$, người chơi đã hết I-frame và sẽ lãnh trọn toàn bộ sát thương (trừng phạt nghiêm khắc thói quen né non).
 - **Chuyển Pha (Phase Transition) Trong Cửa Sổ Stagger:**
   - Nếu đòn kết liễu Execution rút máu Boss chạm ngưỡng chuyển pha (ví dụ từ 80% xuống 55% rơi vào Pha 2): Hệ thống ưu tiên cho người chơi hoàn thành trọn vẹn hoạt ảnh kết liễu; sau khi Boss gượng dậy mới phát hoạt ảnh gầm thét chuyển sang Pha 2.
 - **Mất Mục Tiêu (Player Tàng Hình / Thoát Tầm Mắt):**
@@ -151,7 +151,7 @@ $$\text{Damage}_{\text{ChestWeakpoint}} = \text{IncomingDamage} \times 1.50$$
 
 - **Combat System (`combat-system.md`):** Cung cấp sát thương người chơi và cơ chế Hitstop khi Boss trúng đòn.
 - **Stagger & Part Breaking (`stagger-system.md`):** Cung cấp trạng thái `State.Staggered`, vị trí tử huyệt và cơ chế gãy bộ phận.
-- **Dash Evasion (`dash-evasion.md`):** Cung cấp khung I-frame 0.28s để cân bằng thời lượng Telegraph.
+- **Dash Evasion (`dash-evasion.md`):** Cung cấp khung I-frame 0.20s (từ 0.05s đến 0.25s của cú lướt) để cân bằng thời lượng Telegraph.
 
 ---
 
