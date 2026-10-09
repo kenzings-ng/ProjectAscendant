@@ -151,7 +151,10 @@ void FPAItemDataAssetPresets::ConfigureSkillBookDash(UItemStaticDataAsset* Asset
 	Asset->ItemId = FName(TEXT("Item_SkillBook_Dash"));
 	Asset->ItemName = FText::FromString(TEXT("Skill Tome: Vanguard Dash"));
 	Asset->ItemDescription = FText::FromString(TEXT("Teaches the evasive Dash maneuver to Vanguard warriors."));
-	Asset->RarityTier = EPAItemRarity::Rare;
+	// Sách kỹ năng dùng thang kỹ năng 4 bậc, không dùng thang trang bị (DECISIONS.md §5).
+	// Dash là sách Vanguard T1 -> Normal (skill-progression-system.md bảng Bậc T1 Vanguard = Normal).
+	Asset->RarityTier = EPAItemRarity::None;
+	Asset->SkillRarity = EPASkillRarity::Normal;
 	Asset->Category = EPAItemCategory::SkillBook;
 	Asset->RequiredClassTag = UGameplayTagsManager::Get().AddNativeGameplayTag(FName(TEXT("Class.Vanguard")), TEXT("Vanguard warrior class"));
 	Asset->GrantedAbilityClass = UPAGameplayAbility_Dash::StaticClass();

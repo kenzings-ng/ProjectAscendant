@@ -113,19 +113,42 @@ struct PROJECTASCENDANT_API FPABlacksmithFormulas
 	}
 
 	/**
-	 * AC-2: Sản lượng Tàn Trang (Skill Shards) khi phân rã trang bị hoặc Sách Kỹ Năng:
-	 * - Skill Book: Cố định 5 Skill Shards
-	 * - Common (Tier 1): 1 Skill Shards
-	 * - Uncommon (Tier 2): 3 Skill Shards
-	 * - Rare (Tier 3): 10 Skill Shards
-	 * - Epic (Tier 4): 25 Skill Shards
-	 * - Legendary (Tier 5): 75 Skill Shards
+	 * Sản lượng Tàn Trang (item_skill_shard) khi phân rã Sách Kỹ Năng / Quyển Trục, theo thang kỹ năng 4 bậc
+	 * (skill-progression-system.md "Cơ Chế Phân Rã Sách" + Tuning Knobs SalvageShardRate_*; blacksmithing-system.md):
+	 * - Normal: 1, Rare: 3, Epic: 8, Mythic: 25
 	 */
-	static int32 GetSalvageSkillShards(EPAItemRarity Rarity, EPAItemCategory Category)
+	static int32 GetSkillBookSalvageShards(EPASkillRarity SkillRarity)
+	{
+		switch (SkillRarity)
+		{
+		case EPASkillRarity::Normal:
+			return 1;
+		case EPASkillRarity::Rare:
+			return 3;
+		case EPASkillRarity::Epic:
+			return 8;
+		case EPASkillRarity::Mythic:
+			return 25;
+		default:
+			return 1;
+		}
+	}
+
+	/**
+	 * AC-2: Sản lượng Tàn Trang (Skill Shards) khi phân rã trang bị hoặc Sách Kỹ Năng:
+	 * - Skill Book: theo SkillRarity (EPASkillRarity) -> GetSkillBookSalvageShards (1/3/8/25); bỏ qua EPAItemRarity
+	 * - Trang bị (EPAItemRarity, chưa đổi trong X6):
+	 *   - Common (Tier 1): 1 Skill Shards
+	 *   - Uncommon (Tier 2): 3 Skill Shards
+	 *   - Rare (Tier 3): 10 Skill Shards
+	 *   - Epic (Tier 4): 25 Skill Shards
+	 *   - Legendary (Tier 5): 75 Skill Shards
+	 */
+	static int32 GetSalvageSkillShards(EPAItemRarity Rarity, EPAItemCategory Category, EPASkillRarity SkillRarity)
 	{
 		if (Category == EPAItemCategory::SkillBook)
 		{
-			return 5;
+			return GetSkillBookSalvageShards(SkillRarity);
 		}
 
 		switch (Rarity)

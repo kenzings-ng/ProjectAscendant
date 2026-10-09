@@ -37,8 +37,8 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Item|Display")
 	FText ItemDescription;
 
-	/** 5 Tier cấp độ hiếm (Common -> Legendary) */
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Item|Properties")
+	/** 5 Tier cấp độ hiếm (Common -> Legendary). Không dùng cho Sách Kỹ Năng (dùng SkillRarity - DECISIONS.md §5) */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Item|Properties", meta = (EditCondition = "Category != EPAItemCategory::SkillBook"))
 	EPAItemRarity RarityTier;
 
 	/** Phân loại vật phẩm (Equipment, Consumable, Material...) */
@@ -92,6 +92,13 @@ public:
 	/** Thẻ chức nghiệp yêu cầu để học kỹ năng (ví dụ: Class.Ranger, Class.Vanguard - AC-4) */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Item|SkillBook")
 	FGameplayTag RequiredClassTag;
+
+	/**
+	 * Độ hiếm Sách Kỹ Năng theo thang kỹ năng 4 bậc (Normal/Rare/Epic/Mythic - DECISIONS.md §5.2).
+	 * Chỉ dùng khi Category == SkillBook; trang bị dùng RarityTier (EPAItemRarity). Hai thang không trộn lẫn.
+	 */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Item|SkillBook", meta = (EditCondition = "Category == EPAItemCategory::SkillBook"))
+	EPASkillRarity SkillRarity = EPASkillRarity::Normal;
 
 	// -------------------------------------------------------------------------
 	// Consumable Properties (Story 003 / AC-3)

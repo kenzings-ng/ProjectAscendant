@@ -98,11 +98,14 @@ bool FPABlacksmithTests::RunTest(const FString& Parameters)
 			RareArmor->Category = EPAItemCategory::Equipment;
 			RareArmor->RarityTier = EPAItemRarity::Rare;
 
-			// Skill Book asset (yields 5 Skill Shards)
+			// Skill Book asset: Rare on the 4-tier skill scale -> 3 Skill Shards
+			// (X6 spec correction 2026-10-09: was flat 5; GDD skill-progression-system.md salvage 1/3/8/25).
+			// RarityTier (equipment scale) is deliberately set and must be ignored for skill books.
 			UItemStaticDataAsset* SkillBook = NewObject<UItemStaticDataAsset>();
 			SkillBook->ItemId = FName("item_skill_book");
 			SkillBook->Category = EPAItemCategory::SkillBook;
 			SkillBook->RarityTier = EPAItemRarity::Uncommon;
+			SkillBook->SkillRarity = EPASkillRarity::Rare;
 
 			Inventory->AddItemToSlot(0, RareArmor, 1);
 			Inventory->AddItemToSlot(1, SkillBook, 1);
@@ -119,8 +122,8 @@ bool FPABlacksmithTests::RunTest(const FString& Parameters)
 			// Salvage Skill Book in Slot 1
 			bSalvaged = Blacksmith->SalvageItem(Inventory, Wallet, 1, ShardsGained, CraftErr);
 			TestTrue(TEXT("AC-2: Salvaging Skill Book succeeds"), bSalvaged);
-			TestEqual(TEXT("AC-2: Skill Book yields 5 Skill Shards"), ShardsGained, 5);
-			TestEqual(TEXT("AC-2: Total Skill Shards is 15"), Wallet->GetSkillShards(), 15LL);
+			TestEqual(TEXT("AC-2: Rare Skill Book yields 3 Skill Shards (skill scale, not equipment scale)"), ShardsGained, 3);
+			TestEqual(TEXT("AC-2: Total Skill Shards is 13"), Wallet->GetSkillShards(), 13LL);
 			TestNull(TEXT("AC-2: Skill Book consumed and slot 1 is now empty"), Inventory->GetItemAtSlot(1));
 
 			// Locked Item Protection: create locked item in Slot 2

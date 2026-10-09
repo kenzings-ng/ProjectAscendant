@@ -217,6 +217,9 @@ bool FPACoreItemDataAssetsIntegrationTest::RunTest(const FString& Parameters)
 			TestTrue(TEXT("AC-3 (.uasset): SkillBook RequiredClassTag is Class.Vanguard"), LoadedSkillBook->RequiredClassTag.MatchesTag(VanguardTag));
 			TestEqual(TEXT("AC-3 (.uasset): SkillBook GrantedAbilityClass is UPAGameplayAbility_Dash"), LoadedSkillBook->GrantedAbilityClass, TSubclassOf<UGameplayAbility>(UGA_Dash::StaticClass()));
 			TestEqual(TEXT("AC-3 (.uasset): SkillBook max stack is 1"), LoadedSkillBook->MaxStackSize, 1);
+			// X6: sách kỹ năng dùng thang kỹ năng 4 bậc, không mang độ hiếm trang bị (DECISIONS.md §5)
+			TestEqual(TEXT("X6 (.uasset): SkillBook SkillRarity is Normal"), LoadedSkillBook->SkillRarity, EPASkillRarity::Normal);
+			TestEqual(TEXT("X6 (.uasset): SkillBook RarityTier is None (no equipment rarity)"), LoadedSkillBook->RarityTier, EPAItemRarity::None);
 		}
 	}
 

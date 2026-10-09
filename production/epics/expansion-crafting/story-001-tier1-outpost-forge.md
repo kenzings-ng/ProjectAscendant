@@ -31,7 +31,7 @@
 ## Acceptance Criteria
 
 - [x] **AC-1 (Durability Repair Engine)**: `UPABlacksmithComponent` repairs equipped or inventory items calculating cost via `repair_cost = ceil(base_price * 0.25 * (1.0 - durability_pct))`, deducting Gold from `UPACurrencyComponent` and resetting `CurrentDurability = 100.0f`.
-- [x] **AC-2 (Item & Skill Book Salvaging)**: Disassembling equipment or skill books yields Skill Shards based on rarity tier (Common: 1, Uncommon: 3, Rare: 10, Epic: 25, Legendary: 75; SkillBook: 5), destroys the source item from `UPAInventoryComponent`, and credits Skill Shards to `UPACurrencyComponent`. Rejects locked items (`bIsLocked == true`).
+- [x] **AC-2 (Item & Skill Book Salvaging)**: Disassembling equipment or skill books yields Skill Shards based on rarity tier (Common: 1, Uncommon: 3, Rare: 10, Epic: 25, Legendary: 75; Skill Books by skill rarity `EPASkillRarity` Normal/Rare/Epic/Mythic: 1/3/8/25 per `skill-progression-system.md` — *corrected 2026-10-09 (X6), was flat 5*), destroys the source item from `UPAInventoryComponent`, and credits Skill Shards to `UPACurrencyComponent`. Rejects locked items (`bIsLocked == true`).
 - [x] **AC-3 (Safe Enhancement +1 to +3)**: Outpost Forge (Tier 1) supports safe enhancement up to +3 with 100% success rate, consuming Gold and Iron Ore (`iron_ore`), incrementing `EnhancementLevel`, and preventing enhancement beyond the Tier 1 ceiling (+3).
 - [x] **AC-4 (Interaction & Server Authority Guardrails)**: All operations enforce server authority, interaction distance $\le 300\text{cm}$ between character and forge, and reject requests when `In-Combat == true` or funds/materials are insufficient.
 
@@ -44,7 +44,7 @@
    - `EPACraftingError`: `None`, `InsufficientGold`, `InsufficientMaterials`, `ItemNotFound`, `ItemLocked`, `MaxDurabilityAlready`, `MaxTierLevelReached`, `DistanceExceeded`, `InCombat`, `ServerRejected`.
    - Helper struct `FPABlacksmithFormulas`:
      - `CalculateRepairCost(int32 BasePrice, float CurrentDurability, float MaxDurability)`
-     - `GetSalvageSkillShards(EPAItemRarity Rarity, EPAItemCategory Category)`
+     - `GetSalvageSkillShards(EPAItemRarity Rarity, EPAItemCategory Category, EPASkillRarity SkillRarity)` + `GetSkillBookSalvageShards(EPASkillRarity)` *(updated 2026-10-09, X6)*
      - `GetEnhancementRequirements(int32 TargetLevel, int32& OutGoldCost, int32& OutIronOreCost)`
 2. **Blacksmith Component (`PABlacksmithComponent.h` / `PABlacksmithComponent.cpp`)**:
    - `RepairItem(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex, EPACraftingError& OutError)`
@@ -69,7 +69,7 @@
   - Attempting to repair an item already at 100% durability returns `MaxDurabilityAlready`.
 - **Test 2: Salvage Equipment & Skill Books**:
   - Salvaging a Rare (Tier 3) chestplate yields 10 Skill Shards; item is removed from slot.
-  - Salvaging a Skill Book yields 5 Skill Shards.
+  - Salvaging a Skill Book yields shards by skill rarity: Normal 1 / Rare 3 / Epic 8 / Mythic 25 *(corrected 2026-10-09, X6; was flat 5)*.
   - Salvaging a locked item (`bIsLocked == true`) returns `ItemLocked` and leaves item intact.
 - **Test 3: Safe Enhancement +1 to +3**:
   - Weapon +0 enhanced to +1 consumes 100 Gold + 2 Iron Ore; level becomes +1.

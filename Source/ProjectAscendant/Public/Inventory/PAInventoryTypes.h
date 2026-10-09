@@ -32,6 +32,26 @@ enum class EPAItemRarity : uint8
 };
 
 /**
+ * EPASkillRarity
+ *
+ * Thang độ hiếm Sách Kỹ Năng & Quyển Trục (4 bậc), ĐỘC LẬP với EPAItemRarity của trang bị
+ * (DECISIONS.md §5.2, skill-progression-system.md §2 "SkillRarity"):
+ * - Normal (Trắng - Sách T1)
+ * - Rare   (Xanh dương - Quyển Trục T2)
+ * - Epic   (Tím - Quyển Trục T3)
+ * - Mythic (Đỏ ánh kim - Quyển Trục T4)
+ * Không thêm Legendary/Divine vào thang này. Chỉ có nghĩa khi Category == SkillBook.
+ */
+UENUM(BlueprintType)
+enum class EPASkillRarity : uint8
+{
+	Normal = 0 UMETA(DisplayName = "Normal"),
+	Rare   = 1 UMETA(DisplayName = "Rare"),
+	Epic   = 2 UMETA(DisplayName = "Epic"),
+	Mythic = 3 UMETA(DisplayName = "Mythic")
+};
+
+/**
  * EPAItemCategory
  *
  * Phân loại vật phẩm quy định giới hạn chồng đồ (AC-3):

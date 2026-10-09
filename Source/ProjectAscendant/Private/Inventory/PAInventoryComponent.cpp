@@ -638,8 +638,12 @@ bool UPAInventoryComponent::RouteToOverflowStash(UItemStaticDataAsset* ItemData,
 		return false;
 	}
 
-	// AC-4: Chỉ định tuyến vật phẩm Tier Rare (3) trở lên vào Hòm Đệm Lửa Trại
-	if (ItemData->RarityTier < EPAItemRarity::Rare)
+	// AC-4: Chỉ định tuyến vật phẩm Rare trở lên vào Hòm Đệm Lửa Trại (inventory-system.md §8.1, AC-6).
+	// Sách Kỹ Năng dùng thang kỹ năng (EPASkillRarity), trang bị/vật phẩm khác dùng EPAItemRarity (DECISIONS.md §5).
+	const bool bRareOrAbove = (ItemData->Category == EPAItemCategory::SkillBook)
+		? (ItemData->SkillRarity >= EPASkillRarity::Rare)
+		: (ItemData->RarityTier >= EPAItemRarity::Rare);
+	if (!bRareOrAbove)
 	{
 		return false;
 	}
