@@ -138,11 +138,11 @@ bool UPABlacksmithComponent::SalvageItem(UPAInventoryComponent* Inventory, UPACu
 		return false;
 	}
 
-	const int32 Shards = FPABlacksmithFormulas::GetSalvageAshShards(Entry->StaticData->RarityTier, Entry->StaticData->Category);
+	const int32 Shards = FPABlacksmithFormulas::GetSalvageSkillShards(Entry->StaticData->RarityTier, Entry->StaticData->Category);
 
-	// Credit Ash Shards to wallet
+	// Credit Skill Shards to wallet
 	EPACurrencyTransactionError CurrErr = EPACurrencyTransactionError::None;
-	if (Shards > 0 && !Wallet->AddCurrency(EPACurrencyType::AshShards, Shards, CurrErr))
+	if (Shards > 0 && !Wallet->AddCurrency(EPACurrencyType::SkillShards, Shards, CurrErr))
 	{
 		OutError = EPACraftingError::ServerRejected;
 		OnCraftingFailed.Broadcast(OutError);

@@ -553,7 +553,7 @@ bool UPABlacksmithSubsystem::ServerReforgeAffix(
 		return false;
 	}
 
-	if (Wallet->GetAshShards() < RequiredShards)
+	if (Wallet->GetSkillShards() < RequiredShards)
 	{
 		OutError = EPACraftingError::InsufficientSkillShards;
 		return false;
@@ -577,8 +577,8 @@ bool UPABlacksmithSubsystem::ServerReforgeAffix(
 		return false;
 	}
 
-	// Khấu trừ Tàn Trang (Ash Shards)
-	if (!Wallet->DeductCurrency(EPACurrencyType::AshShards, RequiredShards, CurrErr))
+	// Khấu trừ Tàn Trang (Skill Shards)
+	if (!Wallet->DeductCurrency(EPACurrencyType::SkillShards, RequiredShards, CurrErr))
 	{
 		// Rollback vàng và khôi phục affix cũ
 		Wallet->AddCurrency(EPACurrencyType::Gold, RequiredGold, CurrErr);
@@ -642,7 +642,7 @@ bool UPABlacksmithSubsystem::ServerAddSocket(
 		return false;
 	}
 
-	if (Wallet->GetAshShards() < RequiredShards)
+	if (Wallet->GetSkillShards() < RequiredShards)
 	{
 		OutError = EPACraftingError::InsufficientSkillShards;
 		return false;
@@ -657,7 +657,7 @@ bool UPABlacksmithSubsystem::ServerAddSocket(
 	}
 
 	// 5. Khấu trừ Tàn Trang
-	if (!Wallet->DeductCurrency(EPACurrencyType::AshShards, RequiredShards, CurrErr))
+	if (!Wallet->DeductCurrency(EPACurrencyType::SkillShards, RequiredShards, CurrErr))
 	{
 		Wallet->AddCurrency(EPACurrencyType::Gold, RequiredGold, CurrErr);
 		OutError = EPACraftingError::InsufficientSkillShards;
@@ -668,7 +668,7 @@ bool UPABlacksmithSubsystem::ServerAddSocket(
 	if (!UnlockSocketAtIndex(Item, ForgeTier, TargetIndex, OutError))
 	{
 		Wallet->AddCurrency(EPACurrencyType::Gold, RequiredGold, CurrErr);
-		Wallet->AddCurrency(EPACurrencyType::AshShards, RequiredShards, CurrErr);
+		Wallet->AddCurrency(EPACurrencyType::SkillShards, RequiredShards, CurrErr);
 		return false;
 	}
 

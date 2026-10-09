@@ -11,9 +11,9 @@
  * FPACurrencyWalletTests
  *
  * Automated unit and integration tests for Story econ-001 (Dual Currency Wallet & Transaction Engine):
- *  - AC-1: Dual Currency balances (Gold & Ash Shards), clamping to maximum limits, and FastArray delta serialization.
+ *  - AC-1: Dual Currency balances (Gold & Skill Shards), clamping to maximum limits, and FastArray delta serialization.
  *  - AC-2: Atomic transaction operations (Add, Deduct, Transfer) with anti-duping validation and insufficient funds guards.
- *  - AC-3: PvE Death Penalty dropping 50% Gold into an Ashen Remnant while preserving 100% Ash Shards.
+ *  - AC-3: PvE Death Penalty dropping 50% Gold into an Ashen Remnant while preserving 100% Skill Shards.
  */
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(
 	FPACurrencyWalletTests,
@@ -33,7 +33,7 @@ bool FPACurrencyWalletTests::RunTest(const FString& Parameters)
 		{
 			// Default balances must be 0
 			TestEqual(TEXT("AC-1: Default Gold balance is 0"), Wallet->GetGold(), 0LL);
-			TestEqual(TEXT("AC-1: Default Ash Shards balance is 0"), Wallet->GetAshShards(), 0LL);
+			TestEqual(TEXT("AC-1: Default Skill Shards balance is 0"), Wallet->GetSkillShards(), 0LL);
 
 			// Add Gold within normal range
 			EPACurrencyTransactionError ErrorCode = EPACurrencyTransactionError::None;
@@ -42,18 +42,18 @@ bool FPACurrencyWalletTests::RunTest(const FString& Parameters)
 			TestEqual(TEXT("AC-1: Gold balance is 1500"), Wallet->GetGold(), 1500LL);
 			TestEqual(TEXT("AC-1: No error code on success"), ErrorCode, EPACurrencyTransactionError::None);
 
-			// Add Ash Shards within normal range
-			bSuccess = Wallet->AddCurrency(EPACurrencyType::AshShards, 42, ErrorCode);
-			TestTrue(TEXT("AC-1: AddCurrency 42 Ash Shards succeeds"), bSuccess);
-			TestEqual(TEXT("AC-1: Ash Shards balance is 42"), Wallet->GetAshShards(), 42LL);
+			// Add Skill Shards within normal range
+			bSuccess = Wallet->AddCurrency(EPACurrencyType::SkillShards, 42, ErrorCode);
+			TestTrue(TEXT("AC-1: AddCurrency 42 Skill Shards succeeds"), bSuccess);
+			TestEqual(TEXT("AC-1: Skill Shards balance is 42"), Wallet->GetSkillShards(), 42LL);
 
 			// Test Upper Limit Clamping: Gold max limit is 9,999,999
 			Wallet->AddCurrency(EPACurrencyType::Gold, 50000000, ErrorCode);
 			TestEqual(TEXT("AC-1: Gold clamped to MaxGold (9,999,999)"), Wallet->GetGold(), 9999999LL);
 
-			// Test Upper Limit Clamping: Ash Shards max limit is 99,999
-			Wallet->AddCurrency(EPACurrencyType::AshShards, 50000000, ErrorCode);
-			TestEqual(TEXT("AC-1: Ash Shards clamped to MaxAshShards (99,999)"), Wallet->GetAshShards(), 99999LL);
+			// Test Upper Limit Clamping: Skill Shards max limit is 99,999
+			Wallet->AddCurrency(EPACurrencyType::SkillShards, 50000000, ErrorCode);
+			TestEqual(TEXT("AC-1: Skill Shards clamped to MaxSkillShards (99,999)"), Wallet->GetSkillShards(), 99999LL);
 		}
 	}
 
@@ -106,7 +106,7 @@ bool FPACurrencyWalletTests::RunTest(const FString& Parameters)
 	}
 
 	// =========================================================================
-	// AC-3: PvE Death Penalty (50% Gold Loss, 100% Ash Shards Retained)
+	// AC-3: PvE Death Penalty (50% Gold Loss, 100% Skill Shards Retained)
 	// =========================================================================
 	{
 		UPACurrencyComponent* DeathWallet = NewObject<UPACurrencyComponent>();
@@ -116,14 +116,14 @@ bool FPACurrencyWalletTests::RunTest(const FString& Parameters)
 		{
 			EPACurrencyTransactionError ErrorCode = EPACurrencyTransactionError::None;
 			DeathWallet->AddCurrency(EPACurrencyType::Gold, 1000, ErrorCode);
-			DeathWallet->AddCurrency(EPACurrencyType::AshShards, 75, ErrorCode);
+			DeathWallet->AddCurrency(EPACurrencyType::SkillShards, 75, ErrorCode);
 
 			int64 DroppedGold = 0;
 			bool bDeathPenaltyApplied = DeathWallet->HandlePvEDeathPenalty(DroppedGold);
 			TestTrue(TEXT("AC-3: PvE Death Penalty applied successfully"), bDeathPenaltyApplied);
 			TestEqual(TEXT("AC-3: 50% of 1000 Gold dropped = 500 Gold"), DroppedGold, 500LL);
 			TestEqual(TEXT("AC-3: Remaining Gold in wallet is 500"), DeathWallet->GetGold(), 500LL);
-			TestEqual(TEXT("AC-3: Ash Shards 100% safeguarded at 75"), DeathWallet->GetAshShards(), 75LL);
+			TestEqual(TEXT("AC-3: Skill Shards 100% safeguarded at 75"), DeathWallet->GetSkillShards(), 75LL);
 
 			// Edge case: Odd number Gold (e.g. 501 Gold -> 50% floor is 250 remaining, 251 dropped)
 			DeathWallet->AddCurrency(EPACurrencyType::Gold, 1, ErrorCode); // 501 Gold
