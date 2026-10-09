@@ -319,6 +319,11 @@ items:
       - design/gdd/skill-progression-system.md
       - design/gdd/inventory-system.md
       - design/gdd/merchant-economy.md
+      - design/gdd/zone-system.md
+      - design/gdd/itemization.md
+      - design/gdd/foundational-classes.md
+      - design/gdd/advanced-classes.md
+      - design/gdd/blacksmithing-system.md
     # 2026-10-09 (DECISIONS.md §12): tiền tệ thứ hai theo merchant-economy.md.
     # Cũ: category: crafting_material, max_stack: 999.
     category: currency
@@ -2066,6 +2071,7 @@ constants:
   # trạng thái deprecated theo quy tắc "Never delete entries".
   - name: ash_shards_carry_limit
     status: deprecated
+    # replaced_by: skill_shards_carry_limit
     source: design/gdd/merchant-economy.md
     referenced_by:
       - design/gdd/merchant-economy.md
