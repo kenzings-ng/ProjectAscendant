@@ -189,10 +189,10 @@ Thống nhất dứt điểm mọi phân bổ weapon family cho toàn bộ 16 Cl
 
 ## 12. Quyết Định Bổ Sung Sau Rà Soát Plan ↔ Code (2026-10-09)
 
-> **Nguồn**: lựa chọn của chủ dự án, lưu lúc 2026-10-09 11:49 UTC trên trang "Ascendant Review Decisions", sau báo cáo `production/qa/review-plan-vs-code-2026-10-09.md`. Kế hoạch thực thi: `production/plans/execution-owner-decisions-2026-10-09.md`.
+> **Nguồn**: lựa chọn của chủ dự án, lưu lúc 2026-10-09 11:49 UTC trên trang "Ascendant Review Decisions", sau báo cáo `production/qa/review-plan-vs-code-2026-10-09.md`. Kế hoạch thực thi: `production/plans/execution-owner-decisions-2026-10-09.md` (thêm vào bằng một PR riêng).
 
 - **ROADMAP**: Khôi phục `production/ROADMAP.md` theo bản ở commit `493a442`.
 - **Talent Tree, Skill Point, Respec của talent**: **Gỡ bỏ** khỏi code và story. Đây là hệ thống không có trong GDD, nên không được phát triển tiếp. Tiến trình kỹ năng vẫn theo Skill Book như `skill-progression-system.md` mô tả. Tính năng đổi bộ kỹ năng (respec) mà GDD đã định nghĩa (`skill-progression-system.md:210`, `foundational-classes.md:445`) **được giữ nguyên**.
-- **Thông số Dash / Combo / Finisher**: Giá trị đang có trong code runtime (`PAGameplayAbility_Dash`, `PAGameplayAbility_MeleeAttack`, `PAGameplayAbility_Finisher`) là **chuẩn**. GDD, `control-manifest.md`, `tr-registry.yaml` và story phải sửa cho khớp code. Chủ dự án chấp nhận cảm giác chơi tương ứng với các giá trị này.
-- **Epic Class Chính / Phụ & Thăng Chức** (§3, §4): lập epic và story trong **Giai đoạn 2B** của ROADMAP, không lập trước đó.
-- **`item_skill_shard` (Tàn Trang)**: là **tiền tệ thứ hai** theo `merchant-economy.md` (giới hạn 99.999). Mọi chỗ còn dùng "Ash Shards" đều đổi sang `item_skill_shard`, đúng với §5.
+- **Thông số Dash / Combo / Finisher**: Giá trị đang có trong code runtime (`PAGameplayAbility_Dash`, `PAGameplayAbility_MeleeAttack`, `PAGameplayAbility_Finisher`) là **chuẩn**. GDD, `control-manifest.md`, `tr-registry.yaml` và story phải sửa cho khớp code. Cảm giác chơi với các giá trị này **vẫn cần chủ dự án duyệt** (điểm bắt buộc dừng và hỏi theo CLAUDE.md) trước khi coi là chốt.
+- **Epic Class Chính / Phụ & Thăng Chức** (§3, §4): lập sau khi chốt ROADMAP, xếp vào giai đoạn phù hợp. ROADMAP bản `493a442` đã có sẵn giai đoạn cho hệ thống này: **Giai đoạn 2B — Hệ thống Class Chính / Phụ & Quyển trục**.
+- **`item_skill_shard` (Tàn Trang)**: là **tiền tệ thứ hai** theo `merchant-economy.md` (giới hạn 99.999). Mọi chỗ còn dùng "Ash Shards" đều đổi sang `item_skill_shard`, đúng với §5. `inventory-system.md:49,62` (đang xếp `item_skill_shard` vào nhóm Nguyên Liệu) phải sửa cho khớp.
