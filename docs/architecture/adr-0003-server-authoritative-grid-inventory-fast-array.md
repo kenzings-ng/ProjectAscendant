@@ -41,7 +41,7 @@ Project Ascendant sở hữu hệ thống túi đồ dạng lưới tiêu chuẩ
 ### Constraints & Requirements
 - **Tối ưu băng thông mạng**: Tuyệt đối không replicate toàn bộ 30 ô đồ khi chỉ có 1 ô thay đổi (ví dụ: vũ khí bị trừ 1 điểm độ bền sau đòn đánh).
 - **Server Authority 100%**: Client chỉ gửi yêu cầu ý định thao tác (`Server_MoveItem`, `Server_SplitStack`). Mọi biến đổi trạng thái ô đồ bắt buộc phải do Dedicated Server thực thi và xác nhận.
-- **Phân tách Dữ liệu Tĩnh & Động**: Tách rời định nghĩa vật phẩm cố định (Tên, Icon, Mesh, Tier hiếm) khỏi dữ liệu phiên bản thực tế (ID thực thể, Độ bền, Cấp độ rèn).
+- **Phân tách Dữ liệu Tĩnh & Động**: Tách rời định nghĩa vật phẩm cố định (Tên, Icon, Mesh, Độ Hiếm) khỏi dữ liệu phiên bản thực tế (ID thực thể, Độ bền, Cấp độ rèn).
 
 ---
 
@@ -67,7 +67,7 @@ flowchart TD
     Iris -.->|Replicate Duy Nhất Delta 12-24 Bytes| FastArray_Client
     
     subgraph StaticData["Static Data (Nạp Cục Bộ Cả 2 Phía)"]
-        AssetMgr[UAssetManager] --> ItemAsset[UItemDataAsset: Icon, Tên, 5 Tier Hiếm]
+        AssetMgr[UAssetManager] --> ItemAsset[UItemDataAsset: Icon, Tên, 5 Độ Hiếm]
     end
 
     UI -.->|Tra Cứu Thông Tin Hiển Thị| ItemAsset
@@ -154,7 +154,7 @@ Mảng túi đồ được quản lý bởi `FInventoryFastArray` tích hợp c�
 
 | GDD System | Yêu Cầu Cụ Thể | Cách Thức ADR-0003 Giải Quyết |
 |---|---|---|
-| `inventory-system.md` | Lưới 6x5 (30 ô), chia tách chồng, 5 Tier hiếm. | `SlotIndex` từ 0 đến 29, `Quantity` quản lý cộng dồn/tách chồng, `ItemDefId` trỏ sang Asset có Tier. |
+| `inventory-system.md` | Lưới 6x5 (30 ô), chia tách chồng, 5 Độ Hiếm. | `SlotIndex` từ 0 đến 29, `Quantity` quản lý cộng dồn/tách chồng, `ItemDefId` trỏ sang Asset có Tier. |
 | `blacksmithing-system.md` | Cấp cường hóa +1 đến +10, trừ độ bền, khảm ngọc. | `EnhancementLevel`, `CurrentDurability` và `SocketedGemIds` được lưu trữ trực tiếp trong struct. |
 | `merchant-economy.md` | Bộ đệm mua lại (Buyback FIFO 10 ô). | Thành phần `UInventoryComponent` tái sử dụng `FInventoryFastArray` riêng cho danh mục Buyback. |
 

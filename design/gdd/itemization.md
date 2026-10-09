@@ -598,7 +598,7 @@ Các thực thể mới được đăng ký chính thức vào [`design/registry
 Để các vật phẩm rơi ngoài thế giới (Loot Drops) và icon giao diện không bị "chìm màu" hay hòa lẫn vào bối cảnh của 3 đại địa khu (Verdant Frontier, Ashen Wilderness, Forbidden Sanctum):
 
 ```
-BẢNG MÃ MÀU CHUẨN HÓA CHO 5 BẬC HIẾM:
+BẢNG MÃ MÀU CHUẨN HÓA CHO 5 ĐỘ HIẾM:
 [Common]    #E8ECEB (Sacred Bone White) / #9CA3AF (Slate) ── Tương phản cao trên đá xỉn
 [Uncommon]  #10B981 (Electric Emerald)                    ── Tươi sáng, rực rỡ hơn cỏ xanh
 [Rare]      #3B82F6 (Cobalt Sapphire)                     ── Sắc xanh dương đậm, tách biệt tuyệt đối
