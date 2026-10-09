@@ -93,6 +93,13 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Item|SkillBook")
 	FGameplayTag RequiredClassTag;
 
+	/**
+	 * Độ hiếm Sách Kỹ Năng theo thang kỹ năng 4 bậc (Normal/Rare/Epic/Mythic - DECISIONS.md §5.2).
+	 * Chỉ dùng khi Category == SkillBook; trang bị dùng RarityTier (EPAItemRarity). Hai thang không trộn lẫn.
+	 */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Item|SkillBook", meta = (EditCondition = "Category == EPAItemCategory::SkillBook"))
+	EPASkillRarity SkillRarity = EPASkillRarity::Normal;
+
 	// -------------------------------------------------------------------------
 	// Consumable Properties (Story 003 / AC-3)
 	// -------------------------------------------------------------------------

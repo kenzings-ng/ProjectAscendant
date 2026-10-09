@@ -138,7 +138,7 @@ bool UPABlacksmithComponent::SalvageItem(UPAInventoryComponent* Inventory, UPACu
 		return false;
 	}
 
-	const int32 Shards = FPABlacksmithFormulas::GetSalvageSkillShards(Entry->StaticData->RarityTier, Entry->StaticData->Category);
+	const int32 Shards = FPABlacksmithFormulas::GetSalvageSkillShards(Entry->StaticData->RarityTier, Entry->StaticData->Category, Entry->StaticData->SkillRarity);
 
 	// Credit Skill Shards to wallet
 	EPACurrencyTransactionError CurrErr = EPACurrencyTransactionError::None;
