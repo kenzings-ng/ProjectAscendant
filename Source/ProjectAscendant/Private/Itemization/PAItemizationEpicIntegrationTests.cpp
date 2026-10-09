@@ -114,7 +114,7 @@ bool FPAItemizationEpicIntegrationTest::RunTest(const FString& Parameters)
 
 	EPACraftingError SocketErr = EPACraftingError::None;
 	bool bSocketUnlocked = Blacksmith->ServerAddSocket(
-		GeneratedItem, 1000, 3, EPAForgeTier::Tier2_Field, Wallet, SocketErr);
+		GeneratedItem, EPAForgeTier::Tier2_Field, Wallet, SocketErr);
 	TestTrue(TEXT("Step 3: ServerAddSocket at Field Forge succeeds"), bSocketUnlocked);
 	TestTrue(TEXT("Step 3: Socket 0 is unlocked"), GeneratedItem.SocketSlots[0].bIsUnlocked);
 	TestEqual(TEXT("Step 3: Gold deducted 1,000 -> 9,000"), Wallet->GetGold(), 9000LL);
@@ -139,7 +139,7 @@ bool FPAItemizationEpicIntegrationTest::RunTest(const FString& Parameters)
 	// =========================================================================
 	EPACraftingError ReforgeErr = EPACraftingError::None;
 	bool bReforged = Blacksmith->ServerReforgeAffix(
-		GeneratedItem, 0, 2000, 5, EPAForgeTier::Tier2_Field, Wallet, ItemGenerator, ReforgeErr);
+		GeneratedItem, 0, EPAForgeTier::Tier2_Field, Wallet, ItemGenerator, ReforgeErr);
 	TestTrue(TEXT("Step 5: ServerReforgeAffix succeeds"), bReforged);
 	TestEqual(TEXT("Step 5: Gold deducted 2,000 -> 7,000"), Wallet->GetGold(), 7000LL);
 	TestEqual(TEXT("Step 5: Shards deducted 5 -> 12"), Wallet->GetSkillShards(), 12LL);

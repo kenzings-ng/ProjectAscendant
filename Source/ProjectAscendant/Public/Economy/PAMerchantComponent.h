@@ -9,6 +9,7 @@
 
 class UPAInventoryComponent;
 class UPACurrencyComponent;
+class APlayerController;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FPAOnItemPurchased, FName, ItemId, int32, Quantity, int32, TotalCost);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FPAOnItemSold, FName, ItemId, int32, Quantity, int32, TotalReceived);
@@ -90,6 +91,18 @@ public:
 	 */
 	UFUNCTION(BlueprintPure, Category = "ProjectAscendant|Merchant")
 	bool ValidateInteraction(const AActor* InteractingActor, bool bInCombat, EPATransactionError& OutError) const;
+
+	/**
+	 * X11a: Player that may have sent a Server RPC on this component (APlayerController on the owner chain of
+	 * this component's actor). nullptr for NPC-owned merchants (such RPCs cannot arrive from a client; see X11b).
+	 */
+	APlayerController* GetRequestingPlayerController() const;
+
+	/**
+	 * X11a: Server precondition run by every Server RPC before any state mutation: authority, requesting player
+	 * with a pawn, Inventory / Wallet owned by the requesting player, and ValidateInteraction (distance + State.InCombat).
+	 */
+	bool ValidateServerRequest(const APlayerController* Requester, const UActorComponent* Inventory, const UActorComponent* Wallet, EPATransactionError& OutError) const;
 
 	// -------------------------------------------------------------------------
 	// Server RPCs

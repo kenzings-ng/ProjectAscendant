@@ -19,6 +19,8 @@
  *
  * Kiểm thử tự động cho Story item-007 (Dual-Currency Transactions, EPIC-ITEMIZATION-001, Sprint 6):
  * - AC-1: Server-Authoritative Repair Transaction & Gold sink, rollback khi thiếu vàng.
+ *   X11a: chi phí sửa chữa do server tính (Rare, BasePrice 300 theo inventory-system.md §7.1;
+ *   RepairCost = ceil(300 * 0.25 * (1 - 0.40)) = 45), không còn nhận chi phí từ client.
  * - AC-2: Reforge Transaction (2,000 Gold + 5 Skill Shards), atomic rollback khi thiếu 1 trong 2 loại tiền.
  * - AC-3: AddSocket Transaction kết hợp điều kiện Forge Tier và chi phí song tiền tệ, khóa 100% tại Outpost.
  */
@@ -63,30 +65,35 @@ bool FPAItemizationTransactionTest::RunTest(const FString& Parameters)
 		DamagedItem.CurrentDurability = 40.0f;
 		DamagedItem.MaxDurability = 100.0f;
 
+		// X11a: chi phí do server tính từ trạng thái vật phẩm
+		const int32 ExpectedRepairCost = UPABlacksmithSubsystem::GetRepairCost(DamagedItem);
+		TestEqual(TEXT("AC-1: Server repair cost = ceil(300 * 0.25 * 0.6) = 45"), ExpectedRepairCost, 45);
+
 		// 1. Thử sửa chữa khi ví có 0 Gold -> Thất bại, mã lỗi InsufficientGold, giữ nguyên độ bền 40
 		EPACraftingError RepairErr = EPACraftingError::None;
-		bool bRepairedNoGold = Blacksmith->ServerRepairItem(DamagedItem, Wallet, 50, RepairErr);
+		bool bRepairedNoGold = Blacksmith->ServerRepairItem(DamagedItem, Wallet, RepairErr);
 		TestFalse(TEXT("AC-1: Repair without gold must fail"), bRepairedNoGold);
 		TestEqual(TEXT("AC-1: Error code must be InsufficientGold"), RepairErr, EPACraftingError::InsufficientGold);
 		TestEqual(TEXT("AC-1: Durability remains untouched at 40.0"), DamagedItem.CurrentDurability, 40.0f);
 		TestEqual(TEXT("AC-1: Wallet gold remains 0"), Wallet->GetGold(), 0LL);
 
-		// 2. Nạp 200 Gold vào ví, sửa chữa với chi phí 50 Gold -> Thành công
+		// 2. Nạp 200 Gold vào ví, sửa chữa với chi phí server tính (45 Gold) -> Thành công
 		EPACurrencyTransactionError CurrErr;
 		Wallet->AddCurrency(EPACurrencyType::Gold, 200, CurrErr);
 
-		bool bRepairedSuccess = Blacksmith->ServerRepairItem(DamagedItem, Wallet, 50, RepairErr);
+		bool bRepairedSuccess = Blacksmith->ServerRepairItem(DamagedItem, Wallet, RepairErr);
 		TestTrue(TEXT("AC-1: Repair with sufficient gold must succeed"), bRepairedSuccess);
 		TestEqual(TEXT("AC-1: Durability restored to 100.0"), DamagedItem.CurrentDurability, 100.0f);
-		TestEqual(TEXT("AC-1: Wallet deducted 50 Gold -> 150 remaining"), Wallet->GetGold(), 150LL);
+		TestEqual(TEXT("AC-1: Wallet deducted 45 Gold -> 155 remaining"), Wallet->GetGold(), 155LL);
 
 		// 3. Thử sửa chữa khi đồ đã 100% độ bền -> Thất bại MaxDurabilityAlready, 0 Gold bị trừ
-		bool bRepairedFull = Blacksmith->ServerRepairItem(DamagedItem, Wallet, 50, RepairErr);
+		bool bRepairedFull = Blacksmith->ServerRepairItem(DamagedItem, Wallet, RepairErr);
 		TestFalse(TEXT("AC-1: Repairing fully durable item must fail"), bRepairedFull);
 		TestEqual(TEXT("AC-1: Error is MaxDurabilityAlready"), RepairErr, EPACraftingError::MaxDurabilityAlready);
-		TestEqual(TEXT("AC-1: Wallet gold remains 150"), Wallet->GetGold(), 150LL);
+		TestEqual(TEXT("AC-1: Wallet gold remains 155"), Wallet->GetGold(), 155LL);
 
-		// 4. Kiểm thử qua Component Server RPC
+		// 4. Component Server RPC trên lò rèn không có người chơi sở hữu (NPC / không owner) -> server từ chối (X11a).
+		//    Đường RPC thành công với người chơi sở hữu được kiểm thử trong ProjectAscendant.Network.ServerAuthority.*.
 		UPABlacksmithComponent* BlacksmithComp = NewObject<UPABlacksmithComponent>();
 		TArray<FPASavedItemInstance> InventoryItems;
 		FPASavedItemInstance RpcItem = ItemGenerator->GenerateItemInstance(
@@ -95,10 +102,10 @@ bool FPAItemizationTransactionTest::RunTest(const FString& Parameters)
 		InventoryItems.Add(RpcItem);
 
 		BlacksmithComp->BindSavedItemInventory(&InventoryItems, Wallet);
-		BlacksmithComp->Server_RepairItem(RpcItem.ItemInstanceUID, 50);
+		BlacksmithComp->Server_RepairItem(RpcItem.ItemInstanceUID);
 
-		TestEqual(TEXT("AC-1: Component RPC restored durability to 100"), InventoryItems[0].CurrentDurability, 100.0f);
-		TestEqual(TEXT("AC-1: Wallet deducted 50 Gold -> 100 remaining"), Wallet->GetGold(), 100LL);
+		TestEqual(TEXT("AC-1: Ownerless forge RPC rejected - durability unchanged at 60"), InventoryItems[0].CurrentDurability, 60.0f);
+		TestEqual(TEXT("AC-1: Ownerless forge RPC rejected - wallet unchanged at 155"), Wallet->GetGold(), 155LL);
 	}
 
 	// =========================================================================
@@ -120,7 +127,7 @@ bool FPAItemizationTransactionTest::RunTest(const FString& Parameters)
 
 		EPACraftingError ReforgeErr = EPACraftingError::None;
 		bool bReforgeFailGold = Blacksmith->ServerReforgeAffix(
-			RareItem, 0, 2000, 5, EPAForgeTier::Tier2_Field, Wallet, ItemGenerator, ReforgeErr);
+			RareItem, 0, EPAForgeTier::Tier2_Field, Wallet, ItemGenerator, ReforgeErr);
 		TestFalse(TEXT("AC-2: Reforge without sufficient gold must fail"), bReforgeFailGold);
 		TestEqual(TEXT("AC-2: Error code is InsufficientGold"), ReforgeErr, EPACraftingError::InsufficientGold);
 		TestEqual(TEXT("AC-2: Atomic rollback - Gold unchanged"), Wallet->GetGold(), 1000LL);
@@ -133,7 +140,7 @@ bool FPAItemizationTransactionTest::RunTest(const FString& Parameters)
 		Wallet->DeductCurrency(EPACurrencyType::SkillShards, 8, CurrErr); // Còn lại 2 Shards
 
 		bool bReforgeFailShards = Blacksmith->ServerReforgeAffix(
-			RareItem, 0, 2000, 5, EPAForgeTier::Tier2_Field, Wallet, ItemGenerator, ReforgeErr);
+			RareItem, 0, EPAForgeTier::Tier2_Field, Wallet, ItemGenerator, ReforgeErr);
 		TestFalse(TEXT("AC-2: Reforge without sufficient shards must fail"), bReforgeFailShards);
 		TestEqual(TEXT("AC-2: Error code is InsufficientSkillShards"), ReforgeErr, EPACraftingError::InsufficientSkillShards);
 		TestEqual(TEXT("AC-2: Atomic rollback - Gold unchanged at 5000"), Wallet->GetGold(), 5000LL);
@@ -144,7 +151,7 @@ bool FPAItemizationTransactionTest::RunTest(const FString& Parameters)
 		Wallet->AddCurrency(EPACurrencyType::SkillShards, 10, CurrErr); // Giờ có 12 Shards
 
 		bool bReforgeSuccess = Blacksmith->ServerReforgeAffix(
-			RareItem, 0, 2000, 5, EPAForgeTier::Tier2_Field, Wallet, ItemGenerator, ReforgeErr);
+			RareItem, 0, EPAForgeTier::Tier2_Field, Wallet, ItemGenerator, ReforgeErr);
 		TestTrue(TEXT("AC-2: Reforge with sufficient dual currency must succeed"), bReforgeSuccess);
 		TestEqual(TEXT("AC-2: Wallet deducted 2000 Gold -> 3000 remaining"), Wallet->GetGold(), 3000LL);
 		TestEqual(TEXT("AC-2: Wallet deducted 5 Shards -> 7 remaining"), Wallet->GetSkillShards(), 7LL);
@@ -176,7 +183,7 @@ bool FPAItemizationTransactionTest::RunTest(const FString& Parameters)
 		// 1. Outpost Forge (Tier 1): Khóa 100% việc đục lỗ, tiền không bị trừ
 		EPACraftingError SocketErr = EPACraftingError::None;
 		bool bOutpostSocket = Blacksmith->ServerAddSocket(
-			RareItem, 1000, 3, EPAForgeTier::Tier1_Outpost, Wallet, SocketErr);
+			RareItem, EPAForgeTier::Tier1_Outpost, Wallet, SocketErr);
 		TestFalse(TEXT("AC-3: Outpost Forge must reject AddSocket"), bOutpostSocket);
 		TestEqual(TEXT("AC-3: Error is MaxTierLevelReached"), SocketErr, EPACraftingError::MaxTierLevelReached);
 		TestEqual(TEXT("AC-3: Gold untouched at 25000"), Wallet->GetGold(), 25000LL);
@@ -189,7 +196,7 @@ bool FPAItemizationTransactionTest::RunTest(const FString& Parameters)
 		PoorWallet->AddCurrency(EPACurrencyType::SkillShards, 5, CurrErr);
 
 		bool bPoorSocket = Blacksmith->ServerAddSocket(
-			RareItem, 1000, 3, EPAForgeTier::Tier2_Field, PoorWallet, SocketErr);
+			RareItem, EPAForgeTier::Tier2_Field, PoorWallet, SocketErr);
 		TestFalse(TEXT("AC-3: AddSocket with insufficient gold must fail"), bPoorSocket);
 		TestEqual(TEXT("AC-3: Error code is InsufficientGold"), SocketErr, EPACraftingError::InsufficientGold);
 		TestEqual(TEXT("AC-3: Poor wallet gold untouched"), PoorWallet->GetGold(), 500LL);
@@ -197,7 +204,7 @@ bool FPAItemizationTransactionTest::RunTest(const FString& Parameters)
 
 		// 3. Field Forge (Tier 2): Đủ tiền -> Mở Socket 1 (1,000 Gold + 3 Shards) trên RareItem
 		bool bSocket1Success = Blacksmith->ServerAddSocket(
-			RareItem, 1000, 3, EPAForgeTier::Tier2_Field, Wallet, SocketErr);
+			RareItem, EPAForgeTier::Tier2_Field, Wallet, SocketErr);
 		TestTrue(TEXT("AC-3: Field Forge AddSocket 1 succeeds on Rare item"), bSocket1Success);
 		TestTrue(TEXT("AC-3: RareItem Socket 0 is now unlocked"), RareItem.SocketSlots[0].bIsUnlocked);
 		TestEqual(TEXT("AC-3: Wallet deducted 1000 Gold -> 24000 remaining"), Wallet->GetGold(), 24000LL);
@@ -205,7 +212,7 @@ bool FPAItemizationTransactionTest::RunTest(const FString& Parameters)
 
 		// 4. RareItem chỉ có 1 socket capacity -> Thử mở tiếp socket 2 phải bị từ chối MaxSocketsReached
 		bool bSocket2Rare = Blacksmith->ServerAddSocket(
-			RareItem, 3000, 8, EPAForgeTier::Tier2_Field, Wallet, SocketErr);
+			RareItem, EPAForgeTier::Tier2_Field, Wallet, SocketErr);
 		TestFalse(TEXT("AC-3: Rare item cannot exceed 1 socket capacity"), bSocket2Rare);
 		TestEqual(TEXT("AC-3: Error is MaxSocketsReached"), SocketErr, EPACraftingError::MaxSocketsReached);
 		TestEqual(TEXT("AC-3: Currency remains unchanged"), Wallet->GetGold(), 24000LL);
@@ -215,11 +222,11 @@ bool FPAItemizationTransactionTest::RunTest(const FString& Parameters)
 			FName("SteelCuirass"), 30, EPAItemRarity::Epic, EPAForgeTier::Tier2_Field);
 		TestEqual(TEXT("AC-3: Epic item has 2 socket capacity"), EpicItem.SocketSlots.Num(), 2);
 
-		bool bEpicSocket1 = Blacksmith->ServerAddSocket(EpicItem, 1000, 3, EPAForgeTier::Tier2_Field, Wallet, SocketErr);
+		bool bEpicSocket1 = Blacksmith->ServerAddSocket(EpicItem, EPAForgeTier::Tier2_Field, Wallet, SocketErr);
 		TestTrue(TEXT("AC-3: Epic Socket 0 unlocked"), bEpicSocket1);
 		TestTrue(TEXT("AC-3: Epic Socket 0 is unlocked"), EpicItem.SocketSlots[0].bIsUnlocked);
 
-		bool bEpicSocket2 = Blacksmith->ServerAddSocket(EpicItem, 3000, 8, EPAForgeTier::Tier2_Field, Wallet, SocketErr);
+		bool bEpicSocket2 = Blacksmith->ServerAddSocket(EpicItem, EPAForgeTier::Tier2_Field, Wallet, SocketErr);
 		TestTrue(TEXT("AC-3: Epic Socket 1 unlocked"), bEpicSocket2);
 		TestTrue(TEXT("AC-3: Epic Socket 1 is unlocked"), EpicItem.SocketSlots[1].bIsUnlocked);
 		TestEqual(TEXT("AC-3: Wallet deducted 4000 Gold total -> 20000 remaining"), Wallet->GetGold(), 20000LL);
@@ -231,15 +238,15 @@ bool FPAItemizationTransactionTest::RunTest(const FString& Parameters)
 		TestEqual(TEXT("AC-3: Legendary has 3 socket capacity"), LegendaryItem.SocketSlots.Num(), 3);
 
 		// Mở 2 socket đầu
-		Blacksmith->ServerAddSocket(LegendaryItem, 1000, 3, EPAForgeTier::Tier2_Field, Wallet, SocketErr);
-		Blacksmith->ServerAddSocket(LegendaryItem, 3000, 8, EPAForgeTier::Tier2_Field, Wallet, SocketErr);
+		Blacksmith->ServerAddSocket(LegendaryItem, EPAForgeTier::Tier2_Field, Wallet, SocketErr);
+		Blacksmith->ServerAddSocket(LegendaryItem, EPAForgeTier::Tier2_Field, Wallet, SocketErr);
 
 		// Mở Socket Prismatic thứ 3 tại Forbidden Forge
 		const int64 GoldBeforePrismatic = Wallet->GetGold();
 		const int64 ShardsBeforePrismatic = Wallet->GetSkillShards();
 
 		bool bPrismaticSuccess = Blacksmith->ServerAddSocket(
-			LegendaryItem, 15000, 20, EPAForgeTier::Tier3_Forbidden, Wallet, SocketErr);
+			LegendaryItem, EPAForgeTier::Tier3_Forbidden, Wallet, SocketErr);
 		TestTrue(TEXT("AC-3: Forbidden Forge unlocks Prismatic socket on Legendary"), bPrismaticSuccess);
 		TestTrue(TEXT("AC-3: Socket 2 (Prismatic) is unlocked"), LegendaryItem.SocketSlots[2].bIsUnlocked);
 		TestEqual(TEXT("AC-3: Socket 2 type is Prismatic"), LegendaryItem.SocketSlots[2].SocketType, EPASocketType::Prismatic);

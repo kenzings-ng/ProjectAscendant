@@ -11,6 +11,7 @@
 
 class UPAInventoryComponent;
 class UPACurrencyComponent;
+class APlayerController;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FPAOnItemRepaired, int32, SlotIndex, int32, GoldCost, float, NewDurability);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FPAOnItemSalvaged, int32, SlotIndex, FName, ItemId, int32, ShardsGained);
@@ -114,12 +115,12 @@ public:
 	 * AC-1 (crft-003): Rèn đúc trang bị độ hiếm Legendary từ Linh Hồn Boss.
 	 * Độc quyền tại Tier 3 Ancient Sanctuary Forge.
 	 * Yêu cầu: 1x Linh Hồn Boss, 4x Mảnh vỡ Boss, 5x Quặng Hư Không, 5,000 Vàng.
+	 * X11a: trang bị đầu ra do server quyết định qua BossSoulRecipes (theo BossSoulItemId); client không chọn được đầu ra.
 	 */
 	UFUNCTION(BlueprintCallable, Category = "ProjectAscendant|Crafting")
 	bool ForgeBossSoulEquipment(
 		UPAInventoryComponent* Inventory,
 		UPACurrencyComponent* Wallet,
-		UItemStaticDataAsset* BossSoulItemData,
 		FName BossSoulItemId,
 		FName BossPartItemId,
 		FName VoidOreItemId,
@@ -137,6 +138,36 @@ public:
 	 */
 	UFUNCTION(BlueprintPure, Category = "ProjectAscendant|Crafting")
 	bool ValidateInteraction(const AActor* InteractingActor, bool bInCombat, EPACraftingError& OutError) const;
+
+	// -------------------------------------------------------------------------
+	// X11a: Server-side request validation (ownership + distance + combat)
+	// -------------------------------------------------------------------------
+
+	/**
+	 * Player that may have sent a Server RPC on this component: the APlayerController on the owner chain of
+	 * this component's actor. nullptr for NPC-owned forges (such RPCs cannot arrive from a client; see X11b).
+	 */
+	APlayerController* GetRequestingPlayerController() const;
+
+	/**
+	 * Server precondition run by every Server RPC before any state mutation:
+	 * - authority on this forge, requesting player present and possessing a pawn;
+	 * - client-supplied Inventory / Wallet (when non-null) must be owned by the requesting player;
+	 * - ValidateInteraction(pawn, State.InCombat on pawn ASC) with kMaxInteractionDistance.
+	 */
+	bool ValidateServerRequest(const APlayerController* Requester, const UActorComponent* Inventory, const UActorComponent* Wallet, EPACraftingError& OutError) const;
+
+	/** Forge tier of this (server-side) forge converted to the itemization EPAForgeTier scale. */
+	EPAForgeTier GetItemizationForgeTier() const;
+
+	// -------------------------------------------------------------------------
+	// X11a: Boss Soul recipes (server configuration)
+	// -------------------------------------------------------------------------
+
+	void AddBossSoulRecipe(const FPABossSoulRecipe& Recipe) { BossSoulRecipes.Add(Recipe); }
+
+	/** Returns the server recipe for BossSoulItemId, or nullptr. */
+	const FPABossSoulRecipe* FindBossSoulRecipe(FName BossSoulItemId) const;
 
 	// -------------------------------------------------------------------------
 	// Server RPCs (Client Request -> Server Execution)
@@ -167,7 +198,6 @@ public:
 	void Server_RequestForgeBossSoul(
 		UPAInventoryComponent* Inventory,
 		UPACurrencyComponent* Wallet,
-		UItemStaticDataAsset* BossSoulItemData,
 		FName BossSoulItemId,
 		FName BossPartItemId,
 		FName VoidOreItemId);
@@ -181,17 +211,17 @@ public:
 
 	void BindSavedItemInventory(TArray<FPASavedItemInstance>* InItems, UPACurrencyComponent* InWallet);
 
-	/** AC-1: Server RPC sửa chữa vật phẩm bằng ItemUID */
+	/** AC-1: Server RPC sửa chữa vật phẩm bằng ItemUID (X11a: chi phí do server tính) */
 	UFUNCTION(Server, Reliable, WithValidation, Category = "ProjectAscendant|Itemization")
-	void Server_RepairItem(const FGuid& ItemInstanceUID, int32 CostGold);
+	void Server_RepairItem(const FGuid& ItemInstanceUID);
 
-	/** AC-2: Server RPC tẩy dòng Affix bằng ItemUID */
+	/** AC-2: Server RPC tẩy dòng Affix bằng ItemUID (X11a: chi phí và bậc lò do server xác định) */
 	UFUNCTION(Server, Reliable, WithValidation, Category = "ProjectAscendant|Itemization")
-	void Server_ReforgeAffix(const FGuid& ItemInstanceUID, int32 AffixIndex, int32 CostGold, int32 CostShards);
+	void Server_ReforgeAffix(const FGuid& ItemInstanceUID, int32 AffixIndex);
 
-	/** AC-3: Server RPC đục lỗ khảm ngọc bằng ItemUID */
+	/** AC-3: Server RPC đục lỗ khảm ngọc bằng ItemUID (X11a: chi phí theo ô và bậc lò lấy từ ForgeTier của lò này) */
 	UFUNCTION(Server, Reliable, WithValidation, Category = "ProjectAscendant|Itemization")
-	void Server_AddSocket(const FGuid& ItemInstanceUID, int32 CostGold, int32 CostShards, EPAForgeTier InForgeTier);
+	void Server_AddSocket(const FGuid& ItemInstanceUID);
 
 public:
 	UPROPERTY(BlueprintAssignable, Category = "ProjectAscendant|Crafting")
@@ -226,6 +256,10 @@ public:
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectAscendant|Crafting")
 	EPABlacksmithTier ForgeTier = EPABlacksmithTier::Tier1_Outpost;
+
+	/** X11a: Server-side Boss Soul recipes (BossSoulItemId -> Legendary output). Never sent by clients. */
+	UPROPERTY(EditAnywhere, Category = "ProjectAscendant|Crafting")
+	TArray<FPABossSoulRecipe> BossSoulRecipes;
 
 	/** Biến đè tỷ lệ tung xúc xắc ngẫu nhiên cho TDD Automation Tests */
 	float TestRollOverride = -1.0f;

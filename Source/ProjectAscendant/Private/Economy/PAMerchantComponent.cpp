@@ -5,6 +5,9 @@
 #include "Inventory/PAInventoryComponent.h"
 #include "Inventory/PAItemStaticDataAsset.h"
 #include "GameFramework/Actor.h"
+#include "GameFramework/Pawn.h"
+#include "GameFramework/PlayerController.h"
+#include "Network/PAServerRequestValidation.h"
 
 UPAMerchantComponent::UPAMerchantComponent()
 	: MerchantTier(EPAMerchantTier::Tier1_Outpost)
@@ -62,6 +65,42 @@ bool UPAMerchantComponent::ValidateInteraction(const AActor* InteractingActor, b
 
 	OutError = EPATransactionError::None;
 	return true;
+}
+
+APlayerController* UPAMerchantComponent::GetRequestingPlayerController() const
+{
+	return PAServerRequestValidation::ResolveOwningPlayerController(GetOwner());
+}
+
+bool UPAMerchantComponent::ValidateServerRequest(const APlayerController* Requester, const UActorComponent* Inventory, const UActorComponent* Wallet, EPATransactionError& OutError) const
+{
+	if (!GetOwner() || !GetOwner()->HasAuthority() || !Requester)
+	{
+		OutError = EPATransactionError::ServerRejected;
+		return false;
+	}
+
+	// Client-supplied components must belong to the requesting player (no trading with another player's inventory/wallet).
+	if (Inventory && !PAServerRequestValidation::IsComponentOwnedBy(Inventory, Requester))
+	{
+		OutError = EPATransactionError::ServerRejected;
+		return false;
+	}
+
+	if (Wallet && !PAServerRequestValidation::IsComponentOwnedBy(Wallet, Requester))
+	{
+		OutError = EPATransactionError::ServerRejected;
+		return false;
+	}
+
+	const APawn* InteractingPawn = Requester->GetPawn();
+	if (!InteractingPawn)
+	{
+		OutError = EPATransactionError::ServerRejected;
+		return false;
+	}
+
+	return ValidateInteraction(InteractingPawn, PAServerRequestValidation::IsActorInCombat(InteractingPawn), OutError);
 }
 
 bool UPAMerchantComponent::BuyItem(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 CatalogIndex, int32 Quantity, EPATransactionError& OutError)
@@ -340,6 +379,11 @@ bool UPAMerchantComponent::Server_RequestBuyItem_Validate(UPAInventoryComponent*
 void UPAMerchantComponent::Server_RequestBuyItem_Implementation(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 CatalogIndex, int32 Quantity)
 {
 	EPATransactionError Err = EPATransactionError::None;
+	if (!ValidateServerRequest(GetRequestingPlayerController(), Inventory, Wallet, Err))
+	{
+		OnTransactionFailed.Broadcast(Err);
+		return;
+	}
 	BuyItem(Inventory, Wallet, CatalogIndex, Quantity, Err);
 }
 
@@ -351,6 +395,11 @@ bool UPAMerchantComponent::Server_RequestSellItem_Validate(UPAInventoryComponent
 void UPAMerchantComponent::Server_RequestSellItem_Implementation(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex, int32 Quantity)
 {
 	EPATransactionError Err = EPATransactionError::None;
+	if (!ValidateServerRequest(GetRequestingPlayerController(), Inventory, Wallet, Err))
+	{
+		OnTransactionFailed.Broadcast(Err);
+		return;
+	}
 	SellItem(Inventory, Wallet, SlotIndex, Quantity, Err);
 }
 
@@ -364,6 +413,11 @@ void UPAMerchantComponent::Server_RequestSellAllJunk_Implementation(UPAInventory
 	int32 TotalGold = 0;
 	int32 ItemsSold = 0;
 	EPATransactionError Err = EPATransactionError::None;
+	if (!ValidateServerRequest(GetRequestingPlayerController(), Inventory, Wallet, Err))
+	{
+		OnTransactionFailed.Broadcast(Err);
+		return;
+	}
 	SellAllJunk(Inventory, Wallet, TotalGold, ItemsSold, Err);
 }
 
@@ -375,5 +429,10 @@ bool UPAMerchantComponent::Server_RequestBuybackItem_Validate(UPAInventoryCompon
 void UPAMerchantComponent::Server_RequestBuybackItem_Implementation(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 BuybackIndex)
 {
 	EPATransactionError Err = EPATransactionError::None;
+	if (!ValidateServerRequest(GetRequestingPlayerController(), Inventory, Wallet, Err))
+	{
+		OnTransactionFailed.Broadcast(Err);
+		return;
+	}
 	BuybackItem(Inventory, Wallet, BuybackIndex, Err);
 }
