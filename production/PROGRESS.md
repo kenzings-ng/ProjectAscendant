@@ -360,6 +360,19 @@
      - Đã chạy kiểm tra standalone client (`-game`) vào map `L_VerdantFrontier_Outpost`: Cả 2 warning trên đã biến mất hoàn toàn khỏi log (`Saved/Logs/GameStandaloneCheck.log`).
      - Chạy lại toàn bộ `Tools/QA/run_headless_tests.sh --ue`: **PASS 45/45 tests (0 Failed, 0 Errors, QueueFinished=1, ExitCode=1)**.
 
+### 2.4 Dọn File Mẫu Claude-Code-Game-Studios & Sửa Agent Reviewer (2026-10-09)
+
+1. **PR #3 — `chore/untrack-ccgs-template`** (commit `3383f30`, merge `3ab58b9` trên `origin/main`):
+   - Gỡ khỏi git 46 file mẫu của CCGS không thuộc game: `.github/FUNDING.yml`, `.github/CODEOWNERS` (trỏ tới @Donchitos), `docs/WORKFLOW-GUIDE.md`, `docs/examples/`, `UPGRADING.md`, `docs/COLLABORATIVE-DESIGN-PRINCIPLE.md`, `CONTRIBUTING.md`, `SECURITY.md`, `docs/engine-reference/godot/`, `docs/engine-reference/unity/`. Giữ `LICENSE` theo quyết định chủ dự án. Bản lưu nằm ngoài repo tại `project-games/ccgs-template/`.
+   - Sửa `docs/CLAUDE.md:33` trỏ sang `docs/engine-reference/unreal/VERSION.md`.
+   - Cổng: GDD Consistency PASS (92 file, 0 lỗi, exit 0); LFS gate PASS; UE Automation `ProjectAscendant.` **45/45 PASS** (0 Failed, 0 Errors, QueueFinished=1; script tổng exit 0); Backend Postgres: không có Postgres local nên bỏ qua ở máy, **CI "Fast Gates" PASS** (job 113795588136).
+   - Reviewer: lần 1 FAIL (`docs/CLAUDE.md` chưa được stage) → đã sửa; các kiểm tra còn lại (link gãy, CI phụ thuộc, `DECISIONS.md`) đạt.
+2. **PR #4 — `fix/reviewer-agent-claude-tools`** (commit `cc2b13f`, merge `0cf1c7c` trên `origin/main`):
+   - `.claude/agents/reviewer.md` khai báo tool theo tên Antigravity (`view_file`, `run_command`) nên Claude Code từ chối khởi chạy agent. Đổi thành `tools: Read, Glob, Grep, Bash`.
+   - Kiểm chứng: `claude -p` từ nhánh này khởi chạy được `reviewer`. CI "Fast Gates" PASS (job 113795600412). Reviewer: **PASS**.
+3. **Bộ công cụ CCGS (không đưa vào git)**: skills (74), agents (49), docs, rules đặt tại `project-games/.claude/`, symlink vào `ProjectAscendant/.claude/` (đã nằm trong `.gitignore`). Hooks/statusline chưa cài — chờ chủ dự án tự chạy lệnh cài.
+4. **Tồn đọng ghi nhận**: `.github/PULL_REQUEST_TEMPLATE.md` và `.github/ISSUE_TEMPLATE/` vẫn là mẫu CCGS; git LFS cảnh báo khoảng 6.191 file (vd. `Art_Gallery/`) đáng lẽ là LFS pointer nhưng đang lưu thẳng trong git trên `main`.
+
 ---
 
 ## 3. Danh Sách 16 Class Đã Được Duyệt Chính Thức
