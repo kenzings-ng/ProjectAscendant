@@ -107,7 +107,7 @@ if [ "${RUN_UE}" -eq 1 ]; then
         echo "[INFO] Executing headless tests in UnrealEditor..."
         set +e
         "${ENGINE_BIN}" "${UPROJECT}" \
-            -nullrhi -nosound -unattended -nopause \
+            -nullrhi -nosound -unattended -nopause -ForceLogFlush \
             -ExecCmds="Automation RunTests ${TEST_FILTER}" \
             -TestExit="Automation Test Queue Empty" \
             -log="AutomationTest_Headless.log" > /dev/null 2>&1
@@ -120,6 +120,7 @@ if [ "${RUN_UE}" -eq 1 ]; then
             TOTAL_PASS=$(grep -c -E "Result={Success}|Automation Test Succeeded" "${LOG_FILE}" || true)
             TOTAL_FAIL=$(grep -c -E "Result={Fail}|Automation Test Failed" "${LOG_FILE}" || true)
             QUEUE_EMPTY=$(grep -c -E "\.\.\.Automation Test Queue Empty [0-9]+ tests performed" "${LOG_FILE}" || true)
+            TESTS_PERFORMED=$(grep -oP "\.\.\.Automation Test Queue Empty \K[0-9]+(?= tests performed)" "${LOG_FILE}" | tail -n 1 || true)
             ERROR_COUNT=$(grep -c -E "\]Log[a-zA-Z0-9_]+: (Error|Fatal):" "${LOG_FILE}" || true)
 
             echo "UE Automation Summary: Discovered=${TOTAL_DISCOVERED:-unknown}, Passed=${TOTAL_PASS}, Failed=${TOTAL_FAIL}, Errors=${ERROR_COUNT}, QueueFinished=${QUEUE_EMPTY}, ExitCode=${UE_EXIT}"
@@ -142,6 +143,9 @@ if [ "${RUN_UE}" -eq 1 ]; then
                 FAILED_GATES=$((FAILED_GATES + 1))
             elif [ "${QUEUE_EMPTY}" -eq 0 ]; then
                 echo ">> [FAIL] UE Automation Gate: Automation Test Queue did not complete fully."
+                FAILED_GATES=$((FAILED_GATES + 1))
+            elif [ -z "${TESTS_PERFORMED}" ] || [ "${TESTS_PERFORMED}" -ne "${TOTAL_DISCOVERED}" ]; then
+                echo ">> [FAIL] UE Automation Gate: tests performed (${TESTS_PERFORMED:-unknown}) does not equal Discovered (${TOTAL_DISCOVERED})"
                 FAILED_GATES=$((FAILED_GATES + 1))
             else
                 if [ "${UE_EXIT}" -eq 1 ]; then
