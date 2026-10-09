@@ -138,11 +138,11 @@ struct PROJECTASCENDANT_API FPABlacksmithFormulas
 	 * AC-2: Sản lượng Tàn Trang (Skill Shards) khi phân rã trang bị hoặc Sách Kỹ Năng:
 	 * - Skill Book: theo SkillRarity (EPASkillRarity) -> GetSkillBookSalvageShards (1/3/8/25); bỏ qua EPAItemRarity
 	 * - Trang bị (EPAItemRarity, chưa đổi trong X6):
-	 *   - Common (Tier 1): 1 Skill Shards
-	 *   - Uncommon (Tier 2): 3 Skill Shards
-	 *   - Rare (Tier 3): 10 Skill Shards
-	 *   - Epic (Tier 4): 25 Skill Shards
-	 *   - Legendary (Tier 5): 75 Skill Shards
+	 *   - Common: 1 Skill Shards
+	 *   - Uncommon: 3 Skill Shards
+	 *   - Rare: 10 Skill Shards
+	 *   - Epic: 25 Skill Shards
+	 *   - Legendary: 75 Skill Shards
 	 */
 	static int32 GetSalvageSkillShards(EPAItemRarity Rarity, EPAItemCategory Category, EPASkillRarity SkillRarity)
 	{
@@ -313,7 +313,7 @@ struct PROJECTASCENDANT_API FPABlacksmithFormulas
 
 	/**
 	 * AC-3: Giới hạn số lỗ ngọc có thể đục trên trang bị:
-	 * - Chỉ trang bị Bậc Rare trở lên mới có thể đục lỗ.
+	 * - Chỉ trang bị độ hiếm Rare trở lên mới có thể đục lỗ.
 	 * - Tier 1: 0 lỗ
 	 * - Tier 2: Tối đa 2 lỗ
 	 * - Tier 3: Tối đa 3 lỗ

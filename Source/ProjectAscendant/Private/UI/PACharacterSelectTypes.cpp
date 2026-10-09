@@ -10,7 +10,7 @@ FPACharacterClassInfo FPACharacterClassRegistry::GetClassInfo(EPACharacterClass 
 	switch (InClass)
 	{
 	case EPACharacterClass::Vanguard:
-		Info.ClassTag = TEXT("Class.Vanguard");
+		Info.ClassTag = TEXT("Class.Line.Guard.Vanguard");
 		Info.DisplayName = NSLOCTEXT("ProjectAscendant", "VanguardName", "Chiến Binh (Vanguard)");
 		Info.Tagline = NSLOCTEXT("ProjectAscendant", "VanguardTagline", "Bức Tường Thép Bất Hoại");
 		Info.LoreDescription = NSLOCTEXT("ProjectAscendant", "VanguardLore",
@@ -33,7 +33,7 @@ FPACharacterClassInfo FPACharacterClassRegistry::GetClassInfo(EPACharacterClass 
 		break;
 
 	case EPACharacterClass::Ranger:
-		Info.ClassTag = TEXT("Class.Ranger");
+		Info.ClassTag = TEXT("Class.Line.Scout.Ranger");
 		Info.DisplayName = NSLOCTEXT("ProjectAscendant", "RangerName", "Du Hiệp (Ranger)");
 		Info.Tagline = NSLOCTEXT("ProjectAscendant", "RangerTagline", "Bóng Ma Tật Phong & Thợ Săn Tử Thần");
 		Info.LoreDescription = NSLOCTEXT("ProjectAscendant", "RangerLore",
@@ -56,7 +56,7 @@ FPACharacterClassInfo FPACharacterClassRegistry::GetClassInfo(EPACharacterClass 
 		break;
 
 	case EPACharacterClass::Arcanist:
-		Info.ClassTag = TEXT("Class.Arcanist");
+		Info.ClassTag = TEXT("Class.Line.Caster.Arcanist");
 		Info.DisplayName = NSLOCTEXT("ProjectAscendant", "ArcanistName", "Thuật Sĩ (Arcanist)");
 		Info.Tagline = NSLOCTEXT("ProjectAscendant", "ArcanistTagline", "Bậc Thầy Thao Túng Chiến Trường");
 		Info.LoreDescription = NSLOCTEXT("ProjectAscendant", "ArcanistLore",

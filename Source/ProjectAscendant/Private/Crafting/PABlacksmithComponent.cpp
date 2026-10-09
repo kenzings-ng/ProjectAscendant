@@ -612,13 +612,13 @@ void UPABlacksmithComponent::Server_RequestUnsocketGem_Implementation(UPAInvento
 bool UPABlacksmithComponent::ForgeBossSoulEquipment(
 	UPAInventoryComponent* Inventory,
 	UPACurrencyComponent* Wallet,
-	UItemStaticDataAsset* DivineItemData,
+	UItemStaticDataAsset* BossSoulItemData,
 	FName BossSoulItemId,
 	FName BossPartItemId,
 	FName VoidOreItemId,
 	EPACraftingError& OutError)
 {
-	if (!Inventory || !Wallet || !DivineItemData)
+	if (!Inventory || !Wallet || !BossSoulItemData)
 	{
 		OutError = EPACraftingError::ServerRejected;
 		OnCraftingFailed.Broadcast(OutError);
@@ -687,14 +687,14 @@ bool UPABlacksmithComponent::ForgeBossSoulEquipment(
 	Inventory->ConsumeItemQuantity(BossPartItemId, BossPartCount);
 	Inventory->ConsumeItemQuantity(VoidOreItemId, VoidOreCount);
 
-	// Create and add Divine equipment
+	// Create and add boss-soul (Legendary) equipment
 	FPAItemInstanceData DynamicData;
 	DynamicData.CurrentDurability = 100.0f;
 	DynamicData.EnhancementLevel = 0;
-	Inventory->AddItemToSlot(EmptySlot, DivineItemData, 1, DynamicData);
+	Inventory->AddItemToSlot(EmptySlot, BossSoulItemData, 1, DynamicData);
 
 	OutError = EPACraftingError::None;
-	OnBossSoulForged.Broadcast(DivineItemData->ItemId, DivineItemData->RarityTier);
+	OnBossSoulForged.Broadcast(BossSoulItemData->ItemId, BossSoulItemData->RarityTier);
 	return true;
 }
 
@@ -807,24 +807,24 @@ bool UPABlacksmithComponent::ExpandBackpackCapacity(UPAInventoryComponent* Inven
 bool UPABlacksmithComponent::Server_RequestForgeBossSoul_Validate(
 	UPAInventoryComponent* Inventory,
 	UPACurrencyComponent* Wallet,
-	UItemStaticDataAsset* DivineItemData,
+	UItemStaticDataAsset* BossSoulItemData,
 	FName BossSoulItemId,
 	FName BossPartItemId,
 	FName VoidOreItemId)
 {
-	return Inventory != nullptr && Wallet != nullptr && DivineItemData != nullptr;
+	return Inventory != nullptr && Wallet != nullptr && BossSoulItemData != nullptr;
 }
 
 void UPABlacksmithComponent::Server_RequestForgeBossSoul_Implementation(
 	UPAInventoryComponent* Inventory,
 	UPACurrencyComponent* Wallet,
-	UItemStaticDataAsset* DivineItemData,
+	UItemStaticDataAsset* BossSoulItemData,
 	FName BossSoulItemId,
 	FName BossPartItemId,
 	FName VoidOreItemId)
 {
 	EPACraftingError Err = EPACraftingError::None;
-	ForgeBossSoulEquipment(Inventory, Wallet, DivineItemData, BossSoulItemId, BossPartItemId, VoidOreItemId, Err);
+	ForgeBossSoulEquipment(Inventory, Wallet, BossSoulItemData, BossSoulItemId, BossPartItemId, VoidOreItemId, Err);
 }
 
 bool UPABlacksmithComponent::Server_RequestExpandBackpack_Validate(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet)

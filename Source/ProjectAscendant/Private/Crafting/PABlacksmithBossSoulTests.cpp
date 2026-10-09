@@ -14,8 +14,8 @@
 /**
  * FPABlacksmithBossSoulTests
  *
- * Automated unit tests for Story crft-003 (Boss Soul Forging & Divine Equipment):
- *  - AC-1: Boss Soul Divine Forging at Tier 3 Forge (1x Soul, 4x Parts, 5x Void Ore, 5,000 Gold).
+ * Automated unit tests for Story crft-003 (Boss Soul Forging & Legendary Equipment):
+ *  - AC-1: Boss Soul Legendary Forging at Tier 3 Forge (1x Soul, 4x Parts, 5x Void Ore, 5,000 Gold).
  *  - AC-2: Prismatic Socket (3rd Gem Socket Expansion) and Prismatic Gem socketing at Tier 3 Forge.
  *  - AC-3: Backpack capacity expansion sequence (30 -> 40 -> 50 -> 60 max).
  *  - AC-4: Proximity and in-combat interaction guardrails.
@@ -28,7 +28,7 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(
 bool FPABlacksmithBossSoulTests::RunTest(const FString& Parameters)
 {
 	// =========================================================================
-	// AC-1: Boss Soul Divine Forging (Tier 3 Exclusive)
+	// AC-1: Boss Soul Legendary Forging (Tier 3 Forge Exclusive)
 	// =========================================================================
 	{
 		UPABlacksmithComponent* Blacksmith = NewObject<UPABlacksmithComponent>();
@@ -41,13 +41,13 @@ bool FPABlacksmithBossSoulTests::RunTest(const FString& Parameters)
 
 		if (Blacksmith && Inventory && Wallet)
 		{
-			// Divine Weapon Static Data Asset
-			UItemStaticDataAsset* DivineSword = NewObject<UItemStaticDataAsset>();
-			DivineSword->ItemId = FName("item_divine_dragon_slayer");
-			DivineSword->Category = EPAItemCategory::Equipment;
-			DivineSword->RarityTier = EPAItemRarity::Legendary;
-			DivineSword->AllowedEquipmentSlot = EPAEquipmentSlot::Mainhand;
-			DivineSword->BaseSellPrice = 5000;
+			// Boss-soul Legendary Weapon Static Data Asset
+			UItemStaticDataAsset* BossSoulSword = NewObject<UItemStaticDataAsset>();
+			BossSoulSword->ItemId = FName("item_boss_soul_dragon_slayer");
+			BossSoulSword->Category = EPAItemCategory::Equipment;
+			BossSoulSword->RarityTier = EPAItemRarity::Legendary;
+			BossSoulSword->AllowedEquipmentSlot = EPAEquipmentSlot::Mainhand;
+			BossSoulSword->BaseSellPrice = 5000;
 
 			// Ingredients Assets
 			UItemStaticDataAsset* SoulAsset = NewObject<UItemStaticDataAsset>();
@@ -79,45 +79,45 @@ bool FPABlacksmithBossSoulTests::RunTest(const FString& Parameters)
 			// --- Test 1: Tier Gating - Fails at Tier 1 and Tier 2 Forges ---
 			Blacksmith->SetForgeTier(EPABlacksmithTier::Tier1_Outpost);
 			bool bForged = Blacksmith->ForgeBossSoulEquipment(
-				Inventory, Wallet, DivineSword,
+				Inventory, Wallet, BossSoulSword,
 				FName("item_boss_soul_dragon"), FName("item_boss_horn"), FName("void_ore"),
 				CraftErr);
-			TestFalse(TEXT("AC-1: Divine forging rejected at Tier 1 Forge"), bForged);
+			TestFalse(TEXT("AC-1: Boss soul forging rejected at Tier 1 Forge"), bForged);
 			TestEqual(TEXT("AC-1: Error is MaxTierLevelReached at Tier 1"), CraftErr, EPACraftingError::MaxTierLevelReached);
 
 			Blacksmith->SetForgeTier(EPABlacksmithTier::Tier2_Wilderness);
 			bForged = Blacksmith->ForgeBossSoulEquipment(
-				Inventory, Wallet, DivineSword,
+				Inventory, Wallet, BossSoulSword,
 				FName("item_boss_soul_dragon"), FName("item_boss_horn"), FName("void_ore"),
 				CraftErr);
-			TestFalse(TEXT("AC-1: Divine forging rejected at Tier 2 Forge"), bForged);
+			TestFalse(TEXT("AC-1: Boss soul forging rejected at Tier 2 Forge"), bForged);
 			TestEqual(TEXT("AC-1: Error is MaxTierLevelReached at Tier 2"), CraftErr, EPACraftingError::MaxTierLevelReached);
 
 			// --- Test 2: Successful Forging at Tier 3 Forge ---
 			Blacksmith->SetForgeTier(EPABlacksmithTier::Tier3_Sanctuary);
 			bForged = Blacksmith->ForgeBossSoulEquipment(
-				Inventory, Wallet, DivineSword,
+				Inventory, Wallet, BossSoulSword,
 				FName("item_boss_soul_dragon"), FName("item_boss_horn"), FName("void_ore"),
 				CraftErr);
-			TestTrue(TEXT("AC-1: Divine forging succeeds at Tier 3 Forge"), bForged);
+			TestTrue(TEXT("AC-1: Boss soul forging succeeds at Tier 3 Forge"), bForged);
 			TestEqual(TEXT("AC-1: Error is None on success"), CraftErr, EPACraftingError::None);
 			TestEqual(TEXT("AC-1: Wallet deducted 5,000 Gold -> 5,000 remaining"), Wallet->GetGold(), 5000LL);
 			TestEqual(TEXT("AC-1: Boss Soul consumed (0 remaining)"), Inventory->GetItemCount(FName("item_boss_soul_dragon")), 0);
 			TestEqual(TEXT("AC-1: Boss Horn consumed (0 remaining)"), Inventory->GetItemCount(FName("item_boss_horn")), 0);
 			TestEqual(TEXT("AC-1: Void Ore consumed (0 remaining)"), Inventory->GetItemCount(FName("void_ore")), 0);
 
-			// Verify Divine weapon added to inventory slot 0
+			// Verify boss-soul Legendary weapon added to inventory slot 0
 			const FPAInventoryItemEntry* ResultItem = Inventory->GetItemAtSlot(0);
-			TestNotNull(TEXT("AC-1: Divine Weapon present in inventory"), ResultItem);
+			TestNotNull(TEXT("AC-1: Boss-soul Legendary weapon present in inventory"), ResultItem);
 			if (ResultItem)
 			{
-				TestEqual(TEXT("AC-1: Item ID matches Divine Dragon Slayer"), ResultItem->ItemDefId, FName("item_divine_dragon_slayer"));
+				TestEqual(TEXT("AC-1: Item ID matches boss-soul Dragon Slayer"), ResultItem->ItemDefId, FName("item_boss_soul_dragon_slayer"));
 				TestEqual(TEXT("AC-1: Durability is 100%"), ResultItem->DynamicData.CurrentDurability, 100.0f);
 			}
 
 			// --- Test 3: Insufficient Materials Failure ---
 			bForged = Blacksmith->ForgeBossSoulEquipment(
-				Inventory, Wallet, DivineSword,
+				Inventory, Wallet, BossSoulSword,
 				FName("item_boss_soul_dragon"), FName("item_boss_horn"), FName("void_ore"),
 				CraftErr);
 			TestFalse(TEXT("AC-1: Forging fails without ingredients"), bForged);

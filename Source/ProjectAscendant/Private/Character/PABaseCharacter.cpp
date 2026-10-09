@@ -132,11 +132,11 @@ void APABaseCharacter::BeginPlay()
 		{
 			const FName SelectedClassTag = AccSub->GetSelectedCharacterClass();
 			EPACharacterClass SelectedClass = EPACharacterClass::Vanguard;
-			if (SelectedClassTag == FName(TEXT("Class.Ranger")))
+			if (SelectedClassTag == FName(TEXT("Class.Line.Scout.Ranger")))
 			{
 				SelectedClass = EPACharacterClass::Ranger;
 			}
-			else if (SelectedClassTag == FName(TEXT("Class.Arcanist")))
+			else if (SelectedClassTag == FName(TEXT("Class.Line.Caster.Arcanist")))
 			{
 				SelectedClass = EPACharacterClass::Arcanist;
 			}

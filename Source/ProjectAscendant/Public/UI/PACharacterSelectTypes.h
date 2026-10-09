@@ -32,7 +32,7 @@ struct PROJECTASCENDANT_API FPACharacterClassInfo
 	EPACharacterClass ClassType = EPACharacterClass::Vanguard;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ascendant|CharacterSelect")
-	FString ClassTag = TEXT("Class.Vanguard");
+	FString ClassTag = TEXT("Class.Line.Guard.Vanguard");
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ascendant|CharacterSelect")
 	FText DisplayName;

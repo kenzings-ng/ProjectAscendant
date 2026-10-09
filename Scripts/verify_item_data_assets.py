@@ -74,8 +74,9 @@ def verify():
             tag = asset.get_editor_property("required_class_tag")
             tag_export = tag.export_text() if hasattr(tag, 'export_text') else str(tag)
             unreal.log(f"  required_class_tag: {tag_export}")
-            if "Class.Vanguard" not in tag_export:
-                unreal.log_error(f"DA_SkillBook_Dash required_class_tag does not contain Class.Vanguard: {tag_export}")
+            # X7 (DECISIONS.md section 8): class tags use Class.Line.<Line>.<Class>
+            if '"Class.Line.Guard.Vanguard"' not in tag_export:
+                unreal.log_error(f"DA_SkillBook_Dash required_class_tag is not Class.Line.Guard.Vanguard: {tag_export}")
                 all_ok = False
 
     if all_ok:

@@ -110,6 +110,10 @@ struct PROJECTASCENDANT_API FPAPaperdollConstants
 
 	static FName GetDefaultCrestAssetForClass(FName ClassName);
 	static FName GetDefaultTabardAssetForClass(FName ClassName);
+	/** Tên tag chuẩn Class.Line.<Nhánh>.<Class> cho tên class (DECISIONS.md §8); NAME_None nếu không thuộc 16 class. */
+	static FName GetClassTagNameForClass(FName ClassName);
+	/** Toàn bộ 16 tag class chuẩn Class.Line.* (DECISIONS.md §2/§8). */
+	static TArray<FName> GetAllClassTagNames();
 	static FGameplayTag GetTagForClass(FName ClassName);
 	static FName GetClassNameFromTag(FGameplayTag ClassTag);
 };

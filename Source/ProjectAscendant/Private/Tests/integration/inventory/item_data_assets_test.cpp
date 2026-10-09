@@ -24,7 +24,7 @@
  *  - AC-2 (Consumable Quickbar DataAssets):
  *    * DA_Potion_Health: Slot Quickbar_1, ConsumableDuration 0.8s, SpeedDebuff 30%, Restores 100 HP, MaxStack 20.
  *  - AC-3 (Skill Book DataAsset):
- *    * DA_SkillBook_Dash: ItemType SkillBook, RequiredClassTag = Class.Vanguard, GrantedAbilityClass = UPAGameplayAbility_Dash (UGA_Dash), MaxStack 1.
+ *    * DA_SkillBook_Dash: ItemType SkillBook, RequiredClassTag = Class.Line.Guard.Vanguard (DECISIONS.md §8), GrantedAbilityClass = UPAGameplayAbility_Dash (UGA_Dash), MaxStack 1.
  */
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(
 	FPACoreItemDataAssetsIntegrationTest,
@@ -160,9 +160,10 @@ bool FPACoreItemDataAssetsIntegrationTest::RunTest(const FString& Parameters)
 			TestEqual(TEXT("AC-3: Dash SkillBook Category must be SkillBook"), DashBookData->Category, EPAItemCategory::SkillBook);
 			TestEqual(TEXT("AC-3: Dash SkillBook MaxStack must be 1"), DashBookData->MaxStackSize, 1);
 
-			// RequiredClassTag: Class.Vanguard
-			const FGameplayTag VanguardTag = FGameplayTag::RequestGameplayTag(FName(TEXT("Class.Vanguard")), false);
-			TestTrue(TEXT("AC-3: RequiredClassTag must match Class.Vanguard"), DashBookData->RequiredClassTag.MatchesTag(VanguardTag));
+			// RequiredClassTag: Class.Line.Guard.Vanguard (X7, DECISIONS.md §8)
+			const FGameplayTag VanguardTag = FGameplayTag::RequestGameplayTag(FName(TEXT("Class.Line.Guard.Vanguard")), false);
+			TestTrue(TEXT("AC-3: Class.Line.Guard.Vanguard is a registered tag"), VanguardTag.IsValid());
+			TestTrue(TEXT("AC-3: RequiredClassTag must be exactly Class.Line.Guard.Vanguard"), DashBookData->RequiredClassTag.MatchesTagExact(VanguardTag));
 
 			// GrantedAbilityClass: UPAGameplayAbility_Dash / UGA_Dash
 			TestEqual(TEXT("AC-3: GrantedAbilityClass must be UPAGameplayAbility_Dash (UGA_Dash)"), DashBookData->GrantedAbilityClass, TSubclassOf<UGameplayAbility>(UGA_Dash::StaticClass()));
@@ -213,8 +214,9 @@ bool FPACoreItemDataAssetsIntegrationTest::RunTest(const FString& Parameters)
 		if (LoadedSkillBook)
 		{
 			TestEqual(TEXT("AC-3 (.uasset): SkillBook category is SkillBook"), LoadedSkillBook->Category, EPAItemCategory::SkillBook);
-			const FGameplayTag VanguardTag = FGameplayTag::RequestGameplayTag(FName(TEXT("Class.Vanguard")), false);
-			TestTrue(TEXT("AC-3 (.uasset): SkillBook RequiredClassTag is Class.Vanguard"), LoadedSkillBook->RequiredClassTag.MatchesTag(VanguardTag));
+			const FGameplayTag VanguardTag = FGameplayTag::RequestGameplayTag(FName(TEXT("Class.Line.Guard.Vanguard")), false);
+			TestTrue(TEXT("AC-3 (.uasset): Class.Line.Guard.Vanguard is a registered tag"), VanguardTag.IsValid());
+			TestTrue(TEXT("AC-3 (.uasset): SkillBook RequiredClassTag is exactly Class.Line.Guard.Vanguard"), LoadedSkillBook->RequiredClassTag.MatchesTagExact(VanguardTag));
 			TestEqual(TEXT("AC-3 (.uasset): SkillBook GrantedAbilityClass is UPAGameplayAbility_Dash"), LoadedSkillBook->GrantedAbilityClass, TSubclassOf<UGameplayAbility>(UGA_Dash::StaticClass()));
 			TestEqual(TEXT("AC-3 (.uasset): SkillBook max stack is 1"), LoadedSkillBook->MaxStackSize, 1);
 			// X6: sách kỹ năng dùng thang kỹ năng 4 bậc, không mang độ hiếm trang bị (DECISIONS.md §5)

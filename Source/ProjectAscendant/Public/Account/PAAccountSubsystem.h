@@ -155,7 +155,7 @@ public:
 	UFUNCTION(BlueprintPure, Category = "Ascendant|Account")
 	bool IsLoggedIn() const { return CurrentState == EPAAuthLoginState::LoggedIn; }
 
-	/** Thiết lập chức nghiệp được chọn (ví dụ: Class.Vanguard, Class.Ranger, Class.Arcanist) */
+	/** Thiết lập chức nghiệp được chọn (ví dụ: Class.Line.Guard.Vanguard, Class.Line.Scout.Ranger, Class.Line.Caster.Arcanist) */
 	UFUNCTION(BlueprintCallable, Category = "Ascendant|Account")
 	void SetSelectedCharacterClass(FName InClass) { SelectedCharacterClass = InClass; }
 
@@ -211,7 +211,7 @@ private:
 
 	/** Chức nghiệp nhân vật đang được chọn */
 	UPROPERTY(Transient)
-	FName SelectedCharacterClass = FName(TEXT("Class.Vanguard"));
+	FName SelectedCharacterClass = FName(TEXT("Class.Line.Guard.Vanguard"));
 
 	/** Bộ nhớ lưu trữ giả lập các tài khoản đã đăng ký (Email -> Password) */
 	TMap<FString, FString> RegisteredCredentials;

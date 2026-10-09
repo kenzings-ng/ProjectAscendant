@@ -13,22 +13,22 @@ struct FPAEquipmentItemList;
 /**
  * EPAItemRarity
  *
- * 5 Tier cấp độ hiếm theo GDD (inventory-system.md):
- * - Tier 1: Common (Trắng)
- * - Tier 2: Uncommon (Xanh lục)
- * - Tier 3: Rare (Xanh lam)
- * - Tier 4: Epic (Tím)
- * - Tier 5: Legendary (Cam / Hoàng kim)
+ * 5 độ hiếm trang bị theo GDD (inventory-system.md, DECISIONS.md §1 — không gọi là "Tier"/"Bậc"):
+ * - Common (Trắng)
+ * - Uncommon (Xanh lục)
+ * - Rare (Xanh lam)
+ * - Epic (Tím)
+ * - Legendary (Cam / Hoàng kim)
  */
 UENUM(BlueprintType)
 enum class EPAItemRarity : uint8
 {
 	None         = 0 UMETA(DisplayName = "None / Unassigned"),
-	Common       = 1 UMETA(DisplayName = "Tier 1: Common"),
-	Uncommon     = 2 UMETA(DisplayName = "Tier 2: Uncommon"),
-	Rare         = 3 UMETA(DisplayName = "Tier 3: Rare"),
-	Epic         = 4 UMETA(DisplayName = "Tier 4: Epic"),
-	Legendary    = 5 UMETA(DisplayName = "Tier 5: Legendary")
+	Common       = 1 UMETA(DisplayName = "Common"),
+	Uncommon     = 2 UMETA(DisplayName = "Uncommon"),
+	Rare         = 3 UMETA(DisplayName = "Rare"),
+	Epic         = 4 UMETA(DisplayName = "Epic"),
+	Legendary    = 5 UMETA(DisplayName = "Legendary")
 };
 
 /**
