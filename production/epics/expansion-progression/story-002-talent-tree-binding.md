@@ -1,12 +1,14 @@
 # Story 002: Skill Tree & Talent Node Binding
 
 > **Epic**: Expansion Progression & Class Specialization  
-> **Status**: Done  
+> **Status**: Removed — DECISIONS §12, 2026-10-10  
 > **Layer**: Expansion  
 > **Type**: Logic & GAS  
 > **Estimate**: 8 hours (1.0 days)  
 > **Manifest Version**: 2026-09-18  
-> **Last Updated**: 2026-09-18  
+> **Last Updated**: 2026-10-10  
+
+> **Removed (2026-10-10, task X9)**: Talent Tree, Skill Point và Respec của talent không có trong GDD nên đã bị gỡ khỏi code và story theo `production/DECISIONS.md` §12. Các file `PATalentTreeComponent.h/.cpp`, `PATalentTreeTypes.h`, `PATalentTreeTests.cpp` đã xóa; `SpendSkillPoint`/`RefundSkillPoints`/`AvailableSkillPoints` đã gỡ khỏi `UPAProgressionComponent`. Tiến trình kỹ năng theo Skill Book (`skill-progression-system.md`). Respec đổi bộ kỹ năng của GDD (`skill-progression-system.md:210`, `foundational-classes.md:445`) **không** thuộc story này và được giữ nguyên. Nội dung bên dưới chỉ giữ làm lịch sử; mọi AC không còn hiệu lực.
 
 ## Context
 
@@ -30,20 +32,20 @@
 
 ## Acceptance Criteria
 
-- [x] **AC-1 (3-Branch Specialization Trees)**: Cấu trúc cây kỹ năng 3 nhánh chuyên môn hóa cho 3 chức nghiệp:
+- [ ] ~~**AC-1 (3-Branch Specialization Trees)**: Cấu trúc cây kỹ năng 3 nhánh chuyên môn hóa cho 3 chức nghiệp:
   - Vanguard: `Ironclad` (Phòng ngự), `Duelist` (Phản đòn), `Juggernaut` (Công kích)
   - Ranger: `Marksman` (Sát thương tầm xa), `Windrunner` (Tật phong), `Trapper` (Bẫy)
-  - Arcanist: `Pyromancer` (Hỏa thuật), `Chronomancer` (Thời gian), `Leyline` (Địa mạch)
-- [x] **AC-2 (Passive Talent Node Unlocking & GAS Binding)**: Mở khóa các node nội tại (Passive Nodes) tiêu hao Skill Points từ `UPAProgressionComponent`, kiểm tra điều kiện cấp độ (Level) và node tiên quyết (Prerequisite). Tăng trực tiếp các chỉ số trên `UAscendantAttributeSet`:
+  - Arcanist: `Pyromancer` (Hỏa thuật), `Chronomancer` (Thời gian), `Leyline` (Địa mạch)~~ — Removed (DECISIONS §12)
+- [ ] ~~**AC-2 (Passive Talent Node Unlocking & GAS Binding)**: Mở khóa các node nội tại (Passive Nodes) tiêu hao Skill Points từ `UPAProgressionComponent`, kiểm tra điều kiện cấp độ (Level) và node tiên quyết (Prerequisite). Tăng trực tiếp các chỉ số trên `UAscendantAttributeSet`:
   - `BonusAttackPower` (Tăng sát thương)
   - `BonusMaxPosture` (Tăng thanh thế đứng)
   - `DashCooldownReduction` (Giảm hồi chiêu Dash)
-  - `BonusArmor` & `BonusMaxHealth`
-- [x] **AC-3 (Respec / Talent Reset Loop)**: Hỗ trợ tẩy điểm kỹ năng (`ResetTalents`), hoàn trả toàn bộ Skill Points đã tiêu vào `UPAProgressionComponent`, gỡ bỏ các chỉ số cộng thêm khỏi `UAscendantAttributeSet` và làm sạch danh sách node đã mở khóa.
+  - `BonusArmor` & `BonusMaxHealth`~~ — Removed (DECISIONS §12)
+- [ ] ~~**AC-3 (Respec / Talent Reset Loop)**: Hỗ trợ tẩy điểm kỹ năng (`ResetTalents`), hoàn trả toàn bộ Skill Points đã tiêu vào `UPAProgressionComponent`, gỡ bỏ các chỉ số cộng thêm khỏi `UAscendantAttributeSet` và làm sạch danh sách node đã mở khóa.~~ — Removed (DECISIONS §12)
 
 ---
 
-## Implementation Notes
+## Implementation Notes (historical — code removed 2026-10-10)
 
 1. **Talent Tree Types (`PATalentTreeTypes.h`)**:
    - `EPATalentTreeError`: `None`, `InvalidNodeId`, `NodeAlreadyUnlocked`, `PrerequisiteNotMet`, `InsufficientLevel`, `InsufficientSkillPoints`, `NoNodesToReset`, `NotAuthoritative`, `ServerRejected`.
