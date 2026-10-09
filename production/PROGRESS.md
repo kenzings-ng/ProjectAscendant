@@ -372,6 +372,17 @@
    - Kiểm chứng: `claude -p` từ nhánh này khởi chạy được `reviewer`. CI "Fast Gates" PASS (job 113795600412). Reviewer: **PASS**.
 3. **Bộ công cụ CCGS (không đưa vào git)**: skills (74), agents (49), docs, rules đặt tại `project-games/.claude/`, symlink vào `ProjectAscendant/.claude/` (đã nằm trong `.gitignore`). Hooks/statusline chưa cài — chờ chủ dự án tự chạy lệnh cài.
 4. **Tồn đọng ghi nhận**: `.github/PULL_REQUEST_TEMPLATE.md` và `.github/ISSUE_TEMPLATE/` vẫn là mẫu CCGS; git LFS cảnh báo khoảng 6.191 file (vd. `Art_Gallery/`) đáng lẽ là LFS pointer nhưng đang lưu thẳng trong git trên `main`.
+5. **PR #5 — nhật ký mục 2.4** (commit `87858d9`, merge `0f888f9` trên `origin/main`). CI "Fast Gates" PASS. Reviewer: **PASS**.
+
+### 2.5 Rà Soát Tài Liệu Plan ↔ Code (2026-10-09) — PR #6
+
+- **Nhánh / commit**: `docs/review-plan-vs-code-2026-10-09`, commit `e114df0`, merge `50adcf5` trên `origin/main` (xác nhận bằng `git ls-remote`).
+- **Nội dung**: plan `production/plans/review-plan-vs-code-2026-10-09.md`; báo cáo `production/qa/review-plan-vs-code-2026-10-09.md`; báo cáo thô của từng nhóm và từng reviewer kiểm chứng trong thư mục cùng tên. Đây là đợt rà soát **read-only**, không sửa code, GDD hay `DECISIONS.md`.
+- **Kết luận rà soát**: FAIL. Có 4 BLOCKER: R1 Ash Shards; R2 thiếu thang độ hiếm kỹ năng 4 bậc; R3 ROADMAP trống trong khi mục 1 của file này ghi "đã duyệt"; R4 22/24 test trong `Tests/` chưa từng được biên dịch nhưng story vẫn ghi PASS. Ngoài ra có 21 nhóm MAJOR. Có 15 đề xuất sửa đang chờ chủ dự án duyệt.
+- **Lưu ý về tính đúng của file này**: các tuyên bố trước đây ở mục 1 ("ROADMAP đã duyệt", "hoàn thành 100% Giai đoạn 0") và các dòng "PASS" trong story bị báo cáo trên xác định là **không có bằng chứng**. Các dòng đó chưa được sửa trong PR này; việc sửa thuộc đề xuất số 5 của báo cáo, chờ duyệt.
+- **Cổng**: GDD Consistency PASS (92 file, 0 lỗi, exit 0). CI "Fast Gates" PASS (job 113804944672). Không chạy lại test UE vì PR chỉ chứa tài liệu.
+- **Reviewer**: lần 1 FAIL (8 lỗi) → lần 2 FAIL (1 lỗi cấu trúc danh sách) → lần 3 **PASS**.
+- **Phân công**: nhóm A giao cho Antigravity (`agy -p`) nhưng 3 lần đều bị chế độ headless từ chối quyền `command`, nên chuyển sang Claude subagent. Các nhóm B1–B4, C và D1–D3 do Claude subagent làm.
 
 ---
 
