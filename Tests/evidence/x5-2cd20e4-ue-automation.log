@@ -1,0 +1,76 @@
+# X5 UE automation evidence | git HEAD=2cd20e4c3f4d4784e9103a7d79de6d1d5ec30fbd | date=2026-10-09T15:17:10Z | run_headless_tests.sh --ue exit code=0 | TRIMMED EXCERPT of Saved/Logs/AutomationTest_Headless.log (3166 lines): command line, 'Found N', every Result= line, queue-empty line
+# Script summary: UE Automation Summary: Discovered=67, Passed=67, Failed=0, Errors=0, QueueFinished=1, ExitCode=1
+# Note: a previous run at the same HEAD exited 1 (log truncated after 'Test Started' of ProjectAscendant.World.CitadelSafeZonesAndAutoSave, no crash dump, 66/67 Success, 0 Fail); immediate re-run below passed 67/67.
+LogInit: Command Line: -nullrhi -nosound -unattended -nopause -ExecCmds="Automation RunTests ProjectAscendant." -TestExit="Automation Test Queue Empty" -log=AutomationTest_Headless.log
+[2026.10.09-15.17.09:316][590]LogAutomationCommandLine: Display: Found 67 automation tests based on 'ProjectAscendant.'
+[2026.10.09-15.17.09:342][593]LogAutomationController: Display: Test Completed. Result={Success} Name={AuthTokenHandshake} Path={ProjectAscendant.Account.AuthTokenHandshake}
+[2026.10.09-15.17.09:367][596]LogAutomationController: Display: Test Completed. Result={Success} Name={BossAITelegraphs} Path={ProjectAscendant.AI.BossAITelegraphs}
+[2026.10.09-15.17.09:385][598]LogAutomationController: Display: Test Completed. Result={Success} Name={SpineBossAnimation} Path={ProjectAscendant.AI.SpineBossAnimation}
+[2026.10.09-15.17.09:409][601]LogAutomationController: Display: Test Completed. Result={Success} Name={PaperdollModularSystem} Path={ProjectAscendant.Character.PaperdollModularSystem}
+[2026.10.09-15.17.09:426][603]LogAutomationController: Display: Test Completed. Result={Success} Name={VanguardRuntimeWiring} Path={ProjectAscendant.Character.VanguardRuntimeWiring}
+[2026.10.09-15.17.09:458][606]LogAutomationController: Display: Test Completed. Result={Success} Name={CivilianNPCAndTownGuardAI} Path={ProjectAscendant.CharacterVisual.CivilianNPCAndTownGuardAI}
+[2026.10.09-15.17.09:477][609]LogAutomationController: Display: Test Completed. Result={Success} Name={IdentitySocketsAndOverlays} Path={ProjectAscendant.CharacterVisual.IdentitySocketsAndOverlays}
+[2026.10.09-15.17.09:502][612]LogAutomationController: Display: Test Completed. Result={Success} Name={MasterRigDecoupledStateMachine} Path={ProjectAscendant.CharacterVisual.MasterRigDecoupledStateMachine}
+[2026.10.09-15.17.09:527][615]LogAutomationController: Display: Test Completed. Result={Success} Name={DamageAndPostureCalculations} Path={ProjectAscendant.Combat.Formulas.DamageAndPostureCalculations}
+[2026.10.09-15.17.09:552][618]LogAutomationController: Display: Test Completed. Result={Success} Name={DashIFramePerfectDodge} Path={ProjectAscendant.Combat.DashIFramePerfectDodge}
+[2026.10.09-15.17.09:577][621]LogAutomationController: Display: Test Completed. Result={Success} Name={PartBreakingMatrix} Path={ProjectAscendant.Combat.PartBreakingMatrix}
+[2026.10.09-15.17.09:602][624]LogAutomationController: Display: Test Completed. Result={Success} Name={RegressionHardening} Path={ProjectAscendant.Combat.RegressionHardening}
+[2026.10.09-15.17.09:627][627]LogAutomationController: Display: Test Completed. Result={Success} Name={StaggerExecution} Path={ProjectAscendant.Combat.StaggerExecution}
+[2026.10.09-15.17.09:652][630]LogAutomationController: Display: Test Completed. Result={Success} Name={BossPaperZDAggroIntegration} Path={ProjectAscendant.Core.Character.BossPaperZDAggroIntegration}
+[2026.10.09-15.17.09:670][632]LogAutomationController: Display: Test Completed. Result={Success} Name={Paper2DFlipbooksIntegration} Path={ProjectAscendant.Core.Character.Paper2DFlipbooksIntegration}
+[2026.10.09-15.17.09:693][635]LogAutomationController: Display: Test Completed. Result={Success} Name={PaperZDAnimBPIntegration} Path={ProjectAscendant.Core.Character.PaperZDAnimBPIntegration}
+[2026.10.09-15.17.09:718][638]LogAutomationController: Display: Test Completed. Result={Success} Name={GASComboFinisherIntegration} Path={ProjectAscendant.Core.Combat.GASComboFinisherIntegration}
+[2026.10.09-15.17.09:744][641]LogAutomationController: Display: Test Completed. Result={Success} Name={GASDashAbilityIntegration} Path={ProjectAscendant.Core.Combat.GASDashAbilityIntegration}
+[2026.10.09-15.17.09:762][643]LogAutomationController: Display: Test Completed. Result={Success} Name={ReviewFixesRegression} Path={ProjectAscendant.Core.Combat.ReviewFixesRegression}
+[2026.10.09-15.17.09:786][646]LogAutomationController: Display: Test Completed. Result={Success} Name={ItemDataAssetsIntegration} Path={ProjectAscendant.Core.Items.ItemDataAssetsIntegration}
+[2026.10.09-15.17.09:811][649]LogAutomationController: Display: Test Completed. Result={Success} Name={MapBlockoutCameraIntegration} Path={ProjectAscendant.Core.World.MapBlockoutCameraIntegration}
+[2026.10.09-15.17.09:837][652]LogAutomationController: Display: Test Completed. Result={Success} Name={SanctuaryLeashVolumeIntegration} Path={ProjectAscendant.Core.World.SanctuaryLeashVolumeIntegration}
+[2026.10.09-15.17.09:861][655]LogAutomationController: Display: Test Completed. Result={Success} Name={Blacksmith} Path={ProjectAscendant.Crafting.Blacksmith}
+[2026.10.09-15.17.09:886][658]LogAutomationController: Display: Test Completed. Result={Success} Name={BossSoulForging} Path={ProjectAscendant.Crafting.BossSoulForging}
+[2026.10.09-15.17.09:911][661]LogAutomationController: Display: Test Completed. Result={Success} Name={EnhancementSocketing} Path={ProjectAscendant.Crafting.EnhancementSocketing}
+[2026.10.09-15.17.09:936][664]LogAutomationController: Display: Test Completed. Result={Success} Name={CurrencyWallet} Path={ProjectAscendant.Economy.CurrencyWallet}
+[2026.10.09-15.17.09:961][667]LogAutomationController: Display: Test Completed. Result={Success} Name={KarmaDeathPenalties} Path={ProjectAscendant.Economy.KarmaDeathPenalties}
+[2026.10.09-15.17.09:986][670]LogAutomationController: Display: Test Completed. Result={Success} Name={Merchant} Path={ProjectAscendant.Economy.Merchant}
+[2026.10.09-15.17.10:011][673]LogAutomationController: Display: Test Completed. Result={Success} Name={WanderingSmuggler} Path={ProjectAscendant.Economy.WanderingSmuggler}
+[2026.10.09-15.17.10:036][676]LogAutomationController: Display: Test Completed. Result={Success} Name={AuthAndIdentityPipeline} Path={ProjectAscendant.Foundation.Account.AuthAndIdentityPipeline}
+[2026.10.09-15.17.10:054][678]LogAutomationController: Display: Test Completed. Result={Success} Name={AttributesAndReplication} Path={ProjectAscendant.Foundation.Combat.AttributesAndReplication}
+[2026.10.09-15.17.10:078][681]LogAutomationController: Display: Test Completed. Result={Success} Name={ContestedThreatTable} Path={ProjectAscendant.Foundation.Combat.ContestedThreatTable}
+[2026.10.09-15.17.10:103][684]LogAutomationController: Display: Test Completed. Result={Success} Name={DamageExecutionCalculations} Path={ProjectAscendant.Foundation.Combat.DamageExecutionCalculations}
+[2026.10.09-15.17.10:127][687]LogAutomationController: Display: Test Completed. Result={Success} Name={StaminaExhaustionPipeline} Path={ProjectAscendant.Foundation.Combat.StaminaExhaustionPipeline}
+[2026.10.09-15.17.10:153][690]LogAutomationController: Display: Test Completed. Result={Success} Name={CameraLookAheadAndOcclusion} Path={ProjectAscendant.Foundation.Controller.CameraLookAheadAndOcclusion}
+[2026.10.09-15.17.10:178][693]LogAutomationController: Display: Test Completed. Result={Success} Name={CursorDeprojectionAndAiming} Path={ProjectAscendant.Foundation.Controller.CursorDeprojectionAndAiming}
+[2026.10.09-15.17.10:203][696]LogAutomationController: Display: Test Completed. Result={Success} Name={ScreenRelativeMovement} Path={ProjectAscendant.Foundation.Controller.ScreenRelativeMovement}
+[2026.10.09-15.17.10:228][699]LogAutomationController: Display: Test Completed. Result={Success} Name={FastArrayGridInventory} Path={ProjectAscendant.Foundation.Inventory.FastArrayGridInventory}
+[2026.10.09-15.17.10:255][702]LogAutomationController: Display: Test Completed. Result={Success} Name={PaperdollGASEquipmentIntegration} Path={ProjectAscendant.Foundation.Inventory.PaperdollGASEquipmentIntegration}
+[2026.10.09-15.17.10:278][705]LogAutomationController: Display: Test Completed. Result={Success} Name={TransactionalRPCsAndSafeguards} Path={ProjectAscendant.Foundation.Inventory.TransactionalRPCsAndSafeguards}
+[2026.10.09-15.17.10:303][708]LogAutomationController: Display: Test Completed. Result={Success} Name={ContestedLootFinisherIntegration} Path={ProjectAscendant.Foundation.Netcode.ContestedLootFinisherIntegration}
+[2026.10.09-15.17.10:321][710]LogAutomationController: Display: Test Completed. Result={Success} Name={IrisSpatialAndGhostBody} Path={ProjectAscendant.Foundation.Netcode.IrisSpatialAndGhostBody}
+[2026.10.09-15.17.10:344][713]LogAutomationController: Display: Test Completed. Result={Success} Name={LocomotionLagCompensation} Path={ProjectAscendant.Foundation.Netcode.LocomotionLagCompensation}
+[2026.10.09-15.17.10:369][716]LogAutomationController: Display: Test Completed. Result={Success} Name={BlacksmithSocketing} Path={ProjectAscendant.Itemization.BlacksmithSocketing}
+[2026.10.09-15.17.10:394][719]LogAutomationController: Display: Test Completed. Result={Success} Name={DualCurrencyTransactions} Path={ProjectAscendant.Itemization.DualCurrencyTransactions}
+[2026.10.09-15.17.10:419][722]LogAutomationController: Display: Test Completed. Result={Success} Name={EpicIntegrationPipeline} Path={ProjectAscendant.Itemization.EpicIntegrationPipeline}
+[2026.10.09-15.17.10:444][725]LogAutomationController: Display: Test Completed. Result={Success} Name={MaterialRarity} Path={ProjectAscendant.Itemization.MaterialRarity}
+[2026.10.09-15.17.10:469][728]LogAutomationController: Display: Test Completed. Result={Success} Name={Paperdoll9Slot} Path={ProjectAscendant.Itemization.Paperdoll9Slot}
+[2026.10.09-15.17.10:495][731]LogAutomationController: Display: Test Completed. Result={Success} Name={RaidCombatStackingEngine} Path={ProjectAscendant.Itemization.RaidCombatStackingEngine}
+[2026.10.09-15.17.10:570][734]LogAutomationController: Display: Test Completed. Result={Success} Name={SavedItemInstance} Path={ProjectAscendant.Itemization.SavedItemInstance}
+[2026.10.09-15.17.10:595][737]LogAutomationController: Display: Test Completed. Result={Success} Name={ServerItemGenerator} Path={ProjectAscendant.Itemization.ServerItemGenerator}
+[2026.10.09-15.17.10:620][740]LogAutomationController: Display: Test Completed. Result={Success} Name={DifficultyScalingLoot} Path={ProjectAscendant.Network.DifficultyScalingLoot}
+[2026.10.09-15.17.10:645][743]LogAutomationController: Display: Test Completed. Result={Success} Name={IrisReplication} Path={ProjectAscendant.Network.IrisReplication}
+[2026.10.09-15.17.10:670][746]LogAutomationController: Display: Test Completed. Result={Success} Name={AC1_ClassTreeStructure} Path={ProjectAscendant.Progression.TalentTree.AC1_ClassTreeStructure}
+[2026.10.09-15.17.10:695][749]LogAutomationController: Display: Test Completed. Result={Success} Name={AC2_UnlockNode_AttributeBinding} Path={ProjectAscendant.Progression.TalentTree.AC2_UnlockNode_AttributeBinding}
+[2026.10.09-15.17.10:712][751]LogAutomationController: Display: Test Completed. Result={Success} Name={AC3_ResetTalents_Refund} Path={ProjectAscendant.Progression.TalentTree.AC3_ResetTalents_Refund}
+[2026.10.09-15.17.10:728][753]LogAutomationController: Display: Test Completed. Result={Success} Name={AC1_MaxLevelCap} Path={ProjectAscendant.Progression.AC1_MaxLevelCap}
+[2026.10.09-15.17.10:753][756]LogAutomationController: Display: Test Completed. Result={Success} Name={AC1_MultiLevelUp} Path={ProjectAscendant.Progression.AC1_MultiLevelUp}
+[2026.10.09-15.17.10:778][759]LogAutomationController: Display: Test Completed. Result={Success} Name={AC1_NonLinearXPCurve} Path={ProjectAscendant.Progression.AC1_NonLinearXPCurve}
+[2026.10.09-15.17.10:805][762]LogAutomationController: Display: Test Completed. Result={Success} Name={AC2_GrantXP_LevelUp_StatGrowth} Path={ProjectAscendant.Progression.AC2_GrantXP_LevelUp_StatGrowth}
+[2026.10.09-15.17.10:829][765]LogAutomationController: Display: Test Completed. Result={Success} Name={AC2_SpendSkillPoint} Path={ProjectAscendant.Progression.AC2_SpendSkillPoint}
+[2026.10.09-15.17.10:846][767]LogAutomationController: Display: Test Completed. Result={Success} Name={BossHUD} Path={ProjectAscendant.UI.BossHUD}
+[2026.10.09-15.17.10:871][770]LogAutomationController: Display: Test Completed. Result={Success} Name={CharacterSelectTextures} Path={ProjectAscendant.UI.CharacterSelectTextures}
+[2026.10.09-15.17.10:895][773]LogAutomationController: Display: Test Completed. Result={Success} Name={FloatingCombatText} Path={ProjectAscendant.UI.FloatingCombatText}
+[2026.10.09-15.17.10:913][775]LogAutomationController: Display: Test Completed. Result={Success} Name={PlayerVitals} Path={ProjectAscendant.UI.PlayerVitals}
+[2026.10.09-15.17.10:937][778]LogAutomationController: Display: Test Completed. Result={Success} Name={ShopForgeUI} Path={ProjectAscendant.UI.ShopForgeUI}
+[2026.10.09-15.17.10:954][780]LogAutomationController: Display: Test Completed. Result={Success} Name={CitadelSafeZonesAndAutoSave} Path={ProjectAscendant.World.CitadelSafeZonesAndAutoSave}
+LogCsvProfiler: Display: Metadata set : commandline="" /mnt/Data/Projects/project-games/ProjectAscendant/ProjectAscendant.uproject -nullrhi -nosound -unattended -nopause -ExecCmds="Automation RunTests ProjectAscendant." -TestExit="Automation Test Queue Empty" -log=AutomationTest_Headless.log""
+LogInit: Command Line: -nullrhi -nosound -unattended -nopause -ExecCmds="Automation RunTests ProjectAscendant." -TestExit="Automation Test Queue Empty" -log=AutomationTest_Headless.log
+[2026.10.09-15.17.10:956][780]LogAutomationCommandLine: Display: ...Automation Test Queue Empty 67 tests performed.
+[2026.10.09-15.17.10:956][781]LogExit: Display: **** TestExit: Automation Test Queue Empty ****
