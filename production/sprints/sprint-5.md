@@ -10,7 +10,7 @@
 ## Sprint Goal
 
 Hoàn thành Tầng Giao Chiến & Cơ Chế Đấu Trùm (**Encounter & Boss Mechanics Layer**) cho *Project Ascendant*, hoàn tất vòng lặp chiến đấu đỉnh cao liên kết chặt chẽ với hệ thống HUD ở Sprint 4:
-Triển khai trí tuệ nhân tạo Trùm **Ironclad Warlord** với 4 pha ra chiêu chuẩn mực (Telegraph decal, Flash Cue phản xạ, Hitbox, Recovery) và cơ chế choáng khi húc tường; Hệ thống Phá vỡ thế trận (**Posture Stagger**) với 3.0s quỳ gối, đòn kết liễu gây **25% True Damage** kèm 1.2s bất tử; Hệ thống Phá hủy bộ phận (**Part Breaking**) khóa vĩnh viễn chiêu thức tương ứng của trùm; và Hệ thống Né đòn hoàn hảo (**Dash I-Frame & Perfect Dodge**) với cửa sổ vàng 0.05–0.15s thưởng +15 thể lực và 0.08s hitstop toàn cục.
+Triển khai trí tuệ nhân tạo Trùm **Ironclad Warlord** với 4 pha ra chiêu chuẩn mực (Telegraph decal, Flash Cue phản xạ, Hitbox, Recovery) và cơ chế choáng khi húc tường; Hệ thống Phá vỡ thế trận (**Posture Stagger**) với 3.0s quỳ gối, đòn kết liễu gây **25% True Damage** kèm 1.5s bất tử cho người kết liễu và 1.5s choáng mục tiêu (theo code runtime `UPAGameplayAbility_Finisher`; trước 2026-10-09 ghi 1.2s bất tử); Hệ thống Phá hủy bộ phận (**Part Breaking**) khóa vĩnh viễn chiêu thức tương ứng của trùm; và Hệ thống Né đòn hoàn hảo (**Dash I-Frame & Perfect Dodge**) với cửa sổ vàng 0.05–0.15s thưởng +15 thể lực và 0.08s hitstop toàn cục (Perfect Dodge chưa triển khai trong code (theo quyết định 2026-10-09: giá trị code là chuẩn)).
 
 ---
 
@@ -21,14 +21,14 @@ Triển khai trí tuệ nhân tạo Trùm **Ironclad Warlord** với 4 pha ra ch
 | ID | Task | Owner | Est. Days | Dependencies | Acceptance Criteria |
 |---|---|---|---|---|---|
 | `boss-001` | [Prototype Boss AI & 4-Phase Telegraph System](file:///mnt/Data/Projects/project-games/ProjectAscendant/production/epics/encounter-boss/story-001-boss-ai-telegraphs.md) | `gameplay-programmer` | 1.0 (8h) | `cmbt-001`, `hud-002` | AC-1: 4 pha ra chiêu (Telegraph, Flash Cue 0.10s, Hitbox, Recovery); AC-2: 5 kỹ năng với chấm điểm EQS theo góc/cự ly; AC-3: 3 giai đoạn máu trùm; AC-4: Choáng 1.8s khi húc tường. |
-| `stgr-001` | [Posture Stagger, Kneel Window & True Damage Execution](file:///mnt/Data/Projects/project-games/ProjectAscendant/production/epics/encounter-boss/story-002-stagger-execution.md) | `gameplay-programmer` | 1.0 (8h) | `attr-002`, `hud-002` | AC-1: Trùm quỳ gối 3.0s tại 100% Posture; AC-2: Đòn kết liễu gây 25% True Damage + I-Frame 1.2s; AC-3: Suy giảm Posture 20/s sau 4s; AC-4: Hoàn lại 50% Posture nếu lỡ cơ hội. |
+| `stgr-001` | [Posture Stagger, Kneel Window & True Damage Execution](file:///mnt/Data/Projects/project-games/ProjectAscendant/production/epics/encounter-boss/story-002-stagger-execution.md) | `gameplay-programmer` | 1.0 (8h) | `attr-002`, `hud-002` | AC-1: Trùm quỳ gối 3.0s tại 100% Posture; AC-2: Đòn kết liễu gây 25% True Damage + I-Frame 1.5s và choáng mục tiêu 1.5s (code runtime; trước 2026-10-09 ghi I-Frame 1.2s); AC-3: Suy giảm Posture 20/s sau 4s; AC-4: Hoàn lại 50% Posture nếu lỡ cơ hội. |
 
 ### Should Have (16 hours / 2.0 days)
 
 | ID | Task | Owner | Est. Days | Dependencies | Acceptance Criteria |
 |---|---|---|---|---|---|
 | `stgr-002` | [Anatomical Part Breaking & Skill Disabling Matrix](file:///mnt/Data/Projects/project-games/ProjectAscendant/production/epics/encounter-boss/story-003-part-breaking-matrix.md) | `gameplay-programmer` | 1.0 (8h) | `stgr-001`, `boss-001` | AC-1: Theo dõi máu độc lập Sừng (20%), Đuôi (15%), Giáp ngực (25%); AC-2: Gãy sừng/đuôi khóa vĩnh viễn chiêu tương ứng; AC-3: Giáp ngực vỡ nhận +50% sát thương; AC-4: Báo tin rơi nguyên liệu rèn. |
-| `dash-001` | [Dash I-Frame, Perfect Dodge Sweet Spot & Hitstop](file:///mnt/Data/Projects/project-games/ProjectAscendant/production/epics/encounter-boss/story-004-dash-iframe-perfect-dodge.md) | `gameplay-programmer` | 1.0 (8h) | `attr-003`, `hud-001` | AC-1: Lướt 0.45s, I-Frame 0.28s; AC-2: Cửa sổ Perfect Dodge 0.05-0.15s (+15 thể lực, 0.08s hitstop); AC-3: Chống rơi mép vực; AC-4: Hủy phục hồi sang Dash Attack từ 0.35s. |
+| `dash-001` | [Dash I-Frame, Perfect Dodge Sweet Spot & Hitstop](file:///mnt/Data/Projects/project-games/ProjectAscendant/production/epics/encounter-boss/story-004-dash-iframe-perfect-dodge.md) | `gameplay-programmer` | 1.0 (8h) | `attr-003`, `hud-001` | AC-1: Lướt 0.35s / 450cm, I-Frame 0.20s từ 0.05s đến 0.25s (code runtime `UPAGameplayAbility_Dash`; trước 2026-10-09 ghi 0.45s / 0.28s); AC-2: Cửa sổ Perfect Dodge 0.05-0.15s (+15 thể lực, 0.08s hitstop); AC-3: Chống rơi mép vực; AC-4: Hủy phục hồi sang Dash Attack (mốc cũ từ 0.35s cần định lại). *(AC-2..AC-4 chưa triển khai trong code (theo quyết định 2026-10-09: giá trị code là chuẩn).)* |
 
 ---
 

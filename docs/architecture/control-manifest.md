@@ -5,6 +5,7 @@
 > **Manifest Version**: 2026-09-16  
 > **ADRs Covered**: [ADR-0001](adr-0001-open-world-mmo-combat-networking.md), [ADR-0002](adr-0002-gas-integration-paperzd-pixel-sprites.md), [ADR-0003](adr-0003-server-authoritative-grid-inventory-fast-array.md)  
 > **Status**: Active — regenerate with `/create-control-manifest update` when ADRs change  
+> **Amendment 2026-10-09 (X10)**: Core-layer dash / combo values synced to runtime code per DECISIONS.md §12 (code values are authoritative; game feel still pending owner approval). `Manifest Version` intentionally unchanged. Before/after table: `production/qa/x10-combat-values-before-after.md`.  
 
 `Manifest Version` is the date this manifest was generated. Story files embed this date when created. `/story-readiness` compares a story's embedded version to this field to detect stories written against stale rules. Always matches `Last Updated` — they are the same date, serving different consumers.
 
@@ -47,9 +48,9 @@ This manifest is a programmer's quick-reference extracted from all Accepted ADRs
 - **PaperZD AnimNotify to GAS Bridge**: Combat attack montages must place custom PaperZD AnimNotify tracks (`AnimNotify_ActiveHitboxStart` / `End`) to trigger server-side 3D Chaos capsule sweeps — source: [ADR-0002](adr-0002-gas-integration-paperzd-pixel-sprites.md)
 - **True 3D Chaos Sweep Volumes**: Hitboxes must use 3D Chaos collision sweeps (e.g. `SweepMultiByChannel` with capsule or box geometry) aligned with the isometric ground plane, not 2D sprite box collisions — source: [ADR-0002](adr-0002-gas-integration-paperzd-pixel-sprites.md)
 - **Server-Authoritative GameplayEffects**: Damage, healing, posture damage, and status effects must be applied exclusively via `UGameplayEffect` on the Dedicated Server — source: [ADR-0002](adr-0002-gas-integration-paperzd-pixel-sprites.md)
-- **I-Frame Tag Application**: Dash/evasion mechanics must grant `GameplayTag.State.Invulnerable` during the 0.25s active window via a replicated GameplayEffect — source: [ADR-0002](adr-0002-gas-integration-paperzd-pixel-sprites.md)
+- **I-Frame Tag Application**: Dash/evasion mechanics must grant `GameplayTag.State.Invulnerable` during the 0.20s active window from t = 0.05s to t = 0.25s of the 0.35s dash (runtime `UPAGameplayAbility_Dash`, `PAGameplayAbility_Dash.h:158,162`) via a replicated GameplayEffect; previously stated here as "0.25s" — source: [ADR-0002](adr-0002-gas-integration-paperzd-pixel-sprites.md)
 - **Posture Break (Stagger) Execution**: When Posture reaches 100%, the entity must enter `GameplayTag.State.Staggered`, triggering a 3.0s vulnerability window and critical damage multipliers — source: [ADR-0002](adr-0002-gas-integration-paperzd-pixel-sprites.md)
-- **Input Buffer Queue**: The combo state machine must support a 250ms input buffer queue to capture queued attacks during animation recovery frames — source: [ADR-0002](adr-0002-gas-integration-paperzd-pixel-sprites.md)
+- **Input Buffer Queue**: The combo state machine must support an input buffer queue to capture queued attacks during animation recovery frames — **chưa triển khai trong code (theo quyết định 2026-10-09: giá trị code là chuẩn)**: production code has no input buffer. Design-intent values disagree (250ms previously stated here; 0.15s in `combat-system.md`) and must be settled when implemented. Runtime combo reset window is 1.2s between activations (`PAGameplayAbility_MeleeAttack.h:167`) — source: [ADR-0002](adr-0002-gas-integration-paperzd-pixel-sprites.md)
 
 ### Forbidden Approaches
 - **Never use invisible 3D skeletal mesh proxies under 2D sprites**: Characters are rendered directly via PaperZD flipbook components. Do not attach hidden 3D skeletal meshes to drive hitboxes — source: [ADR-0002](adr-0002-gas-integration-paperzd-pixel-sprites.md)
@@ -125,7 +126,7 @@ This manifest is a programmer's quick-reference extracted from all Accepted ADRs
 | Member Variables | PascalCase | `CurrentHealth`, `MaxStamina` |
 | Signals / Delegates | `On[Action]` | `OnPostureBroken`, `OnItemEquipped` |
 | Source Files | PascalCase matching class | `PACombatComponent.h`, `PACombatComponent.cpp` |
-| Constants | Prefix `k` or constexpr in namespace | `kMaxInputBufferSize = 0.25f` |
+| Constants | Prefix `k` or constexpr in namespace | `kComboResetDelay = 1.2f` |
 
 ### 5.2 Smart Pointers & Memory Management
 - **`TObjectPtr<T>` for Member UObjects**: Never use raw C++ pointers (`MyClass*`) for UObject member variables; always use `TObjectPtr<T>` — source: `docs/engine-reference/unreal/deprecated-apis.md`

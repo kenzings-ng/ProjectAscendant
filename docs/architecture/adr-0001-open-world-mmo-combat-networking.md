@@ -35,7 +35,7 @@ Trong môi trường thế giới mở nơi hàng trăm người chơi xa lạ c
 
 * **Trụ Cột 1 & Trụ Cột 3**: Biểu đạt kỹ năng tối thượng (True Skill Expression) và thế giới mở cạnh tranh rủi ro cao - phần thưởng lớn.
 * **Chống Độc Hại & Chống Gian Lận (Anti-Griefing & Anti-Cheat)**: Bảo vệ nạn nhân bị PK, trừng phạt nghiêm khắc kẻ ác (Red Name), ngăn chặn hoàn toàn việc client tự báo cáo sát thương gian lận.
-* **Tính Nhất Quán Trong Gameplay**: Đảm bảo các chỉ số GAS (`UAscendantAttributeSet`), I-frame 0.28s, Stagger 3.0s được đồng bộ hoàn hảo trên máy chủ.
+* **Tính Nhất Quán Trong Gameplay**: Đảm bảo các chỉ số GAS (`UAscendantAttributeSet`), I-frame 0.20s (từ 0.05s đến 0.25s của cú lướt 0.35s; trước 2026-10-09 ghi 0.28s — đổi theo code runtime `UPAGameplayAbility_Dash`, DECISIONS.md §12), Stagger 3.0s được đồng bộ hoàn hảo trên máy chủ.
 * **Khả Năng Mở Rộng Kỹ Thuật (Scalability)**: Sử dụng Dedicated Server với UE 5.7 Iris Replication để tối ưu băng thông khi đông người chơi cùng tụ tập săn Boss thế giới.
 
 ---

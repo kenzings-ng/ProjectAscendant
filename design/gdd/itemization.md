@@ -122,7 +122,7 @@ Chỉ xuất hiện trên trang bị Bậc Legendary. Thay vì chỉ tăng số 
    - Khi Boss vỡ thế, Server chỉ áp dụng giá trị kéo dài thời gian lớn nhất từ người tung đòn bẻ khớp (`Posture Finisher`). Thời gian choáng của Boss bị **khóa cứng trần tối đa ở 3.5 giây** (Base 3.0s + Max 0.5s).
 2. **RULE 2: INSTIGATOR ONLY (Độc Quyền Người Kích Hoạt)**:
    - Áp dụng cho: `prefix_execution_dmg_pct` và `suffix_leech_on_stagger`.
-   - Căn cứ theo [`attributes-system.md`](file:///mnt/Data/Projects/project-games/design/gdd/attributes-system.md), chỉ duy nhất **1 người chơi tương tác với tử huyệt (`Socket_Execution`)** thực hiện hoạt ảnh kết liễu `AM_Execute_Boss`. Sát thương kết liễu ($25\% \times (1.0 + \text{Bonus})$) và bùa hồi phục chỉ tính toán trên thuộc tính của Executor. Nhịp độ 3.0s quỳ gối và 1.2s hoạt ảnh bất tử được bảo toàn nguyên vẹn 100%.
+   - Căn cứ theo [`attributes-system.md`](file:///mnt/Data/Projects/project-games/design/gdd/attributes-system.md), chỉ duy nhất **1 người chơi tương tác với tử huyệt (`Socket_Execution`)** thực hiện hoạt ảnh kết liễu `AM_Execute_Boss`. Sát thương kết liễu ($25\% \times (1.0 + \text{Bonus})$) và bùa hồi phục chỉ tính toán trên thuộc tính của Executor. Nhịp độ 3.0s quỳ gối và 1.5s hoạt ảnh bất tử (theo code `PAGameplayAbility_Finisher.h:91`, cập nhật 2026-10-09) được bảo toàn nguyên vẹn 100%.
 3. **RULE 3: PERSONAL OUTGOING (Cá Nhân Hóa Đòn Đánh & Trần DoT Toàn Raid)**:
    - Áp dụng cho: `prefix_staggered_target_dmg`, `prefix_armor_pen_pct`, `prefix_all_ele_pct`, và `prefix_dot_bleed`.
    - **Quy chuẩn Chảy Máu (`prefix_dot_bleed` / `GE_Debuff_Bleed`) trong Contested PvE**:

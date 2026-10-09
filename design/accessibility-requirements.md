@@ -106,7 +106,7 @@ Built entirely on **Unreal Engine 5.7 Enhanced Input System (`UEnhancedInputComp
 
 ### 4.3 Elimination of Rapid Button Mashing
 - **Zero Required QTE Mashing**: Mechanics that simulate struggles, grappling escapes, or sustained spell casting use **Hold-to-Channel** or **Auto-Repeat** at a configurable frequency (e.g. 5 inputs/second while button is held).
-- **Input Buffer Tuning**: Global input buffer window configured at 250ms (see ADR-0002 & Combat GDD) to accommodate varying reaction speeds and avoid dropped inputs during animation recovery.
+- **Input Buffer Tuning**: Global input buffer window configured at 250ms (see ADR-0002 & Combat GDD) to accommodate varying reaction speeds and avoid dropped inputs during animation recovery. *(X10 2026-10-09: input buffer chưa triển khai trong code (theo quyết định 2026-10-09: giá trị code là chuẩn); design-intent value still disagrees with `combat-system.md` (0.15s) and must be settled on implementation.)*
 
 ---
 

@@ -2,7 +2,7 @@
 
 > **Status**: Approved  
 > **Author**: Systems Designer & Lead Programmer  
-> **Last Updated**: 2026-09-15  
+> **Last Updated**: 2026-10-09 (X10: đồng bộ nền Dash theo code runtime)  
 > **Implements Pillar**: True Skill Expression & Meaningful Progression  
 > **Target Engine**: Unreal Engine 5 (GAS & Enhanced Input)
 
@@ -84,7 +84,7 @@ Tất cả 4 Class cơ bản được mở khóa miễn phí ngay từ màn hìn
 - **Phong cách:** Cơ động tốc độ cao, cấu rỉa tầm xa, kiểm soát bước chân quái bằng bẫy.
 - **Cơ Chế Độc Quyền: Nhịp Lướt Tật Phong (Acrobatic Momentum)**:
   - Chi phí lướt né (Dash Stamina Cost) giảm từ 25 xuống còn **20 điểm Thể Lực**.
-  - Tổng thời gian lướt ngắn hơn 0.05s (chỉ còn **0.40 giây**, đỉnh tốc 1350 cm/s), cho phép ngắt hoạt ảnh lướt (Dash Cancel) sớm hơn các class khác.
+  - Tổng thời gian lướt ngắn hơn 0.05s (chỉ còn **0.40 giây**, đỉnh tốc 1350 cm/s), cho phép ngắt hoạt ảnh lướt (Dash Cancel) sớm hơn các class khác. *(Biến thể lướt riêng của Ranger: chưa triển khai trong code (theo quyết định 2026-10-09: giá trị code là chuẩn). Mốc 0.40s / 1350 cm/s được tính trên nền cũ 0.45s / 1200 cm/s; nền Dash theo code hiện là 0.35s / 450cm nên mốc của Ranger cần chủ dự án định lại — xem Formulas §3 và Open Questions.)*
   - Có khả năng bắn một phát tên phụ nhanh (*Snap Shot*) ngay khi vừa kết thúc thao tác lướt né mà không làm giảm tốc độ di chuyển.
 - **Bộ Kỹ Năng Khởi Đầu (Starter Kit):**
   - *Active 1 (Slot Q) — Xuyên Tâm Tiễn (Piercing Shot):* Kéo căng cung trong 0.4s bắn mũi tên xuyên thẳng qua mọi quái vật trên đường bay cự ly 1200cm (Tiêu hao: 20 Mana, Hồi chiêu: 5.0s).
@@ -232,10 +232,10 @@ The `ranger_acrobatic_dash` formula is defined as:
 |---|:---:|:---:|:---:|---|
 | Base Dash Stamina | $\text{BaseStamina}$ | float | $25.0$ | Chi phí Stamina lướt né tiêu chuẩn của game. |
 | Stamina Reduction | $\Delta S$ | float | $5.0$ | Lượng Stamina được giảm trừ độc quyền của Ranger. |
-| Base Dash Duration | $\text{BaseDuration}$ | float | $0.45$ | Tổng thời gian lướt né tiêu chuẩn (giây). |
+| Base Dash Duration | $\text{BaseDuration}$ | float | $0.35$ | Tổng thời gian lướt né tiêu chuẩn (giây), theo code `UPAGameplayAbility_Dash` (`PAGameplayAbility_Dash.h:150`); trước 2026-10-09 là $0.45$. |
 | Duration Reduction | $\Delta T$ | float | $0.05$ | Lượng thời gian lướt được rút ngắn (giây). |
 
-**Output Range:** Chi phí Stamina $= \mathbf{20.0}$ điểm; Thời gian lướt $= \mathbf{0.40}$ giây (I-frame giữ nguyên $0.28\text{s}$, đạt đỉnh tốc $1350\text{ cm/s}$).  
+**Output Range:** Chi phí Stamina $= \mathbf{20.0}$ điểm; Thời gian lướt $= \text{BaseDuration} - 0.05$ — với nền code $0.35\text{s}$ công thức cho $0.30\text{s}$ (giá trị cũ $0.40\text{s}$ tính trên nền $0.45\text{s}$), **chờ chủ dự án duyệt**; I-frame giữ nguyên như nền ($0.20\text{s}$, từ $0.05\text{s}$ đến $0.25\text{s}$). Mốc đỉnh tốc $1350\text{ cm/s}$ của thiết kế cũ không còn căn cứ vì nền code tính vận tốc đỉnh $= 2 \times \text{quãng đường} / \text{thời lượng}$. *(Biến thể Ranger chưa triển khai trong code (theo quyết định 2026-10-09: giá trị code là chuẩn).)*  
 **Example:** Bình Stamina gốc của Ranger là $120$ điểm $\rightarrow$ Ranger có thể thực hiện liên tiếp $\lfloor 120 / 20 \rfloor = \mathbf{6}$ cú lướt né (so với chỉ $4$ cú lướt của các class khác với Stamina $100$ và phí $25$).
 
 ---
@@ -280,8 +280,8 @@ The `acolyte_aegis_barrier` formula is defined as:
    - *Nếu Posture tụt về 0 trong lúc Block:* Nhân vật bị **Vỡ Thế Thủ (Guard Break)**, bật ngửa ra sau, choáng váng trong **1.5 giây** (`State.Staggered.GuardBreak`) và nhận thêm +30% sát thương trong thời gian này.
 
 2. **If Ranger đang lướt né mà bị đòn đánh của Boss quét trúng**:
-   - *Nếu trúng trong cửa sổ 0.28s đầu:* Kích hoạt **Né Hoàn Hảo (Perfect Dodge)** — hoàn trả ngay +15 Stamina, kích hoạt buff nội tại *Bộ Pháp Nhanh Nhẹn* (+25% tốc chạy trong 2.5s) và miễn nhiễm sát thương hoàn toàn.
-   - *Nếu trúng trong 0.12s cuối (Pha phục hồi / Recovery):* Nhận 100% sát thương đòn đánh và bị ngắt quãng chuyển động lướt.
+   - *Nếu trúng trong khung I-frame (từ 0.05s đến 0.25s của cú lướt):* Kích hoạt **Né Hoàn Hảo (Perfect Dodge)** (chưa triển khai trong code (theo quyết định 2026-10-09: giá trị code là chuẩn)) — hoàn trả ngay +15 Stamina, kích hoạt buff nội tại *Bộ Pháp Nhanh Nhẹn* (+25% tốc chạy trong 2.5s) và miễn nhiễm sát thương hoàn toàn.
+   - *Nếu trúng sau khi hết I-frame (từ 0.25s đến hết cú lướt — Pha phục hồi / Recovery; trước 2026-10-09 ghi là 0.12s cuối):* Nhận 100% sát thương đòn đánh và bị ngắt quãng chuyển động lướt.
 
 3. **If Arcanist đã tích đủ 3 tầng Quá Tải Ma Lực (Arcane Charge) nhưng tiếp tục dùng kỹ năng thay vì đánh thường**:
    - Số tầng tích lũy không tăng thêm (vẫn giữ nguyên tối đa là 3 tầng).
@@ -290,7 +290,7 @@ The `acolyte_aegis_barrier` formula is defined as:
 
 4. **If Tu Sĩ (Acolyte) tụt Stamina dưới 30% khi cơ chế Chân Khí Hộ Thể đang trong thời gian hồi nội tại (ICD 20s)**:
    - Sóng chân khí và việc hồi 30 Stamina KHÔNG kích hoạt.
-   - Tu Sĩ rơi vào trạng thái Kiệt Sức (`State.Debuff.Exhausted`), tốc độ di chuyển giảm 30% và buộc phải dùng *Lăn Sinh Tồn (Desperation Roll)* với chi phí gấp đôi cho đến khi hồi trên 30 Stamina.
+   - Tu Sĩ rơi vào trạng thái Kiệt Sức (`State.Debuff.Exhausted`), tốc độ di chuyển giảm 30% và buộc phải dùng *Lăn Sinh Tồn (Desperation Roll)* với chi phí gấp đôi cho đến khi hồi trên 30 Stamina. *(Desperation Roll chưa triển khai trong code (theo quyết định 2026-10-09: giá trị code là chuẩn): `UPAGameplayAbility_Dash` chặn cú lướt khi Stamina < 25.)*
 
 5. **If người chơi thực hiện Chuyển Đổi Class Cơ Bản (Class Swap) tại Lửa Trại**:
    - Toàn bộ cấp độ kỹ năng và số lượng Tàn Trang đã đầu tư trong Grimoire của Class cũ được bảo lưu vĩnh viễn 100%.
@@ -425,7 +425,7 @@ Tích hợp trực tiếp vào thanh trạng thái CommonUI của người chơi
 - [ ] **AC-3 (Ranger Acrobatic Dash & Stamina Reduction):**
   - **GIVEN** Du Hiệp (Ranger) có đủ Thể Lực,
   - **WHEN** nhấn phím Space để thực hiện lướt né,
-  - **THEN** thanh Stamina chỉ tiêu hao đúng $20.0$ điểm (thay vì $25.0$ điểm tiêu chuẩn), tổng thời gian lướt kéo dài đúng $0.40\text{s}$ với $0.28\text{s}$ I-frame, và có thể bắn ngay 1 phát tên phụ (*Snap Shot*) mà không bị khựng lại.
+  - **THEN** thanh Stamina chỉ tiêu hao đúng $20.0$ điểm (thay vì $25.0$ điểm tiêu chuẩn), tổng thời gian lướt ngắn hơn nền $0.05\text{s}$ (mốc tuyệt đối chờ duyệt, xem Formulas §3) với I-frame như nền ($0.20\text{s}$, từ $0.05\text{s}$ đến $0.25\text{s}$), và có thể bắn ngay 1 phát tên phụ (*Snap Shot*) mà không bị khựng lại. *(chưa triển khai trong code (theo quyết định 2026-10-09: giá trị code là chuẩn))*
 
 - [ ] **AC-4 (Arcanist Arcane Surge Resource Loop):**
   - **GIVEN** Thuật Sĩ (Arcanist) đã tích lũy đủ 3 tầng `Arcane Charge` qua việc tung kỹ năng ma pháp trúng đích,
@@ -451,4 +451,4 @@ Tích hợp trực tiếp vào thanh trạng thái CommonUI của người chơi
 
 ## Open Questions
 
-*Không còn câu hỏi thiết kế tồn đọng. Toàn bộ thông số và cơ chế đã được đồng bộ chuẩn xác với Attributes Engine (GAS), Core Combat, Dash Evasion, Stagger System và Inventory System.*
+- **Q1 (2026-10-09):** Nền Dash đổi theo code (0.35s, I-frame 0.05s–0.25s, 450cm — DECISIONS.md §12). Thời lượng lướt và đỉnh tốc riêng của Ranger (cũ: 0.40s / 1350 cm/s, `entities.yaml` `ranger_dash_duration = 0.40`) cần chủ dự án định lại trên nền mới.

@@ -2,9 +2,11 @@
 
 > **Status**: Approved  
 > **Author**: Systems Designer & Lead Programmer  
-> **Last Updated**: 2026-09-14  
+> **Last Updated**: 2026-10-09 (X10: đồng bộ thông số Dash / Đòn Kết Liễu theo code runtime)  
 > **Implements Pillar**: True Skill Expression & Break Posture  
 > **Target Engine**: Unreal Engine 5 (C++ Gameplay Ability System)
+
+> **Đồng bộ thông số (2026-10-09, DECISIONS.md §12)**: Các giá trị I-frame, thời lượng lướt và Đòn Kết Liễu trong tài liệu này lấy theo code runtime `UPAGameplayAbility_Dash` và `UPAGameplayAbility_Finisher`. Cảm giác chơi vẫn chờ chủ dự án duyệt. Bảng đối chiếu trước/sau: `production/qa/x10-combat-values-before-after.md`.
 
 ---
 
@@ -40,7 +42,7 @@ Toàn bộ thuộc tính nhân vật và quái vật được khai báo trong C+
 | **`Mana` / `MaxMana`** | Năng lượng kỹ năng | 100 / 100 | Dùng thi triển skill Class. Tự hồi 5/giây hoặc hồi 10 điểm khi đánh thường trúng đích. |
 | **`Posture` / `MaxPosture`** | Thanh Thế đứng | 0 / 100 *(Boss: 0 / 1000+)* | **Cơ chế ngược:** Tích tụ từ 0 đến 100. Đạt 100% kích hoạt `State.Staggered` (Choáng vỡ thế). |
 | **`PostureDecayRate`** | Tốc độ hạ nhiệt thế đứng | 20 / giây | Bắt đầu giảm nhiệt nếu không bị tấn công trong **4.0 giây** (`PostureDecayDelay`). |
-| **`IFrameDuration`** | Thời lượng bất tử khi né | 0.28 giây | Kích hoạt thẻ `State.Invulnerable` trong 0.28s đầu của cú lướt (tổng hoạt ảnh lướt 0.45s). |
+| **`IFrameDuration`** | Thời lượng bất tử khi né | 0.20 giây | Kích hoạt thẻ `State.Invulnerable` từ t = 0.05s đến t = 0.25s của cú lướt (tổng hoạt ảnh lướt 0.35s), theo `UPAGameplayAbility_Dash` (`PAGameplayAbility_Dash.h:158,162`). *Lưu ý: attribute `IFrameDuration` của `UAscendantAttributeSet` vẫn khởi tạo 0.28 (`AscendantAttributeSet.cpp:24`) nhưng ability Dash không đọc attribute này — lệch trong code, ghi nhận để xử lý bằng task code riêng.* |
 | **`MoveSpeed`** | Tốc độ di chuyển | 550 cm/s | Tốc độ chạy 8 hướng chuẩn góc nhìn Isometric. |
 
 ### States and Transitions
@@ -51,7 +53,7 @@ Trạng thái nhân vật được quản lý thông qua GameplayTags:
 stateDiagram-v2
     [*] --> Normal
     Normal --> Dodging: Bấm Space / Nhấn Lướt (Tốn 25 Stamina)
-    Dodging --> Normal: Hết hoạt ảnh lướt (0.45s)
+    Dodging --> Normal: Hết hoạt ảnh lướt (0.35s, sau đó hồi chiêu Dash 0.5s)
     Normal --> Exhausted: Stamina chạm mốc 0
     Exhausted --> Normal: Stamina hồi phục vượt mốc 30%
     Normal --> Staggered: Posture đạt 100% MaxPosture
@@ -60,7 +62,7 @@ stateDiagram-v2
     Staggered --> Dead: Bị Đòn Kết Liễu (Execution)
 ```
 
-- **`State.Invulnerable` (Bất Tử Tạm Thời):** Được gán vào nhân vật trong suốt 0.28s của `IFrameDuration`. Mọi sát thương và hiệu ứng truyền vào bị triệt tiêu 100%.
+- **`State.Invulnerable` (Bất Tử Tạm Thời):** Được gán vào nhân vật trong 0.20s của `IFrameDuration` (từ t = 0.05s đến t = 0.25s của cú lướt). Mọi sát thương và hiệu ứng truyền vào bị triệt tiêu 100%.
 - **`State.Exhausted` (Kiệt Sức):** Xuất hiện khi lạm dụng Stamina về 0. Nhân vật bị giảm 25% tốc độ chạy và khóa hoàn toàn nút Lướt né trong 1.5 giây cho đến khi Stamina hồi phục trên 30%.
 - **`State.Staggered` (Vỡ Thế Đứng - Cơ chế Đánh Vượt Cấp):** 
   - Khi Posture của Boss hoặc Player đầy 100%: Mục tiêu bị đóng băng cử động trong 3.0 giây, mở ra cửa sổ **Đòn Kết Liễu (Execution Window)**.
@@ -95,7 +97,9 @@ $$\text{PostureDamage} = \text{BaseStagger} \times (1 + \text{StaggerBonus}) \ti
 
 ### 3. Công thức Đòn Kết Liễu Vượt Cấp (Stagger Execution Damage)
 
-$$\text{ExecuteDamage} = (\text{TargetMaxHP} \times 0.25) + (\text{BaseDamage} \times 3.0)$$
+$$\text{ExecuteDamage} = \text{TargetMaxHP} \times 0.25$$
+
+- **Theo code runtime** (`UPAGameplayAbility_Finisher`, `PAGameplayAbility_Finisher.h:95`, `PAGameplayAbility_MeleeAttack.cpp:104-108`): sát thương chuẩn đúng 25% Max HP, bỏ qua giáp. Công thức cũ của tài liệu này có thêm hạng tử $+ (\text{BaseDamage} \times 3.0)$; hạng tử đó chỉ còn trong `UPADamageExecutionCalculation` (`PADamageExecutionCalculation.cpp:64`) vốn không được Finisher gọi ở runtime, nên bỏ khỏi công thức chuẩn theo quyết định 2026-10-09.
 
 - **Ý nghĩa thiết kế:** Khi làm đầy 100% Posture của Boss, người chơi kích hoạt đòn kết liễu rút thẳng **25% Max HP của Boss**. Người chơi kỹ năng cao chỉ cần 4 lần phá thế thành công là có thể hạ gục Boss vượt 20-30 cấp mà không bị cản trở bởi lượng máu khổng lồ của Boss.
 
@@ -108,7 +112,7 @@ $$\text{Stamina} = \min(\text{MaxStamina}, \text{Stamina} + \text{StaminaRegenRa
 
 ## Edge Cases
 
-- **Cú lướt tuyệt vọng (Desperation Roll):** Nếu Stamina chỉ còn dưới 25 điểm (ví dụ: còn 5 điểm) mà người chơi bấm phím né, hệ thống vẫn cho phép lướt đủ 0.28s I-frame để cứu người chơi trong khoảnh khắc sinh tử. Tuy nhiên, Stamina sẽ bị âm tạm thời và nhân vật lập tức rơi vào trạng thái Kiệt Sức (`State.Exhausted`) trong **2.2 giây** (thay vì 1.5 giây thông thường).
+- **Cú lướt tuyệt vọng (Desperation Roll)** — **chưa triển khai trong code (theo quyết định 2026-10-09: giá trị code là chuẩn)**: `UPAGameplayAbility_Dash` chặn hoàn toàn cú lướt khi Stamina < 25 (`PAGameplayAbility_Dash.cpp:30`); nhánh Desperation Roll trong `FPAStaminaPipeline::ConsumeStamina` (`PAStaminaComponent.cpp:32-35`) không được gọi ở runtime. Ý đồ thiết kế: Nếu Stamina chỉ còn dưới 25 điểm (ví dụ: còn 5 điểm) mà người chơi bấm phím né, hệ thống vẫn cho phép lướt đủ khung I-frame để cứu người chơi trong khoảnh khắc sinh tử. Tuy nhiên, Stamina sẽ bị âm tạm thời và nhân vật lập tức rơi vào trạng thái Kiệt Sức (`State.Exhausted`) trong **2.2 giây** (thay vì 1.5 giây thông thường).
 - **Ngắt chiêu Boss khi Vỡ Thế Đứng:** Nếu Boss đang bay trên không hoặc đang gồng chiêu cuối diện rộng mà bị đòn đánh dồn đầy 100% Posture, toàn bộ hoạt ảnh của Boss bị ngắt lập tức (Animation Interrupt). Boss rơi xuống đất nằm gục trong 3.0 giây. Cơ chế Posture luôn được ưu tiên cao hơn Super-Armor của quái.
 - **Tranh chấp đòn kết liễu trong MMO Contested Combat ([ADR-0001](file:///mnt/Data/Projects/project-games/docs/architecture/adr-0001-open-world-mmo-combat-networking.md)):** Người chơi tung đòn bẻ gãy điểm Posture cuối cùng (Posture Break Finisher) nhận cửa sổ ưu tiên 1.5 giây đầu tiên để tương tác kết liễu độc quyền gây 25% Max HP của Boss. Sau 1.5 giây nếu Finisher chưa kích hoạt, nút kết liễu sẽ mở tự do cho bất kỳ người chơi tham chiến nào trong bán kính. Khi đòn kết liễu hoàn tất, toàn bộ người chơi tham chiến đứng trong bán kính 10m (1000cm) đều nhận được bùa lợi **Hưng Phấn Chiến Đấu** (+20% tốc độ đánh và hồi đầy thanh Stamina ngay lập tức).
 
@@ -134,7 +138,7 @@ Các biến số có thể tinh chỉnh trực tiếp trong GameplayEffect hoặ
 | Tên Biến Số | Giá Trị Mặc Định | Biên Độ Khuyến Nghị | Mục Đích Cân Bằng |
 | :--- | :---: | :---: | :--- |
 | `StaminaCost_Dash` | 25.0 | 20.0 – 35.0 | Điều tiết số lần lướt tối đa liên tục trước khi kiệt sức. |
-| `IFrameDuration` | 0.28s | 0.24s – 0.32s | Thước đo độ khó của việc canh timing né đòn. |
+| `IFrameDuration` | 0.20s (bắt đầu tại 0.05s) | — (chờ duyệt cảm giác chơi) | Thước đo độ khó của việc canh timing né đòn (`PAGameplayAbility_Dash.h:158,162`). |
 | `StaminaRegenDelay` | 0.6s | 0.4s – 1.0s | Nhịp dừng trước khi hồi phục thể lực. |
 | `StaminaRegenRate` | 45.0 / s | 35.0 – 60.0 | Tốc độ lấp đầy thanh thể lực. |
 | `ExhaustedDuration` | 1.5s | 1.0s – 2.5s | Thời gian chịu phạt kiệt sức khi dùng cạn Stamina. |
@@ -172,13 +176,13 @@ Các biến số có thể tinh chỉnh trực tiếp trong GameplayEffect hoặ
 
 ## Acceptance Criteria
 
-- [ ] **AC-1 (Né & I-frame):** Bấm phím né tiêu hao chính xác 25 Stamina, kích hoạt I-frame trong 0.28s đầu; mọi hitbox đi xuyên qua người chơi trong 0.28s này không gây sát thương và không gây hiệu ứng.
+- [ ] **AC-1 (Né & I-frame):** Bấm phím né tiêu hao chính xác 25 Stamina, kích hoạt I-frame từ t = 0.05s đến t = 0.25s; mọi hitbox đi xuyên qua người chơi trong khung 0.20s này không gây sát thương và không gây hiệu ứng.
 - [ ] **AC-2 (Kiệt Sức):** Tiêu hao Stamina về 0 kích hoạt ngay lập tức thẻ `State.Exhausted`, giảm 25% tốc chạy và khóa phím né đòn trong 1.5s.
-- [ ] **AC-3 (Phá Thế Đứng):** Khi Posture của Boss đạt 100%, Boss bị khựng lại 3.0s; bấm phím tấn công trong cự ly 3m sẽ kích hoạt hoạt ảnh kết liễu rút đúng 25% Max HP của Boss.
+- [ ] **AC-3 (Phá Thế Đứng):** Khi Posture của Boss đạt 100%, Boss bị khựng lại 3.0s; bấm phím tấn công trong cự ly 250cm sẽ kích hoạt hoạt ảnh kết liễu rút đúng 25% Max HP của Boss (`PAGameplayAbility_Finisher.h:87`).
 - [ ] **AC-4 (Đồng Bộ Mạng GAS):** Mọi thuộc tính (Máu, Stamina, Posture) đồng bộ mượt mà giữa Server và Client qua Unreal Replication; Client né đòn có cảm giác tức thì nhờ Client-side Prediction.
 
 ---
 
 ## Open Questions
 
-- **Q1:** Có nên cho phép trang bị cấp cao (như Cấp Thần / Divine) tăng nhẹ thời lượng I-frame (ví dụ từ 0.28s lên 0.32s) hay giữ nguyên 0.28s cố định xuyên suốt game để bảo toàn tính công bằng kỹ năng? *(Đề xuất: Giữ cố định 0.28s, trang bị chỉ nên giảm lượng Stamina tiêu hao thay vì kéo dài I-frame).*
+- **Q1:** Có nên cho phép trang bị cấp cao (như Cấp Thần / Divine) tăng nhẹ thời lượng I-frame hay giữ nguyên 0.20s cố định xuyên suốt game để bảo toàn tính công bằng kỹ năng? *(Đề xuất: Giữ cố định 0.20s, trang bị chỉ nên giảm lượng Stamina tiêu hao thay vì kéo dài I-frame).* *(Cập nhật 2026-10-09: bỏ ví dụ cũ "0.28s → 0.32s"; mốc gốc nay là I-frame 0.20s của code.)*

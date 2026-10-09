@@ -22,7 +22,7 @@ Vòng lặp cốt lõi (**Core Game Loop**) được vận hành qua cấu trúc
 ```mermaid
 flowchart TD
     subgraph Micro["1. Vòng Lặp Tức Thời (Micro Loop: Giây)"]
-        Combat["Chiến đấu Action-First"] --> Dodge["Né lướt I-Frame (200ms)"]
+        Combat["Chiến đấu Action-First"] --> Dodge["Né lướt I-Frame (200ms, từ 0.05s đến 0.25s)"]
         Dodge --> Posture["Bào mòn Posture & Phá thế (Stagger)"]
         Posture --> Finisher["Đòn kết liễu tàn khốc (Finisher)"]
     end
@@ -55,7 +55,7 @@ Mỗi cuộc chạm trán diễn ra với nhịp độ dồn dập, đòi hỏi 
 1. **Quan sát & Phản xạ (Telegraph Recognition):**
    - Boss và quái vật luôn có cửa sổ cảnh báo rõ ràng (VFX mặt đất nứt đỏ, âm thanh gầm rú, frame giương vũ khí dừng có chủ đích).
 2. **Né đòn bất tử (I-Frame Evasion):**
-   - Kỹ năng Dash tiêu tốn thể lực (Stamina) cung cấp chính xác **200ms Invulnerability Frame**.
+   - Kỹ năng Dash tiêu tốn thể lực (25 Stamina) cung cấp chính xác **200ms Invulnerability Frame**, từ t = 0.05s đến t = 0.25s của cú lướt 0.35s (theo code `UPAGameplayAbility_Dash`, quyết định 2026-10-09).
    - Căn lướt đúng khoảnh khắc đòn giáng giúp nhân vật không nhận sát thương và giữ vững thế đứng.
 3. **Bào mòn thanh Posture (Posture Breakdown):**
    - Đòn đánh thường và kỹ năng nặng gây sát thương lên cả thanh Máu (HP) lẫn thanh Thế đứng (Posture).
@@ -116,7 +116,7 @@ Vòng tuần hoàn giữ chân người chơi qua nhiều tuần và tháng:
 
 ## 4. Tiêu Chuẩn Nghiệm Thu Của Core Game Loop (Definition of Done)
 
-1. [x] Thao tác chiến đấu tức thì: Dash né đòn có i-frame 200ms, hủy hoạt ảnh đúng nhịp Action-First.
+1. [x] Thao tác chiến đấu tức thì: Dash né đòn có i-frame 200ms (từ 0.05s đến 0.25s của cú lướt 0.35s), hủy hoạt ảnh đúng nhịp Action-First.
 2. [x] Boss Stone Golem thực thi đầy đủ vòng lặp: Telegraph -> Slam -> Ground Impact -> Stagger Window -> Finisher Execution.
 3. [x] Mạng Iris đồng bộ chính xác giữa 2 client trong môi trường lag/loss: cả hai client thấy chung lượng máu quái, đúng animation Hurt/Dead.
 4. [ ] Bản mẫu Vanguard hoàn chỉnh với art chính thức thể hiện trực quan các lớp giáp Paperdoll và vũ khí gắn đúng socket.
