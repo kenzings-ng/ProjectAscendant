@@ -85,7 +85,12 @@ bool FPAIrisGhostBodyTest::RunTest(const FString& Parameters)
 	// Test 4: AC-4 (Rút Mạng Ngoài Giao Tranh - Cho Phép Thoát Game Tức Thì)
 	// -------------------------------------------------------------------------
 	{
-		UPAGhostBodySubsystem* GhostSubsystem = NewObject<UPAGhostBodySubsystem>(GEngine->GetWorldContexts()[0].World()) /* X12: WorldSubsystem needs a UWorld outer */;
+		UWorld* TestWorld = (GEngine && GEngine->GetWorldContexts().Num() > 0) ? GEngine->GetWorldContexts()[0].World() : nullptr;
+		if (!TestNotNull(TEXT("Cần UWorld làm outer cho WorldSubsystem"), TestWorld))
+		{
+			return false;
+		}
+		UPAGhostBodySubsystem* GhostSubsystem = NewObject<UPAGhostBodySubsystem>(TestWorld) /* X12: WorldSubsystem needs a UWorld outer */;
 		FSubsystemCollection<UWorldSubsystem> TestCollection; // X12: real empty collection (was a nullptr reference, UB)
 		GhostSubsystem->Initialize(TestCollection);
 
@@ -103,7 +108,12 @@ bool FPAIrisGhostBodyTest::RunTest(const FString& Parameters)
 	// Test 5: AC-4 (Rút Mạng Trong Giao Tranh - Duy Trì Xác Ma Đúng 15.0 Giây)
 	// -------------------------------------------------------------------------
 	{
-		UPAGhostBodySubsystem* GhostSubsystem = NewObject<UPAGhostBodySubsystem>(GEngine->GetWorldContexts()[0].World()) /* X12: WorldSubsystem needs a UWorld outer */;
+		UWorld* TestWorld = (GEngine && GEngine->GetWorldContexts().Num() > 0) ? GEngine->GetWorldContexts()[0].World() : nullptr;
+		if (!TestNotNull(TEXT("Cần UWorld làm outer cho WorldSubsystem"), TestWorld))
+		{
+			return false;
+		}
+		UPAGhostBodySubsystem* GhostSubsystem = NewObject<UPAGhostBodySubsystem>(TestWorld) /* X12: WorldSubsystem needs a UWorld outer */;
 		FSubsystemCollection<UWorldSubsystem> TestCollection; // X12: real empty collection (was a nullptr reference, UB)
 		GhostSubsystem->Initialize(TestCollection);
 
@@ -126,7 +136,12 @@ bool FPAIrisGhostBodyTest::RunTest(const FString& Parameters)
 	// Test 6: AC-4 (Kết Nối Lại Thành Công Trong Vòng 15 Giây - Reconnect)
 	// -------------------------------------------------------------------------
 	{
-		UPAGhostBodySubsystem* GhostSubsystem = NewObject<UPAGhostBodySubsystem>(GEngine->GetWorldContexts()[0].World()) /* X12: WorldSubsystem needs a UWorld outer */;
+		UWorld* TestWorld = (GEngine && GEngine->GetWorldContexts().Num() > 0) ? GEngine->GetWorldContexts()[0].World() : nullptr;
+		if (!TestNotNull(TEXT("Cần UWorld làm outer cho WorldSubsystem"), TestWorld))
+		{
+			return false;
+		}
+		UPAGhostBodySubsystem* GhostSubsystem = NewObject<UPAGhostBodySubsystem>(TestWorld) /* X12: WorldSubsystem needs a UWorld outer */;
 		FSubsystemCollection<UWorldSubsystem> TestCollection; // X12: real empty collection (was a nullptr reference, UB)
 		GhostSubsystem->Initialize(TestCollection);
 
@@ -146,7 +161,12 @@ bool FPAIrisGhostBodyTest::RunTest(const FString& Parameters)
 	// Test 7: AC-4 (Hết Hạn 15 Giây Hoặc Bị Tiêu Diệt Trong Lúc Rớt Mạng)
 	// -------------------------------------------------------------------------
 	{
-		UPAGhostBodySubsystem* GhostSubsystem = NewObject<UPAGhostBodySubsystem>(GEngine->GetWorldContexts()[0].World()) /* X12: WorldSubsystem needs a UWorld outer */;
+		UWorld* TestWorld = (GEngine && GEngine->GetWorldContexts().Num() > 0) ? GEngine->GetWorldContexts()[0].World() : nullptr;
+		if (!TestNotNull(TEXT("Cần UWorld làm outer cho WorldSubsystem"), TestWorld))
+		{
+			return false;
+		}
+		UPAGhostBodySubsystem* GhostSubsystem = NewObject<UPAGhostBodySubsystem>(TestWorld) /* X12: WorldSubsystem needs a UWorld outer */;
 		FSubsystemCollection<UWorldSubsystem> TestCollection; // X12: real empty collection (was a nullptr reference, UB)
 		GhostSubsystem->Initialize(TestCollection);
 

@@ -306,11 +306,15 @@ bool FPAGASDashAbilityIntegrationTest::RunTest(const FString& Parameters)
         TestEqual(TEXT("AC-3 GAS: Đúng 1 GameplayEffect hồi chiêu Cooldown.Dash đang hoạt động"), CooldownDurations.Num(), 1);
         if (CooldownDurations.Num() == 1)
         {
-            TestNearlyEqual(TEXT("AC-3 GAS: GE hồi chiêu Cooldown.Dash kéo dài đúng GetCooldownDuration()"),
-                CooldownDurations[0], DashAbility->GetCooldownDuration(), 0.001f);
+            // X12: assert against the literal spec value 0.5s (dash-evasion.md:163, DECISIONS §12 code value),
+            // not GetCooldownDuration(), so a changed default would be caught.
+            TestNearlyEqual(TEXT("AC-3 GAS: GE hồi chiêu Cooldown.Dash kéo dài đúng 0.5s"),
+                CooldownDurations[0], 0.5f, 0.001f);
         }
 
         // Hết thời gian hồi chiêu: GE hết hạn -> thẻ Cooldown.Dash phải biến mất
+        // X12 NOTE: expiry is SIMULATED with RemoveActiveEffects (no world tick in this test). This proves the
+        // tag is owned by the cooldown GE, not that GAS expires it after 0.5s of real time.
         ASC->RemoveActiveEffects(CooldownQuery);
         TestFalse(TEXT("AC-3 GAS: Khi GE hồi chiêu hết hạn, thẻ Cooldown.Dash phải được gỡ bỏ"),
             ASC->HasMatchingGameplayTag(TagCooldownDash));
@@ -324,6 +328,8 @@ bool FPAGASDashAbilityIntegrationTest::RunTest(const FString& Parameters)
         const float ExpectedDist = 450.0f;
 
         // Phát delegate trực tiếp trên Ability (AC-4)
+        // X12 NOTE: tautology - the test broadcasts the delegate itself and asserts `true`; it does not prove
+        // that ActivateAbility broadcasts OnDashExecuted.
         DashAbility->OnDashExecuted.Broadcast(ExpectedDir, ExpectedDist);
         TestTrue(TEXT("AC-4: OnDashExecuted trên Ability broadcast an toàn cho visual components"), true);
     }

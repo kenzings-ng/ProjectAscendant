@@ -148,6 +148,7 @@ bool FPASanctuaryLeashVolumeIntegrationTest::RunTest(const FString& Parameters)
 			// Kiểm tra delegate thông báo chuyển vùng AC-3
 			const FGameplayTag TagSanctuary = FGameplayTag::RequestGameplayTag(TEXT("Zone.Sanctuary"), false);
 			SanctuaryVolume->OnZoneTransitionChanged.Broadcast(SanctuaryVolume, TagSanctuary);
+			// X12 NOTE: tautology - broadcasts the delegate itself and asserts `true` (only proves no crash).
 			TestTrue(TEXT("AC-3: Delegate OnZoneTransitionChanged phát an toàn"), true);
 		}
 	}
@@ -198,10 +199,12 @@ bool FPASanctuaryLeashVolumeIntegrationTest::RunTest(const FString& Parameters)
 
 			// Kiểm tra hàm thực thi di chuyển quay về ExecuteReturnMovement
 			LeashComp->ExecuteReturnMovement();
+			// X12 NOTE: tautology - asserts `true`; only proves ExecuteReturnMovement does not crash.
 			TestTrue(TEXT("AC-2: ExecuteReturnMovement thực thi an toàn"), true);
 
 			LeashComp->OnLeashStateChanged.Broadcast(true);
 			LeashComp->OnLeashCompleted.Broadcast();
+			// X12 NOTE: tautology - broadcasts the delegates itself and asserts `true` (only proves no crash).
 			TestTrue(TEXT("AC-2: Delegate OnLeashStateChanged và OnLeashCompleted phát an toàn"), true);
 
 			LeashComp->CompleteLeashReset();

@@ -113,6 +113,13 @@ bool FPAStaminaExhaustionTest::RunTest(const FString& Parameters)
         const bool bCanRecoverC = FPAStaminaPipeline::CanRecoverFromExhaustion(31.0f, MaxStamina, 1.5f, 1.5f);
         TestTrue(TEXT("AC-3: Đủ điều kiện thoát kiệt sức khi hết 1.5s VÀ Stamina > 30%"), bCanRecoverC);
 
+        // Trường hợp C2: biên GDD — đúng 30% (30 điểm) thì CHƯA được thoát (GDD yêu cầu > 30%).
+        // X12 NOTE: code dùng `>=` (PAStaminaComponent.cpp:66). Assert này PASS chỉ nhờ làm tròn float
+        // (100 * 0.30f = 30.0000019f > 30), không phải nhờ logic. TODO (ngoài phạm vi X12, code gameplay):
+        // đổi `>=` thành `>` cho khớp GDD attributes-system.md:56,64.
+        const bool bCanRecoverAtExactly30 = FPAStaminaPipeline::CanRecoverFromExhaustion(30.0f, MaxStamina, 1.5f, 1.5f);
+        TestFalse(TEXT("AC-3: Đúng 30% (không vượt) chưa được thoát kiệt sức"), bCanRecoverAtExactly30);
+
         // 3.4: Kiểm tra điều kiện giải trừ kiệt sức Desperation Roll (2.2s phạt):
         // Tại T = 1.8s (đã qua 1.5s thường nhưng chưa đủ 2.2s của Desperation Roll) -> Chưa được thoát
         const bool bCanRecoverDesperationEarly = FPAStaminaPipeline::CanRecoverFromExhaustion(50.0f, MaxStamina, 1.8f, 2.2f);
