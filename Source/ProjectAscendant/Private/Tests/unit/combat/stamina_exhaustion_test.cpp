@@ -107,9 +107,11 @@ bool FPAStaminaExhaustionTest::RunTest(const FString& Parameters)
         const bool bCanRecoverB = FPAStaminaPipeline::CanRecoverFromExhaustion(50.0f, MaxStamina, 1.0f, 1.5f);
         TestFalse(TEXT("AC-3: Chưa được thoát kiệt sức khi chưa hết 1.5s phạt dù Stamina > 30%"), bCanRecoverB);
 
-        // Trường hợp C: Đã hết 1.5s VÀ Stamina đạt 30 điểm (>= 30%) -> Thoát kiệt sức thành công
-        const bool bCanRecoverC = FPAStaminaPipeline::CanRecoverFromExhaustion(30.0f, MaxStamina, 1.5f, 1.5f);
-        TestTrue(TEXT("AC-3: Đủ điều kiện thoát kiệt sức khi hết 1.5s VÀ Stamina >= 30%"), bCanRecoverC);
+        // Trường hợp C: Đã hết 1.5s VÀ Stamina vượt 30% (31 điểm) -> Thoát kiệt sức thành công
+        // X12: GDD attributes-system.md:56,64 and story-003:39,55 say Stamina must EXCEED 30% ("vượt mốc",
+        // "trên 30%", "exceeds", "past"). The old case used exactly 30 (>=), which contradicts the plan.
+        const bool bCanRecoverC = FPAStaminaPipeline::CanRecoverFromExhaustion(31.0f, MaxStamina, 1.5f, 1.5f);
+        TestTrue(TEXT("AC-3: Đủ điều kiện thoát kiệt sức khi hết 1.5s VÀ Stamina > 30%"), bCanRecoverC);
 
         // 3.4: Kiểm tra điều kiện giải trừ kiệt sức Desperation Roll (2.2s phạt):
         // Tại T = 1.8s (đã qua 1.5s thường nhưng chưa đủ 2.2s của Desperation Roll) -> Chưa được thoát

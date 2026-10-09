@@ -73,7 +73,10 @@ bool FPACursorDeprojectionAimTest::RunTest(const FString& Parameters)
         TestEqual(TEXT("AC-2: Hướng 8 chiều phải là NorthEast"), Orientation, EPAAimDirection8Way::NorthEast);
 
         // Kiểm tra độc lập: Người chơi đang lùi về phía Tây Nam (-500 cm/s)
-        const FVector2D BackwardMoveInput(-1.0f, -1.0f); // Phím lùi
+        // X12: input is screen-relative (camera yaw 45°). Screen (-1,-1) maps to world (0,-1), not world
+        // South-West, so the old dot product was -0.707. Pressing S (0,-1) moves world (-0.707,-0.707),
+        // exactly opposite the North-East aim.
+        const FVector2D BackwardMoveInput(0.0f, -1.0f); // Phím lùi S
         const FVector VelocityDirection = UPAIsometricMovementMath::CalculateWorldDirection(BackwardMoveInput, 45.0f);
 
         // Vector di chuyển ngược 180 độ so với vector ngắm bắn
