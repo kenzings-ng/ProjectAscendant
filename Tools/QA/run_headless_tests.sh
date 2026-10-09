@@ -12,6 +12,7 @@ ENGINE_BIN="${UE_EDITOR_PATH:-/mnt/Data/Engine/Binaries/Linux/UnrealEditor}"
 UPROJECT="${PROJECT_ROOT}/ProjectAscendant.uproject"
 
 RUN_UE=0
+UE_ONLY=0
 TEST_FILTER="ProjectAscendant."
 
 # Parse arguments
@@ -30,9 +31,15 @@ while [[ $# -gt 0 ]]; do
             RUN_UE=1
             shift
             ;;
+        --ue-only)
+            # UE gate only (used by the CI ue-tests job; gates 1-2 run in the CI 'gates' job).
+            RUN_UE=1
+            UE_ONLY=1
+            shift
+            ;;
         *)
             echo "Unknown option: $1"
-            echo "Usage: ./run_headless_tests.sh [--ue] [--all] [--filter=ProjectAscendant.Network]"
+            echo "Usage: ./run_headless_tests.sh [--ue] [--ue-only] [--all] [--filter=ProjectAscendant.Network]"
             exit 1
             ;;
     esac
@@ -46,6 +53,10 @@ echo "============================================================"
 FAILED_GATES=0
 
 # 1. GDD Consistency Validator
+if [ "${UE_ONLY}" -eq 1 ]; then
+    echo -e "\n[GATE 1/3] GDD Consistency Validator skipped (--ue-only)."
+    echo -e "\n[GATE 2/3] Backend Postgres Test Suite skipped (--ue-only)."
+else
 echo -e "\n[GATE 1/3] Running GDD Consistency Validator..."
 if python3 "${PROJECT_ROOT}/Tools/QA/validate_gdd_consistency.py"; then
     echo ">> [PASS] GDD Consistency Gate"
@@ -61,15 +72,16 @@ python3 "${PROJECT_ROOT}/Tools/QA/test_backend_postgres.py"
 PG_STATUS=$?
 set -e
 
+# Exit code 3 from test_backend_postgres.py == server genuinely unreachable (nothing listening).
+# Only that case may be skipped, and only outside CI. Any other non-zero code is a real failure.
 if [ "${PG_STATUS}" -eq 0 ]; then
     echo ">> [PASS] Backend Database & Anti-Dupe Gate"
+elif [ "${PG_STATUS}" -eq 3 ] && [ "${CI:-}" != "true" ]; then
+    echo ">> [WARN] Backend Database & Anti-Dupe Gate skipped locally (PostgreSQL server not reachable). Run 'docker compose up -d postgres' for local DB tests. Verified strictly in CI."
 else
-    if [ "${CI}" = "true" ]; then
-        echo ">> [FAIL] Backend Database & Anti-Dupe Gate (Required in CI)"
-        FAILED_GATES=$((FAILED_GATES + 1))
-    else
-        echo ">> [WARN] Backend Database & Anti-Dupe Gate skipped locally (PostgreSQL server not detected). Run 'docker compose up -d postgres' for local DB tests. Verified strictly in CI."
-    fi
+    echo ">> [FAIL] Backend Database & Anti-Dupe Gate (ExitCode=${PG_STATUS})"
+    FAILED_GATES=$((FAILED_GATES + 1))
+fi
 fi
 
 # 3. Unreal Engine Headless Automation Suite
@@ -81,6 +93,11 @@ if [ "${RUN_UE}" -eq 1 ]; then
     else
         LOG_FILE="${PROJECT_ROOT}/Saved/Logs/AutomationTest_Headless.log"
         mkdir -p "${PROJECT_ROOT}/Saved/Logs"
+
+        # Rotate any stale log so a previous run can never be parsed as the current result.
+        if [ -f "${LOG_FILE}" ]; then
+            mv -f "${LOG_FILE}" "${LOG_FILE%.log}-prev.log"
+        fi
 
         # Prime render offload & headless flags
         export __NV_PRIME_RENDER_OFFLOAD=1
@@ -120,8 +137,8 @@ if [ "${RUN_UE}" -eq 1 ]; then
             elif [ "${UE_EXIT}" -ne 0 ] && [ "${UE_EXIT}" -ne 1 ]; then
                 echo ">> [FAIL] UE Automation Gate (Process crashed or terminated abnormally with ExitCode=${UE_EXIT})"
                 FAILED_GATES=$((FAILED_GATES + 1))
-            elif [ -n "${TOTAL_DISCOVERED}" ] && [ "${TOTAL_DISCOVERED}" -gt 0 ] && [ "$((TOTAL_PASS + TOTAL_FAIL))" -lt "${TOTAL_DISCOVERED}" ]; then
-                echo ">> [FAIL] UE Automation Gate: Truncated execution ($((TOTAL_PASS + TOTAL_FAIL)) of ${TOTAL_DISCOVERED} ran)"
+            elif [ -z "${TOTAL_DISCOVERED}" ] || [ "${TOTAL_PASS}" -ne "${TOTAL_DISCOVERED}" ]; then
+                echo ">> [FAIL] UE Automation Gate: Passed (${TOTAL_PASS}) does not equal Discovered (${TOTAL_DISCOVERED:-unknown})"
                 FAILED_GATES=$((FAILED_GATES + 1))
             elif [ "${QUEUE_EMPTY}" -eq 0 ]; then
                 echo ">> [FAIL] UE Automation Gate: Automation Test Queue did not complete fully."

@@ -74,11 +74,18 @@ jobs:
           lfs: true
 
       - name: Run Unreal Engine Automation Tests
+        # Delegates to run_headless_tests.sh so CI uses the exact same result parsing as local runs
+        # (Discovered==Passed, Failed=0, Errors=0, queue finished); the script exits non-zero otherwise.
         run: |
-          "${UE_EDITOR_CMD:-/mnt/Data/Engine/Binaries/Linux/UnrealEditor-Cmd}" "${{ github.workspace }}/ProjectAscendant/ProjectAscendant.uproject" \
-            -nullrhi -nosound -unattended \
-            -ExecCmds="Automation RunTests ProjectAscendant.; Quit" \
-            -log=AutomationTest.log
+          UPROJECT="${{ github.workspace }}/ProjectAscendant.uproject"
+          if [ ! -f "${UPROJECT}" ]; then
+            echo "[ERROR] .uproject not found at ${UPROJECT}"
+            exit 1
+          fi
+          if [ -z "${UE_EDITOR_PATH:-}" ] && [ -n "${UE_EDITOR_CMD:-}" ]; then
+            export UE_EDITOR_PATH="${UE_EDITOR_CMD}"
+          fi
+          bash "${{ github.workspace }}/Tools/QA/run_headless_tests.sh" --ue-only
         shell: bash
 
       - name: Upload Test Logs
