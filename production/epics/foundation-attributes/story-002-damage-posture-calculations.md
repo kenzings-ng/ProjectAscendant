@@ -6,7 +6,7 @@
 > **Type**: Logic  
 > **Estimate**: 4 hours (M)  
 > **Manifest Version**: 2026-09-16  
-> **Last Updated**: 2026-09-16  
+> **Last Updated**: 2026-10-09 (X10: ghi chú công thức kết liễu theo code runtime)  
 
 ## Context
 
@@ -40,6 +40,7 @@
 - [x] **AC-3 (Stagger Execution Damage)**: When executing a staggered boss, calculate execution damage as:
   $$\text{ExecuteDamage} = (\text{TargetMaxHP} \times 0.25) + (\text{BaseDamage} \times 3.0)$$
   bypassing standard armor reduction to guarantee boss defeat in 4 clean execution cycles.
+  - *X10 (2026-10-09, DECISIONS.md §12): the runtime finisher `UPAGameplayAbility_Finisher` deals exactly `TargetMaxHP × 0.25` (`PAGameplayAbility_Finisher.h:95`, `PAGameplayAbility_MeleeAttack.cpp:104-108`) and is authoritative. The `+ (BaseDamage × 3.0)` term above exists only in `UPADamageExecutionCalculation` (`PADamageExecutionCalculation.cpp:64`), which the finisher does not call at runtime; `attributes-system.md` §3 now states the code formula. This [x] reflects the helper's tests, not runtime behaviour.*
 
 ---
 

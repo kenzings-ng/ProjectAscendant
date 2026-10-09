@@ -2,9 +2,11 @@
 
 > **Status**: Approved  
 > **Author**: Systems Designer & Gameplay Programmer  
-> **Last Updated**: 2026-09-15  
+> **Last Updated**: 2026-10-09 (X10: đồng bộ thông số đòn kết liễu theo code runtime)  
 > **Implements Pillar**: True Skill Expression & Break Posture  
 > **Target Engine**: Unreal Engine 5 (GAS, Motion Warping, Chaos Skeletal Mesh)
+
+> **Đồng bộ thông số (2026-10-09, DECISIONS.md §12)**: Cự ly, thời lượng bất tử/choáng và sát thương của Đòn Kết Liễu lấy theo code runtime `UPAGameplayAbility_Finisher` (`Source/ProjectAscendant/Public/Combat/PAGameplayAbility_Finisher.h:85-95`). Cảm giác chơi với các giá trị này vẫn chờ chủ dự án duyệt. Bảng đối chiếu trước/sau: `production/qa/x10-combat-values-before-after.md`.
 
 ---
 
@@ -43,8 +45,9 @@ Cơ chế Phá Thế Đứng và Phá Hủy Bộ Phận được điều khiển
   - Người chơi áp sát trong phạm vi **250 cm** và nhấn phím **Tấn Công** hoặc **Tương Tác**.
   - Hệ thống sử dụng Unreal *Motion Warping* để hút mượt nhân vật vào đúng vị trí tử huyệt và phát hoạt ảnh kết liễu song hành (`AM_Execute_Boss`).
   - **Sát thương tuyệt đối:** Rút thẳng **25% Máu tối đa (Max HP)** của Boss, hoàn toàn bỏ qua chỉ số Giáp phòng thủ (Defense). Bất kỳ người chơi cấp thấp nào chỉ cần phá vỡ 4 lần Posture là hạ gục Boss.
-  - **Bảo hộ I-frame:** Người chơi được cấp thẻ `State.Invulnerable` trong suốt 1.2s của hoạt ảnh kết liễu.
-  - **Hồi phục của Boss:** Sau đòn kết liễu, thanh Posture làm mới về 0 và Boss được cấp 2.0s Miễn nhiễm Posture (`State.PostureImmune`) trong lúc đứng dậy và gầm thét, chống việc bị "combo khóa chết" vô tận.
+  - **Bảo hộ I-frame:** Người chơi được cấp thẻ `State.Invulnerable` trong suốt 1.5s của chuỗi kết liễu (`FinisherDuration`, `PAGameplayAbility_Finisher.h:91`).
+  - **Khóa choáng mục tiêu:** Mục tiêu bị gán `State.Stunned` trong cùng 1.5s; thẻ `State.Broken` / `State.Staggered` được gỡ khi kết liễu (`PAGameplayAbility_Finisher.cpp:297-298, 346-348`).
+  - **Hồi phục của Boss:** Sau đòn kết liễu, thanh Posture làm mới về 0 (`PAGameplayAbility_Finisher.cpp:330-344`) và Boss được cấp 2.0s Miễn nhiễm Posture (`State.PostureImmune`) trong lúc đứng dậy và gầm thét, chống việc bị "combo khóa chết" vô tận — phần Miễn nhiễm Posture 2.0s: chưa triển khai trong code (theo quyết định 2026-10-09: giá trị code là chuẩn).
 - **Cơ Chế Hạ Nhiệt Thế Đứng (Posture Decay):**
   - Nếu người chơi không gây thêm bất kỳ sát thương nào trong **4.0 giây** (`PostureDecayDelay`), thanh Posture của Boss sẽ tự động hạ nhiệt với tốc độ **20 điểm / giây** (`PostureDecayRate`). Điều này buộc người chơi phải liên tục bám sát và tấn công dồn dập, không được câu giờ chạy trốn.
 
@@ -74,9 +77,9 @@ stateDiagram-v2
         Execution_Window --> Stagger_Expired: Hết 3.0s không ai bấm
     }
 
-    Execution_Executed --> Posture_Immune: Rút 25% Max HP + I-frame 1.2s
+    Execution_Executed --> Posture_Immune: Rút 25% Max HP + I-frame 1.5s (mục tiêu choáng 1.5s)
     Stagger_Expired --> Posture_Immune: Boss tự gượng dậy (Posture về 50%)
-    Posture_Immune --> Intact_Posture: Hết 2.0s gầm thét (Posture về 0)
+    Posture_Immune --> Intact_Posture: Hết 2.0s gầm thét (Posture về 0) [PostureImmune chưa triển khai trong code]
 
     state Part_Breaking {
         [*] --> Part_Intact: PartHealth 100%
@@ -91,7 +94,7 @@ stateDiagram-v2
 - **Attributes System (`attributes-system.md`):**
   - Đọc `Posture`, `MaxPosture`, `PostureDecayRate`, `PostureDecayDelay` và thực thi trừ thẳng 25% vào `Health` qua `stagger_execution_hp_pct`.
 - **Core Combat System (`combat-system.md`):**
-  - Tiếp nhận sát thương Posture từ chuỗi combo đòn đánh thường (10–30), Dash Attack (25) và Heavy Charged Attack (60).
+  - Tiếp nhận sát thương Posture từ chuỗi combo đòn đánh thường (10–25), Dash Attack (25) và Heavy Charged Attack (60).
 - **Prototype Boss AI (`boss-ai.md`):**
   - Khi `State.Staggered` được gán: Ép Behavior Tree của Boss ngắt mọi Task đang chạy và chuyển sang nhánh `Staggered Recovery`.
   - Khi một bộ phận bị phá hủy (`Part_Broken`): Gửi sự kiện Blackboard làm mới điều kiện chọn kỹ năng (ví dụ: `bCanUseHornCharge = false`).
@@ -127,7 +130,7 @@ $$\text{PartHealth}_{\text{Max}} = \text{MaxHealth}_{\text{Boss}} \times \text{P
 - **Boss Bị Stagger Khi Đang Bay Trên Không (Mid-Air Stagger):**
   - Boss lập tức bị hủy Montage bay lượn, rơi tự do xuống sàn đấu với hiệu ứng va chạm chấn động (Crash Landing Montage), mở ra cửa sổ Execution 3.0s dưới mặt đất.
 - **Bị Quái Phụ Tấn Công Khi Đang Làm Hoạt Ảnh Kết Liễu:**
-  - Hoạt ảnh kết liễu 1.2s cấp thẻ `State.Invulnerable` tuyệt đối, mọi đòn tấn công của quái đệ (Minions) đi xuyên qua người chơi không gây sát thương hay ngắt chiêu.
+  - Chuỗi kết liễu 1.5s cấp thẻ `State.Invulnerable` tuyệt đối, mọi đòn tấn công của quái đệ (Minions) đi xuyên qua người chơi không gây sát thương hay ngắt chiêu.
 - **Tranh Chấp Đòn Kết Liễu Giữa Nhiều Người Chơi ([ADR-0001](file:///mnt/Data/Projects/project-games/docs/architecture/adr-0001-open-world-mmo-combat-networking.md)):**
   - Trong 1.5s đầu tiên của cửa sổ Stagger, quyền thực hiện đòn chém chính rút 25% HP thuộc độc quyền về người chơi gây đòn bẻ gãy thế đứng cuối cùng (Posture Break Finisher).
   - Từ giây 1.5 đến 3.0s, quyền này mở tự do cho mọi người chơi tham chiến (Server Authority xác thực theo thứ tự RPC đến máy chủ).
@@ -153,7 +156,7 @@ $$\text{PartHealth}_{\text{Max}} = \text{MaxHealth}_{\text{Boss}} \times \text{P
 | `PostureDecayDelay` | 4.0s | 3.0s – 5.0s | Thời gian ngừng tấn công trước khi Posture bắt đầu hạ nhiệt. |
 | `PostureDecayRate` | 20.0/s | 15.0 – 30.0/s | Tốc độ hạ nhiệt thanh Posture mỗi giây. |
 | `ExecutionRange` | 250 cm | 200 – 300 cm | Cự ly tối đa để kích hoạt hút Motion Warping vào tử huyệt. |
-| `ExecutionInvulnDuration`| 1.2s | 1.0s – 1.5s | Thời lượng bất tử bảo vệ người chơi khi làm hoạt ảnh kết liễu. |
+| `FinisherDuration` (trước đây `ExecutionInvulnDuration`) | 1.5s | — (chờ duyệt cảm giác chơi) | Thời lượng bất tử bảo vệ người chơi và thời lượng choáng `State.Stunned` của mục tiêu khi kết liễu (`PAGameplayAbility_Finisher.h:91`). |
 | `BossRecoveryPostureRefund`| 50.0% | 30% – 60% | Lượng Posture giữ lại nếu người chơi bỏ lỡ cửa sổ kết liễu. |
 | `PartRatio_Horn` | 0.20 | 0.15 – 0.25 | Tỷ lệ máu sừng so với máu tổng của Boss. |
 | `PartRatio_Tail` | 0.15 | 0.10 – 0.20 | Tỷ lệ máu đuôi so với máu tổng của Boss. |
@@ -185,7 +188,7 @@ $$\text{PartHealth}_{\text{Max}} = \text{MaxHealth}_{\text{Boss}} \times \text{P
 ## Acceptance Criteria
 
 - [ ] **AC-1 (Kích Hoạt Choáng Vỡ Thế):** Đạt 100% Posture, Boss lập tức ngắt chiêu, khụy gối trong 3.0s và phát âm thanh chuông ngân `SFX_PostureBreak_Gong`.
-- [ ] **AC-2 (Đòn Kết Liễu 25% Max HP):** Tiếp cận trong 250cm nhấn nút Tấn công kích hoạt Motion Warping, hút nhân vật vào tử huyệt, cấp I-frame 1.2s và trừ chuẩn xác 25% Max HP của Boss.
+- [ ] **AC-2 (Đòn Kết Liễu 25% Max HP):** Tiếp cận trong 250cm nhấn nút Tấn công kích hoạt Motion Warping, hút nhân vật vào tử huyệt, cấp I-frame 1.5s cho người chơi, khóa choáng mục tiêu 1.5s và trừ chuẩn xác 25% Max HP của Boss.
 - [ ] **AC-3 (Hạ Nhiệt Posture Sau 4.0s):** Ngừng đánh trong 4.0s, thanh Posture của Boss tự động tụt 20 điểm/s cho đến khi bị đánh trở lại.
 - [ ] **AC-4 (Phá Hủy Bộ Phận & Khóa Chiêu):** Khi thanh máu bộ phận về 0, mảnh vỡ Niagara bắn ra, vật phẩm rèn rơi xuống đất, và Boss bị khóa hoàn toàn chiêu thức gắn với bộ phận đó trong Behavior Tree.
 
@@ -193,4 +196,5 @@ $$\text{PartHealth}_{\text{Max}} = \text{MaxHealth}_{\text{Boss}} \times \text{P
 
 ## Open Questions
 
-- *Không còn câu hỏi mở tồn đọng. Toàn bộ thông số hoàn toàn khớp với attributes-system và combat-system.*
+- **Q1 (2026-10-09):** Cảm giác chơi với thời lượng kết liễu 1.5s (bất tử người chơi + choáng mục tiêu) theo code cần chủ dự án duyệt trước khi coi là chốt (DECISIONS.md §12).
+- **Q2 (2026-10-09):** `FPAStaggerConfig` (`PAStaggerTypes.h:56,60`) vẫn giữ `ExecutionInvulnDuration = 1.20` và `PostureImmunityDuration = 2.0`, nhưng `FPAStaggerModel` không được dùng ở runtime; cần một task code riêng để hợp nhất hoặc loại bỏ.

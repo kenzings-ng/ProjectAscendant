@@ -2,7 +2,7 @@
 
 > **Status**: Approved  
 > **Author**: Systems Designer & Gameplay Programmer  
-> **Last Updated**: 2026-09-15  
+> **Last Updated**: 2026-10-09 (X10: đồng bộ thông số Dash theo code runtime)  
 > **Implements Pillar**: True Skill Expression & Responsive Combat  
 > **Target Engine**: Unreal Engine 5 (Enhanced Input & SpringArm/Camera)
 
@@ -79,7 +79,7 @@ Trạng thái vận động của nhân vật được quản lý qua bộ cờ 
 | :--- | :---: | :--- | :--- |
 | **`Idle`** | 0 cm/s | Xoay theo con trỏ chuột / cần phải | Nhận đầy đủ mọi lệnh |
 | **`Moving`** | 550 cm/s | Xoay theo hướng ngắm (độc lập hướng chạy) | Nhận đầy đủ mọi lệnh |
-| **`Dashing`** | 1200 cm/s (0.45s) | Khóa cố định theo góc lướt né | Khóa di chuyển thường, cho phép gối lệnh chiêu (Buffer) |
+| **`Dashing`** | 450 cm trong 0.35s (đỉnh ≈2571 cm/s, giảm tuyến tính về 0; theo code `UPAGameplayAbility_Dash`) | Khóa cố định theo góc lướt né | Khóa di chuyển thường, cho phép gối lệnh chiêu (Buffer — chưa triển khai trong code (theo quyết định 2026-10-09: giá trị code là chuẩn)) |
 | **`LockedInAnimation`** | 0 – 150 cm/s | Cho phép chỉnh hướng ngắm trước khi vung đòn | Khóa di chuyển cho đến khi hết cửa sổ hoạt ảnh |
 | **`Exhausted`** | 412.5 cm/s (-25%) | Xoay theo hướng ngắm bình thường | Khóa phím Dash (Lướt) trong 1.5s |
 

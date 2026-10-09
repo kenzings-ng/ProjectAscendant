@@ -6,7 +6,7 @@
 > **Type**: Logic  
 > **Estimate**: 4 hours (M)  
 > **Manifest Version**: 2026-09-16  
-> **Last Updated**: 2026-09-16  
+> **Last Updated**: 2026-10-09 (X10: ghi chú Desperation Roll theo quyết định 2026-10-09)  
 
 ## Context
 
@@ -32,6 +32,7 @@
 *From GDD `design/gdd/attributes-system.md`, scoped to this story:*
 
 - [x] **AC-1 (Stamina Consumption & Desperation Roll)**: Dashing consumes 25 Stamina (`StaminaCost_Dash = 25.0f`). If Stamina is $>0$ but $<25$, a "Desperation Roll" is granted, deducting all remaining Stamina and setting an extended exhaustion penalty.
+  - *X10 (2026-10-09) — Desperation Roll: chưa triển khai trong code (theo quyết định 2026-10-09: giá trị code là chuẩn). The runtime dash ability `UPAGameplayAbility_Dash` blocks activation when Stamina < 25 (`PAGameplayAbility_Dash.cpp:30`, Story core-combat/001 AC-1). The Desperation Roll branch exists only in the pure helper `FPAStaminaPipeline::ConsumeStamina` (`PAStaminaComponent.cpp:32-35`), which is not called at runtime; this [x] reflects that helper's tests, not runtime behaviour.*
 - [x] **AC-2 (Regeneration Delay & Rate)**: Following any stamina consumption, regeneration pauses for 0.6 seconds (`StaminaRegenDelay = 0.6s`), after which Stamina regenerates at 45.0 points per second (`StaminaRegenRate = 45.0/s`) until reaching `MaxStamina`.
 - [x] **AC-3 (Exhaustion State & Penalty)**: When Stamina reaches 0, apply `GameplayTag.State.Exhausted`, which:
   - Reduces `MoveSpeed` by $25\%$
@@ -74,7 +75,7 @@
   - When: Player triggers Dash.
   - Then: Stamina decreases to 75.0f; no exhaustion tag applied.
   - When 2: Character has 10 Stamina and triggers Dash.
-  - Then 2: Dash succeeds (I-frame granted), Stamina drops to 0, and `State.Exhausted` applies with 2.2s duration.
+  - Then 2: Dash succeeds (I-frame granted), Stamina drops to 0, and `State.Exhausted` applies with 2.2s duration. *(Runtime `UPAGameplayAbility_Dash` currently rejects this dash — Desperation Roll chưa triển khai trong code (theo quyết định 2026-10-09: giá trị code là chuẩn).)*
 
 - **AC-2 Test: Regeneration Timing**:
   - Given: Character Stamina dropped from 100 to 50 at $T=0$.

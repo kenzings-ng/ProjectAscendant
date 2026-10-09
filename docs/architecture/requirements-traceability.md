@@ -37,11 +37,11 @@
 | **TR-ctrl-001** | `isometric-controller.md` | Controller | Screen-to-world isometric de-projection plane | Arch Ch. 3 | ✅ Covered | Foundation |
 | **TR-ctrl-002** | `isometric-controller.md` | Controller | Enhanced Input 8-way directional movement | Arch Ch. 3 | ✅ Covered | Foundation |
 | **TR-ctrl-003** | `isometric-controller.md` | Controller | Occluding 3D geometry dither-fade shader | Arch Ch. 3 | ✅ Covered | Presentation |
-| **TR-dash-001** | `dash-evasion.md` | Dash | Server-validated 0.25s I-frame invulnerability tag | ADR-0001, ADR-0002 | ✅ Covered | Core |
+| **TR-dash-001** | `dash-evasion.md` | Dash | Server-validated 0.20s I-frame invulnerability tag (t = 0.05s → 0.25s of 0.35s dash; synced to code 2026-10-09) | ADR-0001, ADR-0002 | ✅ Covered | Core |
 | **TR-dash-002** | `dash-evasion.md` | Dash | Stamina deduction via GameplayEffect with prediction | ADR-0002 | ✅ Covered | Core |
 | **TR-dash-003** | `dash-evasion.md` | Dash | Sprite rotation lock along dash trajectory | ADR-0002 | ✅ Covered | Core |
 | **TR-combat-001** | `combat-system.md` | Combat | Server-authoritative 3D capsule sweep via PaperZD notify | ADR-0001, ADR-0002 | ✅ Covered | Core |
-| **TR-combat-002** | `combat-system.md` | Combat | Multi-hit combo state machine with 250ms buffer window | ADR-0002 | ✅ Covered | Core |
+| **TR-combat-002** | `combat-system.md` | Combat | Multi-hit combo state machine (1.2s reset window per code); input buffer chưa triển khai trong code (theo quyết định 2026-10-09: giá trị code là chuẩn) | ADR-0002 | ✅ Covered | Core |
 | **TR-combat-003** | `combat-system.md` | Combat | Server-side damage mitigation formula calculation | ADR-0001, ADR-0002 | ✅ Covered | Core |
 | **TR-stagger-001** | `stagger-system.md` | Stagger | Posture break attribute with 4.0s decay rate | ADR-0002, Arch Ch. 4 | ✅ Covered | Core |
 | **TR-stagger-002** | `stagger-system.md` | Stagger | Vulnerable state granting 200% critical damage multiplier | ADR-0002, Arch Ch. 4 | ✅ Covered | Core |

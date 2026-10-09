@@ -14,7 +14,7 @@
 #     the new TR-ID(s).
 
 version: 1
-last_updated: "2026-09-16"
+last_updated: "2026-10-09"
 
 requirements:
   # =========================================================================
@@ -83,10 +83,11 @@ requirements:
   - id: TR-dash-001
     system: dash
     gdd: design/gdd/dash-evasion.md
-    requirement: "Server-validated 0.25s invulnerability window (I-frame) applying GameplayTag.State.Invulnerable during roll"
+    # X10 2026-10-09: was "0.25s invulnerability window"; synced to runtime UPAGameplayAbility_Dash per DECISIONS.md §12.
+    requirement: "Server-validated 0.20s invulnerability window (I-frame, t = 0.05s to 0.25s of the 0.35s dash) applying GameplayTag.State.Invulnerable during roll"
     layer: Core
     created: 2026-09-16
-    revised: ""
+    revised: "2026-10-09"
     status: active
 
   - id: TR-dash-002
@@ -122,10 +123,12 @@ requirements:
   - id: TR-combat-002
     system: combat
     gdd: design/gdd/combat-system.md
-    requirement: "Multi-hit combo state machine with 250ms input buffer queue and recovery cancel windows"
+    # X10 2026-10-09: was "250ms input buffer queue". Production code has no input buffer
+    # (chưa triển khai trong code (theo quyết định 2026-10-09: giá trị code là chuẩn)); buffer value to be settled on implementation.
+    requirement: "Multi-hit combo state machine with 1.2s combo reset window, input buffer queue (not yet implemented in code) and recovery cancel windows"
     layer: Core
     created: 2026-09-16
-    revised: ""
+    revised: "2026-10-09"
     status: active
 
   - id: TR-combat-003
