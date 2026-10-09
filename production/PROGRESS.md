@@ -383,6 +383,24 @@
 - **Cổng**: GDD Consistency PASS (92 file, 0 lỗi, exit 0). CI "Fast Gates" PASS (job 113804944672). Không chạy lại test UE vì PR chỉ chứa tài liệu.
 - **Reviewer**: lần 1 FAIL (8 lỗi) → lần 2 FAIL (1 lỗi cấu trúc danh sách) → lần 3 **PASS**.
 - **Phân công**: nhóm A giao cho Antigravity (`agy -p`) nhưng 3 lần đều bị chế độ headless từ chối quyền `command`, nên chuyển sang Claude subagent. Các nhóm B1–B4, C và D1–D3 do Claude subagent làm.
+- **PR #7** (nhật ký mục 2.4 và 2.5): commit nhánh `f896573`, merge vào `origin/main` ở commit `8bd5d40`. CI Fast Gates PASS (job 113805411136). Reviewer **PASS**.
+
+### 2.6 Thực Thi Quyết Định Chủ Dự Án — Đợt 1 (2026-10-09)
+
+Kế hoạch: `production/plans/execution-owner-decisions-2026-10-09.md`. Sau khi merge PR #12, `git ls-remote origin main` = `72ed526`.
+
+| Mục | PR | Commit merge trên `origin/main` | Cổng | Reviewer |
+|---|---|---|---|---|
+| X1 Khôi phục ROADMAP từ `493a442` | #8 (squash) | `dfed776` | GDD PASS (92 file, 0 lỗi, exit 0); trùng khớp từng byte với `493a442`; CI Fast Gates PASS (job 113865763600) | FAIL (gộp 2 việc trong một PR, plan thiếu nhiều điểm) → tách PR (`e9dd573`) → **PASS** |
+| X1b Plan thực thi | #11 | `3b1f21c` | GDD PASS (92 file, 0 lỗi, exit 0); CI Fast Gates PASS (job 113866549927) | **PASS** (đã xử lý đủ 15 góp ý ở lần FAIL của PR #8) |
+| X2 `DECISIONS.md` §12 | #9 | `02aae88` | GDD PASS (92 file, 0 lỗi, exit 0); CI Fast Gates PASS (job 113865938915) | FAIL (ghi sai rằng chủ dự án đã duyệt cảm giác chơi; thêm 3 điểm nhỏ: dẫn Giai đoạn 2B, đường dẫn tới plan, mâu thuẫn với `inventory-system`) → sửa (`097a6a6`) → **PASS**. Phạm vi respec được thu hẹp ở `2ce411b`: tự sửa trước khi review, theo góp ý PR #8 |
+| X3 Bảo vệ nhánh `main` | — (cấu hình GitHub, không có PR) | Ruleset 24157209: tạo ngày 2026-09-29 với trạng thái `disabled`, chỉ có deletion + non_fast_forward. Ngày 2026-10-09 18:52 +07 chuyển sang `active` và thêm pull_request, required_status_checks | API `rules/branches/main` trả về 4 rule, gồm check "Fast Gates (GDD & Backend QA)" | Không có reviewer riêng, vì đây là cấu hình GitHub. Reviewer của PR #13 đã kiểm ruleset qua API: khớp |
+| X4 Sửa CI và cổng test local | #10 | `a7622c5` | Kiểm thử local: không có Postgres → exit 0 kèm WARN; Postgres lỗi thật → exit 1; `CI=true` → exit 1; UE stub: 45/45 → 0, 44/45 → 1, không có log mới → 1, thiếu binary → 1. CI Fast Gates PASS (job 113866132807). **Job `ue-tests` chưa chạy trên runner** | **PASS** (có 3 điểm gia cố tuỳ chọn, để làm sau) |
+| X10 Tài liệu theo giá trị code (dash/combo/finisher) | #12 | `72ed526` | GDD PASS (92 file, 0 lỗi, exit 0); hai file YAML đọc được; CI Fast Gates PASS (job 113874505051) | FAIL (còn sót finisher 1.2s, 4 điểm nhỏ) → sửa (`1d7610b`) → **PASS** |
+
+**Đang chờ chủ dự án trả lời** (plan §4): cảm giác chơi với giá trị trong code; cửa sổ dash-cancel; dash của Ranger; giá trị input buffer; các mục `[x]` ở ROADMAP Giai đoạn 0 (dòng 29, 33) và mục bảo vệ nhánh; phạm vi giai đoạn 0→6 hay 0→7; quy tắc khi file mâu thuẫn; quyền sửa ROADMAP (dòng 3 và dòng 10 mâu thuẫn); NestJS hay ADR-0006; duyệt asset AI.
+
+**Ghi nhận, chưa xử lý**: code mâu thuẫn với code — `FPADashModel`, `FPAStaggerModel`, giá trị khởi tạo `IFrameDuration` 0.28, công thức finisher cũ trong `PADamageExecutionCalculation.cpp:64` vẫn giữ số cũ. Các chỗ này không được dùng lúc runtime (xem `production/qa/x10-combat-values-before-after.md`).
 
 ---
 
