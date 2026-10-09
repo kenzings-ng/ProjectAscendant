@@ -7,7 +7,7 @@
 
 /**
  * EPAProgressionError
- * Mã lỗi cho các thao tác progression (cấp XP, lên level, phân bổ skill point).
+ * Mã lỗi cho các thao tác progression (cấp XP, lên level).
  */
 UENUM(BlueprintType)
 enum class EPAProgressionError : uint8
@@ -17,15 +17,13 @@ enum class EPAProgressionError : uint8
 	InvalidXPAmount,
 	/** Đã đạt cấp độ tối đa (MaxLevel) */
 	AlreadyMaxLevel,
-	/** Không đủ Skill Points để phân bổ */
-	InsufficientSkillPoints,
 	/** Server authority check thất bại */
 	NotAuthoritative
 };
 
 /**
  * FPALevelUpReward
- * Phần thưởng mỗi khi lên cấp: tăng chỉ số cơ sở + 1 Skill Point.
+ * Phần thưởng mỗi khi lên cấp: tăng chỉ số cơ sở.
  */
 USTRUCT(BlueprintType)
 struct FPALevelUpReward
@@ -51,10 +49,6 @@ struct FPALevelUpReward
 	/** Lượng Armor tăng thêm mỗi cấp */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Progression")
 	float BonusArmor = 0.f;
-
-	/** Số Skill Points thưởng (luôn = 1) */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Progression")
-	int32 SkillPointsAwarded = 1;
 };
 
 /**
@@ -75,7 +69,6 @@ struct FPALevelUpReward
  *   MaxStamina += 3  per level
  *   AttackPower += 3 per level
  *   Armor      += 2  per level
- *   SkillPoints += 1 per level
  */
 struct FPAProgressionFormulas
 {
@@ -122,7 +115,6 @@ struct FPAProgressionFormulas
 	static constexpr float StaminaPerLevel = 3.f;
 	static constexpr float AttackPowerPerLevel = 3.f;
 	static constexpr float ArmorPerLevel = 2.f;
-	static constexpr int32 SkillPointsPerLevel = 1;
 
 	/**
 	 * Tính phần thưởng stat khi lên 1 cấp.
@@ -135,7 +127,6 @@ struct FPAProgressionFormulas
 		Reward.BonusMaxStamina = StaminaPerLevel;
 		Reward.BonusAttackPower = AttackPowerPerLevel;
 		Reward.BonusArmor = ArmorPerLevel;
-		Reward.SkillPointsAwarded = SkillPointsPerLevel;
 		return Reward;
 	}
 };

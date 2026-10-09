@@ -1,6 +1,8 @@
 // Copyright Project Ascendant. All Rights Reserved.
 // Tests for UPAProgressionComponent — Story prog-001
-// Covers AC-1 (XP Curve), AC-2 (Stat Growth + Skill Points), AC-3 (Replication behavior)
+// Covers AC-1 (XP Curve), AC-2 (Stat Growth), AC-3 (Replication behavior)
+// Skill Point / Talent Tree removed per DECISIONS §12 (2026-10-10); level-up counts are
+// asserted via the OnLevelUp delegate instead of the removed Skill Point counter.
 
 #include "Misc/AutomationTest.h"
 #include "Progression/PAProgressionComponent.h"
@@ -110,7 +112,7 @@ bool FProgressionXPCurveTest::RunTest(const FString& Parameters)
 }
 
 // =========================================================================
-// TEST 2: AC-1 + AC-2 — GrantXP lên cấp + stat growth + skill point
+// TEST 2: AC-1 + AC-2 — GrantXP lên cấp + stat growth
 // =========================================================================
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(
 	FProgressionGrantXPTest,
@@ -127,10 +129,17 @@ bool FProgressionGrantXPTest::RunTest(const FString& Parameters)
 	auto* Prog = Ctx.ProgressionComp.Get();
 	auto* Attr = Ctx.AttrSet.Get();
 
-	// Khởi đầu: Level 1, 0 XP, 0 Skill Points
+	// Khởi đầu: Level 1, 0 XP
 	TestEqual(TEXT("Start at Level 1"), Prog->GetCurrentLevel(), 1);
 	TestEqual(TEXT("Start with 0 XP"), Prog->GetCurrentXP(), 0);
-	TestEqual(TEXT("Start with 0 SP"), Prog->GetAvailableSkillPoints(), 0);
+
+	int32 LevelUpEvents = 0;
+	int32 LastBroadcastLevel = 0;
+	Prog->OnLevelUp.AddLambda([&LevelUpEvents, &LastBroadcastLevel](int32 NewLevel, const FPALevelUpReward&)
+	{
+		++LevelUpEvents;
+		LastBroadcastLevel = NewLevel;
+	});
 
 	// Ghi nhớ stats ban đầu
 	const float StartHealth = Attr->GetMaxHealth();
@@ -145,7 +154,8 @@ bool FProgressionGrantXPTest::RunTest(const FString& Parameters)
 	TestEqual(TEXT("GrantXP succeeds"), Err, EPAProgressionError::None);
 	TestEqual(TEXT("Level up to 2"), Prog->GetCurrentLevel(), 2);
 	TestEqual(TEXT("XP reset to 0 after exact level-up"), Prog->GetCurrentXP(), 0);
-	TestEqual(TEXT("1 Skill Point awarded"), Prog->GetAvailableSkillPoints(), 1);
+	TestEqual(TEXT("Exactly 1 OnLevelUp broadcast"), LevelUpEvents, 1);
+	TestEqual(TEXT("OnLevelUp carries new level 2"), LastBroadcastLevel, 2);
 
 	// Verify stat growth
 	TestEqual(TEXT("MaxHealth += 25"), Attr->GetMaxHealth(), StartHealth + FPAProgressionFormulas::HealthPerLevel);
@@ -176,6 +186,11 @@ bool FProgressionMultiLevelUpTest::RunTest(const FString& Parameters)
 
 	auto Ctx = ProgressionTestHelper::CreateTestContext(World);
 	auto* Prog = Ctx.ProgressionComp.Get();
+	auto* Attr = Ctx.AttrSet.Get();
+	const float StartHealth = Attr->GetMaxHealth();
+
+	int32 LevelUpEvents = 0;
+	Prog->OnLevelUp.AddLambda([&LevelUpEvents](int32, const FPALevelUpReward&) { ++LevelUpEvents; });
 
 	// XP cần Level 1→2 = 100, Level 2→3 = ceil(100 * 2^1.8)
 	int32 XP_Lv1 = FPAProgressionFormulas::GetXPRequiredForLevel(1);
@@ -188,50 +203,14 @@ bool FProgressionMultiLevelUpTest::RunTest(const FString& Parameters)
 	TestEqual(TEXT("GrantXP succeeds"), Err, EPAProgressionError::None);
 	TestEqual(TEXT("Jump to Level 3"), Prog->GetCurrentLevel(), 3);
 	TestEqual(TEXT("Remaining XP = 50"), Prog->GetCurrentXP(), 50);
-	TestEqual(TEXT("2 Skill Points awarded"), Prog->GetAvailableSkillPoints(), 2);
+	TestEqual(TEXT("2 OnLevelUp broadcasts"), LevelUpEvents, 2);
+	TestEqual(TEXT("MaxHealth grew for 2 levels"), Attr->GetMaxHealth(), StartHealth + 2.f * FPAProgressionFormulas::HealthPerLevel);
 
 	return true;
 }
 
 // =========================================================================
-// TEST 4: AC-2 — SpendSkillPoint
-// =========================================================================
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(
-	FProgressionSkillPointTest,
-	"ProjectAscendant.Progression.AC2_SpendSkillPoint",
-	EAutomationTestFlags_ApplicationContextMask | EAutomationTestFlags::ProductFilter
-)
-
-bool FProgressionSkillPointTest::RunTest(const FString& Parameters)
-{
-	UWorld* World = GEngine->GetWorldContexts()[0].World();
-	if (!World) { return false; }
-
-	auto Ctx = ProgressionTestHelper::CreateTestContext(World);
-	auto* Prog = Ctx.ProgressionComp.Get();
-
-	// Trước khi có SP: SpendSkillPoint phải thất bại
-	EPAProgressionError Err = Prog->SpendSkillPoint();
-	TestEqual(TEXT("Cannot spend with 0 SP"), Err, EPAProgressionError::InsufficientSkillPoints);
-
-	// Lên Level 2 để có 1 SP
-	Prog->GrantXP(FPAProgressionFormulas::GetXPRequiredForLevel(1));
-	TestEqual(TEXT("Have 1 SP"), Prog->GetAvailableSkillPoints(), 1);
-
-	// Tiêu 1 SP
-	Err = Prog->SpendSkillPoint();
-	TestEqual(TEXT("Spend succeeds"), Err, EPAProgressionError::None);
-	TestEqual(TEXT("0 SP remaining"), Prog->GetAvailableSkillPoints(), 0);
-
-	// Tiêu lần nữa phải thất bại
-	Err = Prog->SpendSkillPoint();
-	TestEqual(TEXT("Cannot spend again"), Err, EPAProgressionError::InsufficientSkillPoints);
-
-	return true;
-}
-
-// =========================================================================
-// TEST 5: AC-1 — Max Level cap và edge cases
+// TEST 4: AC-1 — Max Level cap và edge cases
 // =========================================================================
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(
 	FProgressionMaxLevelTest,
@@ -246,6 +225,9 @@ bool FProgressionMaxLevelTest::RunTest(const FString& Parameters)
 
 	auto Ctx = ProgressionTestHelper::CreateTestContext(World);
 	auto* Prog = Ctx.ProgressionComp.Get();
+
+	int32 LevelUpEvents = 0;
+	Prog->OnLevelUp.AddLambda([&LevelUpEvents](int32, const FPALevelUpReward&) { ++LevelUpEvents; });
 
 	// Cấp một lượng XP rất lớn để rush đến max level
 	// Tổng XP cần từ Level 1→50
@@ -262,8 +244,8 @@ bool FProgressionMaxLevelTest::RunTest(const FString& Parameters)
 	EPAProgressionError Err = Prog->GrantXP(1000);
 	TestEqual(TEXT("Cannot grant XP at max level"), Err, EPAProgressionError::AlreadyMaxLevel);
 
-	// 49 level-ups = 49 Skill Points
-	TestEqual(TEXT("49 Skill Points total"), Prog->GetAvailableSkillPoints(), 49);
+	// 49 level-ups (1→50), không broadcast thêm khi đã max
+	TestEqual(TEXT("49 OnLevelUp broadcasts total"), LevelUpEvents, 49);
 
 	// Invalid XP
 	auto Ctx2 = ProgressionTestHelper::CreateTestContext(World);

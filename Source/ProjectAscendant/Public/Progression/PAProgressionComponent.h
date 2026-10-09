@@ -13,7 +13,7 @@ class UAbilitySystemComponent;
 /**
  * UPAProgressionComponent
  *
- * Server-Authoritative component quản lý XP, Leveling và Skill Points cho nhân vật.
+ * Server-Authoritative component quản lý XP và Leveling cho nhân vật.
  * Tuân thủ ADR-0001 (Server Authority) và ADR-0003 (Zero Client Trust).
  *
  * Đường cong XP phi tuyến Level 1→50:
@@ -25,9 +25,11 @@ class UAbilitySystemComponent;
  *   - MaxStamina += 3
  *   - AttackPower += 3
  *   - Armor      += 2
- *   - SkillPoints += 1
  *
- * Replicate CurrentLevel, CurrentXP, SkillPoints qua network.
+ * Replicate CurrentLevel, CurrentXP qua network.
+ *
+ * Talent Tree / Skill Point / talent Respec đã gỡ bỏ theo DECISIONS §12 (2026-10-10):
+ * tiến trình kỹ năng đi theo Skill Book (skill-progression-system.md).
  */
 UCLASS(ClassGroup = (ProjectAscendant), meta = (BlueprintSpawnableComponent))
 class PROJECTASCENDANT_API UPAProgressionComponent : public UActorComponent
@@ -50,18 +52,6 @@ public:
 	 */
 	EPAProgressionError GrantXP(int32 XPAmount);
 
-	/**
-	 * Tiêu 1 Skill Point (khi phân bổ vào Skill Tree).
-	 * @return EPAProgressionError::None nếu thành công
-	 */
-	EPAProgressionError SpendSkillPoint();
-
-	/**
-	 * Hoàn trả Skill Points khi tẩy điểm (Respec).
-	 * @param Amount Số điểm hoàn trả
-	 */
-	void RefundSkillPoints(int32 Amount);
-
 	// -------------------------------------------------------------------------
 	// Getters
 	// -------------------------------------------------------------------------
@@ -76,18 +66,7 @@ public:
 	int32 GetXPToNextLevel() const;
 
 	UFUNCTION(BlueprintPure, Category = "Progression")
-	int32 GetAvailableSkillPoints() const { return AvailableSkillPoints; }
-
-	UFUNCTION(BlueprintPure, Category = "Progression")
 	bool IsMaxLevel() const { return CurrentLevel >= FPAProgressionFormulas::MaxLevel; }
-
-	// -------------------------------------------------------------------------
-	// Server RPC
-	// -------------------------------------------------------------------------
-
-	/** Client yêu cầu tiêu Skill Point — Server validate và xử lý */
-	UFUNCTION(Server, Reliable, WithValidation)
-	void Server_SpendSkillPoint();
 
 	// -------------------------------------------------------------------------
 	// Delegates
@@ -109,9 +88,6 @@ protected:
 
 	UPROPERTY(ReplicatedUsing = OnRep_CurrentXP)
 	int32 CurrentXP = 0;
-
-	UPROPERTY(Replicated)
-	int32 AvailableSkillPoints = 0;
 
 	// -------------------------------------------------------------------------
 	// Rep Notifies
