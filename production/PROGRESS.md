@@ -383,6 +383,22 @@
 - **Cổng**: GDD Consistency PASS (92 file, 0 lỗi, exit 0). CI "Fast Gates" PASS (job 113804944672). Không chạy lại test UE vì PR chỉ chứa tài liệu.
 - **Reviewer**: lần 1 FAIL (8 lỗi) → lần 2 FAIL (1 lỗi cấu trúc danh sách) → lần 3 **PASS**.
 - **Phân công**: nhóm A giao cho Antigravity (`agy -p`) nhưng 3 lần đều bị chế độ headless từ chối quyền `command`, nên chuyển sang Claude subagent. Các nhóm B1–B4, C và D1–D3 do Claude subagent làm.
+- **PR #7** (nhật ký mục 2.4 và 2.5): merge vào `origin/main` ở commit `8bd5d40`. Reviewer **PASS**.
+
+### 2.6 Thực Thi Quyết Định Chủ Dự Án — Đợt 1 (2026-10-09)
+
+Kế hoạch: `production/plans/execution-owner-decisions-2026-10-09.md`. Sau khi merge PR #12, `git ls-remote origin main` = `72ed526`.
+
+| Mục | PR | Commit merge trên `origin/main` | Cổng | Reviewer |
+|---|---|---|---|---|
+| X1 Khôi phục ROADMAP từ `493a442` | #8 (squash) | `dfed776` | GDD PASS; trùng khớp từng byte với `493a442` | FAIL (bị gộp 2 việc, plan thiếu nhiều điểm) → tách PR → **PASS** |
+| X1b Plan thực thi | #11 | `3b1f21c` | GDD PASS | **PASS** (đủ 15 góp ý của lần FAIL trước) |
+| X2 `DECISIONS.md` §12 | #9 | `02aae88` | GDD PASS | FAIL (ghi sai rằng chủ dự án đã duyệt cảm giác chơi; phạm vi respec quá rộng) → sửa → **PASS** |
+| X3 Bảo vệ nhánh `main` | — (cấu hình GitHub) | Ruleset 24157209 `active` | API `rules/branches/main` trả về: deletion, non_fast_forward, pull_request, required_status_checks ("Fast Gates (GDD & Backend QA)") | — |
+| X4 Sửa CI và cổng test local | #10 | `a7622c5` | Kiểm thử local: không có Postgres → exit 0 kèm WARN; Postgres lỗi thật → exit 1; `CI=true` → exit 1; UE stub 45/45 → 0, 44/45 → 1, thiếu log → 1. CI Fast Gates PASS. **Job `ue-tests` chưa chạy trên runner** | **PASS** (có 3 điểm gia cố tuỳ chọn, để làm sau) |
+| X10 Tài liệu theo giá trị code (dash/combo/finisher) | #12 | `72ed526` | GDD PASS (92 file, 0 lỗi); hai file YAML đọc được | FAIL (còn sót finisher 1.2s, 4 điểm nhỏ) → sửa → **PASS** |
+
+**Đang chờ chủ dự án trả lời** (plan §4): cảm giác chơi với giá trị trong code; cửa sổ dash-cancel; dash của Ranger; giá trị input buffer; các mục `[x]` ở ROADMAP Giai đoạn 0 (dòng 29, 33) và mục bảo vệ nhánh; phạm vi giai đoạn 0→6 hay 0→7; quy tắc khi file mâu thuẫn; quyền sửa ROADMAP (dòng 3 và dòng 10 mâu thuẫn); NestJS hay ADR-0006; duyệt asset AI.
 
 ---
 
