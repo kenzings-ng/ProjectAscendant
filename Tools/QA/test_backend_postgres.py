@@ -6,6 +6,7 @@ against a real PostgreSQL database (via CI service container or local docker com
 """
 
 import os
+import socket
 import sys
 import uuid
 import time
@@ -29,6 +30,30 @@ PG_PORT = int(os.environ.get("PGPORT", os.environ.get("DB_PORT", "5432")))
 PG_USER = os.environ.get("PGUSER", os.environ.get("DB_USER", "postgres"))
 PG_PASSWORD = os.environ.get("PGPASSWORD", os.environ.get("DB_PASSWORD", "password"))
 PG_DATABASE = os.environ.get("PGDATABASE", os.environ.get("DB_NAME", "project_ascendant"))
+
+# Dedicated exit code: PostgreSQL server is genuinely unreachable (nothing listening /
+# host not resolvable). Callers (run_headless_tests.sh) may skip the gate locally ONLY
+# on this code. Any other non-zero code means tests ran (or could have run) and failed.
+EXIT_SERVER_UNREACHABLE = 3
+
+def is_server_reachable(timeout: float = 3.0) -> bool:
+    """Returns True if something accepts connections at PG_HOST:PG_PORT (TCP or unix socket)."""
+    if PG_HOST.startswith("/"):
+        sock_path = os.path.join(PG_HOST, f".s.PGSQL.{PG_PORT}")
+        if not os.path.exists(sock_path):
+            return False
+        try:
+            with socket.socket(socket.AF_UNIX, socket.SOCK_STREAM) as s:
+                s.settimeout(timeout)
+                s.connect(sock_path)
+            return True
+        except OSError:
+            return False
+    try:
+        with socket.create_connection((PG_HOST, PG_PORT), timeout=timeout):
+            return True
+    except OSError:
+        return False
 
 def get_db_connection():
     """Establishes a new dedicated connection to the PostgreSQL database."""
@@ -267,6 +292,14 @@ def main():
     print(f"Target DB: {PG_USER}@{PG_HOST}:{PG_PORT}/{PG_DATABASE}")
     print("=" * 60)
 
+    if not is_server_reachable():
+        print(f"[UNREACHABLE] No PostgreSQL server accepting connections at {PG_HOST}:{PG_PORT}.")
+        print("\nTo run locally with Docker:")
+        print("  docker compose up -d postgres")
+        print("\nIn CI (GitHub Actions):")
+        print("  This runs automatically in the 'gates' job via the postgres service container.")
+        return EXIT_SERVER_UNREACHABLE
+
     if PG_DRIVER is None:
         print("[ERROR] Neither psycopg2 nor psycopg is installed.")
         print("Install via: pip install psycopg2-binary")
@@ -275,11 +308,9 @@ def main():
     try:
         conn = get_db_connection()
     except Exception as e:
-        print(f"[FAIL] Could not connect to PostgreSQL at {PG_HOST}:{PG_PORT}: {e}")
-        print("\nTo run locally with Docker:")
-        print("  docker compose up -d postgres")
-        print("\nIn CI (GitHub Actions):")
-        print("  This runs automatically in the 'gates' job via the postgres service container.")
+        # Server is listening but the connection failed (auth, missing database, ...):
+        # this is a real failure, not a skip.
+        print(f"[FAIL] PostgreSQL is reachable at {PG_HOST}:{PG_PORT} but connecting failed: {e}")
         return 1
 
     try:
