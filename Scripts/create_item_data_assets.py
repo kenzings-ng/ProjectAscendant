@@ -19,7 +19,8 @@ def create_or_update_data_asset(package_path, asset_name, setup_fn):
         return None
         
     setup_fn(asset)
-    unreal.EditorAssetLibrary.save_asset(full_path)
+    # Preset setters run in C++ and do not mark the package dirty; force the save so updates are persisted.
+    unreal.EditorAssetLibrary.save_asset(full_path, only_if_is_dirty=False)
     unreal.log(f"Successfully saved {full_path}")
     return asset
 

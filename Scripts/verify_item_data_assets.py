@@ -38,6 +38,7 @@ def verify():
             "granted_ability_class": "PAGameplayAbility_Dash",
             # X6: sách kỹ năng dùng thang kỹ năng 4 bậc (DECISIONS.md §5); Dash = sách Vanguard T1 -> Normal
             "skill_rarity": "NORMAL",
+            "rarity_tier": "NONE",
         }),
     ]
     

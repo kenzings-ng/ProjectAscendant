@@ -37,8 +37,8 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Item|Display")
 	FText ItemDescription;
 
-	/** 5 Tier cấp độ hiếm (Common -> Legendary) */
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Item|Properties")
+	/** 5 Tier cấp độ hiếm (Common -> Legendary). Không dùng cho Sách Kỹ Năng (dùng SkillRarity - DECISIONS.md §5) */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Item|Properties", meta = (EditCondition = "Category != EPAItemCategory::SkillBook"))
 	EPAItemRarity RarityTier;
 
 	/** Phân loại vật phẩm (Equipment, Consumable, Material...) */

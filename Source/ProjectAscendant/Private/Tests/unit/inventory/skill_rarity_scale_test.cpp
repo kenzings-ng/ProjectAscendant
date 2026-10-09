@@ -17,6 +17,7 @@
  *  - Phân rã Sách Kỹ Năng theo SkillRarity: 1 / 3 / 8 / 25 Tàn Trang (skill-progression-system.md).
  *  - Phân rã trang bị vẫn theo EPAItemRarity, không bị SkillRarity ảnh hưởng.
  *  - Preset Sách Dash dùng thang kỹ năng (Normal), không mang độ hiếm trang bị.
+ *  - Hòm Đệm (túi đầy): sách kỹ năng Rare+ theo SkillRarity được chuyển vào; trang bị vẫn theo RarityTier.
  */
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(
 	FPASkillRarityScaleTest,
@@ -150,6 +151,58 @@ bool FPASkillRarityScaleTest::RunTest(const FString& Parameters)
 		TestEqual(TEXT("Iron Plate keeps equipment rarity Rare"), Plate->RarityTier, EPAItemRarity::Rare);
 		TestEqual(TEXT("Iron Plate salvage unchanged (10)"),
 			FPABlacksmithFormulas::GetSalvageSkillShards(Plate->RarityTier, Plate->Category, Plate->SkillRarity), 10);
+	}
+
+	// -------------------------------------------------------------------------
+	// 6. Overflow stash routing (bag full): skill books use the skill scale
+	//    (inventory-system.md §8.1 / AC-6 "Rare trở lên"); equipment unchanged
+	// -------------------------------------------------------------------------
+	{
+		UPAInventoryComponent* Inventory = NewObject<UPAInventoryComponent>();
+
+		UItemStaticDataAsset* Filler = NewObject<UItemStaticDataAsset>();
+		Filler->ItemId = FName(TEXT("item_test_filler"));
+		Filler->Category = EPAItemCategory::Equipment;
+		Filler->MaxStackSize = 1;
+		for (int32 Index = 0; Index < Inventory->GetCurrentMaxSlots(); ++Index)
+		{
+			Inventory->AddItemToSlot(Index, Filler, 1);
+		}
+		TestEqual(TEXT("Overflow: bag is full"), Inventory->FindFirstEmptySlot(), static_cast<int32>(INDEX_NONE));
+
+		UItemStaticDataAsset* NormalBook = NewObject<UItemStaticDataAsset>();
+		NormalBook->ItemId = FName(TEXT("item_test_book_normal"));
+		NormalBook->Category = EPAItemCategory::SkillBook;
+		NormalBook->MaxStackSize = 1;
+		NormalBook->RarityTier = EPAItemRarity::Legendary; // equipment scale must be ignored for books
+		NormalBook->SkillRarity = EPASkillRarity::Normal;
+		TestFalse(TEXT("Overflow: Normal skill book is not routed"), Inventory->RouteToOverflowStash(NormalBook, 1));
+		TestEqual(TEXT("Overflow: stash still empty"), Inventory->GetOverflowStashCount(), 0);
+
+		UItemStaticDataAsset* RareBook = NewObject<UItemStaticDataAsset>();
+		RareBook->ItemId = FName(TEXT("item_test_book_rare"));
+		RareBook->Category = EPAItemCategory::SkillBook;
+		RareBook->MaxStackSize = 1;
+		RareBook->RarityTier = EPAItemRarity::None;
+		RareBook->SkillRarity = EPASkillRarity::Rare;
+		TestTrue(TEXT("Overflow: Rare skill book (RarityTier None) is routed"), Inventory->RouteToOverflowStash(RareBook, 1));
+		TestEqual(TEXT("Overflow: stash has 1 item"), Inventory->GetOverflowStashCount(), 1);
+
+		UItemStaticDataAsset* UncommonArmor = NewObject<UItemStaticDataAsset>();
+		UncommonArmor->ItemId = FName(TEXT("item_test_armor_uncommon"));
+		UncommonArmor->Category = EPAItemCategory::Equipment;
+		UncommonArmor->MaxStackSize = 1;
+		UncommonArmor->RarityTier = EPAItemRarity::Uncommon;
+		UncommonArmor->SkillRarity = EPASkillRarity::Mythic; // skill scale must be ignored for equipment
+		TestFalse(TEXT("Overflow: Uncommon equipment is not routed"), Inventory->RouteToOverflowStash(UncommonArmor, 1));
+
+		UItemStaticDataAsset* RareArmor = NewObject<UItemStaticDataAsset>();
+		RareArmor->ItemId = FName(TEXT("item_test_armor_rare"));
+		RareArmor->Category = EPAItemCategory::Equipment;
+		RareArmor->MaxStackSize = 1;
+		RareArmor->RarityTier = EPAItemRarity::Rare;
+		TestTrue(TEXT("Overflow: Rare equipment is routed (unchanged)"), Inventory->RouteToOverflowStash(RareArmor, 1));
+		TestEqual(TEXT("Overflow: stash has 2 items"), Inventory->GetOverflowStashCount(), 2);
 	}
 
 	return true;
