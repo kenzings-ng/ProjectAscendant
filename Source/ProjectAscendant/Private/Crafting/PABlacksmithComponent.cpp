@@ -381,7 +381,8 @@ bool UPABlacksmithComponent::EnhanceItem(UPAInventoryComponent* Inventory, UPACu
 
 bool UPABlacksmithComponent::UnlockSocket(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex, EPACraftingError& OutError)
 {
-	if (!Inventory)
+	// X11a: Wallet is required — opening a socket is charged (itemization.md §7.2).
+	if (!Inventory || !Wallet)
 	{
 		OutError = EPACraftingError::ServerRejected;
 		OnCraftingFailed.Broadcast(OutError);
@@ -423,6 +424,47 @@ bool UPABlacksmithComponent::UnlockSocket(UPAInventoryComponent* Inventory, UPAC
 	if (Entry->DynamicData.SocketedGemIds.Num() >= MaxSockets)
 	{
 		OutError = EPACraftingError::MaxSocketsReached;
+		OnCraftingFailed.Broadcast(OutError);
+		return false;
+	}
+
+	// X11a: server-determined cost for the socket being opened (same table as ServerAddSocket, itemization.md §7.2).
+	const int32 NewSocketIndex = Entry->DynamicData.SocketedGemIds.Num();
+	int32 GoldCost = 0;
+	int32 ShardCost = 0;
+	if (!FPABlacksmithFormulas::GetSocketUnlockCost(NewSocketIndex, GoldCost, ShardCost))
+	{
+		OutError = EPACraftingError::MaxSocketsReached;
+		OnCraftingFailed.Broadcast(OutError);
+		return false;
+	}
+
+	if (Wallet->GetGold() < GoldCost)
+	{
+		OutError = EPACraftingError::InsufficientGold;
+		OnCraftingFailed.Broadcast(OutError);
+		return false;
+	}
+
+	if (Wallet->GetSkillShards() < ShardCost)
+	{
+		OutError = EPACraftingError::InsufficientSkillShards;
+		OnCraftingFailed.Broadcast(OutError);
+		return false;
+	}
+
+	EPACurrencyTransactionError CurrErr = EPACurrencyTransactionError::None;
+	if (!Wallet->DeductCurrency(EPACurrencyType::Gold, GoldCost, CurrErr))
+	{
+		OutError = EPACraftingError::InsufficientGold;
+		OnCraftingFailed.Broadcast(OutError);
+		return false;
+	}
+
+	if (!Wallet->DeductCurrency(EPACurrencyType::SkillShards, ShardCost, CurrErr))
+	{
+		Wallet->AddCurrency(EPACurrencyType::Gold, GoldCost, CurrErr);
+		OutError = EPACraftingError::InsufficientSkillShards;
 		OnCraftingFailed.Broadcast(OutError);
 		return false;
 	}
@@ -759,7 +801,9 @@ bool UPABlacksmithComponent::ForgeBossSoulEquipment(
 		return false;
 	}
 
-	// X11a: nguyên liệu phải đúng loại (blacksmithing-system.md §B) và đầu ra do server quyết định qua recipe.
+	// X11a: kiểm tra loại nguyên liệu và đầu ra do server quyết định qua recipe. Đây chỉ là triển khai MỘT PHẦN của
+	// blacksmithing-system.md §B: code dùng 4x một loại mảnh vỡ (BossPartItemId) thay vì 4 bộ phận khác nhau theo GDD
+	// (Sừng, Vảy Đuôi, Giáp Ngực, Cánh), và đầu ra theo Class (dòng cải biến kỹ năng) vẫn chưa làm.
 	if (!FPABlacksmithFormulas::IsBossSoulItem(BossSoulItemId) ||
 		!FPABlacksmithFormulas::IsBossPartItem(BossPartItemId) ||
 		!FPABlacksmithFormulas::IsVoidOreItem(VoidOreItemId))

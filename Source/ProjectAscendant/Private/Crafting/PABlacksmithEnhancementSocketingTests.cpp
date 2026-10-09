@@ -202,9 +202,10 @@ bool FPABlacksmithEnhancementSocketingTests::RunTest(const FString& Parameters)
 		{
 			Blacksmith->SetForgeTier(EPABlacksmithTier::Tier2_Wilderness);
 
-			// Seed Wallet with 1,000 Gold
+			// Seed Wallet: 5,000 Gold + 11 Shards (X11a: socket 1 = 1,000 G + 3 S, socket 2 = 3,000 G + 8 S, unsocket 100 G)
 			EPACurrencyTransactionError CurrErr;
-			Wallet->AddCurrency(EPACurrencyType::Gold, 1000, CurrErr);
+			Wallet->AddCurrency(EPACurrencyType::Gold, 5000, CurrErr);
+			Wallet->AddCurrency(EPACurrencyType::SkillShards, 11, CurrErr);
 
 			// Equipment 1: Common Armor (cannot be socketed)
 			UItemStaticDataAsset* CommonArmorAsset = NewObject<UItemStaticDataAsset>();
@@ -239,11 +240,15 @@ bool FPABlacksmithEnhancementSocketingTests::RunTest(const FString& Parameters)
 			TestTrue(TEXT("AC-3: Unlock 1st socket succeeds"), bUnlocked);
 			TestEqual(TEXT("AC-3: Weapon has 1 socket"), Inventory->GetItemAtSlot(1)->DynamicData.SocketedGemIds.Num(), 1);
 			TestEqual(TEXT("AC-3: Socket 0 is empty (NAME_None)"), Inventory->GetItemAtSlot(1)->DynamicData.SocketedGemIds[0], NAME_None);
+			TestEqual(TEXT("AC-3: Socket 1 charged 1,000 Gold -> 4,000"), Wallet->GetGold(), 4000LL);
+			TestEqual(TEXT("AC-3: Socket 1 charged 3 Shards -> 8"), Wallet->GetSkillShards(), 8LL);
 
 			// Unlock Socket 2
 			bUnlocked = Blacksmith->UnlockSocket(Inventory, Wallet, 1, CraftErr);
 			TestTrue(TEXT("AC-3: Unlock 2nd socket succeeds"), bUnlocked);
 			TestEqual(TEXT("AC-3: Weapon has 2 sockets"), Inventory->GetItemAtSlot(1)->DynamicData.SocketedGemIds.Num(), 2);
+			TestEqual(TEXT("AC-3: Socket 2 charged 3,000 Gold -> 1,000"), Wallet->GetGold(), 1000LL);
+			TestEqual(TEXT("AC-3: Socket 2 charged 8 Shards -> 0"), Wallet->GetSkillShards(), 0LL);
 
 			// Attempt Unlock Socket 3 at Tier 2 Forge (cap is 2)
 			bUnlocked = Blacksmith->UnlockSocket(Inventory, Wallet, 1, CraftErr);

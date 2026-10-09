@@ -133,7 +133,9 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "ProjectAscendant|Merchant")
 	FPAOnTransactionFailed OnTransactionFailed;
 
-	static constexpr float kMaxInteractionDistance = 300.0f; // 300cm theo AC-4
+	// 300cm theo AC-4 và GDD merchant-economy.md:24. Mâu thuẫn: control-manifest.md:75 ghi 250cm —
+	// đang chờ chủ dự án quyết định; giữ 300cm theo GDD (X11a, không sửa tài liệu).
+	static constexpr float kMaxInteractionDistance = 300.0f;
 	static constexpr int32 kMaxBuybackSlots = 10;          // 10 ô Buyback theo AC-3
 
 protected:

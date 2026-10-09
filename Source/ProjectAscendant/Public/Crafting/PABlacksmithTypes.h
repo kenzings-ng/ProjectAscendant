@@ -90,7 +90,8 @@ struct PROJECTASCENDANT_API FPABackpackExpansionRequirements
 /**
  * FPABossSoulRecipe
  *
- * X11a: Server-side Boss Soul forging recipe (blacksmithing-system.md §B "Chế Tác Thần Binh Từ Linh Hồn Boss").
+ * X11a: Server-side Boss Soul forging recipe — partial implementation of blacksmithing-system.md §B
+ * ("Chế Tác Thần Binh Từ Linh Hồn Boss"): one boss-part id x4 instead of 4 distinct parts, class-specific output pending.
  * The Legendary output is decided by the server from the consumed Linh Hồn Lãnh Chúa (`item_boss_soul_*`);
  * the client only names which soul to consume and can never choose the output item.
  * Recipes are configured on the forge (Tier 3) component; no recipe data assets exist yet in Content.

@@ -93,6 +93,7 @@ public:
 	/**
 	 * AC-3 (crft-002): Đục thêm 1 lỗ khảm ngọc trên trang bị (tối đa 2 lỗ tại Tier 2 Forge).
 	 * Chỉ áp dụng cho trang bị độ hiếm Rare trở lên.
+	 * X11a: thu phí từ Wallet theo FPABlacksmithFormulas::GetSocketUnlockCost(số lỗ hiện có) (itemization.md §7.2).
 	 */
 	UFUNCTION(BlueprintCallable, Category = "ProjectAscendant|Crafting")
 	bool UnlockSocket(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex, EPACraftingError& OutError);
@@ -251,7 +252,9 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "ProjectAscendant|Crafting")
 	FPAOnCraftingFailed OnCraftingFailed;
 
-	static constexpr float kMaxInteractionDistance = 300.0f; // 300cm theo AC-4
+	// 300cm theo AC-4 và GDD merchant-economy.md:24. Mâu thuẫn: control-manifest.md:75 ghi 250cm —
+	// đang chờ chủ dự án quyết định; giữ 300cm theo GDD (X11a, không sửa tài liệu).
+	static constexpr float kMaxInteractionDistance = 300.0f;
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectAscendant|Crafting")

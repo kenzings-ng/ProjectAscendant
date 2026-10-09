@@ -193,6 +193,75 @@ bool FPAServerAuthorityComputedCostsTest::RunTest(const FString& Parameters)
 }
 
 // =============================================================================
+// 1b. Server_RequestUnlockSocket charges the server socket cost (no free-socket bypass)
+// =============================================================================
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(
+	FPAServerAuthorityUnlockSocketChargedTest,
+	"ProjectAscendant.Network.ServerAuthority.UnlockSocketChargedServerSide",
+	EAutomationTestFlags_ApplicationContextMask | EAutomationTestFlags::ProductFilter)
+
+bool FPAServerAuthorityUnlockSocketChargedTest::RunTest(const FString& Parameters)
+{
+	UWorld* World = GEngine->GetWorldContexts()[0].World();
+	if (!TestNotNull(TEXT("World available"), World))
+	{
+		return false;
+	}
+
+	FTestPlayer PlayerA = SpawnPlayer(World, FVector(0.0f, 0.0f, 0.0f));
+	AActor* Forge = SpawnLocatedActor(World, AActor::StaticClass(), FVector(100.0f, 0.0f, 0.0f), PlayerA.PC);
+	UPABlacksmithComponent* Blacksmith = NewObject<UPABlacksmithComponent>(Forge, TEXT("TestForge"));
+	if (!TestNotNull(TEXT("Player A"), PlayerA.Pawn))
+	{
+		if (Forge) { Forge->Destroy(); }
+		DestroyPlayer(PlayerA);
+		return false;
+	}
+	Blacksmith->SetForgeTier(EPABlacksmithTier::Tier2_Wilderness);
+
+	UItemStaticDataAsset* RareSword = MakeItem(FName("item_test_rare_sword"), EPAItemCategory::Equipment, EPAItemRarity::Rare, 300, 1);
+	PlayerA.Inventory->AddItemToSlot(0, RareSword, 1);
+
+	auto SocketCount = [&PlayerA]() { return PlayerA.Inventory->GetItemAtSlot(0)->DynamicData.SocketedGemIds.Num(); };
+
+	// --- Insufficient gold (999 < 1,000): rejected, nothing deducted, no socket ---
+	EPACurrencyTransactionError CurrErr;
+	PlayerA.Wallet->AddCurrency(EPACurrencyType::Gold, 999, CurrErr);
+	PlayerA.Wallet->AddCurrency(EPACurrencyType::SkillShards, 3, CurrErr);
+	Blacksmith->Server_RequestUnlockSocket(PlayerA.Inventory, PlayerA.Wallet, 0);
+	TestEqual(TEXT("Insufficient gold: no socket opened"), SocketCount(), 0);
+	TestEqual(TEXT("Insufficient gold: gold untouched"), PlayerA.Wallet->GetGold(), 999LL);
+	TestEqual(TEXT("Insufficient gold: shards untouched"), PlayerA.Wallet->GetSkillShards(), 3LL);
+
+	// --- Insufficient shards (2 < 3): rejected, nothing deducted, no socket ---
+	PlayerA.Wallet->AddCurrency(EPACurrencyType::Gold, 1, CurrErr);       // 1,000 Gold
+	PlayerA.Wallet->DeductCurrency(EPACurrencyType::SkillShards, 1, CurrErr); // 2 Shards
+	Blacksmith->Server_RequestUnlockSocket(PlayerA.Inventory, PlayerA.Wallet, 0);
+	TestEqual(TEXT("Insufficient shards: no socket opened"), SocketCount(), 0);
+	TestEqual(TEXT("Insufficient shards: gold untouched"), PlayerA.Wallet->GetGold(), 1000LL);
+	TestEqual(TEXT("Insufficient shards: shards untouched"), PlayerA.Wallet->GetSkillShards(), 2LL);
+
+	// --- Sufficient: socket 1 costs 1,000 Gold + 3 Shards ---
+	PlayerA.Wallet->AddCurrency(EPACurrencyType::SkillShards, 1, CurrErr); // 3 Shards
+	Blacksmith->Server_RequestUnlockSocket(PlayerA.Inventory, PlayerA.Wallet, 0);
+	TestEqual(TEXT("Socket 1 opened"), SocketCount(), 1);
+	TestEqual(TEXT("Socket 1 charged 1,000 Gold"), PlayerA.Wallet->GetGold(), 0LL);
+	TestEqual(TEXT("Socket 1 charged 3 Shards"), PlayerA.Wallet->GetSkillShards(), 0LL);
+
+	// --- Socket 2 costs 3,000 Gold + 8 Shards ---
+	PlayerA.Wallet->AddCurrency(EPACurrencyType::Gold, 3500, CurrErr);
+	PlayerA.Wallet->AddCurrency(EPACurrencyType::SkillShards, 10, CurrErr);
+	Blacksmith->Server_RequestUnlockSocket(PlayerA.Inventory, PlayerA.Wallet, 0);
+	TestEqual(TEXT("Socket 2 opened"), SocketCount(), 2);
+	TestEqual(TEXT("Socket 2 charged 3,000 Gold"), PlayerA.Wallet->GetGold(), 500LL);
+	TestEqual(TEXT("Socket 2 charged 8 Shards"), PlayerA.Wallet->GetSkillShards(), 2LL);
+
+	Forge->Destroy();
+	DestroyPlayer(PlayerA);
+	return true;
+}
+
+// =============================================================================
 // 2. Client-supplied Inventory / Wallet must belong to the requesting player
 // =============================================================================
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(

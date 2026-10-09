@@ -172,8 +172,10 @@ bool FPABlacksmithBossSoulTests::RunTest(const FString& Parameters)
 		{
 			Blacksmith->SetForgeTier(EPABlacksmithTier::Tier3_Sanctuary);
 
+			// X11a: sockets are charged 1,000/3 + 3,000/8 + 15,000/20 (itemization.md 7.2) -> 19,000 Gold + 31 Shards
 			EPACurrencyTransactionError CurrErr;
-			Wallet->AddCurrency(EPACurrencyType::Gold, 5000, CurrErr);
+			Wallet->AddCurrency(EPACurrencyType::Gold, 20000, CurrErr);
+			Wallet->AddCurrency(EPACurrencyType::SkillShards, 31, CurrErr);
 
 			// Place a Rare Weapon in Slot 0
 			UItemStaticDataAsset* RareWeapon = NewObject<UItemStaticDataAsset>();
@@ -195,6 +197,8 @@ bool FPABlacksmithBossSoulTests::RunTest(const FString& Parameters)
 			TestTrue(TEXT("AC-2: Unlocking 3rd socket succeeds at Tier 3 Forge"), bUnlocked3);
 			TestEqual(TEXT("AC-2: Weapon now has 3 sockets (Prismatic unlocked)"), Inventory->GetItemAtSlot(0)->DynamicData.SocketedGemIds.Num(), 3);
 			TestTrue(TEXT("AC-2: Socket index 2 is recognized as Prismatic Socket"), FPABlacksmithFormulas::IsPrismaticSocket(2));
+			TestEqual(TEXT("AC-2: Three sockets charged 19,000 Gold -> 1,000"), Wallet->GetGold(), 1000LL);
+			TestEqual(TEXT("AC-2: Three sockets charged 31 Shards -> 0"), Wallet->GetSkillShards(), 0LL);
 
 			// Attempting to unlock 4th socket fails (cap is 3)
 			bool bUnlocked4 = Blacksmith->UnlockSocket(Inventory, Wallet, 0, CraftErr);
