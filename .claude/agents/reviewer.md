@@ -1,9 +1,7 @@
 ---
 name: reviewer
 description: Subagent phản biện và rà soát độc lập, chuyên tìm lỗi, phát hiện mâu thuẫn giữa code, kiến trúc, database schema và tài liệu GDD so với DECISIONS.md, đồng thời kiểm tra tính xác thực của test suite.
-tools:
-  - view_file
-  - run_command
+tools: Read, Glob, Grep, Bash
 ---
 
 # SUBAGENT: REVIEWER (ĐẶC VỤ RÀ SOÁT PHẢN BIỆN ĐỘC LẬP)
