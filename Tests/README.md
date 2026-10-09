@@ -11,11 +11,14 @@
 
 ```
 tests/
-  unit/           # Kiểm thử đơn vị cô lập (công thức sát thương, máy trạng thái, Posture clamping)
-  integration/    # Kiểm thử tích hợp (liên hệ thống, chuỗi sự kiện mạng, Save/Load round-trip)
   smoke/          # Danh mục kiểm thử critical-path cho cổng /smoke-check (< 15 phút)
   evidence/       # Nhật ký ảnh chụp màn hình và biên bản ký duyệt kiểm thử thủ công
 ```
+
+> **Test C++ (unit/integration) KHÔNG nằm ở đây.** Thư mục `Tests/` không được module nào biên dịch.
+> Mọi test tự động nằm trong module: `Source/ProjectAscendant/Private/Tests/unit/[system]/`,
+> `Source/ProjectAscendant/Private/Tests/integration/[system]/` và `Source/ProjectAscendant/Private/<System>/PA*Tests.cpp`
+> (chuyển ở X12, 2026-10-09; xem `Source/Tests/README.md`).
 
 ---
 
@@ -48,8 +51,8 @@ tests/
 
 | Phân Loại Story | Bằng Chứng Yêu Cầu | Vị Trí Lưu Trữ |
 |---|---|---|
-| **Logic** | Kiểm thử đơn vị C++ tự động — bắt buộc 100% Pass | `tests/unit/[system]/` |
-| **Integration** | Automation Spec liên module hoặc log kịch bản mạng | `tests/integration/[system]/` |
+| **Logic** | Kiểm thử đơn vị C++ tự động — bắt buộc 100% Pass | `Source/ProjectAscendant/Private/Tests/unit/[system]/` |
+| **Integration** | Automation Spec liên module hoặc log kịch bản mạng | `Source/ProjectAscendant/Private/Tests/integration/[system]/` |
 | **Visual / Feel** | Ảnh chụp màn hình hoạt ảnh Pixel + Ký duyệt của Art Director | `tests/evidence/` |
 | **UI** | Kiểm thử tương tác CommonUI hoặc biên bản thủ công | `tests/evidence/` |
 | **Config / Data** | Vượt qua cổng Smoke Check không cảnh báo | `production/qa/smoke-*.md` |
