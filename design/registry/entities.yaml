@@ -377,11 +377,12 @@ items:
     stackable: false
     attributes:
       archetype: "Weapon.1H.Blade"
-      classes: ["Vanguard", "Templar", "Void Blade", "God Slayer"]
+      # X13 2026-10-10: bỏ Templar (DECISIONS.md §7: Templar dùng Weapon.1H.Mace), thêm Swordmaster — khớp itemization.md:199 và :495.
+      classes: ["Vanguard", "Swordmaster", "Void Blade", "God Slayer"]
       base_speed: 1.10
       hitbox_arc: 120
     added: 2026-09-24
-    revised: ""
+    revised: "2026-10-10"
 
   - name: weapon_family_2h_heavy
     display_name: "Dòng Đại Khí Hạng Nặng (2H Heavy)"
@@ -395,12 +396,14 @@ items:
     stackable: false
     attributes:
       archetype: "Weapon.2H.Heavy"
-      classes: ["Berserker", "Vanguard", "Dragon Knight"]
+      # X13 2026-10-10: bỏ Vanguard (DECISIONS.md §7: Vanguard dùng Weapon.1H.Blade + khiên) — khớp itemization.md:200 và :508.
+      # Dragon Knight còn chờ chủ dự án xác nhận (DECISIONS.md:122), xem Tools/QA/gdd_validator_allowlist.yaml.
+      classes: ["Berserker", "Dragon Knight"]
       base_speed: 0.75
       hitbox_arc: 160
       hyper_armor: true
     added: 2026-09-24
-    revised: ""
+    revised: "2026-10-10"
 
   - name: weapon_family_polearms
     display_name: "Dòng Thương & Kích (Polearms)"

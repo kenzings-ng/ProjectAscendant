@@ -12,7 +12,7 @@
 |---|---|---|---|---|---|---|
 | [`foundation-attributes`](foundation-attributes/EPIC.md) | Foundation | Character Attributes & Stats Engine (GAS) | [`attributes-system.md`](../../design/gdd/attributes-system.md) | ADR-0001, ADR-0002 | 3 stories | **Done** |
 | [`foundation-controller`](foundation-controller/EPIC.md) | Foundation | Input & Isometric Camera Controller | [`isometric-controller.md`](../../design/gdd/isometric-controller.md) | ADR-0001, ADR-0002 | 3 stories | **Done** |
-| [`foundation-inventory`](foundation-inventory/EPIC.md) | Foundation | Inventory & 5-Tier Item Database | [`inventory-system.md`](../../design/gdd/inventory-system.md) | ADR-0001, ADR-0003 | 3 stories | **Done** |
+| [`foundation-inventory`](foundation-inventory/EPIC.md) | Foundation | Inventory & 5-Rarity Item Database *(Cập nhật 2026-10-10 (X13): đổi tên theo DECISIONS.md §1.)* | [`inventory-system.md`](../../design/gdd/inventory-system.md) | ADR-0001, ADR-0003 | 3 stories | **Done** |
 | [`foundation-netcode`](foundation-netcode/EPIC.md) | Foundation | Open World MMO Netcode & Contested Aggro Sync | [`multiplayer-coop.md`](../../design/gdd/multiplayer-coop.md) | ADR-0001 | 4 stories | **Done** |
 
 ---

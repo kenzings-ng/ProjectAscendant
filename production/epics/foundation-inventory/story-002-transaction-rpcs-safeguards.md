@@ -1,6 +1,6 @@
 # Story 002: Server-Authoritative Transaction RPCs & Duplication Safeguards
 
-> **Epic**: Inventory & 5-Tier Item Database  
+> **Epic**: Inventory & 5-Rarity Item Database *(Cập nhật 2026-10-10 (X13): tên epic đổi theo DECISIONS.md §1.)*  
 > **Status**: Complete  
 > **Layer**: Foundation  
 > **Type**: Logic  
@@ -85,7 +85,7 @@
   - Then: Server rejects operation with error code `ITEM_LOCKED`; armor remains intact in Slot 3.
 
 - **AC-4 Test: Full Backpack Overflow Stash Routing**:
-  - Given: Player backpack full ($30/30$ slots occupied). Boss drops a Rare Tier Ring.
+  - Given: Player backpack full ($30/30$ slots occupied). Boss drops a Rare Ring. *(Cập nhật 2026-10-10 (X13): "Rare Tier Ring" → "Rare Ring", DECISIONS.md §1.)*
   - When: Loot pickup is executed.
   - Then: Ring is redirected to campfire `OverflowStash`, occupying slot 0 of 20, and player receives UI notification.
 

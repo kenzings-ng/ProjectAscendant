@@ -68,7 +68,8 @@ stories:
     completed: "2026-09-25"
 
   - id: "visual-006"
-    name: "12 Class Idle Stances, Crest Sockets & Tabards (360 Assets Wireframe Proxy)"
+    # X13 2026-10-10: tên cũ "12 Class ... (360 Assets Wireframe Proxy)" đổi theo tiêu đề story-006 (16 class, DECISIONS.md §2).
+    name: "16 Class Idle Stances, Crest Sockets & Tabard Overlays (500 Assets)"
     file: "production/epics/presentation-character-visual/story-006-art-class-idle-crest-tabard.md"
     priority: should-have
     status: "Completed (Placeholder-tier art — cần thay thế bằng pixel art thật trước khi release)"
