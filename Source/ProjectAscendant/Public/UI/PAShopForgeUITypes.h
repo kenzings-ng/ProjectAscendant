@@ -55,6 +55,10 @@ struct PROJECTASCENDANT_API FPAShopItemEntry
 	UPROPERTY(BlueprintReadOnly, Category = "ShopUI")
 	bool bCanAfford = false;
 
+	/** X11b: instance UID (inventory / buyback rows) — buyback requests address entries by UID, not index. */
+	UPROPERTY(BlueprintReadOnly, Category = "ShopUI")
+	FGuid ItemInstanceUID;
+
 	FPAShopItemEntry() = default;
 };
 

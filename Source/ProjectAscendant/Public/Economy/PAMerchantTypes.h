@@ -7,6 +7,7 @@
 #include "PAMerchantTypes.generated.h"
 
 class UItemStaticDataAsset;
+class APlayerController;
 
 /**
  * EPAMerchantTier
@@ -77,6 +78,7 @@ struct PROJECTASCENDANT_API FPAMerchantCatalogEntry
  * FPABuybackItemEntry
  *
  * Ô lưu trữ vật phẩm đã bán trong phiên giao dịch để hỗ trợ chuộc lại (Buyback Window).
+ * X11b: Buyback là per-NPC, per-player-session (merchant-economy.md §4, E7): mỗi ô ghi người bán (Seller).
  */
 USTRUCT(BlueprintType)
 struct PROJECTASCENDANT_API FPABuybackItemEntry
@@ -97,6 +99,13 @@ struct PROJECTASCENDANT_API FPABuybackItemEntry
 
 	UPROPERTY(BlueprintReadOnly, Category = "Merchant|Buyback")
 	FGuid ItemInstanceUID;
+
+	/**
+	 * X11b (server-only, not replicated): PlayerController that sold the item. Only that player can see / buy the
+	 * entry back. Explicitly null = unattributed sale through the local SellItem API (not reachable by routed requests).
+	 * When the PlayerController is destroyed (logout) the pointer goes stale and the entry is purged (session scope).
+	 */
+	TWeakObjectPtr<const APlayerController> Seller;
 
 	FPABuybackItemEntry()
 		: ItemData(nullptr)

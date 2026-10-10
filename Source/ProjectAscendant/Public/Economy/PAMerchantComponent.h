@@ -53,37 +53,44 @@ public:
 	// Buyback Management
 	// -------------------------------------------------------------------------
 
+	/** Total entries on this NPC across all sellers (server-side). */
 	UFUNCTION(BlueprintPure, Category = "ProjectAscendant|Merchant")
 	int32 GetBuybackCount() const { return BuybackList.Num(); }
 
 	const FPABuybackItemEntry* GetBuybackEntry(int32 Index) const;
 
+	/** X11b: entries sold by Seller (nullptr = unattributed local sales), oldest first. Server-side. */
+	TArray<FPABuybackItemEntry> GetBuybackEntriesForSeller(const APlayerController* Seller) const;
+
 	// -------------------------------------------------------------------------
 	// Core Trading Operations (Server-Authoritative)
+	// X11b: BlueprintAuthorityOnly — client Blueprints cannot run them. These are trusted server-side entry points
+	// WITHOUT ownership / distance / combat checks and without buyback seller attribution; player requests must go
+	// through UPAServiceRequestComponent -> ServerHandle*. Index-based BuybackItem ignores sellers (server/test use).
 	// -------------------------------------------------------------------------
 
 	/**
 	 * AC-1: Mua vật phẩm từ danh mục thương nhân.
 	 */
-	UFUNCTION(BlueprintCallable, Category = "ProjectAscendant|Merchant")
+	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category = "ProjectAscendant|Merchant")
 	bool BuyItem(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 CatalogIndex, int32 Quantity, EPATransactionError& OutError);
 
 	/**
 	 * AC-2: Bán vật phẩm từ túi đồ cho thương nhân.
 	 */
-	UFUNCTION(BlueprintCallable, Category = "ProjectAscendant|Merchant")
+	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category = "ProjectAscendant|Merchant")
 	bool SellItem(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex, int32 Quantity, EPATransactionError& OutError);
 
 	/**
 	 * AC-2: Bán nhanh toàn bộ đồ đánh dấu rác (bIsJunk == true).
 	 */
-	UFUNCTION(BlueprintCallable, Category = "ProjectAscendant|Merchant")
+	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category = "ProjectAscendant|Merchant")
 	bool SellAllJunk(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32& OutTotalGoldReceived, int32& OutItemsSold, EPATransactionError& OutError);
 
 	/**
 	 * AC-3: Mua lại vật phẩm đã bán từ cửa sổ Buyback.
 	 */
-	UFUNCTION(BlueprintCallable, Category = "ProjectAscendant|Merchant")
+	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category = "ProjectAscendant|Merchant")
 	bool BuybackItem(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 BuybackIndex, EPATransactionError& OutError);
 
 	/**
@@ -93,32 +100,25 @@ public:
 	bool ValidateInteraction(const AActor* InteractingActor, bool bInCombat, EPATransactionError& OutError) const;
 
 	/**
-	 * X11a: Player that may have sent a Server RPC on this component (APlayerController on the owner chain of
-	 * this component's actor). nullptr for NPC-owned merchants (such RPCs cannot arrive from a client; see X11b).
-	 */
-	APlayerController* GetRequestingPlayerController() const;
-
-	/**
-	 * X11a: Server precondition run by every Server RPC before any state mutation: authority, requesting player
+	 * X11a: Server precondition run by every routed request before any state mutation: authority, requesting player
 	 * with a pawn, Inventory / Wallet owned by the requesting player, and ValidateInteraction (distance + State.InCombat).
 	 */
 	bool ValidateServerRequest(const APlayerController* Requester, const UActorComponent* Inventory, const UActorComponent* Wallet, EPATransactionError& OutError) const;
 
 	// -------------------------------------------------------------------------
-	// Server RPCs
+	// X11b: Authority-only request handlers (not RPCs).
+	// Clients reach them only through UPAServiceRequestComponent (on their PlayerController), which supplies the
+	// requesting player. Each runs ValidateServerRequest(Requester, ...) first; returns true if the transaction happened.
 	// -------------------------------------------------------------------------
 
-	UFUNCTION(Server, Reliable, WithValidation, Category = "ProjectAscendant|Merchant")
-	void Server_RequestBuyItem(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 CatalogIndex, int32 Quantity);
+	bool ServerHandleBuyItem(const APlayerController* Requester, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 CatalogIndex, int32 Quantity, EPATransactionError& OutError);
 
-	UFUNCTION(Server, Reliable, WithValidation, Category = "ProjectAscendant|Merchant")
-	void Server_RequestSellItem(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex, int32 Quantity);
+	bool ServerHandleSellItem(const APlayerController* Requester, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex, int32 Quantity, EPATransactionError& OutError);
 
-	UFUNCTION(Server, Reliable, WithValidation, Category = "ProjectAscendant|Merchant")
-	void Server_RequestSellAllJunk(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet);
+	bool ServerHandleSellAllJunk(const APlayerController* Requester, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, EPATransactionError& OutError);
 
-	UFUNCTION(Server, Reliable, WithValidation, Category = "ProjectAscendant|Merchant")
-	void Server_RequestBuybackItem(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 BuybackIndex);
+	/** X11b: buys back the requester's own entry identified by ItemInstanceUID (never another player's entry). */
+	bool ServerHandleBuybackItem(const APlayerController* Requester, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, const FGuid& ItemInstanceUID, EPATransactionError& OutError);
 
 public:
 	UPROPERTY(BlueprintAssignable, Category = "ProjectAscendant|Merchant")
@@ -136,7 +136,7 @@ public:
 	// 300cm theo AC-4 và GDD merchant-economy.md:24. Mâu thuẫn: control-manifest.md:75 ghi 250cm —
 	// đang chờ chủ dự án quyết định; giữ 300cm theo GDD (X11a, không sửa tài liệu).
 	static constexpr float kMaxInteractionDistance = 300.0f;
-	static constexpr int32 kMaxBuybackSlots = 10;          // 10 ô Buyback theo AC-3
+	static constexpr int32 kMaxBuybackSlots = 10;          // 10 ô Buyback theo AC-3 (X11b: mỗi người bán, FIFO)
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectAscendant|Merchant")
@@ -150,4 +150,15 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly, Category = "ProjectAscendant|Merchant")
 	TArray<FPABuybackItemEntry> BuybackList;
+
+private:
+	/** X11b: drops entries whose seller PlayerController no longer exists (logout ends the buyback session). */
+	void PurgeLoggedOutBuybackEntries();
+	/** X11b: appends Entry; evicts that seller's oldest entry when the seller already has kMaxBuybackSlots. */
+	void AddBuybackEntry(const FPABuybackItemEntry& Entry);
+	static bool IsEntryFromSeller(const FPABuybackItemEntry& Entry, const APlayerController* Seller);
+
+	bool SellItemFor(const APlayerController* Seller, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex, int32 Quantity, EPATransactionError& OutError);
+	bool SellAllJunkFor(const APlayerController* Seller, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32& OutTotalGoldReceived, int32& OutItemsSold, EPATransactionError& OutError);
+	bool BuybackAtIndex(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 BuybackIndex, EPATransactionError& OutError);
 };

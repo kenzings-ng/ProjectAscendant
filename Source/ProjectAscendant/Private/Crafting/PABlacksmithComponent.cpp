@@ -67,11 +67,6 @@ bool UPABlacksmithComponent::ValidateInteraction(const AActor* InteractingActor,
 	return true;
 }
 
-APlayerController* UPABlacksmithComponent::GetRequestingPlayerController() const
-{
-	return PAServerRequestValidation::ResolveOwningPlayerController(GetOwner());
-}
-
 bool UPABlacksmithComponent::ValidateServerRequest(const APlayerController* Requester, const UActorComponent* Inventory, const UActorComponent* Wallet, EPACraftingError& OutError) const
 {
 	if (!GetOwner() || !GetOwner()->HasAuthority() || !Requester)
@@ -654,123 +649,6 @@ bool UPABlacksmithComponent::UnsocketGem(UPAInventoryComponent* Inventory, UPACu
 	return true;
 }
 
-// -----------------------------------------------------------------------------
-// Server RPCs
-// -----------------------------------------------------------------------------
-
-bool UPABlacksmithComponent::Server_RequestRepair_Validate(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex)
-{
-	return Inventory != nullptr && Wallet != nullptr && SlotIndex >= 0;
-}
-
-void UPABlacksmithComponent::Server_RequestRepair_Implementation(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex)
-{
-	EPACraftingError Err = EPACraftingError::None;
-	if (!ValidateServerRequest(GetRequestingPlayerController(), Inventory, Wallet, Err))
-	{
-		OnCraftingFailed.Broadcast(Err);
-		return;
-	}
-	RepairItem(Inventory, Wallet, SlotIndex, Err);
-}
-
-bool UPABlacksmithComponent::Server_RequestSalvage_Validate(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex)
-{
-	return Inventory != nullptr && Wallet != nullptr && SlotIndex >= 0;
-}
-
-void UPABlacksmithComponent::Server_RequestSalvage_Implementation(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex)
-{
-	int32 ShardsGained = 0;
-	EPACraftingError Err = EPACraftingError::None;
-	if (!ValidateServerRequest(GetRequestingPlayerController(), Inventory, Wallet, Err))
-	{
-		OnCraftingFailed.Broadcast(Err);
-		return;
-	}
-	SalvageItem(Inventory, Wallet, SlotIndex, ShardsGained, Err);
-}
-
-bool UPABlacksmithComponent::Server_RequestEnhance_Validate(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex)
-{
-	return Inventory != nullptr && Wallet != nullptr && SlotIndex >= 0;
-}
-
-void UPABlacksmithComponent::Server_RequestEnhance_Implementation(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex)
-{
-	EPACraftingError Err = EPACraftingError::None;
-	if (!ValidateServerRequest(GetRequestingPlayerController(), Inventory, Wallet, Err))
-	{
-		OnCraftingFailed.Broadcast(Err);
-		return;
-	}
-	EnhanceItem(Inventory, Wallet, SlotIndex, false, Err);
-}
-
-bool UPABlacksmithComponent::Server_RequestEnhanceWithWard_Validate(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex, bool bUseWard)
-{
-	return Inventory != nullptr && Wallet != nullptr && SlotIndex >= 0;
-}
-
-void UPABlacksmithComponent::Server_RequestEnhanceWithWard_Implementation(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex, bool bUseWard)
-{
-	EPACraftingError Err = EPACraftingError::None;
-	if (!ValidateServerRequest(GetRequestingPlayerController(), Inventory, Wallet, Err))
-	{
-		OnCraftingFailed.Broadcast(Err);
-		return;
-	}
-	EnhanceItem(Inventory, Wallet, SlotIndex, bUseWard, Err);
-}
-
-bool UPABlacksmithComponent::Server_RequestUnlockSocket_Validate(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex)
-{
-	return Inventory != nullptr && Wallet != nullptr && SlotIndex >= 0;
-}
-
-void UPABlacksmithComponent::Server_RequestUnlockSocket_Implementation(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex)
-{
-	EPACraftingError Err = EPACraftingError::None;
-	if (!ValidateServerRequest(GetRequestingPlayerController(), Inventory, Wallet, Err))
-	{
-		OnCraftingFailed.Broadcast(Err);
-		return;
-	}
-	UnlockSocket(Inventory, Wallet, SlotIndex, Err);
-}
-
-bool UPABlacksmithComponent::Server_RequestSocketGem_Validate(UPAInventoryComponent* Inventory, int32 EquipmentSlotIndex, int32 SocketIndex, FName GemItemId)
-{
-	return Inventory != nullptr && EquipmentSlotIndex >= 0 && SocketIndex >= 0;
-}
-
-void UPABlacksmithComponent::Server_RequestSocketGem_Implementation(UPAInventoryComponent* Inventory, int32 EquipmentSlotIndex, int32 SocketIndex, FName GemItemId)
-{
-	EPACraftingError Err = EPACraftingError::None;
-	if (!ValidateServerRequest(GetRequestingPlayerController(), Inventory, nullptr, Err))
-	{
-		OnCraftingFailed.Broadcast(Err);
-		return;
-	}
-	SocketGem(Inventory, EquipmentSlotIndex, SocketIndex, GemItemId, Err);
-}
-
-bool UPABlacksmithComponent::Server_RequestUnsocketGem_Validate(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 EquipmentSlotIndex, int32 SocketIndex)
-{
-	return Inventory != nullptr && Wallet != nullptr && EquipmentSlotIndex >= 0 && SocketIndex >= 0;
-}
-
-void UPABlacksmithComponent::Server_RequestUnsocketGem_Implementation(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 EquipmentSlotIndex, int32 SocketIndex)
-{
-	EPACraftingError Err = EPACraftingError::None;
-	if (!ValidateServerRequest(GetRequestingPlayerController(), Inventory, Wallet, Err))
-	{
-		OnCraftingFailed.Broadcast(Err);
-		return;
-	}
-	UnsocketGem(Inventory, Wallet, EquipmentSlotIndex, SocketIndex, Err);
-}
-
 bool UPABlacksmithComponent::ForgeBossSoulEquipment(
 	UPAInventoryComponent* Inventory,
 	UPACurrencyComponent* Wallet,
@@ -988,101 +866,123 @@ bool UPABlacksmithComponent::ExpandBackpackCapacity(UPAInventoryComponent* Inven
 	return true;
 }
 
-bool UPABlacksmithComponent::Server_RequestForgeBossSoul_Validate(
-	UPAInventoryComponent* Inventory,
-	UPACurrencyComponent* Wallet,
-	FName BossSoulItemId,
-	FName BossPartItemId,
-	FName VoidOreItemId)
-{
-	return Inventory != nullptr && Wallet != nullptr;
-}
+// -----------------------------------------------------------------------------
+// X11b: Authority-only request handlers (reached via UPAServiceRequestComponent)
+// -----------------------------------------------------------------------------
 
-void UPABlacksmithComponent::Server_RequestForgeBossSoul_Implementation(
-	UPAInventoryComponent* Inventory,
-	UPACurrencyComponent* Wallet,
-	FName BossSoulItemId,
-	FName BossPartItemId,
-	FName VoidOreItemId)
+bool UPABlacksmithComponent::ServerHandleRepair(const APlayerController* Requester, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex, EPACraftingError& OutError)
 {
-	EPACraftingError Err = EPACraftingError::None;
-	if (!ValidateServerRequest(GetRequestingPlayerController(), Inventory, Wallet, Err))
+	if (!ValidateServerRequest(Requester, Inventory, Wallet, OutError))
 	{
-		OnCraftingFailed.Broadcast(Err);
-		return;
+		OnCraftingFailed.Broadcast(OutError);
+		return false;
 	}
-	ForgeBossSoulEquipment(Inventory, Wallet, BossSoulItemId, BossPartItemId, VoidOreItemId, Err);
+	return RepairItem(Inventory, Wallet, SlotIndex, OutError);
 }
 
-bool UPABlacksmithComponent::Server_RequestExpandBackpack_Validate(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet)
+bool UPABlacksmithComponent::ServerHandleSalvage(const APlayerController* Requester, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex, EPACraftingError& OutError)
 {
-	return Inventory != nullptr && Wallet != nullptr;
-}
-
-void UPABlacksmithComponent::Server_RequestExpandBackpack_Implementation(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet)
-{
-	EPACraftingError Err = EPACraftingError::None;
-	if (!ValidateServerRequest(GetRequestingPlayerController(), Inventory, Wallet, Err))
+	if (!ValidateServerRequest(Requester, Inventory, Wallet, OutError))
 	{
-		OnCraftingFailed.Broadcast(Err);
-		return;
+		OnCraftingFailed.Broadcast(OutError);
+		return false;
 	}
-	ExpandBackpackCapacity(Inventory, Wallet, Err);
+	int32 ShardsGained = 0;
+	return SalvageItem(Inventory, Wallet, SlotIndex, ShardsGained, OutError);
 }
 
-void UPABlacksmithComponent::BindSavedItemInventory(TArray<FPASavedItemInstance>* InItems, UPACurrencyComponent* InWallet)
+bool UPABlacksmithComponent::ServerHandleEnhance(const APlayerController* Requester, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex, bool bUseWard, EPACraftingError& OutError)
 {
-	BoundSavedItems = InItems;
-	BoundWallet = InWallet;
-}
-
-bool UPABlacksmithComponent::Server_RepairItem_Validate(const FGuid& ItemInstanceUID)
-{
-	return ItemInstanceUID.IsValid();
-}
-
-void UPABlacksmithComponent::Server_RepairItem_Implementation(const FGuid& ItemInstanceUID)
-{
-	if (!BoundSavedItems || !BoundWallet.IsValid())
+	if (!ValidateServerRequest(Requester, Inventory, Wallet, OutError))
 	{
-		OnCraftingFailed.Broadcast(EPACraftingError::ServerRejected);
-		return;
+		OnCraftingFailed.Broadcast(OutError);
+		return false;
 	}
+	return EnhanceItem(Inventory, Wallet, SlotIndex, bUseWard, OutError);
+}
 
-	EPACraftingError Err = EPACraftingError::None;
-	if (!ValidateServerRequest(GetRequestingPlayerController(), nullptr, BoundWallet.Get(), Err))
+bool UPABlacksmithComponent::ServerHandleUnlockSocket(const APlayerController* Requester, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex, EPACraftingError& OutError)
+{
+	if (!ValidateServerRequest(Requester, Inventory, Wallet, OutError))
 	{
-		OnCraftingFailed.Broadcast(Err);
-		return;
+		OnCraftingFailed.Broadcast(OutError);
+		return false;
+	}
+	return UnlockSocket(Inventory, Wallet, SlotIndex, OutError);
+}
+
+bool UPABlacksmithComponent::ServerHandleSocketGem(const APlayerController* Requester, UPAInventoryComponent* Inventory, int32 EquipmentSlotIndex, int32 SocketIndex, FName GemItemId, EPACraftingError& OutError)
+{
+	if (!ValidateServerRequest(Requester, Inventory, nullptr, OutError))
+	{
+		OnCraftingFailed.Broadcast(OutError);
+		return false;
+	}
+	return SocketGem(Inventory, EquipmentSlotIndex, SocketIndex, GemItemId, OutError);
+}
+
+bool UPABlacksmithComponent::ServerHandleUnsocketGem(const APlayerController* Requester, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 EquipmentSlotIndex, int32 SocketIndex, EPACraftingError& OutError)
+{
+	if (!ValidateServerRequest(Requester, Inventory, Wallet, OutError))
+	{
+		OnCraftingFailed.Broadcast(OutError);
+		return false;
+	}
+	return UnsocketGem(Inventory, Wallet, EquipmentSlotIndex, SocketIndex, OutError);
+}
+
+bool UPABlacksmithComponent::ServerHandleForgeBossSoul(const APlayerController* Requester, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, FName BossSoulItemId, FName BossPartItemId, FName VoidOreItemId, EPACraftingError& OutError)
+{
+	if (!ValidateServerRequest(Requester, Inventory, Wallet, OutError))
+	{
+		OnCraftingFailed.Broadcast(OutError);
+		return false;
+	}
+	return ForgeBossSoulEquipment(Inventory, Wallet, BossSoulItemId, BossPartItemId, VoidOreItemId, OutError);
+}
+
+bool UPABlacksmithComponent::ServerHandleExpandBackpack(const APlayerController* Requester, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, EPACraftingError& OutError)
+{
+	if (!ValidateServerRequest(Requester, Inventory, Wallet, OutError))
+	{
+		OnCraftingFailed.Broadcast(OutError);
+		return false;
+	}
+	return ExpandBackpackCapacity(Inventory, Wallet, OutError);
+}
+
+bool UPABlacksmithComponent::ServerHandleRepairItemByUID(const APlayerController* Requester, TArray<FPASavedItemInstance>* SavedItems, UPACurrencyComponent* Wallet, const FGuid& ItemInstanceUID, EPACraftingError& OutError)
+{
+	// Wallet is required and must be the requesting player's (ValidateServerRequest ownership check).
+	if (!SavedItems || !Wallet || !ValidateServerRequest(Requester, nullptr, Wallet, OutError))
+	{
+		if (!SavedItems || !Wallet)
+		{
+			OutError = EPACraftingError::ServerRejected;
+		}
+		OnCraftingFailed.Broadcast(OutError);
+		return false;
 	}
 
 	// X11a: chi phí do server tính trong ServerRepairItem (GetRepairCost), không nhận từ client.
-	ResolveBlacksmithSubsystem(GetWorld())->ServerRepairItemByUID(*BoundSavedItems, ItemInstanceUID, BoundWallet.Get(), Err);
-
-	if (Err != EPACraftingError::None)
+	const bool bOk = ResolveBlacksmithSubsystem(GetWorld())->ServerRepairItemByUID(*SavedItems, ItemInstanceUID, Wallet, OutError);
+	if (!bOk)
 	{
-		OnCraftingFailed.Broadcast(Err);
+		OnCraftingFailed.Broadcast(OutError);
 	}
+	return bOk;
 }
 
-bool UPABlacksmithComponent::Server_ReforgeAffix_Validate(const FGuid& ItemInstanceUID, int32 AffixIndex)
+bool UPABlacksmithComponent::ServerHandleReforgeAffixByUID(const APlayerController* Requester, TArray<FPASavedItemInstance>* SavedItems, UPACurrencyComponent* Wallet, const FGuid& ItemInstanceUID, int32 AffixIndex, EPACraftingError& OutError)
 {
-	return ItemInstanceUID.IsValid() && AffixIndex >= 0;
-}
-
-void UPABlacksmithComponent::Server_ReforgeAffix_Implementation(const FGuid& ItemInstanceUID, int32 AffixIndex)
-{
-	if (!BoundSavedItems || !BoundWallet.IsValid())
+	if (!SavedItems || !Wallet || !ValidateServerRequest(Requester, nullptr, Wallet, OutError))
 	{
-		OnCraftingFailed.Broadcast(EPACraftingError::ServerRejected);
-		return;
-	}
-
-	EPACraftingError Err = EPACraftingError::None;
-	if (!ValidateServerRequest(GetRequestingPlayerController(), nullptr, BoundWallet.Get(), Err))
-	{
-		OnCraftingFailed.Broadcast(Err);
-		return;
+		if (!SavedItems || !Wallet)
+		{
+			OutError = EPACraftingError::ServerRejected;
+		}
+		OnCraftingFailed.Broadcast(OutError);
+		return false;
 	}
 
 	UPAServerItemGeneratorSubsystem* GeneratorSubsystem = nullptr;
@@ -1094,47 +994,39 @@ void UPABlacksmithComponent::Server_ReforgeAffix_Implementation(const FGuid& Ite
 		}
 	}
 
-	if (GeneratorSubsystem)
+	if (!GeneratorSubsystem)
 	{
-		// X11a: chi phí cố định theo GDD và bậc lò lấy từ lò rèn phía server.
-		ResolveBlacksmithSubsystem(GetWorld())->ServerReforgeAffixByUID(*BoundSavedItems, ItemInstanceUID, AffixIndex, GetItemizationForgeTier(), BoundWallet.Get(), GeneratorSubsystem, Err);
-	}
-	else
-	{
-		Err = EPACraftingError::ServerRejected;
+		OutError = EPACraftingError::ServerRejected;
+		OnCraftingFailed.Broadcast(OutError);
+		return false;
 	}
 
-	if (Err != EPACraftingError::None)
+	// X11a: chi phí cố định theo GDD và bậc lò lấy từ lò rèn phía server.
+	const bool bOk = ResolveBlacksmithSubsystem(GetWorld())->ServerReforgeAffixByUID(*SavedItems, ItemInstanceUID, AffixIndex, GetItemizationForgeTier(), Wallet, GeneratorSubsystem, OutError);
+	if (!bOk)
 	{
-		OnCraftingFailed.Broadcast(Err);
+		OnCraftingFailed.Broadcast(OutError);
 	}
+	return bOk;
 }
 
-bool UPABlacksmithComponent::Server_AddSocket_Validate(const FGuid& ItemInstanceUID)
+bool UPABlacksmithComponent::ServerHandleAddSocketByUID(const APlayerController* Requester, TArray<FPASavedItemInstance>* SavedItems, UPACurrencyComponent* Wallet, const FGuid& ItemInstanceUID, EPACraftingError& OutError)
 {
-	return ItemInstanceUID.IsValid();
-}
-
-void UPABlacksmithComponent::Server_AddSocket_Implementation(const FGuid& ItemInstanceUID)
-{
-	if (!BoundSavedItems || !BoundWallet.IsValid())
+	if (!SavedItems || !Wallet || !ValidateServerRequest(Requester, nullptr, Wallet, OutError))
 	{
-		OnCraftingFailed.Broadcast(EPACraftingError::ServerRejected);
-		return;
-	}
-
-	EPACraftingError Err = EPACraftingError::None;
-	if (!ValidateServerRequest(GetRequestingPlayerController(), nullptr, BoundWallet.Get(), Err))
-	{
-		OnCraftingFailed.Broadcast(Err);
-		return;
+		if (!SavedItems || !Wallet)
+		{
+			OutError = EPACraftingError::ServerRejected;
+		}
+		OnCraftingFailed.Broadcast(OutError);
+		return false;
 	}
 
 	// X11a: bậc lò lấy từ ForgeTier của lò này (không nhận từ client); chi phí theo ô do server xác định.
-	ResolveBlacksmithSubsystem(GetWorld())->ServerAddSocketByUID(*BoundSavedItems, ItemInstanceUID, GetItemizationForgeTier(), BoundWallet.Get(), Err);
-
-	if (Err != EPACraftingError::None)
+	const bool bOk = ResolveBlacksmithSubsystem(GetWorld())->ServerAddSocketByUID(*SavedItems, ItemInstanceUID, GetItemizationForgeTier(), Wallet, OutError);
+	if (!bOk)
 	{
-		OnCraftingFailed.Broadcast(Err);
+		OnCraftingFailed.Broadcast(OutError);
 	}
+	return bOk;
 }

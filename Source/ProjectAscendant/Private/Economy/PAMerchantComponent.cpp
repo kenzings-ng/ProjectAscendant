@@ -45,6 +45,61 @@ const FPABuybackItemEntry* UPAMerchantComponent::GetBuybackEntry(int32 Index) co
 	return nullptr;
 }
 
+bool UPAMerchantComponent::IsEntryFromSeller(const FPABuybackItemEntry& Entry, const APlayerController* Seller)
+{
+	return Seller ? (Entry.Seller.Get() == Seller) : Entry.Seller.IsExplicitlyNull();
+}
+
+TArray<FPABuybackItemEntry> UPAMerchantComponent::GetBuybackEntriesForSeller(const APlayerController* Seller) const
+{
+	TArray<FPABuybackItemEntry> Result;
+	for (const FPABuybackItemEntry& Entry : BuybackList)
+	{
+		if (IsEntryFromSeller(Entry, Seller))
+		{
+			Result.Add(Entry);
+		}
+	}
+	return Result;
+}
+
+void UPAMerchantComponent::PurgeLoggedOutBuybackEntries()
+{
+	// GDD merchant-economy.md §4: buyback lasts for the player's session. A set-but-invalid Seller means the
+	// seller's PlayerController was destroyed (logout / disconnect) -> its entries are dropped.
+	BuybackList.RemoveAll([](const FPABuybackItemEntry& Entry)
+	{
+		return !Entry.Seller.IsExplicitlyNull() && !Entry.Seller.IsValid();
+	});
+}
+
+void UPAMerchantComponent::AddBuybackEntry(const FPABuybackItemEntry& Entry)
+{
+	PurgeLoggedOutBuybackEntries();
+
+	const APlayerController* Seller = Entry.Seller.Get();
+	int32 SellerCount = 0;
+	int32 OldestIndex = INDEX_NONE;
+	for (int32 Index = 0; Index < BuybackList.Num(); ++Index)
+	{
+		if (IsEntryFromSeller(BuybackList[Index], Seller))
+		{
+			if (OldestIndex == INDEX_NONE)
+			{
+				OldestIndex = Index;
+			}
+			++SellerCount;
+		}
+	}
+
+	// FIFO per seller: other players' sales never evict this seller's entries.
+	if (SellerCount >= kMaxBuybackSlots && OldestIndex != INDEX_NONE)
+	{
+		BuybackList.RemoveAt(OldestIndex);
+	}
+	BuybackList.Add(Entry);
+}
+
 bool UPAMerchantComponent::ValidateInteraction(const AActor* InteractingActor, bool bInCombat, EPATransactionError& OutError) const
 {
 	if (bInCombat)
@@ -65,11 +120,6 @@ bool UPAMerchantComponent::ValidateInteraction(const AActor* InteractingActor, b
 
 	OutError = EPATransactionError::None;
 	return true;
-}
-
-APlayerController* UPAMerchantComponent::GetRequestingPlayerController() const
-{
-	return PAServerRequestValidation::ResolveOwningPlayerController(GetOwner());
 }
 
 bool UPAMerchantComponent::ValidateServerRequest(const APlayerController* Requester, const UActorComponent* Inventory, const UActorComponent* Wallet, EPATransactionError& OutError) const
@@ -189,6 +239,11 @@ bool UPAMerchantComponent::BuyItem(UPAInventoryComponent* Inventory, UPACurrency
 
 bool UPAMerchantComponent::SellItem(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex, int32 Quantity, EPATransactionError& OutError)
 {
+	return SellItemFor(nullptr, Inventory, Wallet, SlotIndex, Quantity, OutError);
+}
+
+bool UPAMerchantComponent::SellItemFor(const APlayerController* Seller, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex, int32 Quantity, EPATransactionError& OutError)
+{
 	if (!Inventory || !Wallet)
 	{
 		OutError = EPATransactionError::ServerRejected;
@@ -229,12 +284,8 @@ bool UPAMerchantComponent::SellItem(UPAInventoryComponent* Inventory, UPACurrenc
 	BuybackEntry.DynamicData = ItemEntry->DynamicData;
 	BuybackEntry.BuybackPriceGold = TotalGold;
 	BuybackEntry.ItemInstanceUID = ItemEntry->ItemInstanceUID;
-
-	if (BuybackList.Num() >= kMaxBuybackSlots)
-	{
-		BuybackList.RemoveAt(0);
-	}
-	BuybackList.Add(BuybackEntry);
+	BuybackEntry.Seller = Seller;
+	AddBuybackEntry(BuybackEntry); // X11b: per-seller FIFO (10)
 
 	const FName ItemDefId = ItemEntry->ItemDefId;
 	Inventory->RemoveItemFromSlot(SlotIndex, Quantity);
@@ -251,6 +302,11 @@ bool UPAMerchantComponent::SellItem(UPAInventoryComponent* Inventory, UPACurrenc
 }
 
 bool UPAMerchantComponent::SellAllJunk(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32& OutTotalGoldReceived, int32& OutItemsSold, EPATransactionError& OutError)
+{
+	return SellAllJunkFor(nullptr, Inventory, Wallet, OutTotalGoldReceived, OutItemsSold, OutError);
+}
+
+bool UPAMerchantComponent::SellAllJunkFor(const APlayerController* Seller, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32& OutTotalGoldReceived, int32& OutItemsSold, EPATransactionError& OutError)
 {
 	OutTotalGoldReceived = 0;
 	OutItemsSold = 0;
@@ -284,12 +340,8 @@ bool UPAMerchantComponent::SellAllJunk(UPAInventoryComponent* Inventory, UPACurr
 			BuybackEntry.DynamicData = Entry->DynamicData;
 			BuybackEntry.BuybackPriceGold = Gold;
 			BuybackEntry.ItemInstanceUID = Entry->ItemInstanceUID;
-
-			if (BuybackList.Num() >= kMaxBuybackSlots)
-			{
-				BuybackList.RemoveAt(0);
-			}
-			BuybackList.Add(BuybackEntry);
+			BuybackEntry.Seller = Seller;
+			AddBuybackEntry(BuybackEntry); // X11b: per-seller FIFO (10)
 
 			Inventory->RemoveItemFromSlot(SlotIdx, Qty);
 			OutTotalGoldReceived += Gold;
@@ -308,6 +360,11 @@ bool UPAMerchantComponent::SellAllJunk(UPAInventoryComponent* Inventory, UPACurr
 }
 
 bool UPAMerchantComponent::BuybackItem(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 BuybackIndex, EPATransactionError& OutError)
+{
+	return BuybackAtIndex(Inventory, Wallet, BuybackIndex, OutError);
+}
+
+bool UPAMerchantComponent::BuybackAtIndex(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 BuybackIndex, EPATransactionError& OutError)
 {
 	if (!Inventory || !Wallet)
 	{
@@ -358,8 +415,10 @@ bool UPAMerchantComponent::BuybackItem(UPAInventoryComponent* Inventory, UPACurr
 		return false;
 	}
 
-	// Restore item with dynamic data intact
-	Inventory->AddItemToSlot(EmptySlot, BuybackEntry.ItemData, BuybackEntry.Quantity, BuybackEntry.DynamicData, BuybackEntry.ItemInstanceUID);
+	// Restore item with dynamic data intact. X11b: a partial-stack sale shares its UID with the stack still in the
+	// inventory; restore such an entry under a fresh UID so instance UIDs stay unique.
+	const bool bUidInUse = BuybackEntry.ItemInstanceUID.IsValid() && Inventory->FindSlotByItemUID(BuybackEntry.ItemInstanceUID) != INDEX_NONE;
+	Inventory->AddItemToSlot(EmptySlot, BuybackEntry.ItemData, BuybackEntry.Quantity, BuybackEntry.DynamicData, bUidInUse ? FGuid() : BuybackEntry.ItemInstanceUID);
 	BuybackList.RemoveAt(BuybackIndex);
 
 	OutError = EPATransactionError::None;
@@ -368,71 +427,76 @@ bool UPAMerchantComponent::BuybackItem(UPAInventoryComponent* Inventory, UPACurr
 }
 
 // -----------------------------------------------------------------------------
-// Server RPCs
+// X11b: Authority-only request handlers (reached via UPAServiceRequestComponent)
 // -----------------------------------------------------------------------------
 
-bool UPAMerchantComponent::Server_RequestBuyItem_Validate(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 CatalogIndex, int32 Quantity)
+bool UPAMerchantComponent::ServerHandleBuyItem(const APlayerController* Requester, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 CatalogIndex, int32 Quantity, EPATransactionError& OutError)
 {
-	return Inventory != nullptr && Wallet != nullptr && CatalogIndex >= 0 && Quantity > 0;
-}
-
-void UPAMerchantComponent::Server_RequestBuyItem_Implementation(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 CatalogIndex, int32 Quantity)
-{
-	EPATransactionError Err = EPATransactionError::None;
-	if (!ValidateServerRequest(GetRequestingPlayerController(), Inventory, Wallet, Err))
+	if (!ValidateServerRequest(Requester, Inventory, Wallet, OutError))
 	{
-		OnTransactionFailed.Broadcast(Err);
-		return;
+		OnTransactionFailed.Broadcast(OutError);
+		return false;
 	}
-	BuyItem(Inventory, Wallet, CatalogIndex, Quantity, Err);
+	return BuyItem(Inventory, Wallet, CatalogIndex, Quantity, OutError);
 }
 
-bool UPAMerchantComponent::Server_RequestSellItem_Validate(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex, int32 Quantity)
+bool UPAMerchantComponent::ServerHandleSellItem(const APlayerController* Requester, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex, int32 Quantity, EPATransactionError& OutError)
 {
-	return Inventory != nullptr && Wallet != nullptr && SlotIndex >= 0 && Quantity > 0;
-}
-
-void UPAMerchantComponent::Server_RequestSellItem_Implementation(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex, int32 Quantity)
-{
-	EPATransactionError Err = EPATransactionError::None;
-	if (!ValidateServerRequest(GetRequestingPlayerController(), Inventory, Wallet, Err))
+	if (!ValidateServerRequest(Requester, Inventory, Wallet, OutError))
 	{
-		OnTransactionFailed.Broadcast(Err);
-		return;
+		OnTransactionFailed.Broadcast(OutError);
+		return false;
 	}
-	SellItem(Inventory, Wallet, SlotIndex, Quantity, Err);
+	return SellItemFor(Requester, Inventory, Wallet, SlotIndex, Quantity, OutError);
 }
 
-bool UPAMerchantComponent::Server_RequestSellAllJunk_Validate(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet)
+bool UPAMerchantComponent::ServerHandleSellAllJunk(const APlayerController* Requester, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, EPATransactionError& OutError)
 {
-	return Inventory != nullptr && Wallet != nullptr;
-}
-
-void UPAMerchantComponent::Server_RequestSellAllJunk_Implementation(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet)
-{
+	if (!ValidateServerRequest(Requester, Inventory, Wallet, OutError))
+	{
+		OnTransactionFailed.Broadcast(OutError);
+		return false;
+	}
 	int32 TotalGold = 0;
 	int32 ItemsSold = 0;
-	EPATransactionError Err = EPATransactionError::None;
-	if (!ValidateServerRequest(GetRequestingPlayerController(), Inventory, Wallet, Err))
-	{
-		OnTransactionFailed.Broadcast(Err);
-		return;
-	}
-	SellAllJunk(Inventory, Wallet, TotalGold, ItemsSold, Err);
+	return SellAllJunkFor(Requester, Inventory, Wallet, TotalGold, ItemsSold, OutError);
 }
 
-bool UPAMerchantComponent::Server_RequestBuybackItem_Validate(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 BuybackIndex)
+bool UPAMerchantComponent::ServerHandleBuybackItem(const APlayerController* Requester, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, const FGuid& ItemInstanceUID, EPATransactionError& OutError)
 {
-	return Inventory != nullptr && Wallet != nullptr && BuybackIndex >= 0;
-}
-
-void UPAMerchantComponent::Server_RequestBuybackItem_Implementation(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 BuybackIndex)
-{
-	EPATransactionError Err = EPATransactionError::None;
-	if (!ValidateServerRequest(GetRequestingPlayerController(), Inventory, Wallet, Err))
+	if (!ValidateServerRequest(Requester, Inventory, Wallet, OutError))
 	{
-		OnTransactionFailed.Broadcast(Err);
-		return;
+		OnTransactionFailed.Broadcast(OutError);
+		return false;
 	}
-	BuybackItem(Inventory, Wallet, BuybackIndex, Err);
+
+	if (!ItemInstanceUID.IsValid())
+	{
+		OutError = EPATransactionError::BuybackEmpty;
+		OnTransactionFailed.Broadcast(OutError);
+		return false;
+	}
+
+	PurgeLoggedOutBuybackEntries();
+
+	// X11b: only the requester's own entries are addressable (by UID; newest match wins for repeated partial sales).
+	int32 FoundIndex = INDEX_NONE;
+	for (int32 Index = BuybackList.Num() - 1; Index >= 0; --Index)
+	{
+		const FPABuybackItemEntry& Entry = BuybackList[Index];
+		if (Requester && IsEntryFromSeller(Entry, Requester) && Entry.ItemInstanceUID == ItemInstanceUID)
+		{
+			FoundIndex = Index;
+			break;
+		}
+	}
+
+	if (FoundIndex == INDEX_NONE)
+	{
+		OutError = EPATransactionError::BuybackEmpty;
+		OnTransactionFailed.Broadcast(OutError);
+		return false;
+	}
+
+	return BuybackAtIndex(Inventory, Wallet, FoundIndex, OutError);
 }

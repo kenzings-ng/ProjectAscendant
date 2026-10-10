@@ -44,6 +44,7 @@
    - `ToggleWardStone(bool bUseWard)`
    - `UpdateHoldProgress(float DeltaTime, bool bIsHolding)`
    - `OnHoldCompleted()` -> Dispatches `Server_RequestEnhanceWithWard`
+   - > **Note 2026-10-10 (X11b):** `Server_RequestEnhanceWithWard` / `Server_Request*` RPCs on `UPABlacksmithComponent` and `UPAMerchantComponent` were removed (NPC-owned components cannot receive client RPCs). Both widgets now send requests through the player's `UPAServiceRequestComponent` (on `APABasePlayerController`): forge → `Server_RequestForgeEnhance(RequestId, ForgeActor, Inventory, Wallet, SlotIndex, bUseWard)`; shop → `Server_RequestMerchantBuy/Sell/Buyback` (buyback addressed by item instance UID). `InitializeShop` / `InitializeForge` take an optional `RequestRouter`. `OnTransactionCompleted` (shop: no params; forge: `bSuccess, ErrorCode`) and the shop's `OnTransactionRejected` fire only on the server confirmation `Client_ConfirmMerchantRequest` / `Client_ConfirmForgeRequest`.
 
 ---
 

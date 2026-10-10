@@ -92,8 +92,8 @@ bool FPAItemizationTransactionTest::RunTest(const FString& Parameters)
 		TestEqual(TEXT("AC-1: Error is MaxDurabilityAlready"), RepairErr, EPACraftingError::MaxDurabilityAlready);
 		TestEqual(TEXT("AC-1: Wallet gold remains 155"), Wallet->GetGold(), 155LL);
 
-		// 4. Component Server RPC trên lò rèn không có người chơi sở hữu (NPC / không owner) -> server từ chối (X11a).
-		//    Đường RPC thành công với người chơi sở hữu được kiểm thử trong ProjectAscendant.Network.ServerAuthority.*.
+		// 4. Yêu cầu không có người chơi gửi (Requester = nullptr) tới lò rèn NPC -> server từ chối (X11a/X11b).
+		//    Đường yêu cầu qua UPAServiceRequestComponent của người chơi được kiểm thử trong ProjectAscendant.Network.ServerAuthority.*.
 		UPABlacksmithComponent* BlacksmithComp = NewObject<UPABlacksmithComponent>();
 		TArray<FPASavedItemInstance> InventoryItems;
 		FPASavedItemInstance RpcItem = ItemGenerator->GenerateItemInstance(
@@ -101,8 +101,10 @@ bool FPAItemizationTransactionTest::RunTest(const FString& Parameters)
 		RpcItem.CurrentDurability = 60.0f;
 		InventoryItems.Add(RpcItem);
 
-		BlacksmithComp->BindSavedItemInventory(&InventoryItems, Wallet);
-		BlacksmithComp->Server_RepairItem(RpcItem.ItemInstanceUID);
+		EPACraftingError RpcErr = EPACraftingError::None;
+		TestFalse(TEXT("AC-1: Request without requesting player rejected"),
+			BlacksmithComp->ServerHandleRepairItemByUID(nullptr, &InventoryItems, Wallet, RpcItem.ItemInstanceUID, RpcErr));
+		TestEqual(TEXT("AC-1: Request without requesting player -> ServerRejected"), RpcErr, EPACraftingError::ServerRejected);
 
 		TestEqual(TEXT("AC-1: Ownerless forge RPC rejected - durability unchanged at 60"), InventoryItems[0].CurrentDurability, 60.0f);
 		TestEqual(TEXT("AC-1: Ownerless forge RPC rejected - wallet unchanged at 155"), Wallet->GetGold(), 155LL);

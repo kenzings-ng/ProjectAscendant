@@ -62,6 +62,7 @@
    - Server RPCs:
      - `Server_RequestForgeBossSoul`
      - `Server_RequestExpandBackpack`
+   - > **Note 2026-10-10 (X11b):** both RPCs were removed from `UPABlacksmithComponent` (NPC-owned; not client-callable). They are replaced by authority-only `ServerHandleForgeBossSoul` / `ServerHandleExpandBackpack(Requester, …)`, reached via the player's `UPAServiceRequestComponent::Server_RequestForgeBossSoul(RequestId, ForgeActor, …)` / `Server_RequestForgeExpandBackpack(RequestId, ForgeActor, …)`; result via `Client_ConfirmForgeRequest`. The output item is still chosen by the server recipe (X11a).
 
 ---
 

@@ -63,25 +63,28 @@ public:
 
 	// -------------------------------------------------------------------------
 	// Core Blacksmithing Services (Server-Authoritative)
+	// X11b: BlueprintAuthorityOnly — client Blueprints cannot run them. These are trusted server-side entry points
+	// WITHOUT ownership / distance / combat checks; player requests must go through
+	// UPAServiceRequestComponent -> ServerHandle*.
 	// -------------------------------------------------------------------------
 
 	/**
 	 * AC-1: Sửa chữa độ bền trang bị về 100.0%.
 	 */
-	UFUNCTION(BlueprintCallable, Category = "ProjectAscendant|Crafting")
+	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category = "ProjectAscendant|Crafting")
 	bool RepairItem(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex, EPACraftingError& OutError);
 
 	/**
 	 * AC-2: Phân rã trang bị hoặc Sách Kỹ Năng thừa thành Tàn Trang (Skill Shards).
 	 */
-	UFUNCTION(BlueprintCallable, Category = "ProjectAscendant|Crafting")
+	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category = "ProjectAscendant|Crafting")
 	bool SalvageItem(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex, int32& OutShardsGained, EPACraftingError& OutError);
 
 	/**
 	 * AC-3 (crft-001) / AC-1 & AC-2 (crft-002): Cường hóa trang bị (+1 đến +10).
 	 * Hỗ trợ bUseWard bảo vệ trang bị mốc cao (+7 đến +10) chống tụt cấp.
 	 */
-	UFUNCTION(BlueprintCallable, Category = "ProjectAscendant|Crafting")
+	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category = "ProjectAscendant|Crafting")
 	bool EnhanceItem(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex, bool bUseWard, EPACraftingError& OutError);
 
 	/** Phiên bản quá tải tương thích ngược không dùng đá bảo hộ */
@@ -95,21 +98,21 @@ public:
 	 * Chỉ áp dụng cho trang bị độ hiếm Rare trở lên.
 	 * X11a: thu phí từ Wallet theo FPABlacksmithFormulas::GetSocketUnlockCost(số lỗ hiện có) (itemization.md §7.2).
 	 */
-	UFUNCTION(BlueprintCallable, Category = "ProjectAscendant|Crafting")
+	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category = "ProjectAscendant|Crafting")
 	bool UnlockSocket(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex, EPACraftingError& OutError);
 
 	/**
 	 * AC-3 (crft-002): Khảm ngọc vào ô socket trống trên trang bị.
 	 * Tiêu hao viên ngọc từ kho đồ.
 	 */
-	UFUNCTION(BlueprintCallable, Category = "ProjectAscendant|Crafting")
+	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category = "ProjectAscendant|Crafting")
 	bool SocketGem(UPAInventoryComponent* Inventory, int32 EquipmentSlotIndex, int32 SocketIndex, FName GemItemId, EPACraftingError& OutError);
 
 	/**
 	 * AC-3 (crft-002): Tháo ngọc đã khảm ra khỏi trang bị.
 	 * Chi phí 100 Vàng, hoàn trả viên ngọc vào kho đồ, ô socket trở về rỗng (NAME_None).
 	 */
-	UFUNCTION(BlueprintCallable, Category = "ProjectAscendant|Crafting")
+	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category = "ProjectAscendant|Crafting")
 	bool UnsocketGem(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 EquipmentSlotIndex, int32 SocketIndex, EPACraftingError& OutError);
 
 	/**
@@ -118,7 +121,7 @@ public:
 	 * Yêu cầu: 1x Linh Hồn Boss, 4x Mảnh vỡ Boss, 5x Quặng Hư Không, 5,000 Vàng.
 	 * X11a: trang bị đầu ra do server quyết định qua BossSoulRecipes (theo BossSoulItemId); client không chọn được đầu ra.
 	 */
-	UFUNCTION(BlueprintCallable, Category = "ProjectAscendant|Crafting")
+	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category = "ProjectAscendant|Crafting")
 	bool ForgeBossSoulEquipment(
 		UPAInventoryComponent* Inventory,
 		UPACurrencyComponent* Wallet,
@@ -131,7 +134,7 @@ public:
 	 * AC-3 (crft-003): Mở rộng sức chứa kho đồ theo cấp tuần tự (30 -> 40 -> 50 -> 60).
 	 * Kiểm tra điều kiện nguyên liệu, vàng và Bậc Lò Rèn tương ứng.
 	 */
-	UFUNCTION(BlueprintCallable, Category = "ProjectAscendant|Crafting")
+	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category = "ProjectAscendant|Crafting")
 	bool ExpandBackpackCapacity(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, EPACraftingError& OutError);
 
 	/**
@@ -145,13 +148,7 @@ public:
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Player that may have sent a Server RPC on this component: the APlayerController on the owner chain of
-	 * this component's actor. nullptr for NPC-owned forges (such RPCs cannot arrive from a client; see X11b).
-	 */
-	APlayerController* GetRequestingPlayerController() const;
-
-	/**
-	 * Server precondition run by every Server RPC before any state mutation:
+	 * Server precondition run by every routed request (X11b: ServerHandle*) before any state mutation:
 	 * - authority on this forge, requesting player present and possessing a pawn;
 	 * - client-supplied Inventory / Wallet (when non-null) must be owned by the requesting player;
 	 * - ValidateInteraction(pawn, State.InCombat on pawn ASC) with kMaxInteractionDistance.
@@ -171,58 +168,42 @@ public:
 	const FPABossSoulRecipe* FindBossSoulRecipe(FName BossSoulItemId) const;
 
 	// -------------------------------------------------------------------------
-	// Server RPCs (Client Request -> Server Execution)
+	// X11b: Authority-only request handlers (not RPCs).
+	// Clients reach them only through UPAServiceRequestComponent (on their PlayerController), which supplies the
+	// requesting player. Each runs ValidateServerRequest(Requester, ...) first. Return value = the operation's result.
 	// -------------------------------------------------------------------------
 
-	UFUNCTION(Server, Reliable, WithValidation, Category = "ProjectAscendant|Crafting")
-	void Server_RequestRepair(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex);
+	bool ServerHandleRepair(const APlayerController* Requester, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex, EPACraftingError& OutError);
 
-	UFUNCTION(Server, Reliable, WithValidation, Category = "ProjectAscendant|Crafting")
-	void Server_RequestSalvage(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex);
+	bool ServerHandleSalvage(const APlayerController* Requester, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex, EPACraftingError& OutError);
 
-	UFUNCTION(Server, Reliable, WithValidation, Category = "ProjectAscendant|Crafting")
-	void Server_RequestEnhance(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex);
+	bool ServerHandleEnhance(const APlayerController* Requester, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex, bool bUseWard, EPACraftingError& OutError);
 
-	UFUNCTION(Server, Reliable, WithValidation, Category = "ProjectAscendant|Crafting")
-	void Server_RequestEnhanceWithWard(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex, bool bUseWard);
+	bool ServerHandleUnlockSocket(const APlayerController* Requester, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex, EPACraftingError& OutError);
 
-	UFUNCTION(Server, Reliable, WithValidation, Category = "ProjectAscendant|Crafting")
-	void Server_RequestUnlockSocket(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex);
+	bool ServerHandleSocketGem(const APlayerController* Requester, UPAInventoryComponent* Inventory, int32 EquipmentSlotIndex, int32 SocketIndex, FName GemItemId, EPACraftingError& OutError);
 
-	UFUNCTION(Server, Reliable, WithValidation, Category = "ProjectAscendant|Crafting")
-	void Server_RequestSocketGem(UPAInventoryComponent* Inventory, int32 EquipmentSlotIndex, int32 SocketIndex, FName GemItemId);
+	bool ServerHandleUnsocketGem(const APlayerController* Requester, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 EquipmentSlotIndex, int32 SocketIndex, EPACraftingError& OutError);
 
-	UFUNCTION(Server, Reliable, WithValidation, Category = "ProjectAscendant|Crafting")
-	void Server_RequestUnsocketGem(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 EquipmentSlotIndex, int32 SocketIndex);
+	/** X11a: output comes from the server recipe for BossSoulItemId; the request cannot choose it. */
+	bool ServerHandleForgeBossSoul(const APlayerController* Requester, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, FName BossSoulItemId, FName BossPartItemId, FName VoidOreItemId, EPACraftingError& OutError);
 
-	UFUNCTION(Server, Reliable, WithValidation, Category = "ProjectAscendant|Crafting")
-	void Server_RequestForgeBossSoul(
-		UPAInventoryComponent* Inventory,
-		UPACurrencyComponent* Wallet,
-		FName BossSoulItemId,
-		FName BossPartItemId,
-		FName VoidOreItemId);
-
-	UFUNCTION(Server, Reliable, WithValidation, Category = "ProjectAscendant|Crafting")
-	void Server_RequestExpandBackpack(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet);
+	bool ServerHandleExpandBackpack(const APlayerController* Requester, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, EPACraftingError& OutError);
 
 	// -------------------------------------------------------------------------
-	// Dual-Currency Server RPCs (Story item-007, EPIC-ITEMIZATION-001)
+	// Dual-Currency handlers (Story item-007, EPIC-ITEMIZATION-001)
+	// SavedItems / Wallet are the requesting player's bound itemization inventory (UPAServiceRequestComponent);
+	// cost and forge tier are decided by the server (X11a).
 	// -------------------------------------------------------------------------
 
-	void BindSavedItemInventory(TArray<FPASavedItemInstance>* InItems, UPACurrencyComponent* InWallet);
+	/** AC-1: sửa chữa vật phẩm bằng ItemUID (chi phí do server tính) */
+	bool ServerHandleRepairItemByUID(const APlayerController* Requester, TArray<FPASavedItemInstance>* SavedItems, UPACurrencyComponent* Wallet, const FGuid& ItemInstanceUID, EPACraftingError& OutError);
 
-	/** AC-1: Server RPC sửa chữa vật phẩm bằng ItemUID (X11a: chi phí do server tính) */
-	UFUNCTION(Server, Reliable, WithValidation, Category = "ProjectAscendant|Itemization")
-	void Server_RepairItem(const FGuid& ItemInstanceUID);
+	/** AC-2: tẩy dòng Affix bằng ItemUID (chi phí và bậc lò do server xác định) */
+	bool ServerHandleReforgeAffixByUID(const APlayerController* Requester, TArray<FPASavedItemInstance>* SavedItems, UPACurrencyComponent* Wallet, const FGuid& ItemInstanceUID, int32 AffixIndex, EPACraftingError& OutError);
 
-	/** AC-2: Server RPC tẩy dòng Affix bằng ItemUID (X11a: chi phí và bậc lò do server xác định) */
-	UFUNCTION(Server, Reliable, WithValidation, Category = "ProjectAscendant|Itemization")
-	void Server_ReforgeAffix(const FGuid& ItemInstanceUID, int32 AffixIndex);
-
-	/** AC-3: Server RPC đục lỗ khảm ngọc bằng ItemUID (X11a: chi phí theo ô và bậc lò lấy từ ForgeTier của lò này) */
-	UFUNCTION(Server, Reliable, WithValidation, Category = "ProjectAscendant|Itemization")
-	void Server_AddSocket(const FGuid& ItemInstanceUID);
+	/** AC-3: đục lỗ khảm ngọc bằng ItemUID (chi phí theo ô và bậc lò lấy từ ForgeTier của lò này) */
+	bool ServerHandleAddSocketByUID(const APlayerController* Requester, TArray<FPASavedItemInstance>* SavedItems, UPACurrencyComponent* Wallet, const FGuid& ItemInstanceUID, EPACraftingError& OutError);
 
 public:
 	UPROPERTY(BlueprintAssignable, Category = "ProjectAscendant|Crafting")
@@ -266,7 +247,4 @@ protected:
 
 	/** Biến đè tỷ lệ tung xúc xắc ngẫu nhiên cho TDD Automation Tests */
 	float TestRollOverride = -1.0f;
-
-	TArray<FPASavedItemInstance>* BoundSavedItems = nullptr;
-	TWeakObjectPtr<UPACurrencyComponent> BoundWallet = nullptr;
 };

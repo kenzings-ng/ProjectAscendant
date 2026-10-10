@@ -17,8 +17,8 @@ class UActorComponent;
  *
  * Requesting player: a Server RPC on an actor (or one of its components) can only be sent by the owning
  * connection of that actor, so the requesting player is the APlayerController found on the actor's owner chain.
- * For actors without a player owner (NPC forges / merchants placed in the world) this resolves to nullptr and
- * the request is rejected. Routing those RPCs through a player-owned actor is X11b.
+ * X11b: Merchant / Blacksmith requests are sent on UPAServiceRequestComponent (owned by the player's
+ * PlayerController), whose owner chain yields the requesting player; NPC forges / merchants have no player owner.
  */
 namespace PAServerRequestValidation
 {
