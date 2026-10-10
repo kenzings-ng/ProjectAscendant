@@ -63,12 +63,12 @@ UPABlacksmithComponent* UPAServiceRequestComponent::ResolveForgeOrReject(int32 R
 // Merchant
 // -----------------------------------------------------------------------------
 
-bool UPAServiceRequestComponent::Server_MerchantBuyItem_Validate(int32 RequestId, AActor* MerchantActor, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 CatalogIndex, int32 Quantity)
+bool UPAServiceRequestComponent::Server_RequestMerchantBuy_Validate(int32 RequestId, AActor* MerchantActor, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 CatalogIndex, int32 Quantity)
 {
 	return CatalogIndex >= 0 && Quantity > 0;
 }
 
-void UPAServiceRequestComponent::Server_MerchantBuyItem_Implementation(int32 RequestId, AActor* MerchantActor, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 CatalogIndex, int32 Quantity)
+void UPAServiceRequestComponent::Server_RequestMerchantBuy_Implementation(int32 RequestId, AActor* MerchantActor, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 CatalogIndex, int32 Quantity)
 {
 	if (UPAMerchantComponent* Merchant = ResolveMerchantOrReject(RequestId, MerchantActor))
 	{
@@ -78,12 +78,12 @@ void UPAServiceRequestComponent::Server_MerchantBuyItem_Implementation(int32 Req
 	}
 }
 
-bool UPAServiceRequestComponent::Server_MerchantSellItem_Validate(int32 RequestId, AActor* MerchantActor, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex, int32 Quantity)
+bool UPAServiceRequestComponent::Server_RequestMerchantSell_Validate(int32 RequestId, AActor* MerchantActor, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex, int32 Quantity)
 {
 	return SlotIndex >= 0 && Quantity > 0;
 }
 
-void UPAServiceRequestComponent::Server_MerchantSellItem_Implementation(int32 RequestId, AActor* MerchantActor, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex, int32 Quantity)
+void UPAServiceRequestComponent::Server_RequestMerchantSell_Implementation(int32 RequestId, AActor* MerchantActor, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex, int32 Quantity)
 {
 	if (UPAMerchantComponent* Merchant = ResolveMerchantOrReject(RequestId, MerchantActor))
 	{
@@ -93,12 +93,12 @@ void UPAServiceRequestComponent::Server_MerchantSellItem_Implementation(int32 Re
 	}
 }
 
-bool UPAServiceRequestComponent::Server_MerchantSellAllJunk_Validate(int32 RequestId, AActor* MerchantActor, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet)
+bool UPAServiceRequestComponent::Server_RequestMerchantSellAllJunk_Validate(int32 RequestId, AActor* MerchantActor, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet)
 {
 	return true;
 }
 
-void UPAServiceRequestComponent::Server_MerchantSellAllJunk_Implementation(int32 RequestId, AActor* MerchantActor, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet)
+void UPAServiceRequestComponent::Server_RequestMerchantSellAllJunk_Implementation(int32 RequestId, AActor* MerchantActor, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet)
 {
 	if (UPAMerchantComponent* Merchant = ResolveMerchantOrReject(RequestId, MerchantActor))
 	{
@@ -108,17 +108,17 @@ void UPAServiceRequestComponent::Server_MerchantSellAllJunk_Implementation(int32
 	}
 }
 
-bool UPAServiceRequestComponent::Server_MerchantBuybackItem_Validate(int32 RequestId, AActor* MerchantActor, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 BuybackIndex)
+bool UPAServiceRequestComponent::Server_RequestMerchantBuyback_Validate(int32 RequestId, AActor* MerchantActor, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, const FGuid& ItemInstanceUID)
 {
-	return BuybackIndex >= 0;
+	return ItemInstanceUID.IsValid();
 }
 
-void UPAServiceRequestComponent::Server_MerchantBuybackItem_Implementation(int32 RequestId, AActor* MerchantActor, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 BuybackIndex)
+void UPAServiceRequestComponent::Server_RequestMerchantBuyback_Implementation(int32 RequestId, AActor* MerchantActor, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, const FGuid& ItemInstanceUID)
 {
 	if (UPAMerchantComponent* Merchant = ResolveMerchantOrReject(RequestId, MerchantActor))
 	{
 		EPATransactionError Err = EPATransactionError::None;
-		const bool bOk = Merchant->ServerHandleBuybackItem(GetRequestingPlayerController(), Inventory, Wallet, BuybackIndex, Err);
+		const bool bOk = Merchant->ServerHandleBuybackItem(GetRequestingPlayerController(), Inventory, Wallet, ItemInstanceUID, Err);
 		Client_ConfirmMerchantRequest(RequestId, bOk, Err);
 	}
 }
@@ -127,12 +127,12 @@ void UPAServiceRequestComponent::Server_MerchantBuybackItem_Implementation(int32
 // Blacksmith
 // -----------------------------------------------------------------------------
 
-bool UPAServiceRequestComponent::Server_ForgeRepair_Validate(int32 RequestId, AActor* ForgeActor, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex)
+bool UPAServiceRequestComponent::Server_RequestForgeRepair_Validate(int32 RequestId, AActor* ForgeActor, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex)
 {
 	return SlotIndex >= 0;
 }
 
-void UPAServiceRequestComponent::Server_ForgeRepair_Implementation(int32 RequestId, AActor* ForgeActor, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex)
+void UPAServiceRequestComponent::Server_RequestForgeRepair_Implementation(int32 RequestId, AActor* ForgeActor, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex)
 {
 	if (UPABlacksmithComponent* Forge = ResolveForgeOrReject(RequestId, ForgeActor))
 	{
@@ -142,12 +142,12 @@ void UPAServiceRequestComponent::Server_ForgeRepair_Implementation(int32 Request
 	}
 }
 
-bool UPAServiceRequestComponent::Server_ForgeSalvage_Validate(int32 RequestId, AActor* ForgeActor, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex)
+bool UPAServiceRequestComponent::Server_RequestForgeSalvage_Validate(int32 RequestId, AActor* ForgeActor, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex)
 {
 	return SlotIndex >= 0;
 }
 
-void UPAServiceRequestComponent::Server_ForgeSalvage_Implementation(int32 RequestId, AActor* ForgeActor, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex)
+void UPAServiceRequestComponent::Server_RequestForgeSalvage_Implementation(int32 RequestId, AActor* ForgeActor, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex)
 {
 	if (UPABlacksmithComponent* Forge = ResolveForgeOrReject(RequestId, ForgeActor))
 	{
@@ -157,12 +157,12 @@ void UPAServiceRequestComponent::Server_ForgeSalvage_Implementation(int32 Reques
 	}
 }
 
-bool UPAServiceRequestComponent::Server_ForgeEnhance_Validate(int32 RequestId, AActor* ForgeActor, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex, bool bUseWard)
+bool UPAServiceRequestComponent::Server_RequestForgeEnhance_Validate(int32 RequestId, AActor* ForgeActor, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex, bool bUseWard)
 {
 	return SlotIndex >= 0;
 }
 
-void UPAServiceRequestComponent::Server_ForgeEnhance_Implementation(int32 RequestId, AActor* ForgeActor, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex, bool bUseWard)
+void UPAServiceRequestComponent::Server_RequestForgeEnhance_Implementation(int32 RequestId, AActor* ForgeActor, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex, bool bUseWard)
 {
 	if (UPABlacksmithComponent* Forge = ResolveForgeOrReject(RequestId, ForgeActor))
 	{
@@ -172,12 +172,12 @@ void UPAServiceRequestComponent::Server_ForgeEnhance_Implementation(int32 Reques
 	}
 }
 
-bool UPAServiceRequestComponent::Server_ForgeUnlockSocket_Validate(int32 RequestId, AActor* ForgeActor, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex)
+bool UPAServiceRequestComponent::Server_RequestForgeUnlockSocket_Validate(int32 RequestId, AActor* ForgeActor, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex)
 {
 	return SlotIndex >= 0;
 }
 
-void UPAServiceRequestComponent::Server_ForgeUnlockSocket_Implementation(int32 RequestId, AActor* ForgeActor, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex)
+void UPAServiceRequestComponent::Server_RequestForgeUnlockSocket_Implementation(int32 RequestId, AActor* ForgeActor, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex)
 {
 	if (UPABlacksmithComponent* Forge = ResolveForgeOrReject(RequestId, ForgeActor))
 	{
@@ -187,12 +187,12 @@ void UPAServiceRequestComponent::Server_ForgeUnlockSocket_Implementation(int32 R
 	}
 }
 
-bool UPAServiceRequestComponent::Server_ForgeSocketGem_Validate(int32 RequestId, AActor* ForgeActor, UPAInventoryComponent* Inventory, int32 EquipmentSlotIndex, int32 SocketIndex, FName GemItemId)
+bool UPAServiceRequestComponent::Server_RequestForgeSocketGem_Validate(int32 RequestId, AActor* ForgeActor, UPAInventoryComponent* Inventory, int32 EquipmentSlotIndex, int32 SocketIndex, FName GemItemId)
 {
 	return EquipmentSlotIndex >= 0 && SocketIndex >= 0;
 }
 
-void UPAServiceRequestComponent::Server_ForgeSocketGem_Implementation(int32 RequestId, AActor* ForgeActor, UPAInventoryComponent* Inventory, int32 EquipmentSlotIndex, int32 SocketIndex, FName GemItemId)
+void UPAServiceRequestComponent::Server_RequestForgeSocketGem_Implementation(int32 RequestId, AActor* ForgeActor, UPAInventoryComponent* Inventory, int32 EquipmentSlotIndex, int32 SocketIndex, FName GemItemId)
 {
 	if (UPABlacksmithComponent* Forge = ResolveForgeOrReject(RequestId, ForgeActor))
 	{
@@ -202,12 +202,12 @@ void UPAServiceRequestComponent::Server_ForgeSocketGem_Implementation(int32 Requ
 	}
 }
 
-bool UPAServiceRequestComponent::Server_ForgeUnsocketGem_Validate(int32 RequestId, AActor* ForgeActor, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 EquipmentSlotIndex, int32 SocketIndex)
+bool UPAServiceRequestComponent::Server_RequestForgeUnsocketGem_Validate(int32 RequestId, AActor* ForgeActor, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 EquipmentSlotIndex, int32 SocketIndex)
 {
 	return EquipmentSlotIndex >= 0 && SocketIndex >= 0;
 }
 
-void UPAServiceRequestComponent::Server_ForgeUnsocketGem_Implementation(int32 RequestId, AActor* ForgeActor, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 EquipmentSlotIndex, int32 SocketIndex)
+void UPAServiceRequestComponent::Server_RequestForgeUnsocketGem_Implementation(int32 RequestId, AActor* ForgeActor, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 EquipmentSlotIndex, int32 SocketIndex)
 {
 	if (UPABlacksmithComponent* Forge = ResolveForgeOrReject(RequestId, ForgeActor))
 	{
@@ -217,12 +217,12 @@ void UPAServiceRequestComponent::Server_ForgeUnsocketGem_Implementation(int32 Re
 	}
 }
 
-bool UPAServiceRequestComponent::Server_ForgeBossSoul_Validate(int32 RequestId, AActor* ForgeActor, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, FName BossSoulItemId, FName BossPartItemId, FName VoidOreItemId)
+bool UPAServiceRequestComponent::Server_RequestForgeBossSoul_Validate(int32 RequestId, AActor* ForgeActor, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, FName BossSoulItemId, FName BossPartItemId, FName VoidOreItemId)
 {
 	return true;
 }
 
-void UPAServiceRequestComponent::Server_ForgeBossSoul_Implementation(int32 RequestId, AActor* ForgeActor, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, FName BossSoulItemId, FName BossPartItemId, FName VoidOreItemId)
+void UPAServiceRequestComponent::Server_RequestForgeBossSoul_Implementation(int32 RequestId, AActor* ForgeActor, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, FName BossSoulItemId, FName BossPartItemId, FName VoidOreItemId)
 {
 	if (UPABlacksmithComponent* Forge = ResolveForgeOrReject(RequestId, ForgeActor))
 	{
@@ -232,12 +232,12 @@ void UPAServiceRequestComponent::Server_ForgeBossSoul_Implementation(int32 Reque
 	}
 }
 
-bool UPAServiceRequestComponent::Server_ForgeExpandBackpack_Validate(int32 RequestId, AActor* ForgeActor, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet)
+bool UPAServiceRequestComponent::Server_RequestForgeExpandBackpack_Validate(int32 RequestId, AActor* ForgeActor, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet)
 {
 	return true;
 }
 
-void UPAServiceRequestComponent::Server_ForgeExpandBackpack_Implementation(int32 RequestId, AActor* ForgeActor, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet)
+void UPAServiceRequestComponent::Server_RequestForgeExpandBackpack_Implementation(int32 RequestId, AActor* ForgeActor, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet)
 {
 	if (UPABlacksmithComponent* Forge = ResolveForgeOrReject(RequestId, ForgeActor))
 	{
@@ -247,12 +247,12 @@ void UPAServiceRequestComponent::Server_ForgeExpandBackpack_Implementation(int32
 	}
 }
 
-bool UPAServiceRequestComponent::Server_ForgeRepairItemByUID_Validate(int32 RequestId, AActor* ForgeActor, const FGuid& ItemInstanceUID)
+bool UPAServiceRequestComponent::Server_RequestForgeRepairByUID_Validate(int32 RequestId, AActor* ForgeActor, const FGuid& ItemInstanceUID)
 {
 	return ItemInstanceUID.IsValid();
 }
 
-void UPAServiceRequestComponent::Server_ForgeRepairItemByUID_Implementation(int32 RequestId, AActor* ForgeActor, const FGuid& ItemInstanceUID)
+void UPAServiceRequestComponent::Server_RequestForgeRepairByUID_Implementation(int32 RequestId, AActor* ForgeActor, const FGuid& ItemInstanceUID)
 {
 	if (UPABlacksmithComponent* Forge = ResolveForgeOrReject(RequestId, ForgeActor))
 	{
@@ -262,12 +262,12 @@ void UPAServiceRequestComponent::Server_ForgeRepairItemByUID_Implementation(int3
 	}
 }
 
-bool UPAServiceRequestComponent::Server_ForgeReforgeAffixByUID_Validate(int32 RequestId, AActor* ForgeActor, const FGuid& ItemInstanceUID, int32 AffixIndex)
+bool UPAServiceRequestComponent::Server_RequestForgeReforgeAffixByUID_Validate(int32 RequestId, AActor* ForgeActor, const FGuid& ItemInstanceUID, int32 AffixIndex)
 {
 	return ItemInstanceUID.IsValid() && AffixIndex >= 0;
 }
 
-void UPAServiceRequestComponent::Server_ForgeReforgeAffixByUID_Implementation(int32 RequestId, AActor* ForgeActor, const FGuid& ItemInstanceUID, int32 AffixIndex)
+void UPAServiceRequestComponent::Server_RequestForgeReforgeAffixByUID_Implementation(int32 RequestId, AActor* ForgeActor, const FGuid& ItemInstanceUID, int32 AffixIndex)
 {
 	if (UPABlacksmithComponent* Forge = ResolveForgeOrReject(RequestId, ForgeActor))
 	{
@@ -277,12 +277,12 @@ void UPAServiceRequestComponent::Server_ForgeReforgeAffixByUID_Implementation(in
 	}
 }
 
-bool UPAServiceRequestComponent::Server_ForgeAddSocketByUID_Validate(int32 RequestId, AActor* ForgeActor, const FGuid& ItemInstanceUID)
+bool UPAServiceRequestComponent::Server_RequestForgeAddSocketByUID_Validate(int32 RequestId, AActor* ForgeActor, const FGuid& ItemInstanceUID)
 {
 	return ItemInstanceUID.IsValid();
 }
 
-void UPAServiceRequestComponent::Server_ForgeAddSocketByUID_Implementation(int32 RequestId, AActor* ForgeActor, const FGuid& ItemInstanceUID)
+void UPAServiceRequestComponent::Server_RequestForgeAddSocketByUID_Implementation(int32 RequestId, AActor* ForgeActor, const FGuid& ItemInstanceUID)
 {
 	if (UPABlacksmithComponent* Forge = ResolveForgeOrReject(RequestId, ForgeActor))
 	{

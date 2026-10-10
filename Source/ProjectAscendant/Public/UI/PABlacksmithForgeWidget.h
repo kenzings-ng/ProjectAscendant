@@ -6,6 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "UI/PAShopForgeUITypes.h"
 #include "Crafting/PABlacksmithTypes.h"
+#include "Economy/PACurrencyTypes.h"
 #include "PABlacksmithForgeWidget.generated.h"
 
 class UPABlacksmithComponent;
@@ -131,7 +132,13 @@ protected:
 private:
 	void BindRouter(UPAServiceRequestComponent* Router);
 	void UnbindRouter();
+	void BindWallet(UPACurrencyComponent* Wallet);
+	void UnbindWallet();
 	void HandleForgeRequestConfirmed(int32 RequestId, bool bSuccess, EPACraftingError ErrorCode);
+
+	/** X11b: gold shown follows the (replicated) wallet, not only the confirmation (dedicated-client ordering). */
+	UFUNCTION()
+	void HandleCurrencyBalanceChanged(EPACurrencyType Type, int64 NewBalance, int64 Delta);
 
 	FDelegateHandle RouterConfirmHandle;
 	int32 PendingRequestId = INDEX_NONE;

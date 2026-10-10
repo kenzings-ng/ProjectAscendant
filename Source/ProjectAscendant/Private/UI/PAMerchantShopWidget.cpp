@@ -22,6 +22,7 @@ void UPAMerchantShopWidget::NativeConstruct()
 void UPAMerchantShopWidget::NativeDestruct()
 {
 	UnbindRouter();
+	UnbindWallet();
 	Super::NativeDestruct();
 }
 
@@ -49,6 +50,32 @@ void UPAMerchantShopWidget::UnbindRouter()
 	RouterRef.Reset();
 	PendingRequestId = INDEX_NONE;
 	PendingAction = EPendingShopAction::None;
+}
+
+
+void UPAMerchantShopWidget::BindWallet(UPACurrencyComponent* Wallet)
+{
+	UnbindWallet();
+	if (Wallet)
+	{
+		Wallet->OnCurrencyBalanceChanged.AddUniqueDynamic(this, &UPAMerchantShopWidget::HandleCurrencyBalanceChanged);
+	}
+}
+
+void UPAMerchantShopWidget::UnbindWallet()
+{
+	if (UPACurrencyComponent* Wallet = CurrencyRef.Get())
+	{
+		Wallet->OnCurrencyBalanceChanged.RemoveDynamic(this, &UPAMerchantShopWidget::HandleCurrencyBalanceChanged);
+	}
+}
+
+void UPAMerchantShopWidget::HandleCurrencyBalanceChanged(EPACurrencyType Type, int64 NewBalance, int64 Delta)
+{
+	if (Type == EPACurrencyType::Gold)
+	{
+		Model.UpdateAffordability(static_cast<int32>(NewBalance));
+	}
 }
 
 void UPAMerchantShopWidget::HandleMerchantRequestConfirmed(int32 RequestId, bool bSuccess, EPATransactionError ErrorCode)
@@ -96,9 +123,11 @@ void UPAMerchantShopWidget::InitializeShop(
 	int32 PlayerKarma,
 	UPAServiceRequestComponent* RequestRouter)
 {
+	UnbindWallet();
 	MerchantRef = MerchantComp;
 	InventoryRef = PlayerInv;
 	CurrencyRef = PlayerWallet;
+	BindWallet(PlayerWallet);
 
 	if (!RequestRouter)
 	{
@@ -191,7 +220,7 @@ void UPAMerchantShopWidget::ExecuteBuy()
 	// X11b: request via the player's router; OnTransactionCompleted fires on server confirmation.
 	PendingAction = EPendingShopAction::Buy;
 	PendingRequestId = RouterRef->AllocateRequestId();
-	RouterRef->Server_MerchantBuyItem(PendingRequestId, MerchantRef->GetOwner(), InventoryRef.Get(), CurrencyRef.Get(), Model.SelectedCatalogIndex, 1);
+	RouterRef->Server_RequestMerchantBuy(PendingRequestId, MerchantRef->GetOwner(), InventoryRef.Get(), CurrencyRef.Get(), Model.SelectedCatalogIndex, 1);
 }
 
 void UPAMerchantShopWidget::ExecuteSell()
@@ -206,11 +235,16 @@ void UPAMerchantShopWidget::ExecuteSell()
 		return;
 	}
 
-	// Buyback entry is added only after the server confirms the sale.
+	// Buyback entry is added only after the server confirms the sale; it keeps the sold instance UID so the
+	// buyback request can address the server entry by UID (X11b).
 	PendingSoldItem = Model.InventoryItems[Model.SelectedInventoryIndex];
+	if (const FPAInventoryItemEntry* SoldSlot = InventoryRef->GetItemAtSlot(Model.SelectedInventoryIndex))
+	{
+		PendingSoldItem.ItemInstanceUID = SoldSlot->ItemInstanceUID;
+	}
 	PendingAction = EPendingShopAction::Sell;
 	PendingRequestId = RouterRef->AllocateRequestId();
-	RouterRef->Server_MerchantSellItem(PendingRequestId, MerchantRef->GetOwner(), InventoryRef.Get(), CurrencyRef.Get(), Model.SelectedInventoryIndex, 1);
+	RouterRef->Server_RequestMerchantSell(PendingRequestId, MerchantRef->GetOwner(), InventoryRef.Get(), CurrencyRef.Get(), Model.SelectedInventoryIndex, 1);
 }
 
 void UPAMerchantShopWidget::ExecuteBuyback()
@@ -225,7 +259,7 @@ void UPAMerchantShopWidget::ExecuteBuyback()
 		return;
 	}
 
-	// Buyback entry cuối cùng (LIFO cho buyback); server BuybackList cũng nối đuôi theo thứ tự bán.
+	// Buyback entry cuối cùng (LIFO cho buyback). X11b: server tìm theo UID trong các ô do chính người chơi này bán.
 	const int32 LastIndex = Model.BuybackItems.Num() - 1;
 	const FPAShopItemEntry& Item = Model.BuybackItems[LastIndex];
 
@@ -239,5 +273,5 @@ void UPAMerchantShopWidget::ExecuteBuyback()
 	PendingBuybackIndex = LastIndex;
 	PendingAction = EPendingShopAction::Buyback;
 	PendingRequestId = RouterRef->AllocateRequestId();
-	RouterRef->Server_MerchantBuybackItem(PendingRequestId, MerchantRef->GetOwner(), InventoryRef.Get(), CurrencyRef.Get(), LastIndex);
+	RouterRef->Server_RequestMerchantBuyback(PendingRequestId, MerchantRef->GetOwner(), InventoryRef.Get(), CurrencyRef.Get(), Item.ItemInstanceUID);
 }

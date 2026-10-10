@@ -30,6 +30,11 @@
  * role to ROLE_AutonomousProxy therefore reproduces a remote client whose request has been sent but whose
  * confirmation has not arrived yet; Client_Confirm* is then delivered explicitly. With ROLE_Authority the full
  * request -> server validation -> confirmation path runs synchronously (same as listen-host / standalone).
+ *
+ * LIMITATION (honest scope): these tests run in ONE automation world (standalone net mode). The "client" side is
+ * SIMULATED by setting the PlayerController role to ROLE_AutonomousProxy; no real NetDriver, connection, actor
+ * channel or property replication is exercised. A real multi-process run (dedicated server + 2 clients,
+ * DECISIONS.md:186) has NOT been executed for X11b yet.
  */
 
 namespace PAServiceRoutingTestHelper

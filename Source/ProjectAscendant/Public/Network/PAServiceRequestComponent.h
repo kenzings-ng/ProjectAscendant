@@ -25,6 +25,7 @@ DECLARE_MULTICAST_DELEGATE_ThreeParams(FPAOnForgeRequestConfirmedNative, int32 /
  * UPAServiceRequestComponent (X11b, DECISIONS §11 / ADR-0003 / control-manifest "Dedicated Server Authority")
  *
  * Network plumbing only (no gameplay rules): routes a player's Merchant / Blacksmith requests to the server.
+ * Naming follows architecture.md §5.4: Server_Request[Action] (client -> server), Client_Confirm[Action] (server -> client).
  *
  * Why: UPAMerchantComponent / UPABlacksmithComponent live on NPC actors (wandering smuggler, forges) that no client
  * connection owns, so a client cannot send Server RPCs on them. This component lives on the player's
@@ -73,54 +74,55 @@ public:
 	// -------------------------------------------------------------------------
 
 	UFUNCTION(Server, Reliable, WithValidation, BlueprintCallable, Category = "ProjectAscendant|ServiceRequest")
-	void Server_MerchantBuyItem(int32 RequestId, AActor* MerchantActor, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 CatalogIndex, int32 Quantity);
+	void Server_RequestMerchantBuy(int32 RequestId, AActor* MerchantActor, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 CatalogIndex, int32 Quantity);
 
 	UFUNCTION(Server, Reliable, WithValidation, BlueprintCallable, Category = "ProjectAscendant|ServiceRequest")
-	void Server_MerchantSellItem(int32 RequestId, AActor* MerchantActor, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex, int32 Quantity);
+	void Server_RequestMerchantSell(int32 RequestId, AActor* MerchantActor, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex, int32 Quantity);
 
 	UFUNCTION(Server, Reliable, WithValidation, BlueprintCallable, Category = "ProjectAscendant|ServiceRequest")
-	void Server_MerchantSellAllJunk(int32 RequestId, AActor* MerchantActor, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet);
+	void Server_RequestMerchantSellAllJunk(int32 RequestId, AActor* MerchantActor, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet);
 
+	/** Buys back one of the requester's own buyback entries on that NPC, identified by its item instance UID. */
 	UFUNCTION(Server, Reliable, WithValidation, BlueprintCallable, Category = "ProjectAscendant|ServiceRequest")
-	void Server_MerchantBuybackItem(int32 RequestId, AActor* MerchantActor, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 BuybackIndex);
+	void Server_RequestMerchantBuyback(int32 RequestId, AActor* MerchantActor, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, const FGuid& ItemInstanceUID);
 
 	// -------------------------------------------------------------------------
 	// Blacksmith requests (client -> server). No cost / tier / output parameters: the server decides them.
 	// -------------------------------------------------------------------------
 
 	UFUNCTION(Server, Reliable, WithValidation, BlueprintCallable, Category = "ProjectAscendant|ServiceRequest")
-	void Server_ForgeRepair(int32 RequestId, AActor* ForgeActor, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex);
+	void Server_RequestForgeRepair(int32 RequestId, AActor* ForgeActor, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex);
 
 	UFUNCTION(Server, Reliable, WithValidation, BlueprintCallable, Category = "ProjectAscendant|ServiceRequest")
-	void Server_ForgeSalvage(int32 RequestId, AActor* ForgeActor, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex);
+	void Server_RequestForgeSalvage(int32 RequestId, AActor* ForgeActor, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex);
 
 	UFUNCTION(Server, Reliable, WithValidation, BlueprintCallable, Category = "ProjectAscendant|ServiceRequest")
-	void Server_ForgeEnhance(int32 RequestId, AActor* ForgeActor, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex, bool bUseWard);
+	void Server_RequestForgeEnhance(int32 RequestId, AActor* ForgeActor, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex, bool bUseWard);
 
 	UFUNCTION(Server, Reliable, WithValidation, BlueprintCallable, Category = "ProjectAscendant|ServiceRequest")
-	void Server_ForgeUnlockSocket(int32 RequestId, AActor* ForgeActor, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex);
+	void Server_RequestForgeUnlockSocket(int32 RequestId, AActor* ForgeActor, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex);
 
 	UFUNCTION(Server, Reliable, WithValidation, BlueprintCallable, Category = "ProjectAscendant|ServiceRequest")
-	void Server_ForgeSocketGem(int32 RequestId, AActor* ForgeActor, UPAInventoryComponent* Inventory, int32 EquipmentSlotIndex, int32 SocketIndex, FName GemItemId);
+	void Server_RequestForgeSocketGem(int32 RequestId, AActor* ForgeActor, UPAInventoryComponent* Inventory, int32 EquipmentSlotIndex, int32 SocketIndex, FName GemItemId);
 
 	UFUNCTION(Server, Reliable, WithValidation, BlueprintCallable, Category = "ProjectAscendant|ServiceRequest")
-	void Server_ForgeUnsocketGem(int32 RequestId, AActor* ForgeActor, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 EquipmentSlotIndex, int32 SocketIndex);
+	void Server_RequestForgeUnsocketGem(int32 RequestId, AActor* ForgeActor, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 EquipmentSlotIndex, int32 SocketIndex);
 
 	UFUNCTION(Server, Reliable, WithValidation, BlueprintCallable, Category = "ProjectAscendant|ServiceRequest")
-	void Server_ForgeBossSoul(int32 RequestId, AActor* ForgeActor, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, FName BossSoulItemId, FName BossPartItemId, FName VoidOreItemId);
+	void Server_RequestForgeBossSoul(int32 RequestId, AActor* ForgeActor, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, FName BossSoulItemId, FName BossPartItemId, FName VoidOreItemId);
 
 	UFUNCTION(Server, Reliable, WithValidation, BlueprintCallable, Category = "ProjectAscendant|ServiceRequest")
-	void Server_ForgeExpandBackpack(int32 RequestId, AActor* ForgeActor, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet);
+	void Server_RequestForgeExpandBackpack(int32 RequestId, AActor* ForgeActor, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet);
 
 	/** Itemization (item-007): item addressed by UID in this player's bound saved-item inventory. */
 	UFUNCTION(Server, Reliable, WithValidation, BlueprintCallable, Category = "ProjectAscendant|ServiceRequest")
-	void Server_ForgeRepairItemByUID(int32 RequestId, AActor* ForgeActor, const FGuid& ItemInstanceUID);
+	void Server_RequestForgeRepairByUID(int32 RequestId, AActor* ForgeActor, const FGuid& ItemInstanceUID);
 
 	UFUNCTION(Server, Reliable, WithValidation, BlueprintCallable, Category = "ProjectAscendant|ServiceRequest")
-	void Server_ForgeReforgeAffixByUID(int32 RequestId, AActor* ForgeActor, const FGuid& ItemInstanceUID, int32 AffixIndex);
+	void Server_RequestForgeReforgeAffixByUID(int32 RequestId, AActor* ForgeActor, const FGuid& ItemInstanceUID, int32 AffixIndex);
 
 	UFUNCTION(Server, Reliable, WithValidation, BlueprintCallable, Category = "ProjectAscendant|ServiceRequest")
-	void Server_ForgeAddSocketByUID(int32 RequestId, AActor* ForgeActor, const FGuid& ItemInstanceUID);
+	void Server_RequestForgeAddSocketByUID(int32 RequestId, AActor* ForgeActor, const FGuid& ItemInstanceUID);
 
 	// -------------------------------------------------------------------------
 	// Server -> owning client confirmations

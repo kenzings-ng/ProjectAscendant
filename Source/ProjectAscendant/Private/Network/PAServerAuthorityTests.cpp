@@ -32,6 +32,8 @@
  * X11b: every request is sent the way a client sends it — through the requesting player's UPAServiceRequestComponent
  * (owned by its PlayerController) against NPC-owned forge / shop actors (no player owner) — and the outcome is read
  * from the Client_Confirm* reply as well as from the mutated state.
+ * LIMITATION: single automation world (standalone); Server/Client RPCs execute locally. Real dedicated-server +
+ * 2-client replication (DECISIONS.md:186) is NOT yet run for X11b.
  *
  * Covers:
  *  - Costs / forge tier are computed by the server; RPCs carry no cost/tier/output parameters.
@@ -43,13 +45,13 @@
 // -----------------------------------------------------------------------------
 // Compile-time guarantees: the client RPC surface has no cost / tier / output parameters.
 // -----------------------------------------------------------------------------
-static_assert(std::is_same_v<decltype(&UPAServiceRequestComponent::Server_ForgeRepairItemByUID), void (UPAServiceRequestComponent::*)(int32, AActor*, const FGuid&)>,
+static_assert(std::is_same_v<decltype(&UPAServiceRequestComponent::Server_RequestForgeRepairByUID), void (UPAServiceRequestComponent::*)(int32, AActor*, const FGuid&)>,
 	"X11a/X11b: repair-by-UID request must not accept a client cost");
-static_assert(std::is_same_v<decltype(&UPAServiceRequestComponent::Server_ForgeReforgeAffixByUID), void (UPAServiceRequestComponent::*)(int32, AActor*, const FGuid&, int32)>,
+static_assert(std::is_same_v<decltype(&UPAServiceRequestComponent::Server_RequestForgeReforgeAffixByUID), void (UPAServiceRequestComponent::*)(int32, AActor*, const FGuid&, int32)>,
 	"X11a/X11b: reforge request must not accept client cost/shards");
-static_assert(std::is_same_v<decltype(&UPAServiceRequestComponent::Server_ForgeAddSocketByUID), void (UPAServiceRequestComponent::*)(int32, AActor*, const FGuid&)>,
+static_assert(std::is_same_v<decltype(&UPAServiceRequestComponent::Server_RequestForgeAddSocketByUID), void (UPAServiceRequestComponent::*)(int32, AActor*, const FGuid&)>,
 	"X11a/X11b: add-socket request must not accept client cost/shards/forge tier");
-static_assert(std::is_same_v<decltype(&UPAServiceRequestComponent::Server_ForgeBossSoul),
+static_assert(std::is_same_v<decltype(&UPAServiceRequestComponent::Server_RequestForgeBossSoul),
 	void (UPAServiceRequestComponent::*)(int32, AActor*, UPAInventoryComponent*, UPACurrencyComponent*, FName, FName, FName)>,
 	"X11a/X11b: boss soul request must not accept a client-chosen output item");
 
@@ -202,14 +204,14 @@ bool FPAServerAuthorityComputedCostsTest::RunTest(const FString& Parameters)
 	TSharedRef<FConfirmLog> Log = AttachConfirmLog(PlayerA.Router);
 
 	// Unbound saved-item inventory: fail closed (ServerRejected), nothing charged.
-	PlayerA.Router->Server_ForgeRepairItemByUID(1, Forge, DamagedItem.ItemInstanceUID);
+	PlayerA.Router->Server_RequestForgeRepairByUID(1, Forge, DamagedItem.ItemInstanceUID);
 	TestEqual(TEXT("Unbound saved items: confirmation delivered"), Log->ForgeCount, 1);
 	TestFalse(TEXT("Unbound saved items: rejected"), Log->bLastForgeSuccess);
 	TestEqual(TEXT("Unbound saved items: ServerRejected"), Log->LastForgeError, EPACraftingError::ServerRejected);
 	TestEqual(TEXT("Unbound saved items: durability untouched"), SavedItems[0].CurrentDurability, 60.0f);
 
 	PlayerA.Router->BindSavedItemInventory(&SavedItems, PlayerA.Wallet);
-	PlayerA.Router->Server_ForgeRepairItemByUID(2, Forge, DamagedItem.ItemInstanceUID);
+	PlayerA.Router->Server_RequestForgeRepairByUID(2, Forge, DamagedItem.ItemInstanceUID);
 	TestEqual(TEXT("Repair confirmation echoes request id"), Log->LastForgeRequestId, 2);
 	TestTrue(TEXT("Repair confirmed as success"), Log->bLastForgeSuccess);
 	TestEqual(TEXT("Repair RPC restored durability"), SavedItems[0].CurrentDurability, 100.0f);
@@ -222,13 +224,13 @@ bool FPAServerAuthorityComputedCostsTest::RunTest(const FString& Parameters)
 	const int64 ShardsBeforeSocket = PlayerA.Wallet->GetSkillShards();
 
 	Blacksmith->SetForgeTier(EPABlacksmithTier::Tier1_Outpost);
-	PlayerA.Router->Server_ForgeAddSocketByUID(3, Forge, SocketItem.ItemInstanceUID);
+	PlayerA.Router->Server_RequestForgeAddSocketByUID(3, Forge, SocketItem.ItemInstanceUID);
 	TestFalse(TEXT("Tier 1 add-socket confirmed as failure"), Log->bLastForgeSuccess);
 	TestFalse(TEXT("Tier 1 forge (server state) refuses socketing"), SavedItems[1].SocketSlots[0].bIsUnlocked);
 	TestEqual(TEXT("No gold charged at Tier 1 forge"), PlayerA.Wallet->GetGold(), GoldBeforeSocket);
 
 	Blacksmith->SetForgeTier(EPABlacksmithTier::Tier2_Wilderness);
-	PlayerA.Router->Server_ForgeAddSocketByUID(4, Forge, SocketItem.ItemInstanceUID);
+	PlayerA.Router->Server_RequestForgeAddSocketByUID(4, Forge, SocketItem.ItemInstanceUID);
 	TestTrue(TEXT("Tier 2 add-socket confirmed as success"), Log->bLastForgeSuccess);
 	TestTrue(TEXT("Tier 2 forge (server state) unlocks socket 0"), SavedItems[1].SocketSlots[0].bIsUnlocked);
 	TestEqual(TEXT("Socket 0 charged 1,000 Gold (itemization.md 7.2)"), PlayerA.Wallet->GetGold(), GoldBeforeSocket - 1000LL);
@@ -283,7 +285,7 @@ bool FPAServerAuthorityUnlockSocketChargedTest::RunTest(const FString& Parameter
 	EPACurrencyTransactionError CurrErr;
 	PlayerA.Wallet->AddCurrency(EPACurrencyType::Gold, 999, CurrErr);
 	PlayerA.Wallet->AddCurrency(EPACurrencyType::SkillShards, 3, CurrErr);
-	PlayerA.Router->Server_ForgeUnlockSocket(0, Forge, PlayerA.Inventory, PlayerA.Wallet, 0);
+	PlayerA.Router->Server_RequestForgeUnlockSocket(0, Forge, PlayerA.Inventory, PlayerA.Wallet, 0);
 	TestEqual(TEXT("Insufficient gold: no socket opened"), SocketCount(), 0);
 	TestEqual(TEXT("Insufficient gold: gold untouched"), PlayerA.Wallet->GetGold(), 999LL);
 	TestEqual(TEXT("Insufficient gold: shards untouched"), PlayerA.Wallet->GetSkillShards(), 3LL);
@@ -291,14 +293,14 @@ bool FPAServerAuthorityUnlockSocketChargedTest::RunTest(const FString& Parameter
 	// --- Insufficient shards (2 < 3): rejected, nothing deducted, no socket ---
 	PlayerA.Wallet->AddCurrency(EPACurrencyType::Gold, 1, CurrErr);       // 1,000 Gold
 	PlayerA.Wallet->DeductCurrency(EPACurrencyType::SkillShards, 1, CurrErr); // 2 Shards
-	PlayerA.Router->Server_ForgeUnlockSocket(0, Forge, PlayerA.Inventory, PlayerA.Wallet, 0);
+	PlayerA.Router->Server_RequestForgeUnlockSocket(0, Forge, PlayerA.Inventory, PlayerA.Wallet, 0);
 	TestEqual(TEXT("Insufficient shards: no socket opened"), SocketCount(), 0);
 	TestEqual(TEXT("Insufficient shards: gold untouched"), PlayerA.Wallet->GetGold(), 1000LL);
 	TestEqual(TEXT("Insufficient shards: shards untouched"), PlayerA.Wallet->GetSkillShards(), 2LL);
 
 	// --- Sufficient: socket 1 costs 1,000 Gold + 3 Shards ---
 	PlayerA.Wallet->AddCurrency(EPACurrencyType::SkillShards, 1, CurrErr); // 3 Shards
-	PlayerA.Router->Server_ForgeUnlockSocket(0, Forge, PlayerA.Inventory, PlayerA.Wallet, 0);
+	PlayerA.Router->Server_RequestForgeUnlockSocket(0, Forge, PlayerA.Inventory, PlayerA.Wallet, 0);
 	TestEqual(TEXT("Socket 1 opened"), SocketCount(), 1);
 	TestEqual(TEXT("Socket 1 charged 1,000 Gold"), PlayerA.Wallet->GetGold(), 0LL);
 	TestEqual(TEXT("Socket 1 charged 3 Shards"), PlayerA.Wallet->GetSkillShards(), 0LL);
@@ -306,7 +308,7 @@ bool FPAServerAuthorityUnlockSocketChargedTest::RunTest(const FString& Parameter
 	// --- Socket 2 costs 3,000 Gold + 8 Shards ---
 	PlayerA.Wallet->AddCurrency(EPACurrencyType::Gold, 3500, CurrErr);
 	PlayerA.Wallet->AddCurrency(EPACurrencyType::SkillShards, 10, CurrErr);
-	PlayerA.Router->Server_ForgeUnlockSocket(0, Forge, PlayerA.Inventory, PlayerA.Wallet, 0);
+	PlayerA.Router->Server_RequestForgeUnlockSocket(0, Forge, PlayerA.Inventory, PlayerA.Wallet, 0);
 	TestEqual(TEXT("Socket 2 opened"), SocketCount(), 2);
 	TestEqual(TEXT("Socket 2 charged 3,000 Gold"), PlayerA.Wallet->GetGold(), 500LL);
 	TestEqual(TEXT("Socket 2 charged 8 Shards"), PlayerA.Wallet->GetSkillShards(), 2LL);
@@ -370,25 +372,25 @@ bool FPAServerAuthorityForeignOwnerTest::RunTest(const FString& Parameters)
 	TSharedRef<FConfirmLog> LogA = AttachConfirmLog(PlayerA.Router);
 	TSharedRef<FConfirmLog> LogB = AttachConfirmLog(PlayerB.Router);
 
-	PlayerA.Router->Server_ForgeRepair(10, Forge, PlayerB.Inventory, PlayerA.Wallet, 0);
+	PlayerA.Router->Server_RequestForgeRepair(10, Forge, PlayerB.Inventory, PlayerA.Wallet, 0);
 	TestFalse(TEXT("Repair with B's inventory: confirmed as failure"), LogA->bLastForgeSuccess);
 	TestEqual(TEXT("Repair with B's inventory: ServerRejected"), LogA->LastForgeError, EPACraftingError::ServerRejected);
 	TestEqual(TEXT("Repair RPC with B's inventory: B's item untouched"), PlayerB.Inventory->GetItemAtSlot(0)->DynamicData.CurrentDurability, 20.0f);
 	TestEqual(TEXT("Repair RPC with B's inventory: A's gold untouched"), PlayerA.Wallet->GetGold(), 1000LL);
 
-	PlayerA.Router->Server_ForgeRepair(11, Forge, PlayerA.Inventory, PlayerB.Wallet, 0);
+	PlayerA.Router->Server_RequestForgeRepair(11, Forge, PlayerA.Inventory, PlayerB.Wallet, 0);
 	TestEqual(TEXT("Repair RPC with B's wallet: A's item untouched"), PlayerA.Inventory->GetItemAtSlot(0)->DynamicData.CurrentDurability, 20.0f);
 	TestEqual(TEXT("Repair RPC with B's wallet: B's gold untouched"), PlayerB.Wallet->GetGold(), 1000LL);
 
 	// B's router acting on A's components: rejected (requesting player is B).
-	PlayerB.Router->Server_ForgeRepair(20, Forge, PlayerA.Inventory, PlayerA.Wallet, 0);
+	PlayerB.Router->Server_RequestForgeRepair(20, Forge, PlayerA.Inventory, PlayerA.Wallet, 0);
 	TestEqual(TEXT("B's router on A's components: confirmed to B"), LogB->ForgeCount, 1);
 	TestEqual(TEXT("B's router on A's components: ServerRejected"), LogB->LastForgeError, EPACraftingError::ServerRejected);
 	TestEqual(TEXT("B's router on A's components: A's item untouched"), PlayerA.Inventory->GetItemAtSlot(0)->DynamicData.CurrentDurability, 20.0f);
 	TestEqual(TEXT("B's router on A's components: A's gold untouched"), PlayerA.Wallet->GetGold(), 1000LL);
 
 	// Positive control: own components succeed (repair cost = ceil(300 * 0.25 * 0.8) = 60)
-	PlayerA.Router->Server_ForgeRepair(12, Forge, PlayerA.Inventory, PlayerA.Wallet, 0);
+	PlayerA.Router->Server_RequestForgeRepair(12, Forge, PlayerA.Inventory, PlayerA.Wallet, 0);
 	TestTrue(TEXT("Repair with own components: confirmed as success"), LogA->bLastForgeSuccess && LogA->LastForgeRequestId == 12);
 	TestEqual(TEXT("Repair RPC with own components: repaired"), PlayerA.Inventory->GetItemAtSlot(0)->DynamicData.CurrentDurability, 100.0f);
 	TestEqual(TEXT("Repair RPC with own components: charged 60 Gold"), PlayerA.Wallet->GetGold(), 940LL);
@@ -398,7 +400,7 @@ bool FPAServerAuthorityForeignOwnerTest::RunTest(const FString& Parameters)
 	TestFalse(TEXT("Merchant validate: foreign inventory rejected"), Merchant->ValidateServerRequest(PlayerA.PC, PlayerB.Inventory, PlayerA.Wallet, TransErr));
 	TestEqual(TEXT("Merchant validate: foreign inventory -> ServerRejected"), TransErr, EPATransactionError::ServerRejected);
 
-	PlayerA.Router->Server_MerchantSellItem(13, Shop, PlayerB.Inventory, PlayerA.Wallet, 0, 1);
+	PlayerA.Router->Server_RequestMerchantSell(13, Shop, PlayerB.Inventory, PlayerA.Wallet, 0, 1);
 	TestFalse(TEXT("Sell with B's inventory: confirmed as failure"), LogA->bLastMerchantSuccess);
 	TestEqual(TEXT("Sell with B's inventory: ServerRejected"), LogA->LastMerchantError, EPATransactionError::ServerRejected);
 	TestNotNull(TEXT("Sell RPC with B's inventory: B's item still present"), PlayerB.Inventory->GetItemAtSlot(0));
@@ -406,26 +408,26 @@ bool FPAServerAuthorityForeignOwnerTest::RunTest(const FString& Parameters)
 	TestEqual(TEXT("Sell RPC with B's inventory: no buyback entry"), Merchant->GetBuybackCount(), 0);
 
 	// Positive control: selling own item works (floor(300 * 0.30) = 90)
-	PlayerA.Router->Server_MerchantSellItem(14, Shop, PlayerA.Inventory, PlayerA.Wallet, 0, 1);
+	PlayerA.Router->Server_RequestMerchantSell(14, Shop, PlayerA.Inventory, PlayerA.Wallet, 0, 1);
 	TestTrue(TEXT("Sell with own components: confirmed as success"), LogA->bLastMerchantSuccess && LogA->LastMerchantRequestId == 14);
 	TestNull(TEXT("Sell RPC with own components: item removed"), PlayerA.Inventory->GetItemAtSlot(0));
 	TestEqual(TEXT("Sell RPC with own components: received 90 Gold"), PlayerA.Wallet->GetGold(), 1030LL);
 
 	// --- X11b: target validation. Non-merchant / non-forge / missing targets are rejected, nothing mutates ---
 	AActor* PlainActor = SpawnLocatedActor(World, AActor::StaticClass(), FVector(10.0f, 0.0f, 0.0f), nullptr);
-	PlayerB.Router->Server_ForgeRepair(21, PlainActor, PlayerB.Inventory, PlayerB.Wallet, 0);
+	PlayerB.Router->Server_RequestForgeRepair(21, PlainActor, PlayerB.Inventory, PlayerB.Wallet, 0);
 	TestEqual(TEXT("Non-forge target: ServerRejected"), LogB->LastForgeError, EPACraftingError::ServerRejected);
-	PlayerB.Router->Server_ForgeRepair(22, Shop, PlayerB.Inventory, PlayerB.Wallet, 0);
+	PlayerB.Router->Server_RequestForgeRepair(22, Shop, PlayerB.Inventory, PlayerB.Wallet, 0);
 	TestEqual(TEXT("Merchant actor as forge target: ServerRejected"), LogB->LastForgeError, EPACraftingError::ServerRejected);
-	PlayerB.Router->Server_ForgeRepair(23, nullptr, PlayerB.Inventory, PlayerB.Wallet, 0);
+	PlayerB.Router->Server_RequestForgeRepair(23, nullptr, PlayerB.Inventory, PlayerB.Wallet, 0);
 	TestEqual(TEXT("Null forge target: ServerRejected"), LogB->LastForgeError, EPACraftingError::ServerRejected);
 	TestEqual(TEXT("Rejected forge targets: B's item untouched"), PlayerB.Inventory->GetItemAtSlot(0)->DynamicData.CurrentDurability, 20.0f);
 	TestEqual(TEXT("Rejected forge targets: B's gold untouched"), PlayerB.Wallet->GetGold(), 1000LL);
 
-	PlayerB.Router->Server_MerchantSellItem(24, Forge, PlayerB.Inventory, PlayerB.Wallet, 0, 1);
+	PlayerB.Router->Server_RequestMerchantSell(24, Forge, PlayerB.Inventory, PlayerB.Wallet, 0, 1);
 	TestFalse(TEXT("Non-merchant target: confirmed as failure"), LogB->bLastMerchantSuccess);
 	TestEqual(TEXT("Non-merchant target: ServerRejected"), LogB->LastMerchantError, EPATransactionError::ServerRejected);
-	PlayerB.Router->Server_MerchantSellItem(25, PlainActor, PlayerB.Inventory, PlayerB.Wallet, 0, 1);
+	PlayerB.Router->Server_RequestMerchantSell(25, PlainActor, PlayerB.Inventory, PlayerB.Wallet, 0, 1);
 	TestEqual(TEXT("Plain actor as merchant target: ServerRejected"), LogB->LastMerchantError, EPATransactionError::ServerRejected);
 	TestNotNull(TEXT("Rejected merchant targets: B's item still present"), PlayerB.Inventory->GetItemAtSlot(0));
 	TestEqual(TEXT("Rejected merchant targets: B's gold untouched"), PlayerB.Wallet->GetGold(), 1000LL);
@@ -496,13 +498,13 @@ bool FPAServerAuthorityInteractionTest::RunTest(const FString& Parameters)
 	TestFalse(TEXT("Merchant: 310 cm rejected"), Merchant->ValidateServerRequest(PlayerA.PC, PlayerA.Inventory, PlayerA.Wallet, TransErr));
 	TestEqual(TEXT("Merchant: error DistanceExceeded"), TransErr, EPATransactionError::DistanceExceeded);
 
-	PlayerA.Router->Server_ForgeRepair(1, Forge, PlayerA.Inventory, PlayerA.Wallet, 0);
+	PlayerA.Router->Server_RequestForgeRepair(1, Forge, PlayerA.Inventory, PlayerA.Wallet, 0);
 	TestEqual(TEXT("Out-of-range repair: confirmed DistanceExceeded"), Log->LastForgeError, EPACraftingError::DistanceExceeded);
 	TestFalse(TEXT("Out-of-range repair: confirmed as failure"), Log->bLastForgeSuccess);
 	TestEqual(TEXT("Out-of-range repair RPC: item untouched"), PlayerA.Inventory->GetItemAtSlot(0)->DynamicData.CurrentDurability, 20.0f);
 	TestEqual(TEXT("Out-of-range repair RPC: gold untouched"), PlayerA.Wallet->GetGold(), 1000LL);
 
-	PlayerA.Router->Server_MerchantBuyItem(2, Shop, PlayerA.Inventory, PlayerA.Wallet, 0, 1);
+	PlayerA.Router->Server_RequestMerchantBuy(2, Shop, PlayerA.Inventory, PlayerA.Wallet, 0, 1);
 	TestEqual(TEXT("Out-of-range buy: confirmed DistanceExceeded"), Log->LastMerchantError, EPATransactionError::DistanceExceeded);
 	TestFalse(TEXT("Out-of-range buy: confirmed as failure"), Log->bLastMerchantSuccess);
 	TestEqual(TEXT("Out-of-range buy RPC: no potion added"), PlayerA.Inventory->GetItemCount(FName("item_test_potion")), 0);
@@ -523,10 +525,10 @@ bool FPAServerAuthorityInteractionTest::RunTest(const FString& Parameters)
 	TestFalse(TEXT("Merchant: in-combat rejected"), Merchant->ValidateServerRequest(PlayerA.PC, PlayerA.Inventory, PlayerA.Wallet, TransErr));
 	TestEqual(TEXT("Merchant: error InCombat"), TransErr, EPATransactionError::InCombat);
 
-	PlayerA.Router->Server_ForgeRepair(3, Forge, PlayerA.Inventory, PlayerA.Wallet, 0);
+	PlayerA.Router->Server_RequestForgeRepair(3, Forge, PlayerA.Inventory, PlayerA.Wallet, 0);
 	TestEqual(TEXT("In-combat repair: confirmed InCombat"), Log->LastForgeError, EPACraftingError::InCombat);
 	TestEqual(TEXT("In-combat repair RPC: item untouched"), PlayerA.Inventory->GetItemAtSlot(0)->DynamicData.CurrentDurability, 20.0f);
-	PlayerA.Router->Server_MerchantBuyItem(4, Shop, PlayerA.Inventory, PlayerA.Wallet, 0, 1);
+	PlayerA.Router->Server_RequestMerchantBuy(4, Shop, PlayerA.Inventory, PlayerA.Wallet, 0, 1);
 	TestEqual(TEXT("In-combat buy: confirmed InCombat"), Log->LastMerchantError, EPATransactionError::InCombat);
 	TestEqual(TEXT("In-combat buy RPC: no potion added"), PlayerA.Inventory->GetItemCount(FName("item_test_potion")), 0);
 	TestEqual(TEXT("In-combat requests: gold untouched"), PlayerA.Wallet->GetGold(), 1000LL);
@@ -534,12 +536,12 @@ bool FPAServerAuthorityInteractionTest::RunTest(const FString& Parameters)
 	// --- Out of combat, in range (290 cm): both requests go through the router ---
 	ASC->RemoveLooseGameplayTag(InCombatTag);
 	PlayerA.Pawn->SetActorLocation(FVector(290.0f, 0.0f, 0.0f));
-	PlayerA.Router->Server_ForgeRepair(5, Forge, PlayerA.Inventory, PlayerA.Wallet, 0);
+	PlayerA.Router->Server_RequestForgeRepair(5, Forge, PlayerA.Inventory, PlayerA.Wallet, 0);
 	TestTrue(TEXT("In-range repair: confirmed as success"), Log->bLastForgeSuccess && Log->LastForgeRequestId == 5);
 	TestEqual(TEXT("In-range repair: no error"), Log->LastForgeError, EPACraftingError::None);
 	TestEqual(TEXT("In-range repair RPC: repaired"), PlayerA.Inventory->GetItemAtSlot(0)->DynamicData.CurrentDurability, 100.0f);
 	TestEqual(TEXT("In-range repair RPC: charged 60 Gold"), PlayerA.Wallet->GetGold(), 940LL);
-	PlayerA.Router->Server_MerchantBuyItem(6, Shop, PlayerA.Inventory, PlayerA.Wallet, 0, 1);
+	PlayerA.Router->Server_RequestMerchantBuy(6, Shop, PlayerA.Inventory, PlayerA.Wallet, 0, 1);
 	TestTrue(TEXT("In-range buy: confirmed as success"), Log->bLastMerchantSuccess && Log->LastMerchantRequestId == 6);
 	TestEqual(TEXT("In-range buy RPC: potion added"), PlayerA.Inventory->GetItemCount(FName("item_test_potion")), 1);
 	TestEqual(TEXT("In-range buy RPC: charged 10 Gold"), PlayerA.Wallet->GetGold(), 930LL);
@@ -597,18 +599,18 @@ bool FPAServerAuthorityBossSoulTest::RunTest(const FString& Parameters)
 	PlayerA.Inventory->AddItemToSlot(4, MakeItem(FName("void_ore"), EPAItemCategory::Material, EPAItemRarity::None, 0, 999), 10);
 
 	// Misconfigured (non-Legendary) recipe output is refused; nothing consumed.
-	PlayerA.Router->Server_ForgeBossSoul(0, Forge, PlayerA.Inventory, PlayerA.Wallet, FName("item_boss_soul_misconfigured"), FName("item_boss_horn"), FName("void_ore"));
+	PlayerA.Router->Server_RequestForgeBossSoul(0, Forge, PlayerA.Inventory, PlayerA.Wallet, FName("item_boss_soul_misconfigured"), FName("item_boss_horn"), FName("void_ore"));
 	TestEqual(TEXT("Non-Legendary recipe output refused: gold untouched"), PlayerA.Wallet->GetGold(), 20000LL);
 	TestEqual(TEXT("Non-Legendary recipe output refused: soul kept"), PlayerA.Inventory->GetItemCount(FName("item_boss_soul_misconfigured")), 1);
 	TestEqual(TEXT("Non-Legendary recipe output refused: no output item"), PlayerA.Inventory->GetItemCount(FName("item_boss_soul_cheap_output")), 0);
 
 	// Unknown soul id (no server recipe) refused.
-	PlayerA.Router->Server_ForgeBossSoul(0, Forge, PlayerA.Inventory, PlayerA.Wallet, FName("item_boss_soul_dragon"), FName("item_boss_horn"), FName("void_ore"));
+	PlayerA.Router->Server_RequestForgeBossSoul(0, Forge, PlayerA.Inventory, PlayerA.Wallet, FName("item_boss_soul_dragon"), FName("item_boss_horn"), FName("void_ore"));
 	TestEqual(TEXT("No recipe: gold untouched"), PlayerA.Wallet->GetGold(), 20000LL);
 	TestEqual(TEXT("No recipe: parts kept"), PlayerA.Inventory->GetItemCount(FName("item_boss_horn")), 8);
 
 	// Valid request: output is exactly the server recipe's item.
-	PlayerA.Router->Server_ForgeBossSoul(0, Forge, PlayerA.Inventory, PlayerA.Wallet, FName("item_boss_soul_golem"), FName("item_boss_horn"), FName("void_ore"));
+	PlayerA.Router->Server_RequestForgeBossSoul(0, Forge, PlayerA.Inventory, PlayerA.Wallet, FName("item_boss_soul_golem"), FName("item_boss_horn"), FName("void_ore"));
 	TestEqual(TEXT("Forged: 5,000 Gold charged"), PlayerA.Wallet->GetGold(), 15000LL);
 	TestEqual(TEXT("Forged: soul consumed"), PlayerA.Inventory->GetItemCount(FName("item_boss_soul_golem")), 0);
 	TestEqual(TEXT("Forged: 4 parts consumed"), PlayerA.Inventory->GetItemCount(FName("item_boss_horn")), 4);
@@ -618,6 +620,101 @@ bool FPAServerAuthorityBossSoulTest::RunTest(const FString& Parameters)
 	TestTrue(TEXT("Forged: output is Legendary"), Output && Output->StaticData && Output->StaticData->RarityTier == EPAItemRarity::Legendary);
 
 	Forge->Destroy();
+	DestroyPlayer(PlayerA);
+	return true;
+}
+
+// =============================================================================
+// 5. X11b: buyback is per NPC and per player session (merchant-economy.md §4, E7)
+// =============================================================================
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(
+	FPAServerAuthorityBuybackPerPlayerTest,
+	"ProjectAscendant.Network.ServerAuthority.BuybackIsPerPlayer",
+	EAutomationTestFlags_ApplicationContextMask | EAutomationTestFlags::ProductFilter)
+
+bool FPAServerAuthorityBuybackPerPlayerTest::RunTest(const FString& Parameters)
+{
+	UWorld* World = GEngine->GetWorldContexts()[0].World();
+	if (!TestNotNull(TEXT("World available"), World))
+	{
+		return false;
+	}
+
+	FTestPlayer PlayerA = SpawnPlayer(World, FVector(0.0f, 0.0f, 0.0f));
+	FTestPlayer PlayerB = SpawnPlayer(World, FVector(50.0f, 0.0f, 0.0f));
+	AActor* Shop = SpawnLocatedActor(World, AActor::StaticClass(), FVector(-100.0f, 0.0f, 0.0f), nullptr);
+	UPAMerchantComponent* Merchant = NewObject<UPAMerchantComponent>(Shop, TEXT("TestMerchant"));
+	if (!TestNotNull(TEXT("Player A"), PlayerA.Pawn) || !TestNotNull(TEXT("Player B"), PlayerB.Pawn))
+	{
+		Shop->Destroy();
+		DestroyPlayer(PlayerA);
+		DestroyPlayer(PlayerB);
+		return false;
+	}
+
+	TSharedRef<FConfirmLog> LogA = AttachConfirmLog(PlayerA.Router);
+	TSharedRef<FConfirmLog> LogB = AttachConfirmLog(PlayerB.Router);
+
+	EPACurrencyTransactionError CurrErr;
+	PlayerA.Wallet->AddCurrency(EPACurrencyType::Gold, 1000, CurrErr);
+	PlayerB.Wallet->AddCurrency(EPACurrencyType::Gold, 1000, CurrErr);
+
+	// Sell price for base 300: floor(300 * 0.30) = 90.
+	UItemStaticDataAsset* Sword = MakeItem(FName("item_test_sword"), EPAItemCategory::Equipment, EPAItemRarity::Rare, 300, 1);
+	PlayerA.Inventory->AddItemToSlot(0, Sword, 1);
+	for (int32 Slot = 0; Slot < 11; ++Slot)
+	{
+		PlayerB.Inventory->AddItemToSlot(Slot, Sword, 1);
+	}
+	const FGuid UidA = PlayerA.Inventory->GetItemAtSlot(0)->ItemInstanceUID;
+	const FGuid UidB0 = PlayerB.Inventory->GetItemAtSlot(0)->ItemInstanceUID;
+	TestTrue(TEXT("Instance UIDs are valid and distinct"), UidA.IsValid() && UidB0.IsValid() && UidA != UidB0);
+
+	PlayerA.Router->Server_RequestMerchantSell(1, Shop, PlayerA.Inventory, PlayerA.Wallet, 0, 1);
+	PlayerB.Router->Server_RequestMerchantSell(1, Shop, PlayerB.Inventory, PlayerB.Wallet, 0, 1);
+	TestTrue(TEXT("Both sales confirmed"), LogA->bLastMerchantSuccess && LogB->bLastMerchantSuccess);
+	TestEqual(TEXT("A sees exactly its own entry"), Merchant->GetBuybackEntriesForSeller(PlayerA.PC).Num(), 1);
+	TestEqual(TEXT("B sees exactly its own entry"), Merchant->GetBuybackEntriesForSeller(PlayerB.PC).Num(), 1);
+
+	// --- B tries to buy back A's item (by A's UID): rejected, nothing moves ---
+	PlayerB.Router->Server_RequestMerchantBuyback(2, Shop, PlayerB.Inventory, PlayerB.Wallet, UidA);
+	TestFalse(TEXT("B buying A's entry: confirmed as failure"), LogB->bLastMerchantSuccess);
+	TestEqual(TEXT("B buying A's entry: BuybackEmpty"), LogB->LastMerchantError, EPATransactionError::BuybackEmpty);
+	TestEqual(TEXT("B buying A's entry: B's gold untouched"), PlayerB.Wallet->GetGold(), 1090LL);
+	TestEqual(TEXT("B buying A's entry: A's item not in B's inventory"), PlayerB.Inventory->FindSlotByItemUID(UidA), (int32)INDEX_NONE);
+	TestEqual(TEXT("B buying A's entry: A's entry kept"), Merchant->GetBuybackEntriesForSeller(PlayerA.PC).Num(), 1);
+
+	// --- B buys back its own item ---
+	PlayerB.Router->Server_RequestMerchantBuyback(3, Shop, PlayerB.Inventory, PlayerB.Wallet, UidB0);
+	TestTrue(TEXT("B buying own entry: success"), LogB->bLastMerchantSuccess);
+	TestEqual(TEXT("B buying own entry: paid 90 back"), PlayerB.Wallet->GetGold(), 1000LL);
+	TestTrue(TEXT("B buying own entry: item restored with its UID"), PlayerB.Inventory->FindSlotByItemUID(UidB0) != INDEX_NONE);
+
+	// --- B sells 11 items: B's list is capped at 10 (FIFO per player); A's entry is never evicted ---
+	for (int32 Slot = 0; Slot < 11; ++Slot)
+	{
+		if (PlayerB.Inventory->GetItemAtSlot(Slot))
+		{
+			PlayerB.Router->Server_RequestMerchantSell(10 + Slot, Shop, PlayerB.Inventory, PlayerB.Wallet, Slot, 1);
+		}
+	}
+	TestEqual(TEXT("B's buyback capped at 10"), Merchant->GetBuybackEntriesForSeller(PlayerB.PC).Num(), 10);
+	TestEqual(TEXT("A's entry survives B's sales"), Merchant->GetBuybackEntriesForSeller(PlayerA.PC).Num(), 1);
+
+	// --- A buys back its own item ---
+	PlayerA.Router->Server_RequestMerchantBuyback(4, Shop, PlayerA.Inventory, PlayerA.Wallet, UidA);
+	TestTrue(TEXT("A buying own entry: success"), LogA->bLastMerchantSuccess);
+	TestEqual(TEXT("A buying own entry: gold back to 1000"), PlayerA.Wallet->GetGold(), 1000LL);
+	TestTrue(TEXT("A buying own entry: item restored"), PlayerA.Inventory->FindSlotByItemUID(UidA) != INDEX_NONE);
+	TestEqual(TEXT("A has no entries left"), Merchant->GetBuybackEntriesForSeller(PlayerA.PC).Num(), 0);
+
+	// --- B logs out (PlayerController destroyed): B's entries are purged on the next buyback mutation ---
+	DestroyPlayer(PlayerB);
+	PlayerA.Router->Server_RequestMerchantSell(5, Shop, PlayerA.Inventory, PlayerA.Wallet, PlayerA.Inventory->FindSlotByItemUID(UidA), 1);
+	TestTrue(TEXT("A sells again: success"), LogA->bLastMerchantSuccess);
+	TestEqual(TEXT("Logged-out seller's entries purged; only A's remains"), Merchant->GetBuybackCount(), 1);
+
+	Shop->Destroy();
 	DestroyPlayer(PlayerA);
 	return true;
 }

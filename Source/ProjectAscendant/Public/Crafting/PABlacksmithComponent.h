@@ -63,25 +63,28 @@ public:
 
 	// -------------------------------------------------------------------------
 	// Core Blacksmithing Services (Server-Authoritative)
+	// X11b: BlueprintAuthorityOnly — client Blueprints cannot run them. These are trusted server-side entry points
+	// WITHOUT ownership / distance / combat checks; player requests must go through
+	// UPAServiceRequestComponent -> ServerHandle*.
 	// -------------------------------------------------------------------------
 
 	/**
 	 * AC-1: Sửa chữa độ bền trang bị về 100.0%.
 	 */
-	UFUNCTION(BlueprintCallable, Category = "ProjectAscendant|Crafting")
+	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category = "ProjectAscendant|Crafting")
 	bool RepairItem(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex, EPACraftingError& OutError);
 
 	/**
 	 * AC-2: Phân rã trang bị hoặc Sách Kỹ Năng thừa thành Tàn Trang (Skill Shards).
 	 */
-	UFUNCTION(BlueprintCallable, Category = "ProjectAscendant|Crafting")
+	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category = "ProjectAscendant|Crafting")
 	bool SalvageItem(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex, int32& OutShardsGained, EPACraftingError& OutError);
 
 	/**
 	 * AC-3 (crft-001) / AC-1 & AC-2 (crft-002): Cường hóa trang bị (+1 đến +10).
 	 * Hỗ trợ bUseWard bảo vệ trang bị mốc cao (+7 đến +10) chống tụt cấp.
 	 */
-	UFUNCTION(BlueprintCallable, Category = "ProjectAscendant|Crafting")
+	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category = "ProjectAscendant|Crafting")
 	bool EnhanceItem(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex, bool bUseWard, EPACraftingError& OutError);
 
 	/** Phiên bản quá tải tương thích ngược không dùng đá bảo hộ */
@@ -95,21 +98,21 @@ public:
 	 * Chỉ áp dụng cho trang bị độ hiếm Rare trở lên.
 	 * X11a: thu phí từ Wallet theo FPABlacksmithFormulas::GetSocketUnlockCost(số lỗ hiện có) (itemization.md §7.2).
 	 */
-	UFUNCTION(BlueprintCallable, Category = "ProjectAscendant|Crafting")
+	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category = "ProjectAscendant|Crafting")
 	bool UnlockSocket(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex, EPACraftingError& OutError);
 
 	/**
 	 * AC-3 (crft-002): Khảm ngọc vào ô socket trống trên trang bị.
 	 * Tiêu hao viên ngọc từ kho đồ.
 	 */
-	UFUNCTION(BlueprintCallable, Category = "ProjectAscendant|Crafting")
+	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category = "ProjectAscendant|Crafting")
 	bool SocketGem(UPAInventoryComponent* Inventory, int32 EquipmentSlotIndex, int32 SocketIndex, FName GemItemId, EPACraftingError& OutError);
 
 	/**
 	 * AC-3 (crft-002): Tháo ngọc đã khảm ra khỏi trang bị.
 	 * Chi phí 100 Vàng, hoàn trả viên ngọc vào kho đồ, ô socket trở về rỗng (NAME_None).
 	 */
-	UFUNCTION(BlueprintCallable, Category = "ProjectAscendant|Crafting")
+	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category = "ProjectAscendant|Crafting")
 	bool UnsocketGem(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 EquipmentSlotIndex, int32 SocketIndex, EPACraftingError& OutError);
 
 	/**
@@ -118,7 +121,7 @@ public:
 	 * Yêu cầu: 1x Linh Hồn Boss, 4x Mảnh vỡ Boss, 5x Quặng Hư Không, 5,000 Vàng.
 	 * X11a: trang bị đầu ra do server quyết định qua BossSoulRecipes (theo BossSoulItemId); client không chọn được đầu ra.
 	 */
-	UFUNCTION(BlueprintCallable, Category = "ProjectAscendant|Crafting")
+	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category = "ProjectAscendant|Crafting")
 	bool ForgeBossSoulEquipment(
 		UPAInventoryComponent* Inventory,
 		UPACurrencyComponent* Wallet,
@@ -131,7 +134,7 @@ public:
 	 * AC-3 (crft-003): Mở rộng sức chứa kho đồ theo cấp tuần tự (30 -> 40 -> 50 -> 60).
 	 * Kiểm tra điều kiện nguyên liệu, vàng và Bậc Lò Rèn tương ứng.
 	 */
-	UFUNCTION(BlueprintCallable, Category = "ProjectAscendant|Crafting")
+	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category = "ProjectAscendant|Crafting")
 	bool ExpandBackpackCapacity(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, EPACraftingError& OutError);
 
 	/**

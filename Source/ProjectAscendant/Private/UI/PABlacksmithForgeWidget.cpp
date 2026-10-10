@@ -27,6 +27,7 @@ void UPABlacksmithForgeWidget::NativeTick(const FGeometry& MyGeometry, float InD
 void UPABlacksmithForgeWidget::NativeDestruct()
 {
 	UnbindRouter();
+	UnbindWallet();
 	Super::NativeDestruct();
 }
 
@@ -55,6 +56,32 @@ void UPABlacksmithForgeWidget::UnbindRouter()
 	PendingRequestId = INDEX_NONE;
 }
 
+
+void UPABlacksmithForgeWidget::BindWallet(UPACurrencyComponent* Wallet)
+{
+	UnbindWallet();
+	if (Wallet)
+	{
+		Wallet->OnCurrencyBalanceChanged.AddUniqueDynamic(this, &UPABlacksmithForgeWidget::HandleCurrencyBalanceChanged);
+	}
+}
+
+void UPABlacksmithForgeWidget::UnbindWallet()
+{
+	if (UPACurrencyComponent* Wallet = CurrencyRef.Get())
+	{
+		Wallet->OnCurrencyBalanceChanged.RemoveDynamic(this, &UPABlacksmithForgeWidget::HandleCurrencyBalanceChanged);
+	}
+}
+
+void UPABlacksmithForgeWidget::HandleCurrencyBalanceChanged(EPACurrencyType Type, int64 NewBalance, int64 Delta)
+{
+	if (Type == EPACurrencyType::Gold)
+	{
+		Model.PlayerGold = static_cast<int32>(NewBalance);
+	}
+}
+
 void UPABlacksmithForgeWidget::HandleForgeRequestConfirmed(int32 RequestId, bool bSuccess, EPACraftingError ErrorCode)
 {
 	if (RequestId != PendingRequestId || PendingRequestId == INDEX_NONE)
@@ -81,9 +108,11 @@ void UPABlacksmithForgeWidget::InitializeForge(
 	UPACurrencyComponent* PlayerWallet,
 	UPAServiceRequestComponent* RequestRouter)
 {
+	UnbindWallet();
 	ForgeRef = ForgeComp;
 	InventoryRef = PlayerInv;
 	CurrencyRef = PlayerWallet;
+	BindWallet(PlayerWallet);
 
 	if (!RequestRouter)
 	{
@@ -156,7 +185,7 @@ void UPABlacksmithForgeWidget::UpdateHoldInputWithDelta(float DeltaTime, bool bI
 		if (!IsRequestPending() && RouterRef.IsValid() && ForgeRef.IsValid() && InventoryRef.IsValid() && CurrencyRef.IsValid())
 		{
 			PendingRequestId = RouterRef->AllocateRequestId();
-			RouterRef->Server_ForgeEnhance(PendingRequestId, ForgeRef->GetOwner(), InventoryRef.Get(), CurrencyRef.Get(), TargetSlotIndex, Model.bUsingWard);
+			RouterRef->Server_RequestForgeEnhance(PendingRequestId, ForgeRef->GetOwner(), InventoryRef.Get(), CurrencyRef.Get(), TargetSlotIndex, Model.bUsingWard);
 		}
 	}
 }
