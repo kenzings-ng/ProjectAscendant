@@ -29,7 +29,7 @@ flowchart TD
     Check -->|Không: Yêu cầu chung chung| Interrogate[Nhánh 2: KHẢO SÁT 3 BƯỚC BẮT BUỘC]
     Interrogate --> Q1[1. Phong Cách: 16x16 Micro / 32-bit Arcade / Stylized HD]
     Interrogate --> Q2[2. Mục Đích & Góc Đặt: Icon 45° / Sprite 8 hướng / Tileset]
-    Interrogate --> Q3[3. Bảng Màu & Độ Hiếm: 4-Tone Ramp / 5-Tier Rarity]
+    Interrogate --> Q3[3. Bảng Màu & Độ Hiếm: 4-Tone Ramp / 5 Độ Hiếm]
     
     P_Stardew --> Exec[Áp Dụng Bộ Lọc Anti-AI & Xuất Xưởng Engine]
     P_Capcom --> Exec
@@ -143,7 +143,9 @@ Trong hoạt ảnh game hành động hardcore, khung hình đầu tiên của a
 
 ---
 
-## 6. Quy Chuẩn Kỹ Thuật Icon Trang Bị & Ma Trận 5 Bậc Hiếm
+## 6. Quy Chuẩn Kỹ Thuật Icon Trang Bị & Ma Trận 5 Độ Hiếm
+
+*(Cập nhật 2026-10-10 (X13): "Bậc Hiếm"/"5-Tier Rarity" → "Độ Hiếm" ở mục 6, 6.2, sơ đồ đầu tài liệu và mục "Đóng Khung"; bỏ nhãn "Tier N" trong chú thích `RARITY_COLORS` — độ hiếm gọi bằng tên, DECISIONS.md §1. Màu sắc không đổi.)*
 
 ### 6.1 Bố Cục Góc Đặt Thẩm Mỹ Chuẩn Mực
 
@@ -157,16 +159,16 @@ Trong hoạt ảnh game hành động hardcore, khung hình đầu tiên của a
 | **Đá Quý Cắt Giác (Cut Gems)** | **Đa giác kim cương $0^\circ$** | Cắt giác hình học sắc nét. Tâm ngọc sáng rực, viền ngoài đổ bóng sâu tạo độ khúc xạ thủy tinh. |
 | **Trang Bị Mặc (Áo Giáp, Mũ, Ủng)** | **Chính diện $0^\circ$** | Dạng trưng bày trên giá đỡ (Armor Stand), trục dọc cân đối đối xứng. |
 
-### 6.2 Khung Viền Phân Hạng 5 Bậc Hiếm (5-Tier Rarity Color Matrix)
+### 6.2 Khung Viền Phân Hạng 5 Độ Hiếm (5-Rarity Color Matrix)
 Tích hợp trực tiếp với script tự động `generate_item_icon_sheet.py`:
 
 ```python
 RARITY_COLORS = {
-    "common":    (156, 163, 175, 255),  # Gray #9CA3AF (Xám đá phiến - Normal Tier 1)
-    "uncommon":  (34, 197, 94, 255),   # Green #22C55E (Xanh ngọc bích - Magic Tier 2)
-    "rare":      (59, 130, 246, 255),   # Blue #3B82F6 (Xanh lam cobalt - Rare Tier 2)
-    "epic":      (168, 85, 247, 255),   # Purple #A855F7 (Tím huyền bí - Epic Tier 3)
-    "legendary": (245, 158, 11, 255),   # Gold #F59E0B (Hoàng kim rực lửa - Legendary Tier 3/4)
+    "common":    (156, 163, 175, 255),  # Gray #9CA3AF (Xám đá phiến)
+    "uncommon":  (34, 197, 94, 255),   # Green #22C55E (Xanh ngọc bích)
+    "rare":      (59, 130, 246, 255),   # Blue #3B82F6 (Xanh lam cobalt)
+    "epic":      (168, 85, 247, 255),   # Purple #A855F7 (Tím huyền bí)
+    "legendary": (245, 158, 11, 255),   # Gold #F59E0B (Hoàng kim rực lửa)
 }
 ```
 
@@ -271,7 +273,7 @@ python3 /home/kenzings/.gemini/config/skills/game-art-studio/scripts/slice_sprit
     --anchor bottom_center
 ```
 
-### 2. Đóng Khung 5 Bậc Hiếm Cho Icon Trang Bị:
+### 2. Đóng Khung 5 Độ Hiếm Cho Icon Trang Bị:
 ```bash
 python3 /home/kenzings/.gemini/config/skills/game-art-studio/scripts/generate_item_icon_sheet.py \
     --input_sheet <icons_raw.png> \

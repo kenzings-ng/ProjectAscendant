@@ -377,7 +377,7 @@ items:
     stackable: false
     attributes:
       archetype: "Weapon.1H.Blade"
-      # X13 2026-10-10: bỏ Templar (DECISIONS.md §7: Templar dùng Weapon.1H.Mace), thêm Swordmaster — khớp itemization.md:198 và :495.
+      # X13 2026-10-10: bỏ Templar (DECISIONS.md §7: Templar dùng Weapon.1H.Mace), thêm Swordmaster — khớp itemization.md:199 và :495.
       classes: ["Vanguard", "Swordmaster", "Void Blade", "God Slayer"]
       base_speed: 1.10
       hitbox_arc: 120
@@ -396,7 +396,7 @@ items:
     stackable: false
     attributes:
       archetype: "Weapon.2H.Heavy"
-      # X13 2026-10-10: bỏ Vanguard (DECISIONS.md §7: Vanguard dùng Weapon.1H.Blade + khiên) — khớp itemization.md:199 và :508.
+      # X13 2026-10-10: bỏ Vanguard (DECISIONS.md §7: Vanguard dùng Weapon.1H.Blade + khiên) — khớp itemization.md:200 và :508.
       # Dragon Knight còn chờ chủ dự án xác nhận (DECISIONS.md:122), xem Tools/QA/gdd_validator_allowlist.yaml.
       classes: ["Berserker", "Dragon Knight"]
       base_speed: 0.75
