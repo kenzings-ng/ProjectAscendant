@@ -239,7 +239,7 @@ Thống nhất dứt điểm mọi phân bổ weapon family cho toàn bộ 16 Cl
   - Trên trang duyệt, chủ dự án chọn `i-next` là "Dựng test replication thật (1 server + 2 client)".
   - Sau đó, trong terminal, chủ dự án đổi ưu tiên, nguyên văn: *"làm tới giai đoạn hiện tại chỉ có phần BE không có UI/UX cũng chả có tác dùng gì cũng chả test được BE có hoặc động đúng k"*.
   - Vì vậy test replication thật **vẫn được làm**, nhưng xếp sau bản chơi thử, nằm trong Giai đoạn 1.5 và vẫn giữ 🛑 ở `ROADMAP.md:57`.
-  - **§11 vẫn áp dụng đầy đủ.** Các tính năng trong vòng chơi được (boss/stagger, shop/forge, login) chưa được tính là Complete cho tới khi có test replication headless với 1 server và ít nhất 2 client.
+  - **§11 vẫn áp dụng đầy đủ.** Các tính năng gameplay/combat trong vòng chơi được (boss/stagger, shop/forge) chưa được tính là Complete cho tới khi có test replication headless với 1 server và ít nhất 2 client.
 
 **Thẩm mỹ & asset**
 - Khung độ hiếm trong `art-bible.md:127-128` dùng bảng màu ở `inventory-system.md` §1. Không tự chọn màu mới.
