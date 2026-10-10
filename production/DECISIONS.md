@@ -2,8 +2,8 @@
 
 > **Status**: APPROVED & LOCKED  
 > **Authority**: System Architect & Project Lead  
-> **Last Updated**: 2026-10-09 (bổ sung §12)  
-> **Scope**: Bắt buộc tuân thủ tuyệt đối trong toàn bộ quá trình phát triển (Giai đoạn 0 → 6). Mọi sửa đổi phải có sự chấp thuận trực tiếp từ Project Lead.
+> **Last Updated**: 2026-10-10 (bổ sung §13)  
+> **Scope**: Bắt buộc tuân thủ tuyệt đối trong toàn bộ quá trình phát triển (Giai đoạn 0 → 7, theo ROADMAP; cập nhật 2026-10-10 §13). Mọi sửa đổi phải có sự chấp thuận trực tiếp từ Project Lead.
 
 ---
 
@@ -196,3 +196,57 @@ Thống nhất dứt điểm mọi phân bổ weapon family cho toàn bộ 16 Cl
 - **Thông số Dash / Combo / Finisher**: Giá trị đang có trong code runtime (`PAGameplayAbility_Dash`, `PAGameplayAbility_MeleeAttack`, `PAGameplayAbility_Finisher`) là **chuẩn**. GDD, `control-manifest.md`, `tr-registry.yaml` và story phải sửa cho khớp code. Cảm giác chơi với các giá trị này **vẫn cần chủ dự án duyệt** (điểm bắt buộc dừng và hỏi theo CLAUDE.md) trước khi coi là chốt.
 - **Epic Class Chính / Phụ & Thăng Chức** (§3, §4): lập sau khi chốt ROADMAP, xếp vào giai đoạn phù hợp. ROADMAP bản `493a442` đã có sẵn giai đoạn cho hệ thống này: **Giai đoạn 2B — Hệ thống Class Chính / Phụ & Quyển trục**.
 - **`item_skill_shard` (Tàn Trang)**: là **tiền tệ thứ hai** theo `merchant-economy.md` (giới hạn 99.999). Mọi chỗ còn dùng "Ash Shards" đều đổi sang `item_skill_shard`, đúng với §5. `inventory-system.md:49,62` (đang xếp `item_skill_shard` vào nhóm Nguyên Liệu) phải sửa cho khớp.
+
+---
+
+## 13. Quyết Định Bổ Sung Của Chủ Dự Án (2026-10-10)
+
+> **Nguồn**:
+> - Lựa chọn của chủ dự án, lưu lúc 2026-10-10 11:11 UTC trên trang "Ascendant Owner Approvals" (26 câu).
+> - Ba câu trả lời trong terminal cùng ngày.
+> - Kế hoạch thực thi: `production/plans/playable-slice-and-approvals-2026-10-10.md` (PR #28, đã merge). Các file chịu ảnh hưởng của những quyết định dưới đây được sửa ở các PR Y1, Y3… của kế hoạch đó.
+
+**Cảm giác chơi**
+- Thông số dash/combo/finisher trong code (§12): duyệt **sau khi chơi thử**. Chưa coi là chốt cho tới khi chủ dự án chơi thử và xác nhận.
+- Cửa sổ Dash Cancel / Dash Attack: lấy mốc cũ co theo tỉ lệ 0.35/0.45, ra khoảng 0.27–0.35s. Chốt khi triển khai.
+- Dash của Ranger: **0.30s**.
+- Input buffer: chưa chốt, vẫn giữ nhãn "chưa triển khai". Hai giá trị đang lệch nhau: 0.15s (`combat-system.md`) và 250ms (manifest/tr-registry/accessibility). Sẽ chốt khi làm tính năng này.
+- FOV camera: **90°**.
+
+**Thông số thiết kế**
+- Bán kính tương tác với merchant/forge: **300cm** (`merchant-economy.md:24`).
+- "điểm kỹ năng" trong dữ liệu auto-save (`zone-system.md:53`) nghĩa là **cấp kỹ năng trong Grimoire**. Không phải Skill Point, vốn đã bị gỡ ở §12.
+- Dragon Knight chỉ dùng **`Weapon.2H.Polearm`**, không dùng 2H Heavy. Câu "đang trình duyệt" ở §7 coi như đã đóng.
+- Chết ở PvE: rơi **100% Tàn Trang** vào Ash Remnant (`zone-system.md:88`). Code và story phải sửa cho khớp.
+- Bản đồ hầm ngục của Smuggler bán bằng **Tàn Trang** (`merchant-economy.md:105`).
+- Giá gốc để tính phí sửa đồ Rare: **300** (`inventory-system.md:193`).
+- Rèn Boss Soul làm đúng GDD: **4 bộ phận khác nhau** (Sừng, Vảy đuôi, Giáp ngực, Cánh), đồ ra theo class. Chi phí **5.000 Gold**, ghi bổ sung vào `blacksmithing-system.md`.
+
+**ROADMAP & quy trình**
+- Phạm vi giai đoạn theo ROADMAP: **0 → 7**, gồm cả 1.5 và 2B.
+- Các mục ở `ROADMAP.md:29` và `:33` hạ về `[~]` vì chưa có bằng chứng. Thêm vào Giai đoạn 0 mục "bảo vệ nhánh main", đánh `[x]` với bằng chứng từ X3.
+- Khi các file mâu thuẫn nhau:
+  - Mâu thuẫn chạm tới DECISIONS hoặc ROADMAP: **dừng và hỏi**.
+  - Các mâu thuẫn khác: chọn theo file và ghi vào PROGRESS.
+- Agent được đổi `[~]` → `[x]` trong ROADMAP, nhưng chỉ khi có đủ PR đã merge, log test và kết luận reviewer. Phần nội dung còn lại của ROADMAP vẫn chỉ chủ dự án được sửa.
+- Backend: **chưa chốt** NestJS. Để tới Giai đoạn 6 mới quyết, qua ADR-0006.
+- Ngày của sprint 5–7: đổi theo ngày commit thật.
+- **Chèn luồng "vòng chơi được" lên trước thứ tự ROADMAP.** Luồng gồm: UI login/đăng ký/chọn nhân vật/HUD/shop/forge, đánh boss Stone Golem, và chạy 2 client.
+  - Phần 2 client gộp vào Giai đoạn 1.5.
+  - Đánh boss kéo theo Giai đoạn 1 và việc gắn boss/stagger vào game.
+  - Login thật vẫn thuộc Giai đoạn 6.
+- **Thứ tự ưu tiên:**
+  - Trên trang duyệt, chủ dự án chọn `i-next` là "Dựng test replication thật (1 server + 2 client)".
+  - Sau đó, trong terminal, chủ dự án đổi ưu tiên, nguyên văn: *"làm tới giai đoạn hiện tại chỉ có phần BE không có UI/UX cũng chả có tác dùng gì cũng chả test được BE có hoặc động đúng k"*.
+  - Vì vậy test replication thật **vẫn được làm**, nhưng xếp sau bản chơi thử, nằm trong Giai đoạn 1.5 và vẫn giữ 🛑 ở `ROADMAP.md:57`.
+  - **§11 vẫn áp dụng đầy đủ.** Các tính năng gameplay/combat trong vòng chơi được (boss/stagger, shop/forge) chưa được tính là Complete cho tới khi có test replication headless với 1 server và ít nhất 2 client.
+
+**Thẩm mỹ & asset**
+- Khung độ hiếm trong `art-bible.md:127-128` dùng bảng màu ở `inventory-system.md` §1. Không tự chọn màu mới.
+- Asset sinh bằng AI: duyệt **theo lô**. Mỗi lô gom vào một trang xem trước, và vẫn phải dừng chờ chủ dự án duyệt.
+- Đổi tên các asset và nhãn "Divine" sang **Legendary**.
+- Art proxy của visual-004..007: chủ dự án sẽ tự xem `Art_Gallery` rồi báo lại.
+
+**Hạ tầng**
+- Git LFS áp dụng từ giờ về sau: chuyển các file hiện có bằng **một commit mới**, không viết lại lịch sử.
+- Antigravity: chủ dự án tự mở rộng allow-list. Sau đó agy chỉ nhận việc tài liệu/rà soát, và có Claude reviewer kiểm lại.
