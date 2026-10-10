@@ -3,6 +3,7 @@
 > **Epic**: Expansion Economy & Merchant Network  
 > **Status**: In Progress  
 > **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `Done`): Bằng chứng: `Economy.Merchant`, `Network.ServerAuthority.BuybackIsPerPlayer`, `...BuybackPartialStackFreshUid`, `...InteractionRangeAndCombatEnforced`, `Network.ServiceRouting.*` trong `Tests/evidence/x11b-e34f428-ue-automation.log` (77/77 PASS). Các điểm PARTIAL của rà soát B3 (buyback dùng chung, RPC trên NPC, `ValidateInteraction` là code chết) đã sửa ở X11a/X11b (PR #21, #23). Còn mở: AC-4 bán kính 300 cm (code, `merchant-economy.md:24`) mâu thuẫn `control-manifest.md:75` 250 cm (B4-16, chờ chủ dự án); merchant chỉ có trên actor Smuggler và chưa map nào đặt actor này (M6); chưa có test 1 server + 2 client (DECISIONS.md §11, client hiện chỉ mô phỏng). Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
+> **Y1 (2026-10-10, Y1, chủ dự án duyệt):** Mâu thuẫn bán kính AC-4 (B4-16) đã đóng: chủ dự án chọn 300 cm (`merchant-economy.md:24`, khớp code); `docs/architecture/control-manifest.md:76` đã sửa ≤ 250 → ≤ 300 cm. Các điểm còn mở khác ở dòng X14 trên (M6, DECISIONS.md §11) không đổi; Status giữ `In Progress`.  
 > **Layer**: Expansion  
 > **Type**: Logic  
 > **Estimate**: 8 hours (1.0 days)  

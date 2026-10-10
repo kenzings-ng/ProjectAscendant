@@ -92,7 +92,7 @@ stateDiagram-v2
         IFrame_Active --> Recovery_Window: 0.25s (Gỡ thẻ Invulnerable)
     }
     Recovery_Window --> Idle_or_Moving: 0.35s (Hết lướt, gán Cooldown.Dash 0.5s)
-    Recovery_Window --> DashCancel_Window: 0.27s - 0.35s [chưa triển khai trong code, chốt khi triển khai]
+    Recovery_Window --> DashCancel_Window: ≈0.27s - 0.35s [chưa triển khai trong code, chốt khi triển khai]
     DashCancel_Window --> DashAttack: Bấm Attack (Đòn đánh lướt)
     DashCancel_Window --> Dashing: Bấm Dash tiếp (Combo lướt)
     Idle_or_Moving --> Exhausted: Stamina chạm mốc <= 0 (Khóa Dash 1.5s - 2.2s)

@@ -76,7 +76,7 @@ stateDiagram-v2
 
     state Dashing {
         [*] --> IFrame_Dash: 0.05s - 0.25s (tổng lướt 0.35s)
-        IFrame_Dash --> Dash_Cancel_Window: 0.27s - 0.35s [chưa triển khai trong code, chốt khi triển khai]
+        IFrame_Dash --> Dash_Cancel_Window: ≈0.27s - 0.35s [chưa triển khai trong code, chốt khi triển khai]
     }
 
     Dash_Cancel_Window --> Dash_Attack: Bấm Attack

@@ -1712,7 +1712,7 @@ constants:
     # X10 (2026-10-09): value derived from the old base dash 0.45s - 0.05s. Base dash is now 0.35s
     # (runtime code, DECISIONS.md §12); Ranger dash is not implemented in code. Value left unchanged
     # pending owner decision (see foundational-classes.md Open Questions Q1).
-    # (2026-10-10, Y1, chủ dự án duyệt): owner chose 0.30s (= code base 0.35s - 0.05s). Ranger peak speed: decided at implementation.
+    # (2026-10-10, Y1, chủ dự án duyệt): owner chose 0.30s (= code base 0.35s - 0.05s). Ranger peak speed: còn mở / chưa định nghĩa (không phải lựa chọn của chủ dự án) — owner approved duration only.
     value: 0.30
     unit: seconds
     added: 2026-09-15
