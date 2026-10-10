@@ -468,8 +468,8 @@ Sau khi merge PR #26, `git ls-remote origin main` = `8a28233`. Cả hai PR đề
 
 | Mục | PR | Merge trên `origin/main` | Cổng | CI Fast Gates (job) | Reviewer |
 |---|---|---|---|---|---|
-| X13 Mở rộng validator GDD và thêm self-test | #25 | `10b5f26` | Validator: 107 file, 0 lỗi, 5 ALLOW, exit 0. Self-test 26/26 | 114196671948 | FAIL (9 điểm, trong đó cơ chế bỏ qua dòng "deprecated" quá rộng) → **PASS** |
-| X14 Đối chiếu trạng thái story/epic/sprint với bằng chứng | #26 | `8a28233` | Validator (sau khi merge X13): 108 file, 0 lỗi, 5 ALLOW, exit 0. `sprint-status.yaml` đọc được | 114197246250 | FAIL (8 điểm) → FAIL (1 dòng sót) → **PASS** |
+| X13 Mở rộng validator GDD và thêm self-test | #25 | `10b5f26` | Validator: 107 file, 0 lỗi, 5 ALLOW, exit 0. Self-test: 26 test, OK (25 pass, 1 skip vì CI chưa cài PyYAML) | 114196671948 | FAIL (9 điểm, trong đó cơ chế bỏ qua dòng "deprecated" quá rộng) → **PASS** |
+| X14 Đối chiếu trạng thái story/epic/sprint với bằng chứng | #26 | `8a28233` | Validator (sau khi merge X13): 108 file, 0 lỗi, 5 ALLOW, exit 0. Self-test: 26 test, OK (1 skip). `sprint-status.yaml` đọc được | 114197246250 | FAIL (8 điểm) → FAIL (1 dòng sót) → **PASS** |
 
 **X13 — validator:**
 - Quét thêm: story, sprint, `sprint-status.yaml`, `docs/architecture`, `design/registry`, `design/*.md`, `design/art`, `design/ux`, `docs/registry`.
@@ -487,12 +487,13 @@ Sau khi merge PR #26, `git ls-remote origin main` = `8a28233`. Cả hai PR đề
 | Complete/Done | 45 | **1** (core-items/001) |
 | Review (chỉ còn chờ chủ dự án duyệt, và có AC chưa có assert hoặc log) | 0 | 5 |
 | In Progress | 1 | 41 |
+| Ready (Ready for Dev) | 1 | 0 |
 | Removed | 1 | 1 |
 
 - `PROGRESS.md` §1 có thêm khối "Đính chính X14", lịch sử cũ giữ nguyên.
 - `sprint-status.yaml` đã chuẩn hoá cách ghi trạng thái.
-- Tạo `expansion-progression/EPIC.md` (chỉ có phần header).
-- Camera 1200 → 1400.
+- Tạo `expansion-progression/EPIC.md` (chỉ có header và danh sách 2 story).
+- `TargetArmLength` trong `foundation-controller/story-003` và `isometric-controller.md:34,142`: 1200 → 1400. Chỉ sửa tài liệu; code vốn đã là 1400.
 - Không đụng `ROADMAP.md` và `DECISIONS.md`.
 
 **Câu hỏi mới cho chủ dự án** (cộng thêm vào các câu ở §2.6–2.7):
@@ -500,6 +501,7 @@ Sau khi merge PR #26, `git ls-remote origin main` = `8a28233`. Cả hai PR đề
 - Khung độ hiếm trong `art-bible.md:127-128` (cần duyệt thẩm mỹ).
 - ROADMAP: dòng 29 và 33 đang `[x]` mà không có bằng chứng; có hạ xuống không? Có thêm mục "bảo vệ nhánh main" vào Giai đoạn 0 không?
 - Ngày của sprint 5–7: giữ nguyên hay đổi theo ngày commit?
+- FOV của camera (core-world/story-001 AC-2). Ngoài ra Q1 ở `isometric-controller.md:182` (giả định 1200 → 1500) cần xem lại, vì giá trị mặc định giờ đã là 1400.
 - Duyệt thẩm mỹ cho art proxy của visual-004..007.
 
 **Việc còn lại:**
