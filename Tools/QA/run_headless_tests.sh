@@ -123,7 +123,7 @@ if [ "${RUN_UE}" -eq 1 ]; then
             TESTS_PERFORMED=$(grep -oP "\.\.\.Automation Test Queue Empty \K[0-9]+(?= tests performed)" "${LOG_FILE}" | tail -n 1 || true)
             ERROR_COUNT=$(grep -c -E "\]Log[a-zA-Z0-9_]+: (Error|Fatal):" "${LOG_FILE}" || true)
 
-            echo "UE Automation Summary: Discovered=${TOTAL_DISCOVERED:-unknown}, Passed=${TOTAL_PASS}, Failed=${TOTAL_FAIL}, Errors=${ERROR_COUNT}, QueueFinished=${QUEUE_EMPTY}, ExitCode=${UE_EXIT}"
+            echo "UE Automation Summary: Discovered=${TOTAL_DISCOVERED:-unknown}, Passed=${TOTAL_PASS}, Failed=${TOTAL_FAIL}, Errors=${ERROR_COUNT}, QueueFinished=${QUEUE_EMPTY}, Performed=${TESTS_PERFORMED:-unknown}, ExitCode=${UE_EXIT}"
 
             # Validate that tests executed and all discovered tests completed.
             # Note: On Linux, UE5's -TestExit calls FPlatformMisc::RequestExit(true) which terminates via _exit(1).
