@@ -15,6 +15,7 @@ SCAN SCOPE (X13, 2026-10-10) -- see SCAN_TARGETS:
   - production/sprint-status.yaml
   - docs/architecture/*.md, docs/architecture/*.yaml
   - design/registry/*.yaml
+  - design/*.md, design/art/*.md, design/ux/*.md, docs/registry/*.yaml
 
 SKIPPED HISTORICAL / DATED RECORDS -- see SKIP_PATH_PREFIXES / SKIP_NAME_PATTERNS:
   These files are snapshots of the past (review reports, gate checks, plans,
@@ -26,7 +27,8 @@ SKIPPED HISTORICAL / DATED RECORDS -- see SKIP_PATH_PREFIXES / SKIP_NAME_PATTERN
 
 DEPRECATION CONTEXT (narrow skip):
   A banned term is only accepted when the SAME LINE explicitly marks that term as
-  deprecated / removed / banned near the match (see is_marked_deprecated). A line
+  deprecated / removed / banned: the marker is adjacent to the term, or the term is
+  inside a dated X-task note's own parenthetical (see is_marked_deprecated). A line
   that merely contains the word "deprecated" somewhere does not hide other matches.
   YAML registry entries with "status: deprecated" are also treated as marked.
 
@@ -56,6 +58,10 @@ SCAN_TARGETS = [
     ("docs/architecture", "*.md"),
     ("docs/architecture", "*.yaml"),
     ("design/registry", "*.yaml"),
+    ("design", "*.md"),
+    ("design/art", "*.md"),
+    ("design/ux", "*.md"),
+    ("docs/registry", "*.yaml"),
 ]
 
 # Historical / dated records that are never scanned (path prefixes, posix, relative to root).
@@ -91,38 +97,56 @@ ALLOWED_META_TAGS = {
 # Deprecation context (narrow skip)
 # ---------------------------------------------------------------------------
 
-# Strong markers: accepted anywhere within CONTEXT_WINDOW characters of the match on the same line.
-STRONG_DEPRECATION_MARKERS = re.compile(
-    r"(?:bị\s+cấm"
-    r"|(?<!\w)cấm(?!\s+[đĐ][ịi]a)(?!\w)"          # "cấm" but not the place name "Cấm Địa"
-    r"|deprecated|removed|renamed\s+from|replaced_by"
-    r"|không\s+được\s+duyệt|không\s+phải\s+độ\s+hiếm"
-    r"|trước\s+2026-10-09"
-    r"|Cập\s+nhật\s+2026-\d{2}-\d{2}\s*\(X\d+[a-z]?\)"   # dated X-task note, e.g. "(Cập nhật 2026-10-10 (X7): ...)"
-    r"|\bX\d+[a-z]?\s+2026-\d{2}-\d{2}"                 # "# X7 2026-10-10: renamed ..."
-    r"|\bX\d+[a-z]?\s+note\b)",
+# A term counts as "marked deprecated" only in these narrow cases (X13 review, 2026-10-10):
+#  1. It sits INSIDE a dated X-task note's own parenthetical, e.g. *(Cập nhật 2026-10-10 (X7): bỏ "Immortal/Divine" ...)*,
+#     or inside a YAML/inline "#" comment that carries such a dated note ("# X7 2026-10-10: renamed from ...").
+#  2. A marker is ADJACENT AFTER the term (only quotes / spaces / an opening parenthesis between):
+#     'Ash Shards (deprecated)', 'tên "Ash Shards" bị cấm'.
+#  3. A marker is adjacent BEFORE the term: English markers ("deprecated", "removed", "renamed from") with only
+#     quotes/spaces between; Vietnamese removal verbs within a short gap that contains no sentence punctuation:
+#     'Không tạo tiền tệ mới "Ash Shards"', 'bỏ "Immortal/Divine"'. Verbs that INTRODUCE a new term
+#     ("thay bằng", "thay thế", "đổi") are deliberately not markers.
+DATED_NOTE_OPEN = re.compile(r"\(\s*Cập\s+nhật\s+2026-\d{2}-\d{2}\s*\(X\d+[a-z]?\)", re.IGNORECASE)
+DATED_COMMENT = re.compile(r"#[^\n]*?\bX\d+[a-z]?\s+2026-\d{2}-\d{2}", re.IGNORECASE)
+AFTER_MARKER = re.compile(
+    r"""^["'`”’\s]{0,3}\(?\s*(?:bị\s+cấm|deprecated|removed|cũ\b|không\s+còn\s+dùng|không\s+được\s+duyệt|không\s+phải\s+độ\s+hiếm|trước\s+2026-10-09)""",
     re.IGNORECASE,
 )
-# Weak markers: verbs of removal/replacement, accepted only shortly BEFORE the match.
-WEAK_DEPRECATION_MARKERS = re.compile(
-    r"(?<!\w)(?:bỏ|loại\s+bỏ|xóa|thay\s+bằng|thay\s+vì|thay\s+cho|thay\s+thế|không\s+dùng|không\s+tạo|không\s+còn|đổi)(?!\w)",
+BEFORE_MARKER_EN = re.compile(r"""(?:deprecated|removed|renamed\s+from)["'`“‘\s]{1,3}$""", re.IGNORECASE)
+BEFORE_MARKER_VI = re.compile(
+    r"(?<!\w)(?:bị\s+cấm|cấm|bỏ|loại\s+bỏ|xóa|thay\s+vì|thay\s+cho|không\s+dùng|không\s+tạo|không\s+còn)(?!\w)(?![ \t]+[đĐ][ịi]a)[^.;!?|]{0,15}$",
     re.IGNORECASE,
 )
-CONTEXT_WINDOW = 160
-WEAK_PRE_WINDOW = 15
+
+
+def _dated_note_spans(line: str) -> List[Tuple[int, int]]:
+    spans = []
+    for m in DATED_NOTE_OPEN.finditer(line):
+        depth = 0
+        for k in range(m.start(), len(line)):
+            if line[k] == "(":
+                depth += 1
+            elif line[k] == ")":
+                depth -= 1
+                if depth == 0:
+                    spans.append((m.start(), k + 1))
+                    break
+        else:
+            spans.append((m.start(), len(line)))
+    for m in DATED_COMMENT.finditer(line):
+        spans.append((m.start(), len(line)))
+    return spans
 
 
 def is_marked_deprecated(line: str, start: int, end: int) -> bool:
-    """True when the same line explicitly marks the matched term as deprecated/removed/banned."""
-    lo = max(0, start - CONTEXT_WINDOW)
-    hi = min(len(line), end + CONTEXT_WINDOW)
-    if STRONG_DEPRECATION_MARKERS.search(line[lo:hi]):
+    """True only when the same line explicitly marks THIS matched term as deprecated/removed/banned."""
+    if any(a <= start and end <= b for a, b in _dated_note_spans(line)):
         return True
-    # A weak marker counts only when it ENDS at most WEAK_PRE_WINDOW characters before the match.
-    pre_lo = max(0, start - WEAK_PRE_WINDOW - 40)
-    for m in WEAK_DEPRECATION_MARKERS.finditer(line, pre_lo, start):
-        if start - m.end() <= WEAK_PRE_WINDOW:
-            return True
+    if AFTER_MARKER.search(line[end:end + 40]):
+        return True
+    before = line[max(0, start - 40):start]
+    if BEFORE_MARKER_EN.search(before) or BEFORE_MARKER_VI.search(before):
+        return True
     return False
 
 
@@ -161,12 +185,16 @@ def yaml_deprecated_lines(lines: List[str]) -> set:
 _RARITY_NAMES = r"(?:Common|Uncommon|Rare|Epic|Legendary|Normal|Mythic|Divine|Immortal)"
 _TIER_WORD = r"(?:[Tt]ier|[Bb]ậc)"
 _FORGE_WORDS = r"(?:Forge|Blacksmith|Lò|Thợ|Outpost|Field|Ancient|Forbidden)"
+_TIER_NUM = r"(?:[0-9]+|I{1,3}|IV|V)\b"
+# Material words: "Tier 1 Common Ore" is a material tier, not a rarity numbering.
+_NOT_MATERIAL = r"(?!\s+(?:Ores?|Quặng|Materials?|Nguyên\s+liệu|Mats?)\b)"
 
 # (check_id, compiled regex, message). Each match is reported unless marked deprecated on the same line.
 BANNED_TERM_RULES = [
     ("ash_shards",
      # Also catches identifiers: AshShards, AshShardsBalance, ash_shards_carry_limit.
-     re.compile(r"(?<![A-Za-z])(?i:ash[\s_-]?shards?)(?![a-z])"),
+     # ...and CamelCase-embedded identifiers: GetSalvageAshShards, FAshShardsWallet.
+     re.compile(r"(?<![A-Za-z])(?i:ash[\s_-]?shards?)(?![a-z])|(?<=[A-Za-z0-9_])Ash_?Shards?(?![a-z])"),
      "CẤM: 'Ash Shards' dùng làm tiền tệ. Quyển trục phân rã thành 'Tàn Trang' (Skill Shards / item_skill_shard) — DECISIONS.md §5, §12."),
     ("chain_whip",
      re.compile(r"roi\s+x[ií]ch|chain[\s_-]?whip", re.IGNORECASE),
@@ -175,21 +203,21 @@ BANNED_TERM_RULES = [
      re.compile(r"\bvoid[\s_-]?weaver\b", re.IGNORECASE),
      "CẤM: Class 'Void Weaver' không được duyệt. Tổng 15 class + 1 Apex = 16 class."),
     ("banned_class",
-     re.compile(r"\boracle\b", re.IGNORECASE),
+     re.compile(r"\boracles?\b", re.IGNORECASE),
      "CẤM: Class 'Oracle' không được duyệt. Tổng 15 class + 1 Apex = 16 class."),
     # Divine / Immortal used as a rarity (DECISIONS.md §1, §5). Only rarity-shaped contexts are matched,
     # so proper names such as the skill "Divine Siphon" are not flagged.
     ("divine_immortal_rarity",
-     re.compile(r"\b(?:trang\s+bị\s+(?:Immortal|Divine)|đúc\s+đồ\s+Immortal|Immortal\s*\([Đđ]ỏ\)|Divine\s*\([Hh]oàng\s+kim\))", re.IGNORECASE),
+     re.compile(r"\b(?:trang\s+bị\s+(?:Immortal|Divine)|đúc\s+đồ\s+Immortal|Immortal\s*\([Đđ]ỏ|Divine\s*\([Hh]oàng\s+kim)", re.IGNORECASE),
      "CẤM: Trang bị 'Immortal' / 'Divine'. Thang độ hiếm trang bị chỉ gồm 5 độ hiếm (Common → Legendary) theo DECISIONS.md §5."),
     ("divine_immortal_rarity",
      re.compile(r"\b(?:Immortal|Divine)\s*(?:[/&,]|\bvà\b|\bhoặc\b|\bhay\b)\s*(?:Immortal|Divine)\b", re.IGNORECASE),
      "CẤM: 'Immortal/Divine' như độ hiếm. Độ hiếm trang bị: Common → Legendary; kỹ năng: Normal → Mythic (DECISIONS.md §5)."),
     ("divine_immortal_rarity",
-     re.compile(r"\b(?:Divine|Immortal)\s+(?:Equipment|Gear|Items?|Weapons?|Rarity|Tier|Bậc)\b", re.IGNORECASE),
+     re.compile(r"\b(?:Divine|Immortal)[\s-]+(?:Equipment|Gear|Items?|Weapons?|Rarity|Tier|Grade|Bậc)\b", re.IGNORECASE),
      "CẤM: 'Divine/Immortal' dùng làm độ hiếm. Thang độ hiếm theo DECISIONS.md §5."),
     ("divine_immortal_rarity",
-     re.compile(r"\b(?:độ\s+hiếm|rarity|Tier\s*\d*|Bậc\s*\d*)\s+(?:Divine|Immortal)\b", re.IGNORECASE),
+     re.compile(r"\b(?:độ\s+hiếm|rarity|Tier\s*\d*|Bậc\s*\d*|đồ|hạng)\s+(?:Divine|Immortal)\b", re.IGNORECASE),
      "CẤM: 'Divine/Immortal' dùng làm độ hiếm. Thang độ hiếm theo DECISIONS.md §5."),
     ("divine_immortal_rarity",
      re.compile(r"\b(?:Legendary|Epic|Mythic)\s*(?:→|->|\$\\rightarrow\$|,|/|&)\s*(?:Divine|Immortal)\b", re.IGNORECASE),
@@ -202,11 +230,17 @@ BANNED_TERM_RULES = [
     # without a rarity name next to it) are legitimate and are not matched.
     ("rarity_tier_numbering",
      # "Quyển Trục Bậc 2 (Rare Scroll)" is the scroll's class rank (DECISIONS.md §5 "Quyển Trục T2"), not a rarity number.
-     re.compile(r"(?<!Quyển Trục )(?<!Quyển trục )(?<!quyển trục )\b" + _TIER_WORD + r"\s*[0-9]+\s*(?:[:(\-–]\s*)?\**\s*" + _RARITY_NAMES + r"\b"),
+     re.compile(r"(?<!Quyển Trục )(?<!Quyển trục )(?<!quyển trục )\b" + _TIER_WORD + r"[\s-]*" + _TIER_NUM + r"\s*(?:[:(\[\-–—]\s*)?\**\s*" + _RARITY_NAMES + r"\b" + _NOT_MATERIAL),
      "CẤM: Độ hiếm đánh số bằng 'Tier N'/'Bậc N'. Độ hiếm gọi bằng tên (DECISIONS.md §1)."),
     ("rarity_tier_numbering",
-     re.compile(_RARITY_NAMES + r"\**\s*\(\s*" + _TIER_WORD + r"\s*[0-9]+(?!\s*" + _FORGE_WORDS + r")"),
-     "CẤM: Độ hiếm kèm '(Tier N)'/'(Bậc N)'. Độ hiếm gọi bằng tên (DECISIONS.md §1)."),
+     re.compile(r"\b" + _RARITY_NAMES + r"\**\s*[(\[]\s*(?:" + _TIER_WORD + r"[\s-]*|T)" + _TIER_NUM + r"(?!\s*" + _FORGE_WORDS + r")"),
+     "CẤM: Độ hiếm kèm '(Tier N)'/'[Tier N]'/'(TN)'. Độ hiếm gọi bằng tên (DECISIONS.md §1)."),
+    ("rarity_tier_numbering",
+     re.compile(r"\b(?:Common|Uncommon|Rare|Epic|Legendary|Normal|Mythic|Divine|Immortal)[\s-]+Tier\b(?![\s-]*[0-9]+\s*" + _FORGE_WORDS + r")"),
+     "CẤM: '<Độ hiếm> Tier' (vd 'Mythic Tier'). Độ hiếm gọi bằng tên (DECISIONS.md §1)."),
+    ("rarity_tier_numbering",
+     re.compile(r"\b(?:rarity|độ\s+hiếm)\s*[:=]\s*(?:Tier|Bậc)[\s-]*" + _TIER_NUM, re.IGNORECASE),
+     "CẤM: 'Rarity: Tier N'. Độ hiếm gọi bằng tên (DECISIONS.md §1)."),
     ("rarity_tier_numbering",
      re.compile(r"\b" + _TIER_WORD + r"\s+(?:Common|Uncommon|Rare|Epic|Legendary|Divine|Immortal)\b"),
      "CẤM: 'Bậc/Tier <Độ hiếm>'. Dùng 'độ hiếm <tên>' (DECISIONS.md §1)."),
@@ -375,6 +409,7 @@ def load_allowlist(path: Path) -> List[Dict[str, str]]:
           - file: <relative path>
             check: <check id>
             pattern: "<python regex searched in the line text>"
+            match: "<python regex searched in the finding message, e.g. the class name>"
             reason: "<owner question>"
     Comments (#) and blank lines are ignored. 'entries: []' means empty.
     """
@@ -398,10 +433,11 @@ def load_allowlist(path: Path) -> List[Dict[str, str]]:
             raise ValueError(f"{path}:{lineno}: key outside of a list entry: {raw!r}")
         current[m.group(2)] = _parse_scalar(m.group(3))
     for i, e in enumerate(entries, 1):
-        for key in ("file", "check", "pattern", "reason"):
+        for key in ("file", "check", "pattern", "match", "reason"):
             if not e.get(key):
                 raise ValueError(f"{path}: allowlist entry #{i} is missing '{key}'")
         e["_regex"] = re.compile(e["pattern"])
+        e["_match"] = re.compile(e["match"])
     return entries
 
 
@@ -410,6 +446,18 @@ def load_allowlist(path: Path) -> List[Dict[str, str]]:
 # ---------------------------------------------------------------------------
 
 Finding = Tuple[int, str, str]  # (line number or 0 for whole-file, check id, message)
+
+FRAME_CALC_PATTERNS = [
+    re.compile(r'(?:\\times|[\$x×*]|\bnhân\b)\s*(\d+)\s*\$?\s*(?:hướng|directions?)\b', re.IGNORECASE),
+    re.compile(r'(\d+)\s*\$?\s*(?:hướng|directions?)\s*(?:\\times|[\$x×*]|\bnhân\b)', re.IGNORECASE),
+]
+CLASS_COUNT_12_PATTERN = re.compile(r'\b12[\s-]+(?:Class(?:es)?|Chức\s+nghiệp)\b', re.IGNORECASE)
+EQUIPMENT_TIER_PATTERN = re.compile(r'\b(?:ShieldTier|5-Tier\s+Items?)\b', re.IGNORECASE)
+
+
+def first_unmarked(pat, line: str, unmarked):
+    """First match of pat on line that is not marked deprecated (later matches are not hidden by an earlier marked one)."""
+    return next((m for m in pat.finditer(line) if unmarked(m)), None)
 
 
 def check_file(file_path: Path, decisions: Dict) -> Tuple[List[Finding], List[str]]:
@@ -448,23 +496,21 @@ def check_file(file_path: Path, decisions: Dict) -> Tuple[List[Finding], List[st
                     break
 
         # Frame Calculation Direction Count
-        m_frame_calc = re.search(r'(?:\\times|[\$x×*]|\bnhân\b)\s*(\d+)\s*\$?\s*(?:hướng|directions?)\b', line, re.IGNORECASE)
-        if not m_frame_calc:
-            m_frame_calc = re.search(r'(\d+)\s*\$?\s*(?:hướng|directions?)\s*(?:\\times|[\$x×*]|\bnhân\b)', line, re.IGNORECASE)
-        if m_frame_calc and unmarked(m_frame_calc):
-            dirs_found = int(m_frame_calc.group(1))
-            if dirs_found != expected_dirs:
+        for frame_pat in FRAME_CALC_PATTERNS:
+            m_frame_calc = next((m for m in frame_pat.finditer(line) if int(m.group(1)) != expected_dirs and unmarked(m)), None)
+            if m_frame_calc:
+                dirs_found = int(m_frame_calc.group(1))
                 add(line_idx, "frame_directions", f"Phép tính frame sai số hướng nhìn: Dùng '{dirs_found} hướng'. Theo DECISIONS.md Mục 10, nhân vật dùng {expected_dirs} hướng nhìn.")
+                break
 
         # Obsolete 12 Class count
-        m12 = re.search(r'\b12\s+(?:Class|Chức\s+nghiệp)\b', line, re.IGNORECASE)
-        if m12 and unmarked(m12):
+        m12 = first_unmarked(CLASS_COUNT_12_PATTERN, line, unmarked)
+        if m12:
             add(line_idx, "class_count_12", "Lỗi số lượng: Còn sót '12 Class' / '12 Chức nghiệp'. Tổng số class chính thức là 16 Class theo DECISIONS.md Mục 2.")
 
         # Prohibited Class Tier / Rarity Terminology
         for pat, err_msg in CLASS_TIER_RARITY_PATTERNS:
-            m = pat.search(line)
-            if m and unmarked(m):
+            if first_unmarked(pat, line, unmarked):
                 add(line_idx, "class_tier_rarity", err_msg)
 
         # GameplayTags: only Class.Line.<Line>.<Class> (plus metadata tags) are allowed.
@@ -508,8 +554,7 @@ def check_file(file_path: Path, decisions: Dict) -> Tuple[List[Finding], List[st
             add(line_idx, "column_name", "Lỗi tên cột 'item_instance_instance_id', phải là 'item_instance_id'.")
 
         # Prohibited equipment tiers
-        m_eq = re.search(r'\b(?:ShieldTier|5-Tier\s+Item)\b', line, re.IGNORECASE)
-        if m_eq and unmarked(m_eq):
+        if first_unmarked(EQUIPMENT_TIER_PATTERN, line, unmarked):
             add(line_idx, "equipment_tier", "CẤM: Dùng từ 'Tier' cho trang bị/khiên. Trang bị dùng thang 'Độ Hiếm' (Rarity: Common -> Legendary) theo DECISIONS.md Mục 1.")
 
     # 2. General Table & YAML Weapon Family Relationship Validation
@@ -660,7 +705,7 @@ def validate_all(project_root: Path, allowlist_path: Optional[Path] = None) -> i
             text = file_lines[line_no - 1] if line_no > 0 else ""
             hit = None
             for i, e in enumerate(allowlist):
-                if e["file"] == rel and e["check"] == check_id and e["_regex"].search(text):
+                if e["file"] == rel and e["check"] == check_id and e["_regex"].search(text) and e["_match"].search(msg):
                     hit = i
                     break
             loc = f"{rel}:{line_no}" if line_no else rel

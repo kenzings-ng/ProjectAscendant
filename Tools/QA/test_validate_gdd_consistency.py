@@ -130,6 +130,10 @@ class BannedTermTests(unittest.TestCase):
         self.assertCaught("Phân rã quyển trục thành 10 Ash Shards.", "ash_shards")
         self.assertCaught("Server cộng `AshShardsBalance` sau khi phân rã.", "ash_shards")
         self.assertCaught("max_ash_shards: 99999", "ash_shards")
+        # Review fix 1: CamelCase-embedded identifiers.
+        self.assertCaught("int32 GetSalvageAshShards() const;", "ash_shards")
+        self.assertCaught("struct FAshShardsWallet;", "ash_shards")
+        self.assertCaught("UPROPERTY() int32 Ash_Shards;", "ash_shards")
 
     def test_divine_immortal_rarity(self):
         self.assertCaught("Rèn trang bị Divine (Hoàng kim) tại lò.", "divine_immortal_rarity")
@@ -138,6 +142,12 @@ class BannedTermTests(unittest.TestCase):
         self.assertCaught("Thang màu Common → Legendary → Divine.", "divine_immortal_rarity")
         self.assertCaught("Only the forge can forge Divine Tier 5 equipment.", "divine_immortal_rarity")
         self.assertCaught("Boss Soul divine forging.", "divine_immortal_rarity")
+        # Review fix 6: widened forms.
+        self.assertCaught("Unlocks Divine-tier gear.", "divine_immortal_rarity")
+        self.assertCaught("An Immortal-grade drop.", "divine_immortal_rarity")
+        self.assertCaught("Boss rơi đồ Divine.", "divine_immortal_rarity")
+        self.assertCaught("Vật phẩm hạng Immortal.", "divine_immortal_rarity")
+        self.assertCaught("Normal (Xám), Immortal (Đỏ `#DC2626`), Divine (Hoàng Kim `#F59E0B`).", "divine_immortal_rarity")
 
     def test_rarity_numbered_with_tier_or_bac(self):
         self.assertCaught("Thanh Thần Binh Bậc 5 (Legendary) phát sáng.", "rarity_tier_numbering")
@@ -147,6 +157,20 @@ class BannedTermTests(unittest.TestCase):
         self.assertCaught("Shards based on rarity tier (Common: 1).", "rarity_tier_numbering")
         self.assertCaught("Phân loại độ hiếm 5 Tier.", "rarity_tier_numbering")
         self.assertCaught("Epic: Inventory & 5-Tier Item Database", "equipment_tier")
+        self.assertCaught("Supports 5-Tier Items in the grid.", "equipment_tier")
+        # Review fix 6: separators, roman numerals, brackets, "T5", "<Rarity> Tier", "Rarity: Tier N".
+        for text in [
+            "Drops a Tier-5 Legendary sword.",
+            "Drops a Tier V Legendary sword.",
+            "Tier 5 — Legendary weapons glow.",
+            "Tier 4: Epic",
+            "Rarity: Tier 5",
+            "A Legendary (T5) blade.",
+            "An Epic [Tier 4] ring.",
+            "Skill Book (Mythic Tier).",
+            "Boss drops a Rare Tier Ring.",
+        ]:
+            self.assertCaught(text, "rarity_tier_numbering")
 
     def test_legacy_class_tags(self):
         self.assertCaught("`RequiredClassTag = Class.Vanguard`", "legacy_class_tag")
@@ -158,9 +182,12 @@ class BannedTermTests(unittest.TestCase):
     def test_banned_classes(self):
         self.assertCaught("Class mới: Void Weaver.", "banned_class")
         self.assertCaught("Nhánh Faith thêm Oracle.", "banned_class")
+        self.assertCaught("Two Oracles join the party.", "banned_class")
 
     def test_other_line_checks(self):
         self.assertCaught("Ma Trận 12 Class & Action Deck", "class_count_12")
+        self.assertCaught("Supports 12 Classes.", "class_count_12")
+        self.assertCaught("The 12-Class matrix.", "class_count_12")
         self.assertCaught("Inquisitor dùng roi xích.", "chain_whip")
         self.assertCaught("Frame budget = 8 frame $\\times$ 8 hướng.", "frame_directions")
 
@@ -181,6 +208,12 @@ class BannedTermTests(unittest.TestCase):
             "5-Tier Karma State Machine & Death Penalties Matrix",
             "Phân rã thành Tàn Trang (`item_skill_shard`).",
             "Lò Rèn Cấm Địa ở Cấp 35+.",
+            "Vùng Bậc 3 nguy hiểm.",
+            "Iris dùng 3-tier relevancy (60Hz / 30Hz / Culling).",
+            "Flash Shards rơi từ Golem; Splash damage.",
+            "Tier 1 Common Ore and Tier 2 Rare Materials.",
+            "Mở khóa Epic Tier 2 Forge.",
+            "Normal (Trắng - Sách T1), Rare (Xanh dương - Quyển Trục T2).",
         ]:
             self.assertClean(text)
 
@@ -195,6 +228,34 @@ class DeprecationContextTests(unittest.TestCase):
             "Ash Shards (deprecated, trước 2026-10-09).",
         ]:
             self.assertEqual(findings_for(text), [], text)
+
+    def test_generic_marker_elsewhere_on_line_does_not_hide(self):
+        # Review fix 2: real line shape from expansion-crafting story-001 before X7.
+        ids = check_ids("Salvaging a Rare (Tier 3) chestplate yields 10 Ash Shards; item is removed from slot.")
+        self.assertIn("ash_shards", ids)
+        self.assertIn("rarity_tier_numbering", ids)
+        self.assertIn("ash_shards", check_ids("Old field deprecated; now pays 5 Ash Shards."))
+        self.assertIn("ash_shards", check_ids("Ash Shards are granted, the cap was removed later."))
+
+    def test_dated_note_only_covers_its_own_parenthetical(self):
+        # Review fix 3.
+        self.assertIn("ash_shards", check_ids("Ash Shards (Cập nhật 2026-10-10 (X13): giữ nguyên)"))
+        self.assertIn("ash_shards", check_ids("*(Cập nhật 2026-10-10 (X7): sửa số liệu.)* Nhận 10 Ash Shards."))
+        self.assertEqual(findings_for("Nhận Tàn Trang *(Cập nhật 2026-10-10 (X13): bỏ \"Ash Shards\", DECISIONS.md §5.)*"), [])
+
+    def test_replacement_verbs_are_not_markers(self):
+        # Review fix 4: "thay bằng"/"thay thế"/"đổi" introduce the NEW term.
+        self.assertIn("ash_shards", check_ids("Tàn Trang được thay bằng Ash Shards."))
+        self.assertIn("ash_shards", check_ids("Thay thế Gold bằng Ash Shards."))
+        self.assertIn("ash_shards", check_ids("Đổi sang Ash Shards."))
+        self.assertEqual(findings_for("Thay vì Ash Shards, dùng Tàn Trang."), [])
+
+    def test_second_unmarked_match_is_reported(self):
+        # Review fix 5: a marked first match must not hide a later unmarked one (12 Class, class tier, equipment tier, frames).
+        self.assertIn("class_count_12", check_ids('bỏ "12 Class" cũ; Ma Trận 12 Class & Action Deck'))
+        self.assertIn("equipment_tier", check_ids('bỏ "5-Tier Item" ở đây; còn 5-Tier Item Database'))
+        self.assertIn("class_tier_rarity", check_ids('bỏ "Mythic Class" cũ; mở khóa Mythic Class mới'))
+        self.assertIn("frame_directions", check_ids("Ngân sách 5 hướng x 3 frame, còn 8 frame x 8 hướng."))
 
     def test_unrelated_deprecated_word_does_not_hide_match(self):
         # The old validator skipped the whole line when it contained a deprecation phrase.
@@ -236,6 +297,10 @@ class ScopeAndAllowlistTests(unittest.TestCase):
         self.tp.write("docs/architecture/architecture.md", "`RequiredClassTag = Class.Vanguard`\n")
         self.tp.write("docs/architecture/tr-registry.yaml", "  text: Divine Equipment forging\n")
         self.tp.write("design/registry/entities.yaml", "  - name: ash_shards_cap\n    status: active\n")
+        self.tp.write("design/art/pixel-asset-specifications.md", "## Ma Trận 5 Bậc Hiếm\n")
+        self.tp.write("design/ux/hud.md", "Viền đồ Divine (Hoàng kim).\n")
+        self.tp.write("design/overview.md", "Tag `Class.Tier2.Templar`.\n")
+        self.tp.write("docs/registry/terms.yaml", "  currency: AshShards\n")
         code, out = self.tp.run()
         self.assertEqual(code, 1)
         for rel, cid in [
@@ -245,6 +310,10 @@ class ScopeAndAllowlistTests(unittest.TestCase):
             ("docs/architecture/architecture.md:1", "legacy_class_tag"),
             ("docs/architecture/tr-registry.yaml:1", "divine_immortal_rarity"),
             ("design/registry/entities.yaml:1", "ash_shards"),
+            ("design/art/pixel-asset-specifications.md:1", "rarity_tier_numbering"),
+            ("design/ux/hud.md:1", "divine_immortal_rarity"),
+            ("design/overview.md:1", "legacy_class_tag"),
+            ("docs/registry/terms.yaml:1", "ash_shards"),
         ]:
             self.assertIn(f"{rel}: [{cid}]", out)
         self.assertIn("[PASS] design/gdd/clean.md", out)
@@ -275,6 +344,7 @@ class ScopeAndAllowlistTests(unittest.TestCase):
             "  - file: production/epics/e/story-001.md",
             "    check: ash_shards",
             "    pattern: \"Nhận 10 Ash Shards\"",
+            "    match: \"Ash Shards\"",
             "    reason: \"OWNER QUESTION: fixture\"",
         ])
         code, out = self.tp.run(allow)
@@ -285,6 +355,7 @@ class ScopeAndAllowlistTests(unittest.TestCase):
             "  - file: production/epics/e/story-002.md",
             "    check: ash_shards",
             "    pattern: \"gone\"",
+            "    match: \"x\"",
             "    reason: \"fixed already\"",
         ])
         code, out = self.tp.run(stale)
@@ -293,16 +364,48 @@ class ScopeAndAllowlistTests(unittest.TestCase):
 
     def test_allowlist_does_not_cover_other_checks(self):
         self.tp.write("production/epics/e/story-001.md", "Nhận 10 Ash Shards. Tag `Class.Vanguard`.\n")
-        allow = "entries:\n  - file: production/epics/e/story-001.md\n    check: ash_shards\n    pattern: \"Ash Shards\"\n    reason: \"x\"\n"
+        allow = "entries:\n  - file: production/epics/e/story-001.md\n    check: ash_shards\n    pattern: \"Ash Shards\"\n    match: \"Ash\"\n    reason: \"x\"\n"
         code, out = self.tp.run(allow)
         self.assertEqual(code, 1)
         self.assertIn("[legacy_class_tag]", out)
+
+    def test_allowlist_entry_without_match_is_rejected(self):
+        self.tp.write("production/epics/e/story-001.md", "Nhận 10 Ash Shards.\n")
+        code, out = self.tp.run("entries:\n  - file: production/epics/e/story-001.md\n    check: ash_shards\n    pattern: \"Ash\"\n    reason: \"x\"\n")
+        self.assertEqual(code, 1)
+        self.assertIn("missing 'match'", out)
+
+    def test_repo_allowlist_binds_to_dragon_knight_only(self):
+        # Review fix 7: adding Templar/Inquisitor to the 2H Heavy row must fail even though Dragon Knight is allowlisted.
+        repo_allow = (REPO_ROOT / "Tools" / "QA" / "gdd_validator_allowlist.yaml").read_text(encoding="utf-8")
+        row_ok = ("| **2. Two-Handed Heavy** | `Weapon.2H.Heavy` | Bổ dọc 180cm. | **Berserker, Dragon Knight** | Khóa cứng 2 tay. |")
+        row_bad = ("| **2. Two-Handed Heavy** | `Weapon.2H.Heavy` | Bổ dọc 180cm. | **Berserker, Dragon Knight, Templar, Inquisitor** | Khóa cứng 2 tay. |")
+        yaml_block = '  - name: weapon_family_2h_heavy\n    attributes:\n      classes: ["Berserker", "Dragon Knight"]\n'
+        self.tp.write("design/registry/entities.yaml", yaml_block)
+        art = ("- **Khung Viền Phân Hạng 5 Bậc Hiếm (5-Tier Rarity)**:\n"
+               "  - Normal (Xám `#4B5563`), Rare (Lam `#2563EB`), Legendary (Cam `#D97706`), Immortal (Đỏ `#DC2626`), Divine (Hoàng Kim `#F59E0B` + Tím `#7C3AED`).\n")
+        self.tp.write("design/art/art-bible.md", art)
+
+        self.tp.write("design/gdd/itemization.md", row_ok + "\n" + yaml_block)
+        code, out = self.tp.run(repo_allow)
+        self.assertEqual(code, 0, out)
+
+        self.tp.write("design/gdd/itemization.md", row_bad + "\n" + yaml_block)
+        code, out = self.tp.run(repo_allow)
+        self.assertEqual(code, 1)
+        self.assertIn("Class 'Templar'", out)
+        self.assertIn("Class 'Inquisitor'", out)
+
+        self.tp.write("design/gdd/itemization.md", row_ok + "\n" + yaml_block.replace('"Dragon Knight"]', '"Dragon Knight", "Vanguard"]'))
+        code, out = self.tp.run(repo_allow)
+        self.assertEqual(code, 1)
+        self.assertIn("class 'Vanguard'", out)
 
     def test_repo_allowlist_parses_and_matches_pyyaml(self):
         path = REPO_ROOT / "Tools" / "QA" / "gdd_validator_allowlist.yaml"
         entries = v.load_allowlist(path)
         for e in entries:
-            for key in ("file", "check", "pattern", "reason"):
+            for key in ("file", "check", "pattern", "match", "reason"):
                 self.assertTrue(e[key])
             self.assertTrue((REPO_ROOT / e["file"]).exists(), e["file"])
         try:
@@ -310,7 +413,7 @@ class ScopeAndAllowlistTests(unittest.TestCase):
         except ImportError:
             self.skipTest("PyYAML not installed; stdlib reader already verified above")
         ref = yaml.safe_load(path.read_text(encoding="utf-8"))["entries"]
-        self.assertEqual([{k: e[k] for k in ("file", "check", "pattern", "reason")} for e in entries], ref)
+        self.assertEqual([{k: e[k] for k in ("file", "check", "pattern", "match", "reason")} for e in entries], ref)
 
 
 if __name__ == "__main__":
