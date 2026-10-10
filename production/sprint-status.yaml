@@ -79,7 +79,8 @@ stories:
     completed: ""  # X14 2026-10-10: trước đây "2026-09-25" = ngày commit fcdd4b2, story chưa done
 
   - id: "visual-006"
-    name: "16 Class Idle Stances, Crest Sockets & Tabards (500 Assets Wireframe Proxy)"  # X14 2026-10-10: trước đây "12 Class … (360 Assets …)", sửa theo tên story-006
+    # X13 2026-10-10: tên cũ "12 Class ... (360 Assets Wireframe Proxy)" đổi theo tiêu đề story-006 (16 class, DECISIONS.md §2).
+    name: "16 Class Idle Stances, Crest Sockets & Tabard Overlays (500 Assets)"
     file: "production/epics/presentation-character-visual/story-006-art-class-idle-crest-tabard.md"
     priority: should-have
     status: in-progress  # X14 2026-10-10: trước đây "Completed (Placeholder-tier art — cần thay thế bằng pixel art thật trước khi release)"; AC-2/AC-3 chỉ có crest/tabard cho 12/16 class; AC-5 không có log

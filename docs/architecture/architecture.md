@@ -57,7 +57,7 @@ flowchart TD
 
     subgraph Layer3["Tầng 3: Feature Layer"]
         F_AI["PA_BossAI<br/>(Behavior Tree, EQS, Telegraphs, Threat Management)"]
-        F_CLASS["PA_ClassesProgression<br/>(12 Class Matrix, Skill Trees, Skill Books)"]
+        F_CLASS["PA_ClassesProgression<br/>(16 Class Matrix, Skill Trees, Skill Books)"]
         F_CRAFT["PA_Blacksmithing<br/>(Nâng cấp trang bị, Khảm ngọc, Sửa chữa)"]
         F_ECON["PA_MerchantEconomy<br/>(Mạng lưới 3 bậc, Karma Bailout, Sinks & Faucets)"]
     end
@@ -73,7 +73,7 @@ flowchart TD
     subgraph Layer1["Tầng 1: Foundation Layer"]
         F_ATTR["PA_Attributes (GAS)<br/>(UAttributeSet, Base Stats, GameplayTags)"]
         F_INPUT["PA_InputCamera<br/>(Enhanced Input Mapping, Isometric SpringArm -45°)"]
-        F_INV["PA_InventoryCore<br/>(Item Instances, DataTables, 5-Tier Item Database)"]
+        F_INV["PA_InventoryCore<br/>(Item Instances, DataTables, 5-Rarity Item Database)"]
     end
 
     %% Unidirectional Flow
@@ -95,7 +95,7 @@ flowchart TD
 - **Các Module**:
   - `PA_Attributes`: Kế thừa `UAttributeSet` từ GAS, định nghĩa toàn bộ thuộc tính cơ bản (HP, MP, Stamina, Posture, Atk, Def, Speed) và hệ thống GameplayTags danh mục.
   - `PA_InputCamera`: Tích hợp Enhanced Input System và `USpringArmComponent` góc nghiêng chuẩn mực (Pitch: -45°, Yaw: 45°) cùng cơ chế đón đầu thông minh (Dynamic Look-Ahead).
-  - `PA_InventoryCore`: Quản lý cấu trúc dữ liệu lưới ba lô (`UInventoryComponent`), dữ liệu tĩnh `UItemDataAsset` và phân loại độ hiếm 5 Tier.
+  - `PA_InventoryCore`: Quản lý cấu trúc dữ liệu lưới ba lô (`UInventoryComponent`), dữ liệu tĩnh `UItemDataAsset` và phân loại 5 độ hiếm. *(Cập nhật 2026-10-10 (X13): "độ hiếm 5 Tier" → "5 độ hiếm"; sơ đồ 2.1 cũng đổi "5-Tier Item Database" → "5-Rarity Item Database", DECISIONS.md §1.)*
 
 #### Tầng 2: Core Gameplay Layer (Cơ Chế Chiến Đấu & Mạng Cơ Bản)
 - Điều phối các hành vi vật lý, tương tác thời gian thực và đồng bộ hóa máy chủ.
@@ -110,7 +110,7 @@ flowchart TD
 - Xây dựng nội dung trò chơi cụ thể dựa trên các khối cơ chế từ Tầng 2.
 - **Các Module**:
   - `PA_BossAI`: Trí tuệ nhân tạo Boss, Behavior Trees, EQS tìm vị trí, phát tín hiệu cảnh báo đòn đánh (Telegraph Decals) và Bảng cừu hận động (Threat Table 130%).
-  - `PA_ClassesProgression`: Cây kỹ năng của 12 Class, quản lý Action Deck 4 chiêu thức và logic học Sách Kỹ Năng (Skill Books).
+  - `PA_ClassesProgression`: Cây kỹ năng của 16 Class, quản lý Action Deck 4 chiêu thức và logic học Sách Kỹ Năng (Skill Books). *(Cập nhật 2026-10-10 (X13): "12 Class" → "16 Class" ở đây, ở sơ đồ 2.1 và ở mục 10, DECISIONS.md §2.)*
   - `PA_Blacksmithing`: Cơ chế ép cấp trang bị (+1 đến +10), khảm/tháo ngọc, và hao mòn/sửa chữa độ bền.
   - `PA_MerchantEconomy`: Mạng lưới thương nhân 3 bậc, đồng bộ restock toàn server, mua lại (Buyback FIFO 10 ô) và nộp phạt chuộc tội Karma Bailout.
 
@@ -287,7 +287,7 @@ struct FCombatHitResult
   - `void AddThreat(AActor* Instigator, float ThreatScore)`: Cộng dồn điểm đe dọa.
   - `void Server_CastBossSkill(EBossSkillID SkillID)`: Kích hoạt kỹ năng nện búa/triệu hồi và phát Decal cảnh báo Telegraph trước 1.2s.
 
-#### 10. Module `PA_ClassesProgression` (Ma Trận 12 Class & Action Deck)
+#### 10. Module `PA_ClassesProgression` (Ma Trận 16 Class & Action Deck)
 - **Sở hữu (Owns)**: Tiến trình nâng cấp kỹ năng, 4 ô Action Deck kích hoạt (Q, E, R, F), cơ chế học kỹ năng từ Sách Kỹ Năng (Skill Books).
 - **Giao diện công khai (Public API)**:
   - `bool EquipSkillToActionDeck(int32 SlotIndex, FGameplayTag SkillTag)`: Gán kỹ năng vào ô thao tác nhanh.

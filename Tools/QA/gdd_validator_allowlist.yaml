@@ -1,0 +1,45 @@
+# Allowlist for Tools/QA/validate_gdd_consistency.py (X13, 2026-10-10).
+#
+# Each entry accepts ONE known finding that needs an owner decision before the
+# document can be fixed. It does not disable a check: the finding is still printed
+# as [ALLOW], and an entry that no longer matches any finding fails the validator
+# (so it must be removed once the owner decides and the document is fixed).
+#
+# Fields (all required):
+#   file    - path relative to the project root (posix)
+#   check   - check id printed by the validator, e.g. weapon_relation, ash_shards
+#   pattern - Python regex searched in the text of the offending line
+#   match   - Python regex searched in the finding MESSAGE (binds the entry to one
+#             specific finding, e.g. the class name, so a new finding on the same
+#             line is NOT covered)
+#   reason  - why it is allowed and the open owner question
+#
+# Format note: the validator reads this file with a small stdlib reader. Keep to
+# "entries:" followed by "- key: value" items with plain or double-quoted scalars.
+
+entries:
+  - file: design/gdd/itemization.md
+    check: weapon_relation
+    pattern: "^\\| \\*\\*2\\. Two-Handed Heavy\\*\\* \\| `Weapon\\.2H\\.Heavy` \\|.*\\| \\*\\*Berserker, Dragon Knight\\*\\* \\|"
+    match: "Class 'Dragon Knight' không được phép sử dụng dòng vũ khí '2h_heavy'"
+    reason: "OWNER QUESTION: DECISIONS.md:122 approves only Weapon.2H.Polearm for Dragon Knight and notes itemization.md:200 still lists Weapon.2H.Heavy as 'đang trình duyệt xác nhận'. Keep 2H Heavy for Dragon Knight (update DECISIONS §7) or remove it from itemization.md:200?"
+  - file: design/gdd/itemization.md
+    check: weapon_relation
+    pattern: "^\\s*classes:\\s*\\[\"Berserker\", \"Dragon Knight\"\\]\\s*$"
+    match: "YAML block '2h_heavy' chứa class 'Dragon Knight'"
+    reason: "OWNER QUESTION: same pending decision as itemization.md:200 (DECISIONS.md:122) - YAML block weapon_family_2h_heavy lists Dragon Knight."
+  - file: design/registry/entities.yaml
+    check: weapon_relation
+    pattern: "^\\s*classes:\\s*\\[\"Berserker\", \"Dragon Knight\"\\]\\s*$"
+    match: "YAML block '2h_heavy' chứa class 'Dragon Knight'"
+    reason: "OWNER QUESTION: same pending decision as itemization.md:200 (DECISIONS.md:122) - registry weapon_family_2h_heavy lists Dragon Knight."
+  - file: design/art/art-bible.md
+    check: rarity_tier_numbering
+    pattern: "^- \\*\\*Khung Viền Phân Hạng 5 Bậc Hiếm \\(5-Tier Rarity\\)\\*\\*:"
+    match: "Bậc Hiếm"
+    reason: "OWNER AESTHETIC DECISION PENDING: art-bible.md:127-128 rarity frame scale (heading). Needs owner aesthetic approval (CLAUDE.md stop rule); not edited by X13."
+  - file: design/art/art-bible.md
+    check: divine_immortal_rarity
+    pattern: "Immortal \\(Đỏ `#DC2626`\\), Divine \\(Hoàng Kim `#F59E0B` \\+ Tím `#7C3AED`\\)"
+    match: "Trang bị 'Immortal' / 'Divine'"
+    reason: "OWNER AESTHETIC DECISION PENDING: art-bible.md:128 frame colours still include Immortal/Divine (outside DECISIONS §5). Needs owner aesthetic approval (CLAUDE.md stop rule); not edited by X13."

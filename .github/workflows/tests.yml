@@ -46,6 +46,10 @@ jobs:
         run: |
           python Tools/QA/verify_git_lfs_pointers.py --base origin/${{ github.base_ref || 'main' }}
 
+      - name: Self-test GDD Consistency Validator
+        run: |
+          python Tools/QA/test_validate_gdd_consistency.py
+
       - name: Validate GDD Consistency
         run: |
           python Tools/QA/validate_gdd_consistency.py
