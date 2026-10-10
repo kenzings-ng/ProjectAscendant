@@ -6,6 +6,8 @@
 #include "Economy/PACurrencyComponent.h"
 #include "Inventory/PAInventoryComponent.h"
 #include "Inventory/PAItemStaticDataAsset.h"
+#include "Network/PAServiceRequestComponent.h"
+#include "GameFramework/PlayerController.h"
 
 // ===========================================================
 // Lifecycle
@@ -17,6 +19,72 @@ void UPAMerchantShopWidget::NativeConstruct()
 	Model.SwitchTab(EPAShopTab::Buy);
 }
 
+void UPAMerchantShopWidget::NativeDestruct()
+{
+	UnbindRouter();
+	Super::NativeDestruct();
+}
+
+// ===========================================================
+// X11b: server confirmation routing
+// ===========================================================
+
+void UPAMerchantShopWidget::BindRouter(UPAServiceRequestComponent* Router)
+{
+	UnbindRouter();
+	RouterRef = Router;
+	if (Router)
+	{
+		RouterConfirmHandle = Router->OnMerchantRequestConfirmedNative.AddUObject(this, &UPAMerchantShopWidget::HandleMerchantRequestConfirmed);
+	}
+}
+
+void UPAMerchantShopWidget::UnbindRouter()
+{
+	if (UPAServiceRequestComponent* Router = RouterRef.Get())
+	{
+		Router->OnMerchantRequestConfirmedNative.Remove(RouterConfirmHandle);
+	}
+	RouterConfirmHandle.Reset();
+	RouterRef.Reset();
+	PendingRequestId = INDEX_NONE;
+	PendingAction = EPendingShopAction::None;
+}
+
+void UPAMerchantShopWidget::HandleMerchantRequestConfirmed(int32 RequestId, bool bSuccess, EPATransactionError ErrorCode)
+{
+	if (RequestId != PendingRequestId || PendingRequestId == INDEX_NONE)
+	{
+		return; // not ours (another widget / stale request)
+	}
+
+	const EPendingShopAction Action = PendingAction;
+	PendingRequestId = INDEX_NONE;
+	PendingAction = EPendingShopAction::None;
+
+	if (!bSuccess)
+	{
+		OnTransactionRejected.Broadcast(ErrorCode);
+		return;
+	}
+
+	if (Action == EPendingShopAction::Sell)
+	{
+		Model.AddBuybackEntry(PendingSoldItem);
+	}
+	else if (Action == EPendingShopAction::Buyback)
+	{
+		Model.RemoveBuybackEntry(PendingBuybackIndex);
+	}
+
+	if (CurrencyRef.IsValid())
+	{
+		Model.UpdateAffordability(static_cast<int32>(CurrencyRef->GetGold()));
+	}
+
+	OnTransactionCompleted.Broadcast();
+}
+
 // ===========================================================
 // Initialization
 // ===========================================================
@@ -25,11 +93,21 @@ void UPAMerchantShopWidget::InitializeShop(
 	UPAMerchantComponent* MerchantComp,
 	UPAInventoryComponent* PlayerInv,
 	UPACurrencyComponent* PlayerWallet,
-	int32 PlayerKarma)
+	int32 PlayerKarma,
+	UPAServiceRequestComponent* RequestRouter)
 {
 	MerchantRef = MerchantComp;
 	InventoryRef = PlayerInv;
 	CurrencyRef = PlayerWallet;
+
+	if (!RequestRouter)
+	{
+		if (const APlayerController* OwningPC = GetOwningPlayer())
+		{
+			RequestRouter = OwningPC->FindComponentByClass<UPAServiceRequestComponent>();
+		}
+	}
+	BindRouter(RequestRouter);
 
 	if (!MerchantComp || !PlayerWallet)
 	{
@@ -94,7 +172,7 @@ void UPAMerchantShopWidget::SelectInventoryItem(int32 SlotIndex)
 
 void UPAMerchantShopWidget::ExecuteBuy()
 {
-	if (!MerchantRef.IsValid() || !CurrencyRef.IsValid() || !InventoryRef.IsValid())
+	if (IsRequestPending() || !RouterRef.IsValid() || !MerchantRef.IsValid() || !CurrencyRef.IsValid() || !InventoryRef.IsValid())
 	{
 		return;
 	}
@@ -110,14 +188,15 @@ void UPAMerchantShopWidget::ExecuteBuy()
 		return;
 	}
 
-	// Delegate mua hàng đến MerchantComponent (Server RPC)
-	MerchantRef->Server_RequestBuyItem(InventoryRef.Get(), CurrencyRef.Get(), Model.SelectedCatalogIndex, 1);
-	OnTransactionCompleted.Broadcast();
+	// X11b: request via the player's router; OnTransactionCompleted fires on server confirmation.
+	PendingAction = EPendingShopAction::Buy;
+	PendingRequestId = RouterRef->AllocateRequestId();
+	RouterRef->Server_MerchantBuyItem(PendingRequestId, MerchantRef->GetOwner(), InventoryRef.Get(), CurrencyRef.Get(), Model.SelectedCatalogIndex, 1);
 }
 
 void UPAMerchantShopWidget::ExecuteSell()
 {
-	if (!MerchantRef.IsValid() || !InventoryRef.IsValid() || !CurrencyRef.IsValid())
+	if (IsRequestPending() || !RouterRef.IsValid() || !MerchantRef.IsValid() || !InventoryRef.IsValid() || !CurrencyRef.IsValid())
 	{
 		return;
 	}
@@ -127,19 +206,16 @@ void UPAMerchantShopWidget::ExecuteSell()
 		return;
 	}
 
-	const FPAShopItemEntry& Item = Model.InventoryItems[Model.SelectedInventoryIndex];
-
-	// Thêm vào buyback queue trước khi bán
-	Model.AddBuybackEntry(Item);
-
-	// Delegate bán hàng đến MerchantComponent (Server RPC)
-	MerchantRef->Server_RequestSellItem(InventoryRef.Get(), CurrencyRef.Get(), Model.SelectedInventoryIndex, 1);
-	OnTransactionCompleted.Broadcast();
+	// Buyback entry is added only after the server confirms the sale.
+	PendingSoldItem = Model.InventoryItems[Model.SelectedInventoryIndex];
+	PendingAction = EPendingShopAction::Sell;
+	PendingRequestId = RouterRef->AllocateRequestId();
+	RouterRef->Server_MerchantSellItem(PendingRequestId, MerchantRef->GetOwner(), InventoryRef.Get(), CurrencyRef.Get(), Model.SelectedInventoryIndex, 1);
 }
 
 void UPAMerchantShopWidget::ExecuteBuyback()
 {
-	if (!MerchantRef.IsValid() || !CurrencyRef.IsValid())
+	if (IsRequestPending() || !RouterRef.IsValid() || !MerchantRef.IsValid() || !InventoryRef.IsValid() || !CurrencyRef.IsValid())
 	{
 		return;
 	}
@@ -149,7 +225,7 @@ void UPAMerchantShopWidget::ExecuteBuyback()
 		return;
 	}
 
-	// Buyback entry cuối cùng (LIFO cho buyback)
+	// Buyback entry cuối cùng (LIFO cho buyback); server BuybackList cũng nối đuôi theo thứ tự bán.
 	const int32 LastIndex = Model.BuybackItems.Num() - 1;
 	const FPAShopItemEntry& Item = Model.BuybackItems[LastIndex];
 
@@ -158,6 +234,10 @@ void UPAMerchantShopWidget::ExecuteBuyback()
 		return;
 	}
 
-	Model.RemoveBuybackEntry(LastIndex);
-	OnTransactionCompleted.Broadcast();
+	// X11b: previously only removed the local entry (no server call). Now the server performs the buyback and the
+	// local entry is removed on confirmation.
+	PendingBuybackIndex = LastIndex;
+	PendingAction = EPendingShopAction::Buyback;
+	PendingRequestId = RouterRef->AllocateRequestId();
+	RouterRef->Server_MerchantBuybackItem(PendingRequestId, MerchantRef->GetOwner(), InventoryRef.Get(), CurrencyRef.Get(), LastIndex);
 }

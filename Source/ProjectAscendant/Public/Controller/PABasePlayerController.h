@@ -12,6 +12,7 @@ class UInputAction;
 class APABaseCharacter;
 class UPrimitiveComponent;
 class UPALoginWidget;
+class UPAServiceRequestComponent;
 
 /**
  * APABasePlayerController
@@ -30,6 +31,10 @@ public:
 	APABasePlayerController(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
 	virtual void PlayerTick(float DeltaTime) override;
+
+	/** X11b: routes this player's Merchant / Blacksmith requests to the server (owning-connection RPCs). */
+	UFUNCTION(BlueprintPure, Category = "ProjectAscendant|ServiceRequest")
+	UPAServiceRequestComponent* GetServiceRequestComponent() const { return ServiceRequestComponent; }
 
 	// -------------------------------------------------------------------------
 	// Camera Look-Ahead & Occlusion Dither (Story 003)
@@ -86,6 +91,10 @@ protected:
 	void ResetOccludedComponents();
 
 protected:
+	/** X11b: player-owned router for NPC service requests (see UPAServiceRequestComponent). */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "ProjectAscendant|ServiceRequest")
+	TObjectPtr<UPAServiceRequestComponent> ServiceRequestComponent;
+
 	/** Lớp Widget giao diện khởi đầu / Đăng nhập / Fast Playtest (Client Viewport) */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "ProjectAscendant|UI")
 	TSubclassOf<UPALoginWidget> LoginWidgetClass;

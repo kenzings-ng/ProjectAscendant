@@ -93,32 +93,24 @@ public:
 	bool ValidateInteraction(const AActor* InteractingActor, bool bInCombat, EPATransactionError& OutError) const;
 
 	/**
-	 * X11a: Player that may have sent a Server RPC on this component (APlayerController on the owner chain of
-	 * this component's actor). nullptr for NPC-owned merchants (such RPCs cannot arrive from a client; see X11b).
-	 */
-	APlayerController* GetRequestingPlayerController() const;
-
-	/**
-	 * X11a: Server precondition run by every Server RPC before any state mutation: authority, requesting player
+	 * X11a: Server precondition run by every routed request before any state mutation: authority, requesting player
 	 * with a pawn, Inventory / Wallet owned by the requesting player, and ValidateInteraction (distance + State.InCombat).
 	 */
 	bool ValidateServerRequest(const APlayerController* Requester, const UActorComponent* Inventory, const UActorComponent* Wallet, EPATransactionError& OutError) const;
 
 	// -------------------------------------------------------------------------
-	// Server RPCs
+	// X11b: Authority-only request handlers (not RPCs).
+	// Clients reach them only through UPAServiceRequestComponent (on their PlayerController), which supplies the
+	// requesting player. Each runs ValidateServerRequest(Requester, ...) first; returns true if the transaction happened.
 	// -------------------------------------------------------------------------
 
-	UFUNCTION(Server, Reliable, WithValidation, Category = "ProjectAscendant|Merchant")
-	void Server_RequestBuyItem(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 CatalogIndex, int32 Quantity);
+	bool ServerHandleBuyItem(const APlayerController* Requester, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 CatalogIndex, int32 Quantity, EPATransactionError& OutError);
 
-	UFUNCTION(Server, Reliable, WithValidation, Category = "ProjectAscendant|Merchant")
-	void Server_RequestSellItem(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex, int32 Quantity);
+	bool ServerHandleSellItem(const APlayerController* Requester, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex, int32 Quantity, EPATransactionError& OutError);
 
-	UFUNCTION(Server, Reliable, WithValidation, Category = "ProjectAscendant|Merchant")
-	void Server_RequestSellAllJunk(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet);
+	bool ServerHandleSellAllJunk(const APlayerController* Requester, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, EPATransactionError& OutError);
 
-	UFUNCTION(Server, Reliable, WithValidation, Category = "ProjectAscendant|Merchant")
-	void Server_RequestBuybackItem(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 BuybackIndex);
+	bool ServerHandleBuybackItem(const APlayerController* Requester, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 BuybackIndex, EPATransactionError& OutError);
 
 public:
 	UPROPERTY(BlueprintAssignable, Category = "ProjectAscendant|Merchant")

@@ -15,6 +15,7 @@
 #include "Combat/PAGameplayAbility_MeleeAttack.h"
 #include "Combat/PAGameplayAbility_Dash.h"
 #include "Combat/PAGameplayAbility_Finisher.h"
+#include "Network/PAServiceRequestComponent.h"
 
 APABasePlayerController::APABasePlayerController(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
@@ -28,6 +29,8 @@ APABasePlayerController::APABasePlayerController(const FObjectInitializer& Objec
 	bEnableMouseOverEvents = true;
 
 	LoginWidgetClass = UPALoginWidget::StaticClass();
+
+	ServiceRequestComponent = CreateDefaultSubobject<UPAServiceRequestComponent>(TEXT("ServiceRequestComponent"));
 }
 
 void APABasePlayerController::BeginPlay()

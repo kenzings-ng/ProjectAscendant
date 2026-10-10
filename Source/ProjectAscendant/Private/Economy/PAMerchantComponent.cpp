@@ -67,11 +67,6 @@ bool UPAMerchantComponent::ValidateInteraction(const AActor* InteractingActor, b
 	return true;
 }
 
-APlayerController* UPAMerchantComponent::GetRequestingPlayerController() const
-{
-	return PAServerRequestValidation::ResolveOwningPlayerController(GetOwner());
-}
-
 bool UPAMerchantComponent::ValidateServerRequest(const APlayerController* Requester, const UActorComponent* Inventory, const UActorComponent* Wallet, EPATransactionError& OutError) const
 {
 	if (!GetOwner() || !GetOwner()->HasAuthority() || !Requester)
@@ -368,71 +363,47 @@ bool UPAMerchantComponent::BuybackItem(UPAInventoryComponent* Inventory, UPACurr
 }
 
 // -----------------------------------------------------------------------------
-// Server RPCs
+// X11b: Authority-only request handlers (reached via UPAServiceRequestComponent)
 // -----------------------------------------------------------------------------
 
-bool UPAMerchantComponent::Server_RequestBuyItem_Validate(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 CatalogIndex, int32 Quantity)
+bool UPAMerchantComponent::ServerHandleBuyItem(const APlayerController* Requester, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 CatalogIndex, int32 Quantity, EPATransactionError& OutError)
 {
-	return Inventory != nullptr && Wallet != nullptr && CatalogIndex >= 0 && Quantity > 0;
-}
-
-void UPAMerchantComponent::Server_RequestBuyItem_Implementation(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 CatalogIndex, int32 Quantity)
-{
-	EPATransactionError Err = EPATransactionError::None;
-	if (!ValidateServerRequest(GetRequestingPlayerController(), Inventory, Wallet, Err))
+	if (!ValidateServerRequest(Requester, Inventory, Wallet, OutError))
 	{
-		OnTransactionFailed.Broadcast(Err);
-		return;
+		OnTransactionFailed.Broadcast(OutError);
+		return false;
 	}
-	BuyItem(Inventory, Wallet, CatalogIndex, Quantity, Err);
+	return BuyItem(Inventory, Wallet, CatalogIndex, Quantity, OutError);
 }
 
-bool UPAMerchantComponent::Server_RequestSellItem_Validate(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex, int32 Quantity)
+bool UPAMerchantComponent::ServerHandleSellItem(const APlayerController* Requester, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex, int32 Quantity, EPATransactionError& OutError)
 {
-	return Inventory != nullptr && Wallet != nullptr && SlotIndex >= 0 && Quantity > 0;
-}
-
-void UPAMerchantComponent::Server_RequestSellItem_Implementation(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 SlotIndex, int32 Quantity)
-{
-	EPATransactionError Err = EPATransactionError::None;
-	if (!ValidateServerRequest(GetRequestingPlayerController(), Inventory, Wallet, Err))
+	if (!ValidateServerRequest(Requester, Inventory, Wallet, OutError))
 	{
-		OnTransactionFailed.Broadcast(Err);
-		return;
+		OnTransactionFailed.Broadcast(OutError);
+		return false;
 	}
-	SellItem(Inventory, Wallet, SlotIndex, Quantity, Err);
+	return SellItem(Inventory, Wallet, SlotIndex, Quantity, OutError);
 }
 
-bool UPAMerchantComponent::Server_RequestSellAllJunk_Validate(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet)
+bool UPAMerchantComponent::ServerHandleSellAllJunk(const APlayerController* Requester, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, EPATransactionError& OutError)
 {
-	return Inventory != nullptr && Wallet != nullptr;
-}
-
-void UPAMerchantComponent::Server_RequestSellAllJunk_Implementation(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet)
-{
+	if (!ValidateServerRequest(Requester, Inventory, Wallet, OutError))
+	{
+		OnTransactionFailed.Broadcast(OutError);
+		return false;
+	}
 	int32 TotalGold = 0;
 	int32 ItemsSold = 0;
-	EPATransactionError Err = EPATransactionError::None;
-	if (!ValidateServerRequest(GetRequestingPlayerController(), Inventory, Wallet, Err))
-	{
-		OnTransactionFailed.Broadcast(Err);
-		return;
-	}
-	SellAllJunk(Inventory, Wallet, TotalGold, ItemsSold, Err);
+	return SellAllJunk(Inventory, Wallet, TotalGold, ItemsSold, OutError);
 }
 
-bool UPAMerchantComponent::Server_RequestBuybackItem_Validate(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 BuybackIndex)
+bool UPAMerchantComponent::ServerHandleBuybackItem(const APlayerController* Requester, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 BuybackIndex, EPATransactionError& OutError)
 {
-	return Inventory != nullptr && Wallet != nullptr && BuybackIndex >= 0;
-}
-
-void UPAMerchantComponent::Server_RequestBuybackItem_Implementation(UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, int32 BuybackIndex)
-{
-	EPATransactionError Err = EPATransactionError::None;
-	if (!ValidateServerRequest(GetRequestingPlayerController(), Inventory, Wallet, Err))
+	if (!ValidateServerRequest(Requester, Inventory, Wallet, OutError))
 	{
-		OnTransactionFailed.Broadcast(Err);
-		return;
+		OnTransactionFailed.Broadcast(OutError);
+		return false;
 	}
-	BuybackItem(Inventory, Wallet, BuybackIndex, Err);
+	return BuybackItem(Inventory, Wallet, BuybackIndex, OutError);
 }
