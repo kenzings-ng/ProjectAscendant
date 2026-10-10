@@ -6,6 +6,7 @@
 > **ADRs Covered**: [ADR-0001](adr-0001-open-world-mmo-combat-networking.md), [ADR-0002](adr-0002-gas-integration-paperzd-pixel-sprites.md), [ADR-0003](adr-0003-server-authoritative-grid-inventory-fast-array.md)  
 > **Status**: Active — regenerate with `/create-control-manifest update` when ADRs change  
 > **Amendment 2026-10-09 (X10)**: Core-layer dash / combo values synced to runtime code per DECISIONS.md §12 (code values are authoritative; game feel still pending owner approval). `Manifest Version` intentionally unchanged. Before/after table: `production/qa/x10-combat-values-before-after.md`.  
+> **Amendment 2026-10-10 (Y1)**: interaction proximity radius ≤ 250 cm → ≤ 300 cm per `merchant-economy.md:24` (2026-10-10, Y1, chủ dự án duyệt). `Manifest Version` intentionally unchanged.  
 
 `Manifest Version` is the date this manifest was generated. Story files embed this date when created. `/story-readiness` compares a story's embedded version to this field to detect stories written against stale rules. Always matches `Last Updated` — they are the same date, serving different consumers.
 
@@ -72,7 +73,7 @@ This manifest is a programmer's quick-reference extracted from all Accepted ADRs
 - **StateTree Hierarchical AI**: Boss and elite mob AI must be implemented using Unreal Engine 5.7 **StateTree**, partitioning logic into idle, patrol, combat, and phase transitions — source: [`docs/architecture/architecture.md`](architecture.md)
 - **Immutable Item Metadata in DataAssets**: Item static attributes (base mesh, display name, icon, base stats, lore) must reside in `UPrimaryDataAsset` (`UItemStaticDataAsset`) — source: [ADR-0003](adr-0003-server-authoritative-grid-inventory-fast-array.md)
 - **Mutable Instance State in Structs**: Dynamic item attributes (Durability, Affixes, Enhancement Level, Gem Sockets) must be stored inside `FItemInstanceData` within the FastArray item entry — source: [ADR-0003](adr-0003-server-authoritative-grid-inventory-fast-array.md)
-- **Zone Checkpoint & Forge Proximity Validation**: Crafting, upgrading, and merchant interactions must validate player physical proximity ($\le 250\text{cm}$) to the relevant world actor before executing transactions — source: [ADR-0003](adr-0003-server-authoritative-grid-inventory-fast-array.md)
+- **Zone Checkpoint & Forge Proximity Validation**: Crafting, upgrading, and merchant interactions must validate player physical proximity ($\le 300\text{cm}$) to the relevant world actor before executing transactions — source: [ADR-0003](adr-0003-server-authoritative-grid-inventory-fast-array.md); radius per `design/gdd/merchant-economy.md:24` (Interaction Distance ≤ 300 cm). *(2026-10-10, Y1, chủ dự án duyệt): previously ≤ 250 cm, which had no GDD source.*
 
 ### Forbidden Approaches
 - **Never store transient runtime state inside `UPrimaryDataAsset`**: DataAssets are shared global assets; never modify their properties at runtime — source: [ADR-0003](adr-0003-server-authoritative-grid-inventory-fast-array.md)

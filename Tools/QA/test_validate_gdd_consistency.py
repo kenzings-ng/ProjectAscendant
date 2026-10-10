@@ -375,31 +375,41 @@ class ScopeAndAllowlistTests(unittest.TestCase):
         self.assertEqual(code, 1)
         self.assertIn("missing 'match'", out)
 
-    def test_repo_allowlist_binds_to_dragon_knight_only(self):
-        # Review fix 7: adding Templar/Inquisitor to the 2H Heavy row must fail even though Dragon Knight is allowlisted.
+    def test_repo_allowlist_rejects_dragon_knight_in_2h_heavy(self):
+        # Y1 (2026-10-10, chủ dự án duyệt): Dragon Knight was removed from Weapon.2H.Heavy (Polearm only,
+        # DECISIONS.md:122) and its allowlist entries were deleted. Replaces the X13 test that bound those
+        # entries to Dragon Knight only (review fix 7); other classes must still fail.
         repo_allow = (REPO_ROOT / "Tools" / "QA" / "gdd_validator_allowlist.yaml").read_text(encoding="utf-8")
-        row_ok = ("| **2. Two-Handed Heavy** | `Weapon.2H.Heavy` | Bổ dọc 180cm. | **Berserker, Dragon Knight** | Khóa cứng 2 tay. |")
-        row_bad = ("| **2. Two-Handed Heavy** | `Weapon.2H.Heavy` | Bổ dọc 180cm. | **Berserker, Dragon Knight, Templar, Inquisitor** | Khóa cứng 2 tay. |")
-        yaml_block = '  - name: weapon_family_2h_heavy\n    attributes:\n      classes: ["Berserker", "Dragon Knight"]\n'
-        self.tp.write("design/registry/entities.yaml", yaml_block)
+        row_ok = ("| **2. Two-Handed Heavy** | `Weapon.2H.Heavy` | Bổ dọc 180cm. | **Berserker** | Khóa cứng 2 tay. |")
+        row_dk = ("| **2. Two-Handed Heavy** | `Weapon.2H.Heavy` | Bổ dọc 180cm. | **Berserker, Dragon Knight** | Khóa cứng 2 tay. |")
+        row_bad = ("| **2. Two-Handed Heavy** | `Weapon.2H.Heavy` | Bổ dọc 180cm. | **Berserker, Templar, Inquisitor** | Khóa cứng 2 tay. |")
+        yaml_ok = '  - name: weapon_family_2h_heavy\n    attributes:\n      classes: ["Berserker"]\n'
+        self.tp.write("design/registry/entities.yaml", yaml_ok)
         art = ("- **Khung Viền Phân Hạng 5 Bậc Hiếm (5-Tier Rarity)**:\n"
                "  - Normal (Xám `#4B5563`), Rare (Lam `#2563EB`), Legendary (Cam `#D97706`), Immortal (Đỏ `#DC2626`), Divine (Hoàng Kim `#F59E0B` + Tím `#7C3AED`).\n")
         self.tp.write("design/art/art-bible.md", art)
 
-        self.tp.write("design/gdd/itemization.md", row_ok + "\n" + yaml_block)
+        self.tp.write("design/gdd/itemization.md", row_ok + "\n" + yaml_ok)
         code, out = self.tp.run(repo_allow)
         self.assertEqual(code, 0, out)
 
-        self.tp.write("design/gdd/itemization.md", row_bad + "\n" + yaml_block)
+        self.tp.write("design/gdd/itemization.md", row_dk + "\n" + yaml_ok)
+        code, out = self.tp.run(repo_allow)
+        self.assertEqual(code, 1)
+        self.assertIn("Class 'Dragon Knight'", out)
+
+        self.tp.write("design/gdd/itemization.md", row_ok + "\n" + yaml_ok)
+        self.tp.write("design/registry/entities.yaml", yaml_ok.replace('"Berserker"]', '"Berserker", "Dragon Knight"]'))
+        code, out = self.tp.run(repo_allow)
+        self.assertEqual(code, 1)
+        self.assertIn("class 'Dragon Knight'", out)
+        self.tp.write("design/registry/entities.yaml", yaml_ok)
+
+        self.tp.write("design/gdd/itemization.md", row_bad + "\n" + yaml_ok)
         code, out = self.tp.run(repo_allow)
         self.assertEqual(code, 1)
         self.assertIn("Class 'Templar'", out)
         self.assertIn("Class 'Inquisitor'", out)
-
-        self.tp.write("design/gdd/itemization.md", row_ok + "\n" + yaml_block.replace('"Dragon Knight"]', '"Dragon Knight", "Vanguard"]'))
-        code, out = self.tp.run(repo_allow)
-        self.assertEqual(code, 1)
-        self.assertIn("class 'Vanguard'", out)
 
     def test_repo_allowlist_parses_and_matches_pyyaml(self):
         path = REPO_ROOT / "Tools" / "QA" / "gdd_validator_allowlist.yaml"

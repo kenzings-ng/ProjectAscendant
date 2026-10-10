@@ -2,7 +2,7 @@
 
 > **Status**: Approved  
 > **Author**: Systems Designer & Gameplay Programmer  
-> **Last Updated**: 2026-10-09 (X10: đồng bộ thông số combo theo code runtime)  
+> **Last Updated**: 2026-10-10 (Y1: cửa sổ Dash Cancel co theo tỉ lệ 0.35/0.45 (2026-10-10, Y1, chủ dự án duyệt)); 2026-10-09 (X10: đồng bộ thông số combo theo code runtime)  
 > **Implements Pillar**: True Skill Expression & Responsive Combat  
 > **Target Engine**: Unreal Engine 5 (GAS GameplayAbility & Anim Montages)
 
@@ -14,7 +14,7 @@
 
 Hệ thống Chiến đấu Cốt lõi & Chuỗi Đòn Đánh (Core Combat & Combo System) là trung tâm trải nghiệm hành động của *Project Ascendant*. Được xây dựng trên nền tảng **Unreal Engine Gameplay Ability System (GAS)** kết hợp hoạt ảnh đồng bộ góc nhìn 2.5D Isometric, hệ thống cung cấp bộ đòn đánh đa tầng:
 1. Chuỗi đòn đánh thường 3 nhịp (**3-Hit Light Combo**) có nhịp độ dồn dập, hồi nhẹ Năng lượng khi trúng đích.
-2. Đòn đánh lướt (**Dash Attack**) kích hoạt mượt mà từ cửa sổ Dash Cancel của cú lướt để thu hẹp khoảng cách và duy trì thế trận tấn công liên tục (chưa triển khai trong code (theo quyết định 2026-10-09: giá trị code là chuẩn); mốc cửa sổ cần định lại, xem `dash-evasion.md`).
+2. Đòn đánh lướt (**Dash Attack**) kích hoạt mượt mà từ cửa sổ Dash Cancel của cú lướt để thu hẹp khoảng cách và duy trì thế trận tấn công liên tục (chưa triển khai trong code (theo quyết định 2026-10-09: giá trị code là chuẩn); cửa sổ ≈0.27s – 0.35s co theo tỉ lệ 0.35/0.45 (2026-10-10, Y1, chủ dự án duyệt), chốt khi triển khai, xem `dash-evasion.md`).
 3. Đòn tụ lực phá thế (**Heavy Charged Attack**) tiêu hao thể lực (20 Stamina) để giáng đòn uy lực, dồn sát thương Posture cực đại lên đối thủ.
 
 Hệ thống giải quyết bài toán cốt lõi: biến việc tấn công thành một bài toán nhịp điệu (Rhythm, Spacing & Commitment). Mỗi đòn vung vũ khí đều mang lại độ nảy đòn (**Hitstop**), hỗ trợ hủy hoạt ảnh chủ động sang Lướt né (**Dash Cancel**) khi nhận diện nguy hiểm từ Boss, và liên tục tích tụ sát thương Thế Đứng (**Posture Damage**) để mở ra cơ hội kích hoạt Đòn Kết Liễu rút thẳng 25% Max HP của đối thủ.
@@ -51,7 +51,7 @@ Toàn bộ các hành động tấn công được hiện thực thông qua clas
 
 #### 2. Đòn Đánh Lướt (Dash Attack)
 - **Trạng thái:** chưa triển khai trong code (theo quyết định 2026-10-09: giá trị code là chuẩn).
-- **Cách kích hoạt:** Bấm Tấn Công trong cửa sổ Dash Cancel của cú lướt né hoặc ngay khi vừa dứt cú lướt (mốc cũ 0.35s – 0.45s dựa trên cú lướt 0.45s; cú lướt theo code chỉ dài 0.35s nên mốc cần định lại).
+- **Cách kích hoạt:** Bấm Tấn Công trong cửa sổ Dash Cancel của cú lướt né hoặc ngay khi vừa dứt cú lướt (mốc cũ 0.35s – 0.45s dựa trên cú lướt 0.45s; co theo tỉ lệ 0.35/0.45 cho cú lướt 0.35s theo code → **≈0.27s – 0.35s** (2026-10-10, Y1, chủ dự án duyệt); chưa triển khai trong code, chốt khi triển khai).
 - **Đặc tính:** Nhân vật lướt trượt tới trước thêm 150cm và tung nhát đâm xuyên phá cực nhanh.
 - **Thông số:** Sát thương **140% Base ATK**, **25 điểm Posture** (+15% sát thương phá thế so với đòn thường). Tiêu hao 0 Stamina (chỉ tốn thể lực của cú lướt trước đó).
 - **Chuỗi liên hoàn:** Sau khi tung Dash Attack, người chơi bấm tiếp Tấn Công sẽ **nối thẳng vào Nhịp 2 của Light Combo** (tạo dòng combo mượt mà: *Lướt $\rightarrow$ Dash Attack $\rightarrow$ Nhịp 2 $\rightarrow$ Nhịp 3 kết liễu*).
@@ -76,7 +76,7 @@ stateDiagram-v2
 
     state Dashing {
         [*] --> IFrame_Dash: 0.05s - 0.25s (tổng lướt 0.35s)
-        IFrame_Dash --> Dash_Cancel_Window: [chưa triển khai trong code, cần định lại mốc]
+        IFrame_Dash --> Dash_Cancel_Window: 0.27s - 0.35s [chưa triển khai trong code, chốt khi triển khai]
     }
 
     Dash_Cancel_Window --> Dash_Attack: Bấm Attack
@@ -102,7 +102,7 @@ stateDiagram-v2
   - Hồi +10/+15 Mana vào `UAscendantAttributeSet` khi đòn đánh trúng mục tiêu.
   - Gửi `UGameplayEffect` truyền sát thương Posture; khi Posture đối phương đạt 100% kích hoạt `State.Staggered` và cho phép tung Đòn Kết Liễu rút 25% Max HP.
 - **Dash Evasion (`dash-evasion.md`):**
-  - Tiếp nhận tín hiệu từ cửa sổ Dash Cancel của cú lướt để xuất chiêu Dash Attack (chưa triển khai trong code (theo quyết định 2026-10-09: giá trị code là chuẩn); mốc cũ 0.35s–0.45s cần định lại).
+  - Tiếp nhận tín hiệu từ cửa sổ Dash Cancel của cú lướt để xuất chiêu Dash Attack (chưa triển khai trong code (theo quyết định 2026-10-09: giá trị code là chuẩn); mốc cũ 0.35s–0.45s co theo tỉ lệ 0.35/0.45 → ≈0.27s–0.35s (2026-10-10, Y1, chủ dự án duyệt), chốt khi triển khai).
   - Cho phép phím Dash ngắt đòn đánh ngay khi dứt khung Active Hitbox.
 - **Isometric Controller (`isometric-controller.md`):**
   - Nhân vật tự động xoay mặt tức thời theo hướng con trỏ chuột/hướng cần ngắm tại frame bắt đầu vung kiếm (**Snap-to-Aim**), đảm bảo người chơi có thể vừa lùi bước vừa chém chính xác vào Boss.
@@ -196,7 +196,7 @@ $$\text{FinalPostureDmg} = \text{BasePostureDmg} \times (1 + \text{StaggerModifi
 ## Acceptance Criteria
 
 - [ ] **AC-1 (Chuỗi Combo 3 Nhịp & Buffer):** Bấm nhịp nhàng 3 lần xuất chiêu tuần tự Nhịp 1 $\rightarrow$ 2 $\rightarrow$ 3 (hệ số 1.0x / 1.2x / 1.6x, Posture 10 / 15 / 25); khoảng cách giữa hai lần bấm quá 1.2s reset về Nhịp 1. Phần đệm nút trong 0.15s cuối: chưa triển khai trong code (theo quyết định 2026-10-09: giá trị code là chuẩn).
-- [ ] **AC-2 (Đòn Đánh Lướt Nối Combo):** Bấm Tấn công trong cửa sổ Dash Cancel của cú lướt né tung ra Dash Attack và bấm tiếp lập tức nối thẳng vào Nhịp 2 của Light Combo. *(chưa triển khai trong code (theo quyết định 2026-10-09: giá trị code là chuẩn); mốc cửa sổ cần định lại)*
+- [ ] **AC-2 (Đòn Đánh Lướt Nối Combo):** Bấm Tấn công trong cửa sổ Dash Cancel của cú lướt né tung ra Dash Attack và bấm tiếp lập tức nối thẳng vào Nhịp 2 của Light Combo. *(chưa triển khai trong code (theo quyết định 2026-10-09: giá trị code là chuẩn); cửa sổ ≈0.27s – 0.35s co theo tỉ lệ 0.35/0.45 (2026-10-10, Y1, chủ dự án duyệt), chốt khi triển khai)*
 - [ ] **AC-3 (Đòn Tụ Lực & Siêu Giáp):** Giữ đè tấn công 0.40s tiêu hao 20 Stamina, nhận Siêu Giáp không bị quái nhỏ ngắt đòn, thả chiêu gây 250% sát thương máu và 60 sát thương Posture.
 - [ ] **AC-4 (Hủy Hoạt Ảnh Bằng Né Đòn):** Bấm phím Lướt né (Dash) tại bất kỳ thời điểm nào sau khi vung trúng đích (Recovery Phase) lập tức ngắt chiêu chém và chuyển sang lướt né an toàn.
 

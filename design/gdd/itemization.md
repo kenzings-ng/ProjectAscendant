@@ -2,7 +2,7 @@
 
 > **Status**: Approved  
 > **Author**: Lead Systems Designer & Lead Technical Architect  
-> **Last Updated**: 2026-09-24  
+> **Last Updated**: 2026-10-10 (Y1: Dragon Knight bỏ khỏi `Weapon.2H.Heavy` (2026-10-10, Y1, chủ dự án duyệt)); 2026-09-24  
 > **Implements Pillar**: Meaningful Progression, True Skill Expression, High-Risk High-Reward Exploration  
 > **Target Engine**: Unreal Engine 5.7 (Gameplay Ability System, `FFastArraySerializer`, DataTables)
 
@@ -197,12 +197,14 @@ graph TD
 | Dòng Vũ Khí (Weapon Family) | Archetype Kỹ Thuật | Đặc Điểm Hoạt Ảnh & Hitbox | Các Class Sử Dụng Được | Vũ Khí Phụ (Offhand) Tương Thích |
 | :--- | :--- | :--- | :--- | :--- |
 | **1. One-Handed Blades** | `Weapon.1H.Blade` | Chém ngang góc $120^\circ$, tầm 220cm, tốc độ 1.1 đòn/s. | **Vanguard, Swordmaster, Void Blade, God Slayer** | Khiên Sắt, Khiên Phản Đòn, hoặc Bỏ trống (Song đấu, Kiếm Sư không dùng khiên). |
-| **2. Two-Handed Heavy** | `Weapon.2H.Heavy` | Bổ dọc 180cm, quét nặng $160^\circ$, tầm 300cm, tốc độ 0.75 đòn/s, Hyper-Armor. | **Berserker, Dragon Knight** | Khóa cứng 2 tay (`bIsTwoHanded = true`). Không mang khiên. |
+| **2. Two-Handed Heavy** | `Weapon.2H.Heavy` | Bổ dọc 180cm, quét nặng $160^\circ$, tầm 300cm, tốc độ 0.75 đòn/s, Hyper-Armor. | **Berserker** | Khóa cứng 2 tay (`bIsTwoHanded = true`). Không mang khiên. |
 | **3. Polearms & Halberds** | `Weapon.2H.Polearm`| Đâm thẳng tầm xa 400cm, quét vòng tròn $360^\circ$ trên không, phá Posture cực lớn. | **Dragon Knight, God Slayer** | Khóa cứng 2 tay. |
 | **4. Ranged Bows** | `Weapon.2H.Bow` | Bắn đạn đạo tầm xa 1200–1600cm, sạc lực (Hold to Charge), tốc độ 0.9 phát/s. | **Ranger** | Khóa cứng 2 tay (Tự động nạp ống tên Quiver). |
 | **5. Twin Light Blades** | `Weapon.Dual.Daggers`| Đâm chém liên hoàn cực nhanh 2.2 đòn/s, hitbox hẹp 150cm, dồn tích tụ Xuất huyết. | **Shadowblade, Ranger (Sub-set)** | Tay thuận: Đoản đao. Tay nghịch: Dao găm hoặc Phi tiêu. |
 | **6. Magic Staves** | `Weapon.2H.Staff` | Phóng quả cầu ma pháp 900cm, giộng trượng kích hoạt AoE, tăng mạnh Spell Damage. | **Arcanist, Elementalist** | Cổ Thư Grimoire hoặc Cầu Phép (Orb) bổ trợ. |
 | **7. Blunt Maces & Relics** | `Weapon.1H.Mace` / `Relic` | Đập nện 180cm, gây choáng nhẹ (Stagger), sóng xung kích Holy/Time/Ki. | **Acolyte, Templar, Inquisitor, Chronomancer, Seraph** | Đại Thuẫn (Tower Shield), Tràng Hạt Khí Công, Đồng Hồ Cát. |
+
+*(2026-10-10, Y1, chủ dự án duyệt): dòng 2 (Two-Handed Heavy) bỏ Long Kỵ Sĩ — class này chỉ dùng `Weapon.2H.Polearm` (DECISIONS.md:122).*
 
 ---
 
@@ -505,7 +507,8 @@ Các thực thể mới được đăng ký chính thức vào [`design/registry
       - design/gdd/foundational-classes.md
       - design/gdd/advanced-classes.md
     attributes:
-      classes: ["Berserker", "Dragon Knight"]
+      # (2026-10-10, Y1, chủ dự án duyệt): bỏ Dragon Knight (chỉ dùng Polearm, DECISIONS.md:122).
+      classes: ["Berserker"]
       base_speed: 0.75
       hitbox_arc: 160
       hyper_armor: true

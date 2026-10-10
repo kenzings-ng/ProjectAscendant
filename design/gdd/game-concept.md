@@ -121,7 +121,7 @@ Một thế giới nơi cấp độ không thể che giấu sự non nớt, và 
 
 | STT | Tên Class | Vũ Khí Đặc Trưng | Phong Cách Chiến Đấu & Điều Kiện Mở Khóa |
 | :---: | :--- | :--- | :--- |
-| **11** | **Long Kỵ Sĩ (Dragon Knight)** | Thương Dài & Đại Khí (`2H.Polearm` / `2H.Heavy`) | **Không chiến & Hỏa long:** Kỹ năng phóng vút lên không trung rồi giáng xuống gây sát thương phá thế (Posture) cực mạnh; phun lửa diện rộng.<br>📍 *Cách mở:* Hạ gục và chặt đứt sừng của *Hỏa Long Lãnh Chúa*. |
+| **11** | **Long Kỵ Sĩ (Dragon Knight)** | Thương Dài (`2H.Polearm`) *(2026-10-10, Y1, chủ dự án duyệt): bỏ `2H.Heavy`, theo DECISIONS.md:122* | **Không chiến & Hỏa long:** Kỹ năng phóng vút lên không trung rồi giáng xuống gây sát thương phá thế (Posture) cực mạnh; phun lửa diện rộng.<br>📍 *Cách mở:* Hạ gục và chặt đứt sừng của *Hỏa Long Lãnh Chúa*. |
 | **12** | **Hư Không Kiếm Sư (Void Blade)** | Kiếm Hư Không (`Weapon.1H.Blade`) | **Chém xuyên không gian:** Cú lướt biến thành dịch chuyển tức thời; đòn đánh để lại các vết cắt không thời gian nổ sau 1 giây (*Judgement Cut*).<br>📍 *Cách mở:* Đánh bại *Lãnh Chúa Khe Nứt Hư Không*. |
 | **13** | **Bóng Ma (Phantom Stalker)** | Song Đoản Kiếm (`Weapon.Dual.Daggers`) | **Ám tiễn & Tử khí:** Thoắt ẩn thoắt hiện trong sương mù độc, dồn sát thương bạo kích từ hư vô.<br>📍 *Cách mở:* Đánh bại *Lãnh Chúa Đầm Lầy Tử Khí*. |
 | **14** | **Thời Gian Ma Đạo (Chronomancer)** | Pháp Bảo Thời Gian (`1H.Mace` / `Relic`) | **Thao túng dòng thời gian:** Tạo bong bóng làm chậm chuyển động của quái vật; kỹ năng "Đảo ngược" đưa lượng máu và vị trí bản thân quay lại 3 giây trước.<br>📍 *Cách mở:* Vượt qua thử thách *Tháp Đồng Hồ Vĩnh Hằng*. |

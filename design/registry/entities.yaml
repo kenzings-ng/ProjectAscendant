@@ -397,8 +397,8 @@ items:
     attributes:
       archetype: "Weapon.2H.Heavy"
       # X13 2026-10-10: bỏ Vanguard (DECISIONS.md §7: Vanguard dùng Weapon.1H.Blade + khiên) — khớp itemization.md:200 và :508.
-      # Dragon Knight còn chờ chủ dự án xác nhận (DECISIONS.md:122), xem Tools/QA/gdd_validator_allowlist.yaml.
-      classes: ["Berserker", "Dragon Knight"]
+      # (2026-10-10, Y1, chủ dự án duyệt): bỏ Dragon Knight — chỉ dùng Weapon.2H.Polearm (DECISIONS.md:122); đã gỡ khỏi allowlist validator.
+      classes: ["Berserker"]
       base_speed: 0.75
       hitbox_arc: 160
       hyper_armor: true
@@ -489,11 +489,12 @@ items:
     stackable: false
     attributes:
       archetype: "Weapon.1H.Mace"
-      classes: ["Acolyte", "Templar", "Chronomancer"]
+      # (2026-10-10, Y1, chủ dự án duyệt): thêm Inquisitor và Seraph theo DECISIONS.md:134-135 (khớp itemization.md:205).
+      classes: ["Acolyte", "Templar", "Inquisitor", "Chronomancer", "Seraph"]
       base_speed: 1.00
       posture_stagger_bonus: 0.25
     added: 2026-09-24
-    revised: ""
+    revised: "2026-10-10"
 
   # ─── 3 ARMOR WEIGHTS (ITEMIZATION) ─────────────────────────────
   - name: armor_base_heavy_plate
@@ -1711,10 +1712,11 @@ constants:
     # X10 (2026-10-09): value derived from the old base dash 0.45s - 0.05s. Base dash is now 0.35s
     # (runtime code, DECISIONS.md §12); Ranger dash is not implemented in code. Value left unchanged
     # pending owner decision (see foundational-classes.md Open Questions Q1).
-    value: 0.40
+    # (2026-10-10, Y1, chủ dự án duyệt): owner chose 0.30s (= code base 0.35s - 0.05s). Ranger peak speed: decided at implementation.
+    value: 0.30
     unit: seconds
     added: 2026-09-15
-    revised: ""
+    revised: "2026-10-10"
 
   - name: arcanist_surge_mana_refund
     status: active
