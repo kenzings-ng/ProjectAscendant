@@ -470,6 +470,13 @@ bool UPAMerchantComponent::ServerHandleBuybackItem(const APlayerController* Requ
 		return false;
 	}
 
+	if (!ItemInstanceUID.IsValid())
+	{
+		OutError = EPATransactionError::BuybackEmpty;
+		OnTransactionFailed.Broadcast(OutError);
+		return false;
+	}
+
 	PurgeLoggedOutBuybackEntries();
 
 	// X11b: only the requester's own entries are addressable (by UID; newest match wins for repeated partial sales).

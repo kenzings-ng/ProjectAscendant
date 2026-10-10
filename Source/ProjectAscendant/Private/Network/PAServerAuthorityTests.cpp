@@ -676,6 +676,16 @@ bool FPAServerAuthorityBuybackPerPlayerTest::RunTest(const FString& Parameters)
 	TestEqual(TEXT("A sees exactly its own entry"), Merchant->GetBuybackEntriesForSeller(PlayerA.PC).Num(), 1);
 	TestEqual(TEXT("B sees exactly its own entry"), Merchant->GetBuybackEntriesForSeller(PlayerB.PC).Num(), 1);
 
+	// --- Empty / invalid UID: handled (no client kick: _Validate accepts it), replied BuybackEmpty ---
+	const int32 ConfirmsBeforeInvalid = LogA->MerchantCount;
+	PlayerA.Router->Server_RequestMerchantBuyback(6, Shop, PlayerA.Inventory, PlayerA.Wallet, FGuid());
+	TestEqual(TEXT("Invalid UID: confirmation delivered (RPC validation passed)"), LogA->MerchantCount, ConfirmsBeforeInvalid + 1);
+	TestEqual(TEXT("Invalid UID: request id echoed"), LogA->LastMerchantRequestId, 6);
+	TestFalse(TEXT("Invalid UID: confirmed as failure"), LogA->bLastMerchantSuccess);
+	TestEqual(TEXT("Invalid UID: BuybackEmpty"), LogA->LastMerchantError, EPATransactionError::BuybackEmpty);
+	TestEqual(TEXT("Invalid UID: A's entry kept"), Merchant->GetBuybackEntriesForSeller(PlayerA.PC).Num(), 1);
+	TestEqual(TEXT("Invalid UID: A's gold untouched"), PlayerA.Wallet->GetGold(), 1090LL);
+
 	// --- B tries to buy back A's item (by A's UID): rejected, nothing moves ---
 	PlayerB.Router->Server_RequestMerchantBuyback(2, Shop, PlayerB.Inventory, PlayerB.Wallet, UidA);
 	TestFalse(TEXT("B buying A's entry: confirmed as failure"), LogB->bLastMerchantSuccess);
@@ -713,6 +723,66 @@ bool FPAServerAuthorityBuybackPerPlayerTest::RunTest(const FString& Parameters)
 	PlayerA.Router->Server_RequestMerchantSell(5, Shop, PlayerA.Inventory, PlayerA.Wallet, PlayerA.Inventory->FindSlotByItemUID(UidA), 1);
 	TestTrue(TEXT("A sells again: success"), LogA->bLastMerchantSuccess);
 	TestEqual(TEXT("Logged-out seller's entries purged; only A's remains"), Merchant->GetBuybackCount(), 1);
+
+	Shop->Destroy();
+	DestroyPlayer(PlayerA);
+	return true;
+}
+
+// =============================================================================
+// 6. X11b: buying back part of a stack restores it under a fresh, unique UID
+// =============================================================================
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(
+	FPAServerAuthorityBuybackPartialStackTest,
+	"ProjectAscendant.Network.ServerAuthority.BuybackPartialStackFreshUid",
+	EAutomationTestFlags_ApplicationContextMask | EAutomationTestFlags::ProductFilter)
+
+bool FPAServerAuthorityBuybackPartialStackTest::RunTest(const FString& Parameters)
+{
+	UWorld* World = GEngine->GetWorldContexts()[0].World();
+	if (!TestNotNull(TEXT("World available"), World))
+	{
+		return false;
+	}
+
+	FTestPlayer PlayerA = SpawnPlayer(World, FVector(0.0f, 0.0f, 0.0f));
+	AActor* Shop = SpawnLocatedActor(World, AActor::StaticClass(), FVector(-100.0f, 0.0f, 0.0f), nullptr);
+	UPAMerchantComponent* Merchant = NewObject<UPAMerchantComponent>(Shop, TEXT("TestMerchant"));
+	if (!TestNotNull(TEXT("Player A"), PlayerA.Pawn) || !TestNotNull(TEXT("Merchant"), Merchant))
+	{
+		Shop->Destroy();
+		DestroyPlayer(PlayerA);
+		return false;
+	}
+
+	TSharedRef<FConfirmLog> Log = AttachConfirmLog(PlayerA.Router);
+	EPACurrencyTransactionError CurrErr;
+	PlayerA.Wallet->AddCurrency(EPACurrencyType::Gold, 1000, CurrErr);
+
+	UItemStaticDataAsset* Potion = MakeItem(FName("item_test_potion"), EPAItemCategory::Consumable, EPAItemRarity::Common, 100, 99);
+	PlayerA.Inventory->AddItemToSlot(0, Potion, 5);
+	const FGuid StackUid = PlayerA.Inventory->GetItemAtSlot(0)->ItemInstanceUID;
+	TestTrue(TEXT("Stack UID valid"), StackUid.IsValid());
+
+	// Sell 1 of 5: the remaining stack keeps its UID; the buyback entry carries the same UID.
+	PlayerA.Router->Server_RequestMerchantSell(1, Shop, PlayerA.Inventory, PlayerA.Wallet, 0, 1);
+	TestTrue(TEXT("Partial sell confirmed"), Log->bLastMerchantSuccess);
+	TestEqual(TEXT("Remaining stack is 4"), PlayerA.Inventory->GetItemAtSlot(0)->StackCount, 4);
+
+	PlayerA.Router->Server_RequestMerchantBuyback(2, Shop, PlayerA.Inventory, PlayerA.Wallet, StackUid);
+	TestTrue(TEXT("Partial buyback confirmed"), Log->bLastMerchantSuccess);
+
+	const int32 OriginalSlot = PlayerA.Inventory->FindSlotByItemUID(StackUid);
+	TestEqual(TEXT("Original stack still found by its UID in slot 0"), OriginalSlot, 0);
+	TestEqual(TEXT("Original stack count unchanged (4)"), PlayerA.Inventory->GetItemAtSlot(0)->StackCount, 4);
+
+	const FPAInventoryItemEntry* Restored = PlayerA.Inventory->GetItemAtSlot(1);
+	if (TestNotNull(TEXT("Bought-back unit restored into the first empty slot"), Restored))
+	{
+		TestEqual(TEXT("Restored quantity is 1"), Restored->StackCount, 1);
+		TestTrue(TEXT("Restored UID is valid"), Restored->ItemInstanceUID.IsValid());
+		TestNotEqual(TEXT("Restored UID differs from the remaining stack's UID"), Restored->ItemInstanceUID, StackUid);
+	}
 
 	Shop->Destroy();
 	DestroyPlayer(PlayerA);

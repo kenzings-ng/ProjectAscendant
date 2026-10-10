@@ -263,6 +263,13 @@ void UPAMerchantShopWidget::ExecuteBuyback()
 	const int32 LastIndex = Model.BuybackItems.Num() - 1;
 	const FPAShopItemEntry& Item = Model.BuybackItems[LastIndex];
 
+	// X11b: the server addresses buyback entries by instance UID; an entry without one cannot be bought back.
+	if (!Item.ItemInstanceUID.IsValid())
+	{
+		OnTransactionRejected.Broadcast(EPATransactionError::BuybackEmpty);
+		return;
+	}
+
 	if (Model.PlayerGold < Item.FinalPrice)
 	{
 		return;

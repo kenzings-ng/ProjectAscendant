@@ -128,6 +128,9 @@ protected:
 	UPROPERTY()
 	TWeakObjectPtr<UPAServiceRequestComponent> RouterRef;
 
+	/** Automation tests (PAServiceRoutingTests.cpp) seed model rows the UI has no public setter for. */
+	friend struct FPAMerchantShopWidgetTestAccess;
+
 private:
 	enum class EPendingShopAction : uint8 { None, Buy, Sell, Buyback };
 

@@ -110,7 +110,8 @@ void UPAServiceRequestComponent::Server_RequestMerchantSellAllJunk_Implementatio
 
 bool UPAServiceRequestComponent::Server_RequestMerchantBuyback_Validate(int32 RequestId, AActor* MerchantActor, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, const FGuid& ItemInstanceUID)
 {
-	return ItemInstanceUID.IsValid();
+	// Never kick the client for an unknown / empty UID: the handler replies BuybackEmpty instead.
+	return true;
 }
 
 void UPAServiceRequestComponent::Server_RequestMerchantBuyback_Implementation(int32 RequestId, AActor* MerchantActor, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, const FGuid& ItemInstanceUID)

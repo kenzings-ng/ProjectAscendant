@@ -113,6 +113,13 @@ namespace PAServiceRoutingTestHelper
 	}
 }
 
+
+/** X11b: test-only access to the shop widget's protected model (friend of UPAMerchantShopWidget). */
+struct FPAMerchantShopWidgetTestAccess
+{
+	static FPAShopUIModel& Model(UPAMerchantShopWidget* Widget) { return Widget->Model; }
+};
+
 using namespace PAServiceRoutingTestHelper;
 
 // =============================================================================
@@ -297,6 +304,63 @@ bool FPAServiceRoutingForgeWidgetTest::RunTest(const FString& Parameters)
 	TestEqual(TEXT("Host: server consumed 2 iron ore"), Player.Inventory->GetItemCount(FName("iron_ore")), 0);
 
 	ForgeActor->Destroy();
+	DestroyRoutedPlayer(Player);
+	return true;
+}
+
+// =============================================================================
+// 4. Shop widget: a buyback row without instance UID is rejected locally, no request sent
+// =============================================================================
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(
+	FPAServiceRoutingShopBuybackNoUidTest,
+	"ProjectAscendant.Network.ServiceRouting.ShopBuybackWithoutUidRejectedLocally",
+	EAutomationTestFlags_ApplicationContextMask | EAutomationTestFlags::ProductFilter)
+
+bool FPAServiceRoutingShopBuybackNoUidTest::RunTest(const FString& Parameters)
+{
+	UWorld* World = GEngine->GetWorldContexts()[0].World();
+	if (!TestNotNull(TEXT("World available"), World))
+	{
+		return false;
+	}
+
+	FRoutedPlayer Player = SpawnRoutedPlayer(World, FVector(0.0f, 0.0f, 0.0f));
+	AActor* Shop = SpawnRoutingTestActor(World, FVector(100.0f, 0.0f, 0.0f), nullptr);
+	UPAMerchantComponent* Merchant = NewObject<UPAMerchantComponent>(Shop, TEXT("TestMerchant"));
+	if (!TestNotNull(TEXT("Player"), Player.Router) || !TestNotNull(TEXT("Merchant"), Merchant))
+	{
+		if (Shop) { Shop->Destroy(); }
+		DestroyRoutedPlayer(Player);
+		return false;
+	}
+
+	EPACurrencyTransactionError CurrErr;
+	Player.Wallet->AddCurrency(EPACurrencyType::Gold, 100, CurrErr);
+
+	UPAMerchantShopWidget* Widget = NewObject<UPAMerchantShopWidget>(GetTransientPackage());
+	UPAServiceRequestTestProbe* Probe = NewObject<UPAServiceRequestTestProbe>(GetTransientPackage());
+	Widget->OnTransactionCompleted.AddDynamic(Probe, &UPAServiceRequestTestProbe::HandleShopCompleted);
+	Widget->OnTransactionRejected.AddDynamic(Probe, &UPAServiceRequestTestProbe::HandleShopRejected);
+	Widget->InitializeShop(Merchant, Player.Inventory, Player.Wallet, 0, Player.Router);
+
+	// Row added through FPAShopUIModel::AddBuybackEntry without an instance UID.
+	FPAShopItemEntry NoUidRow;
+	NoUidRow.ItemId = FName("item_test_sword");
+	NoUidRow.FinalPrice = 10;
+	FPAMerchantShopWidgetTestAccess::Model(Widget).AddBuybackEntry(NoUidRow);
+	FPAMerchantShopWidgetTestAccess::Model(Widget).PlayerGold = 100;
+
+	const int32 BaseId = Player.Router->AllocateRequestId();
+	Widget->ExecuteBuyback();
+	TestEqual(TEXT("UID-less row: rejected event fired"), Probe->ShopRejectedCount, 1);
+	TestEqual(TEXT("UID-less row: BuybackEmpty"), Probe->LastShopError, EPATransactionError::BuybackEmpty);
+	TestEqual(TEXT("UID-less row: no completion"), Probe->ShopCompletedCount, 0);
+	TestFalse(TEXT("UID-less row: nothing pending"), Widget->IsRequestPending());
+	TestEqual(TEXT("UID-less row: no request sent (no request id consumed)"), Player.Router->AllocateRequestId(), BaseId + 1);
+	TestEqual(TEXT("UID-less row: row kept"), Widget->GetBuybackCount(), 1);
+	TestEqual(TEXT("UID-less row: gold untouched"), Player.Wallet->GetGold(), 100LL);
+
+	Shop->Destroy();
 	DestroyRoutedPlayer(Player);
 	return true;
 }
