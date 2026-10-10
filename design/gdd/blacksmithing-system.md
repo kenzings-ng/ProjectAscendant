@@ -2,7 +2,7 @@
 
 > **Status**: Approved  
 > **Author**: Systems Designer & Lead Programmer  
-> **Last Updated**: 2026-09-15  
+> **Last Updated**: 2026-10-10 (Y1: ví dụ giá sửa đồ Rare 125 → 300 (2026-10-10, Y1, chủ dự án duyệt)); 2026-09-15  
 > **Implements Pillar**: Meaningful Progression & High-Risk High-Reward Exploration  
 > **Target Engine**: Unreal Engine 5 (Crafting DataAssets & DataTable)
 
@@ -243,8 +243,8 @@ The `repair_cost_formula` is defined as:
 | Current Durability Pct | $\text{DurPct}$ | float | $0.0 - 0.99$ | Tỷ lệ độ bền còn lại của món đồ ($0\% \rightarrow 99\%$). |
 
 **Output Range:** $1 - 500$ Vàng để phục hồi hoàn toàn $100\%$ độ bền.  
-**Example:** Một món đồ Rare có $\text{Price} = 125$ Vàng, bị hỏng còn $20\%$ độ bền ($\text{DurPct} = 0.20$):  
-$\text{RepairCost} = \lceil 125 \times 0.25 \times (1 - 0.20) \rceil = \lceil 31.25 \times 0.80 \rceil = \mathbf{25}$ Vàng.
+**Example:** Một món đồ Rare có $\text{Price} = 300$ Vàng ($50 \times 6.0$, theo `inventory-system.md` §7.1), bị hỏng còn $20\%$ độ bền ($\text{DurPct} = 0.20$):  
+$\text{RepairCost} = \lceil 300 \times 0.25 \times (1 - 0.20) \rceil = \lceil 75 \times 0.80 \rceil = \mathbf{60}$ Vàng. *(2026-10-10, Y1, chủ dự án duyệt): trước đây ví dụ dùng $\text{Price} = 125$ (ra 25 Vàng), không khớp bảng giá `inventory-system.md`.*
 
 ---
 

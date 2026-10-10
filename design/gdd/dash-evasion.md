@@ -2,7 +2,7 @@
 
 > **Status**: Approved  
 > **Author**: Systems Designer & Gameplay Programmer  
-> **Last Updated**: 2026-10-09 (X10: đồng bộ thông số theo code runtime)  
+> **Last Updated**: 2026-10-10 (Y1: cửa sổ Dash Cancel co theo tỉ lệ 0.35/0.45 (2026-10-10, Y1, chủ dự án duyệt)); 2026-10-09 (X10: đồng bộ thông số theo code runtime)  
 > **Implements Pillar**: True Skill Expression & Responsive Combat  
 > **Target Engine**: Unreal Engine 5 (GAS GameplayAbility & CharacterMovement)
 
@@ -61,7 +61,7 @@ gantt
   - *Va chạm:* Khôi phục lại va chạm vật lý (`Block`) với quái vật (đi kèm cơ chế xuyên quái ở trên — chưa triển khai trong code (theo quyết định 2026-10-09: giá trị code là chuẩn)).
 - **Giai đoạn 3: Hủy Hoạt Ảnh & Đòn Đánh Lướt** — **chưa triển khai trong code (theo quyết định 2026-10-09: giá trị code là chuẩn)**
   - Ý đồ thiết kế: người chơi có thể bấm nút Tấn Công hoặc Kỹ Năng để hủy phần hồi phục cuối và tung ra ngay chiêu **Đòn Đánh Lướt (Dash Attack)** hoặc xâu chuỗi cú lướt thứ 2.
-  - Mốc cũ của thiết kế (0.35s → 0.45s, hủy 0.10s cuối) dựa trên tổng thời lượng 0.45s nên không còn khớp với cú lướt 0.35s; ngoài ra hồi chiêu `Cooldown.Dash` 0.5s hiện chặn cú lướt thứ 2 ngay sau đó. Mốc mới cần định lại khi triển khai (xem Open Questions).
+  - Mốc cũ của thiết kế (0.35s → 0.45s, hủy 0.10s cuối) dựa trên tổng thời lượng 0.45s. **Mốc mới (2026-10-10, Y1, chủ dự án duyệt):** co theo tỉ lệ 0.35/0.45 → cửa sổ Dash Cancel **0.27s → 0.35s** ($0.35 \times 0.35/0.45 \approx 0.27\text{s}$ → $0.45 \times 0.35/0.45 = 0.35\text{s}$), tức hủy khoảng 0.08s cuối của cú lướt 0.35s; mốc chính xác **chốt khi triển khai**. Lưu ý: hồi chiêu `Cooldown.Dash` 0.5s hiện chặn cú lướt thứ 2 ngay sau đó.
 
 #### 2. Cơ Chế Né Đòn Hoàn Hảo (Perfect Dodge)
 
@@ -92,7 +92,7 @@ stateDiagram-v2
         IFrame_Active --> Recovery_Window: 0.25s (Gỡ thẻ Invulnerable)
     }
     Recovery_Window --> Idle_or_Moving: 0.35s (Hết lướt, gán Cooldown.Dash 0.5s)
-    Recovery_Window --> DashCancel_Window: [chưa triển khai trong code, cần định lại mốc]
+    Recovery_Window --> DashCancel_Window: ≈0.27s - 0.35s [chưa triển khai trong code, chốt khi triển khai]
     DashCancel_Window --> DashAttack: Bấm Attack (Đòn đánh lướt)
     DashCancel_Window --> Dashing: Bấm Dash tiếp (Combo lướt)
     Idle_or_Moving --> Exhausted: Stamina chạm mốc <= 0 (Khóa Dash 1.5s - 2.2s)
@@ -166,7 +166,7 @@ $$\text{EffectiveCost} = \text{StaminaCost\_Dash} - \text{StaminaRefund} = 25.0 
 | `PerfectDodgeWindow_End` | 0.15s | 0.12s – 0.18s | Thời điểm kết thúc cửa sổ né hoàn hảo (chưa triển khai trong code (theo quyết định 2026-10-09: giá trị code là chuẩn)). |
 | `PerfectDodgeStaminaRefund`| 15.0 | 10.0 – 20.0 | Lượng thể lực hoàn lại khi né chuẩn (chưa triển khai trong code (theo quyết định 2026-10-09: giá trị code là chuẩn)). |
 | `PerfectDodgeHitstop` | 0.08s | 0.05s – 0.12s | Độ dài ngưng đọng thời gian tạo cảm giác đã tay (chưa triển khai trong code (theo quyết định 2026-10-09: giá trị code là chuẩn)). |
-| `DashCancelWindow_Start` | — (mốc cũ 0.35s không còn khớp) | — | Thời điểm cho phép hủy hoạt ảnh để tung Dash Attack (chưa triển khai trong code (theo quyết định 2026-10-09: giá trị code là chuẩn); cần định lại mốc). |
+| `DashCancelWindow_Start` | ≈0.27s (mốc cũ 0.35s × 0.35/0.45) | — (chốt khi triển khai) | Thời điểm cho phép hủy hoạt ảnh để tung Dash Attack; cửa sổ kéo tới hết cú lướt 0.35s (mốc cũ 0.45s × 0.35/0.45). Chưa triển khai trong code (theo quyết định 2026-10-09: giá trị code là chuẩn). *(2026-10-10, Y1, chủ dự án duyệt).* |
 
 *Vận tốc đỉnh không còn là biến độc lập: $V_{peak} = 2 \times$ `DashDistance` $/$ `DashDuration` $\approx 2571\text{ cm/s}$.*
 
@@ -196,12 +196,12 @@ $$\text{EffectiveCost} = \text{StaminaCost\_Dash} - \text{StaminaRefund} = 25.0 
 - [ ] **AC-1 (Khung Bất Tử Tuyệt Đối):** Bấm lướt tiêu hao 25 Stamina (bị chặn nếu Stamina < 25, có `State.Exhausted` hoặc `Cooldown.Dash`), nhân vật lướt xa 450cm trong 0.35s; từ t = 0.05s đến t = 0.25s mọi hitbox đòn đánh của quái đi xuyên qua không gây sát thương; kết thúc lướt gán `Cooldown.Dash` 0.5s.
 - [ ] **AC-2 (Né Hoàn Hảo):** Đòn đánh quái chạm người chơi trong khoảng 0.05s–0.15s lập tức kích hoạt âm thanh "Ching", ngưng đọng 0.08s và hoàn lại đúng 15 Stamina. *(chưa triển khai trong code (theo quyết định 2026-10-09: giá trị code là chuẩn))*
 - [ ] **AC-3 (Chống Rơi Vực):** Lướt thẳng về phía mép vực đá không làm nhân vật rơi xuống vực (`bCanWalkOffLedges = false`). *(chưa triển khai trong code (theo quyết định 2026-10-09: giá trị code là chuẩn))*
-- [ ] **AC-4 (Hủy Hoạt Ảnh Đòn Đánh Lướt):** Bấm phím tấn công trong cửa sổ Dash Cancel ngắt phần hồi phục cuối của cú lướt và kích hoạt ngay lập tức chiêu thức Dash Attack. *(chưa triển khai trong code (theo quyết định 2026-10-09: giá trị code là chuẩn); mốc cửa sổ cần định lại)*
+- [ ] **AC-4 (Hủy Hoạt Ảnh Đòn Đánh Lướt):** Bấm phím tấn công trong cửa sổ Dash Cancel ngắt phần hồi phục cuối của cú lướt và kích hoạt ngay lập tức chiêu thức Dash Attack. *(chưa triển khai trong code (theo quyết định 2026-10-09: giá trị code là chuẩn); cửa sổ ≈0.27s – 0.35s co theo tỉ lệ 0.35/0.45 (2026-10-10, Y1, chủ dự án duyệt), chốt khi triển khai)*
 
 ---
 
 ## Open Questions
 
 - **Q1 (2026-10-09):** Cảm giác chơi với bộ thông số code (0.35s / I-frame 0.05s–0.25s / 450cm / hồi chiêu 0.5s) cần chủ dự án duyệt trước khi coi là chốt (DECISIONS.md §12).
-- **Q2 (2026-10-09):** Mốc cửa sổ Dash Cancel / Dash Attack cần định lại cho cú lướt 0.35s và hồi chiêu 0.5s (mốc cũ 0.35s – 0.45s dựa trên tổng thời lượng 0.45s).
+- **Q2 (2026-10-09):** Mốc cửa sổ Dash Cancel / Dash Attack cần định lại cho cú lướt 0.35s và hồi chiêu 0.5s (mốc cũ 0.35s – 0.45s dựa trên tổng thời lượng 0.45s). **Đã giải quyết (2026-10-10, Y1, chủ dự án duyệt):** co theo tỉ lệ 0.35/0.45 → ≈0.27s – 0.35s; chưa triển khai trong code, chốt khi triển khai.
 - **Q3 (2026-10-09):** `FPADashModel` / `FPADashConfig` (`PADashTypes.h:37-83`) vẫn giữ bộ số cũ (tổng 0.45s, I-frame 0.00s–0.28s, đỉnh 1200 cm/s) và không được dùng ở runtime; cần một task code riêng để hợp nhất hoặc loại bỏ.

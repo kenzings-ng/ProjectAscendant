@@ -2,7 +2,7 @@
 
 > **Status**: Approved  
 > **Author**: Systems Designer & Lead Programmer  
-> **Last Updated**: 2026-10-09 (X10: đồng bộ nền Dash theo code runtime)  
+> **Last Updated**: 2026-10-10 (Y1: Ranger dash 0.30s (2026-10-10, Y1, chủ dự án duyệt)); 2026-10-09 (X10: đồng bộ nền Dash theo code runtime)  
 > **Implements Pillar**: True Skill Expression & Meaningful Progression  
 > **Target Engine**: Unreal Engine 5 (GAS & Enhanced Input)
 
@@ -84,7 +84,7 @@ Tất cả 4 Class cơ bản được mở khóa miễn phí ngay từ màn hìn
 - **Phong cách:** Cơ động tốc độ cao, cấu rỉa tầm xa, kiểm soát bước chân quái bằng bẫy.
 - **Cơ Chế Độc Quyền: Nhịp Lướt Tật Phong (Acrobatic Momentum)**:
   - Chi phí lướt né (Dash Stamina Cost) giảm từ 25 xuống còn **20 điểm Thể Lực**.
-  - Tổng thời gian lướt ngắn hơn 0.05s (chỉ còn **0.40 giây**, đỉnh tốc 1350 cm/s), cho phép ngắt hoạt ảnh lướt (Dash Cancel) sớm hơn các class khác. *(Biến thể lướt riêng của Ranger: chưa triển khai trong code (theo quyết định 2026-10-09: giá trị code là chuẩn). Mốc 0.40s / 1350 cm/s được tính trên nền cũ 0.45s / 1200 cm/s; nền Dash theo code hiện là 0.35s / 450cm nên mốc của Ranger cần chủ dự án định lại — xem Formulas §3 và Open Questions.)*
+  - Tổng thời gian lướt ngắn hơn 0.05s (chỉ còn **0.30 giây** trên nền code 0.35s), cho phép ngắt hoạt ảnh lướt (Dash Cancel) sớm hơn các class khác. *(2026-10-10, Y1, chủ dự án duyệt): thời lượng Ranger chốt 0.30s (trước: 0.40s / đỉnh tốc 1350 cm/s, tính trên nền cũ 0.45s / 1200 cm/s). Mốc 1350 cm/s bỏ vì không còn căn cứ: nền code tính đỉnh tốc $= 2 \times \text{quãng đường} / \text{thời lượng}$, mà quãng đường lướt riêng của Ranger chưa được định nghĩa — đỉnh tốc Ranger: **còn mở / chưa định nghĩa (không phải lựa chọn của chủ dự án)**; chủ dự án chỉ duyệt thời lượng 0.30s. Biến thể lướt riêng của Ranger vẫn chưa triển khai trong code (theo quyết định 2026-10-09: giá trị code là chuẩn).*
   - Có khả năng bắn một phát tên phụ nhanh (*Snap Shot*) ngay khi vừa kết thúc thao tác lướt né mà không làm giảm tốc độ di chuyển.
 - **Bộ Kỹ Năng Khởi Đầu (Starter Kit):**
   - *Active 1 (Slot Q) — Xuyên Tâm Tiễn (Piercing Shot):* Kéo căng cung trong 0.4s bắn mũi tên xuyên thẳng qua mọi quái vật trên đường bay cự ly 1200cm (Tiêu hao: 20 Mana, Hồi chiêu: 5.0s).
@@ -235,7 +235,7 @@ The `ranger_acrobatic_dash` formula is defined as:
 | Base Dash Duration | $\text{BaseDuration}$ | float | $0.35$ | Tổng thời gian lướt né tiêu chuẩn (giây), theo code `UPAGameplayAbility_Dash` (`PAGameplayAbility_Dash.h:150`); trước 2026-10-09 là $0.45$. |
 | Duration Reduction | $\Delta T$ | float | $0.05$ | Lượng thời gian lướt được rút ngắn (giây). |
 
-**Output Range:** Chi phí Stamina $= \mathbf{20.0}$ điểm; Thời gian lướt $= \text{BaseDuration} - 0.05$ — với nền code $0.35\text{s}$ công thức cho $0.30\text{s}$ (giá trị cũ $0.40\text{s}$ tính trên nền $0.45\text{s}$), **chờ chủ dự án duyệt**; I-frame giữ nguyên như nền ($0.20\text{s}$, từ $0.05\text{s}$ đến $0.25\text{s}$). Mốc đỉnh tốc $1350\text{ cm/s}$ của thiết kế cũ không còn căn cứ vì nền code tính vận tốc đỉnh $= 2 \times \text{quãng đường} / \text{thời lượng}$. *(Biến thể Ranger chưa triển khai trong code (theo quyết định 2026-10-09: giá trị code là chuẩn).)*  
+**Output Range:** Chi phí Stamina $= \mathbf{20.0}$ điểm; Thời gian lướt $= \text{BaseDuration} - 0.05$ — với nền code $0.35\text{s}$ công thức cho $\mathbf{0.30\text{s}}$ (giá trị cũ $0.40\text{s}$ tính trên nền $0.45\text{s}$), **đã chốt (2026-10-10, Y1, chủ dự án duyệt)**; I-frame giữ nguyên như nền ($0.20\text{s}$, từ $0.05\text{s}$ đến $0.25\text{s}$). Mốc đỉnh tốc $1350\text{ cm/s}$ của thiết kế cũ không còn căn cứ vì nền code tính vận tốc đỉnh $= 2 \times \text{quãng đường} / \text{thời lượng}$; quãng đường lướt riêng của Ranger chưa được định nghĩa nên đỉnh tốc **còn mở / chưa định nghĩa (không phải lựa chọn của chủ dự án)**; Y1 (2026-10-10, Y1, chủ dự án duyệt) chỉ chốt thời lượng 0.30s. *(Biến thể Ranger chưa triển khai trong code (theo quyết định 2026-10-09: giá trị code là chuẩn).)*  
 **Example:** Bình Stamina gốc của Ranger là $120$ điểm $\rightarrow$ Ranger có thể thực hiện liên tiếp $\lfloor 120 / 20 \rfloor = \mathbf{6}$ cú lướt né (so với chỉ $4$ cú lướt của các class khác với Stamina $100$ và phí $25$).
 
 ---
@@ -425,7 +425,7 @@ Tích hợp trực tiếp vào thanh trạng thái CommonUI của người chơi
 - [ ] **AC-3 (Ranger Acrobatic Dash & Stamina Reduction):**
   - **GIVEN** Du Hiệp (Ranger) có đủ Thể Lực,
   - **WHEN** nhấn phím Space để thực hiện lướt né,
-  - **THEN** thanh Stamina chỉ tiêu hao đúng $20.0$ điểm (thay vì $25.0$ điểm tiêu chuẩn), tổng thời gian lướt ngắn hơn nền $0.05\text{s}$ (mốc tuyệt đối chờ duyệt, xem Formulas §3) với I-frame như nền ($0.20\text{s}$, từ $0.05\text{s}$ đến $0.25\text{s}$), và có thể bắn ngay 1 phát tên phụ (*Snap Shot*) mà không bị khựng lại. *(chưa triển khai trong code (theo quyết định 2026-10-09: giá trị code là chuẩn))*
+  - **THEN** thanh Stamina chỉ tiêu hao đúng $20.0$ điểm (thay vì $25.0$ điểm tiêu chuẩn), tổng thời gian lướt ngắn hơn nền $0.05\text{s}$ (tức $0.30\text{s}$ trên nền code $0.35\text{s}$ — (2026-10-10, Y1, chủ dự án duyệt)) với I-frame như nền ($0.20\text{s}$, từ $0.05\text{s}$ đến $0.25\text{s}$), và có thể bắn ngay 1 phát tên phụ (*Snap Shot*) mà không bị khựng lại. *(chưa triển khai trong code (theo quyết định 2026-10-09: giá trị code là chuẩn))*
 
 - [ ] **AC-4 (Arcanist Arcane Surge Resource Loop):**
   - **GIVEN** Thuật Sĩ (Arcanist) đã tích lũy đủ 3 tầng `Arcane Charge` qua việc tung kỹ năng ma pháp trúng đích,
@@ -451,4 +451,4 @@ Tích hợp trực tiếp vào thanh trạng thái CommonUI của người chơi
 
 ## Open Questions
 
-- **Q1 (2026-10-09):** Nền Dash đổi theo code (0.35s, I-frame 0.05s–0.25s, 450cm — DECISIONS.md §12). Thời lượng lướt và đỉnh tốc riêng của Ranger (cũ: 0.40s / 1350 cm/s, `entities.yaml` `ranger_dash_duration = 0.40`) cần chủ dự án định lại trên nền mới.
+- **Q1 (2026-10-09):** Nền Dash đổi theo code (0.35s, I-frame 0.05s–0.25s, 450cm — DECISIONS.md §12). Thời lượng lướt và đỉnh tốc riêng của Ranger (cũ: 0.40s / 1350 cm/s, `entities.yaml` `ranger_dash_duration = 0.40`) cần chủ dự án định lại trên nền mới. **Giải quyết một phần (2026-10-10, Y1, chủ dự án duyệt):** thời lượng 0.30s đã chốt (`ranger_dash_duration = 0.30`); đỉnh tốc còn mở — mốc 1350 cm/s bỏ vì không còn căn cứ, quãng đường lướt riêng của Ranger chưa định nghĩa (không phải lựa chọn của chủ dự án).

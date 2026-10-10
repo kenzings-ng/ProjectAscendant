@@ -2,7 +2,7 @@
 
 > **Status**: In Design  
 > **Author**: Systems Designer & World Builder  
-> **Last Updated**: 2026-09-15  
+> **Last Updated**: 2026-10-10 (Y1: "điểm kỹ năng" → cấp kỹ năng trong Grimoire (2026-10-10, Y1, chủ dự án duyệt)); 2026-09-15  
 > **Implements Pillar**: True Skill Expression & High-Risk High-Reward Exploration  
 > **Target Engine**: Unreal Engine 5.7 (World Partition, Data Layers, Navigation Invokers)
 
@@ -50,7 +50,7 @@ Mỗi Tòa Thành (Citadel) là một trung tâm kiên cố đại diện cho t�
    * **Cấm Giao Tranh PvP Tuyệt Đối**: Toàn bộ kỹ năng và vũ khí của người chơi tự động đưa vào trạng thái Pacified (`State.Pacified`), ngăn chặn hoàn toàn các hành vi PK, gank điểm dịch chuyển hoặc quấy phá.
 2. **Cơ Chế Tự Động Lưu (Citadel Auto-Save on Entry)**:
    * **Kích hoạt tức thì**: Ngay khi người chơi vượt qua cổng thành và bước vào vùng an toàn, máy chủ tự động kích hoạt `ExecuteAutoSave()`.
-   * **Dữ liệu được lưu trữ**: Ghi nhận `LastVisitedCitadelId` (Tòa thành người chơi vào gần nhất), lưu vị trí xuất hiện, cấp độ, kinh nghiệm, túi đồ (Inventory), trang bị, số lượng tiền tệ (Vàng & Tàn Trang Kỹ Năng `item_skill_shard`), điểm kỹ năng và Karma.
+   * **Dữ liệu được lưu trữ**: Ghi nhận `LastVisitedCitadelId` (Tòa thành người chơi vào gần nhất), lưu vị trí xuất hiện, cấp độ, kinh nghiệm, túi đồ (Inventory), trang bị, số lượng tiền tệ (Vàng & Tàn Trang Kỹ Năng `item_skill_shard`), cấp kỹ năng trong Grimoire và Karma. *(2026-10-10, Y1, chủ dự án duyệt): trước đây ghi "điểm kỹ năng" — game không có điểm kỹ năng; cấp kỹ năng gắn vĩnh viễn với kỹ năng trong Grimoire (`skill-progression-system.md:210`, `foundational-classes.md` AC-7).*
    * **Hồi phục tài nguyên trọn vẹn**: Tức thì khôi phục 100% Max HP, 100% Max Mana, 100% Max Stamina, và nạp đầy số lượt dùng của Bình Dược Phẩm (5/5 Flask charges).
 3. **Cơ Chế Thoát Game & Đăng Nhập Lại (Relog Return to Last Visited Citadel)**:
    * Khi người chơi thoát game (Quit, Disconnect, ngắt kết nối mạng hoặc treo máy) ở bất kỳ đâu ngoài hoang dã hay trong dungeon:
