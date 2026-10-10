@@ -1,7 +1,8 @@
 # Story 004: Merchant Shop & Blacksmith Forge Interactive Windows
 
 > **Epic**: Presentation & Interface Layer (Combat HUD & Interactive UI)  
-> **Status**: ✅ Done  
+> **Status**: In Progress  
+> **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `✅ Done`): Bằng chứng: `UI.ShopForgeUI`, `Network.ServiceRouting.ShopWidgetWaitsForConfirmation`, `...ForgeWidgetWaitsForConfirmation`, `...ShopBuybackWithoutUidRejectedLocally` trong `Tests/evidence/x11b-e34f428-ue-automation.log` (77/77 PASS). Lỗi "UI báo xong trước khi server xác nhận" và RPC trên NPC đã sửa ở X11b (PR #23). Còn mở: TR-hud-004 yêu cầu CommonUI nhưng widget là `UUserWidget` (B4-17/M17); AC-1 phụ thu Wanted dựa vào karma do client truyền, karma không replicate (B4-13). Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
 > **Layer**: Presentation  
 > **Type**: UI  
 > **Estimate**: 8 hours (1.0 days)  

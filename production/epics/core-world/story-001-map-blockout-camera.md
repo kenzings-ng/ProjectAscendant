@@ -1,7 +1,8 @@
 # Story 001: Raw Map Blockout & Isometric Camera Setup
 
 > **Epic**: Core World & Level Blockout  
-> **Status**: Complete  
+> **Status**: In Progress  
+> **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `Complete`): Bằng chứng: `Core.World.MapBlockoutCameraIntegration` trong `Tests/evidence/x11b-e34f428-ue-automation.log` (77/77 PASS). AC-2 chưa có bằng chứng: FOV chưa được quy định, chờ chủ dự án (x12-test-migration §7); look-ahead tắt mặc định (B1-9). Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
 > **Layer**: Core  
 > **Type**: Integration  
 > **Estimate**: 8 hours (L)  

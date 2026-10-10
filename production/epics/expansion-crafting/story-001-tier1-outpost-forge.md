@@ -1,7 +1,8 @@
 # Story 001: Blacksmith Tier 1 Outpost Forge & Item Repair
 
 > **Epic**: Expansion Crafting & Blacksmithing Forge  
-> **Status**: Done  
+> **Status**: In Progress  
+> **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `Done`): Bằng chứng: `Crafting.Blacksmith`, `Network.ServerAuthority.ServerComputedCostsAndTier`, `...InteractionRangeAndCombatEnforced`, `...ForeignOwnerComponentsRejected` trong `Tests/evidence/x11b-e34f428-ue-automation.log` (77/77 PASS). AC-4 (server authority) đã sửa ở X11a/X11b (PR #21, #23) nhưng client chỉ được mô phỏng (DECISIONS.md §11). Còn mở: AC-2 salvage trang bị ra shard trong khi GDD ghi ra quặng (M13); AC-3 phí cường hoá là bảng cố định, lệch công thức GDD (B3-12); chưa có forge actor nào trong game (M6). Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
 > **Layer**: Expansion  
 > **Type**: Logic  
 > **Estimate**: 8 hours (1.0 days)  

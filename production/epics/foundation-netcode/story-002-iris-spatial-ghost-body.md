@@ -1,7 +1,8 @@
 # Story 002: Iris Dynamic Spatial Prioritization & Ghost Body Disconnect Protection
 
 > **Epic**: Open World MMO Netcode & Contested Aggro Sync  
-> **Status**: Complete  
+> **Status**: In Progress  
+> **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `Complete`): Bằng chứng: `Foundation.Netcode.IrisSpatialAndGhostBody`, `Network.IrisReplication` trong `Tests/evidence/x11b-e34f428-ue-automation.log` (77/77 PASS). Rà soát B4: MISSING. AC-10 filter chỉ là thư viện tính khoảng cách, không gắn vào Iris (M14); AC-4 subsystem Ghost Body không có caller runtime (B4-6). Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
 > **Layer**: Foundation  
 > **Type**: Integration  
 > **Estimate**: 4 hours (M)  

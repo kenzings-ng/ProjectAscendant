@@ -1,7 +1,8 @@
 # Story 002: Dynamic Difficulty Scaling & Contested Instanced Loot
 
 > **Epic**: World Integration, Sanctuaries & Account Authentication Layer  
-> **Status**: ✅ Done  
+> **Status**: In Progress  
+> **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `✅ Done`): Bằng chứng: `Network.DifficultyScalingLoot` (model) trong `Tests/evidence/x11b-e34f428-ue-automation.log` (77/77 PASS). Rà soát B4: PARTIAL/CONTRADICTS. Không có caller runtime (B4-8); AC-1 hệ số 0.50 lệch `multiplayer-coop.md` 0.45 (B4-16, chờ chủ dự án); AC-4 loot instanced dựa vào relevancy mà Iris bỏ qua (B4-14). Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
 > **Layer**: Combat / Netcode  
 > **Type**: Gameplay / Netcode  
 > **Estimate**: 8 hours (1.0 days)  

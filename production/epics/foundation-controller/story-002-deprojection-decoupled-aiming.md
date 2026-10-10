@@ -1,7 +1,8 @@
 # Story 002: Screen-to-World De-projection & Decoupled Twin-Stick Aiming
 
 > **Epic**: Input & Isometric Camera Controller  
-> **Status**: Complete  
+> **Status**: In Progress  
+> **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `Complete`): Bằng chứng: `Foundation.Controller.CursorDeprojectionAndAiming` trong `Tests/evidence/x11b-e34f428-ue-automation.log` (77/77 PASS). AC-2 chưa đạt ở runtime: hướng ngắm không được gửi lên server (B1-10/M8). AC-1/AC-3 đạt ở phần toán. Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
 > **Layer**: Foundation  
 > **Type**: Logic  
 > **Estimate**: 4 hours (M)  

@@ -1,7 +1,8 @@
 # Story 003: Dynamic Look-Ahead SpringArm Camera & Line-of-Sight Occlusion Dither
 
 > **Epic**: Input & Isometric Camera Controller  
-> **Status**: Complete  
+> **Status**: In Progress  
+> **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `Complete`): Bằng chứng: `Foundation.Controller.CameraLookAheadAndOcclusion` trong `Tests/evidence/x11b-e34f428-ue-automation.log` (77/77 PASS). AC-2 chưa đạt ở runtime: look-ahead tắt mặc định, test chỉ kiểm phần toán (B1-9, x12-test-migration §4). AC-1 arm length đã sửa 1200 → 1400 theo quyết định B1-9/X12 (xem ghi chú tại AC-1). Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
 > **Layer**: Foundation  
 > **Type**: Integration  
 > **Estimate**: 4 hours (M)  
@@ -31,7 +32,7 @@
 
 *From GDD `design/gdd/isometric-controller.md`, scoped to this story:*
 
-- [x] **AC-1 (Isometric SpringArm Specifications)**: `USpringArmComponent` is configured with `TargetArmLength = 1200.0f`, fixed rotation `Pitch = -45.0f`, `Yaw = 45.0f`, `Roll = 0.0f`, `bDoCollisionTest = false`, and `CameraLagSpeed = 12.0f`.
+- [x] **AC-1 (Isometric SpringArm Specifications)**: `USpringArmComponent` is configured with `TargetArmLength = 1400.0f`, fixed rotation `Pitch = -45.0f`, `Yaw = 45.0f`, `Roll = 0.0f`, `bDoCollisionTest = false`, and `CameraLagSpeed = 12.0f`. *(Cập nhật 2026-10-10 (X14): 1200 → 1400 theo quyết định của chủ dự án (B1-9, X12); 1400 nằm trong khoảng 1000–1400 cm của GDD, khớp `PAIsometricMovementMath.h:51` và test `CameraLookAheadAndOcclusion`.)*
 - [x] **AC-2 (Dynamic Look-Ahead Offset)**: As the player aims away from the character, the camera shifts up to $250\text{ cm}$ (`MaxLookAheadDistance = 250.0f`) along the aim direction; when aim returns to center, the camera smoothly re-centers with interpolation speed $8.0$ (`LookAheadReturnSpeed = 8.0f`).
 - [x] **AC-3 (Line-of-Sight Occlusion Dither)**: Line-traces between the camera and character detect any blocking 3D meshes (pillars, archways, trees), setting their dynamic material scalar parameter `DitherOpacity` to $0.25f$ within a $200\text{ cm}$ cylinder to ensure the player and boss telegraphs are never occluded.
 
@@ -43,7 +44,7 @@
 
 1. **SpringArm & Camera Setup (`APACameraActor` / `APABaseCharacter`)**:
    - `SpringArm->SetRelativeRotation(FRotator(-45.0f, 45.0f, 0.0f));`
-   - `SpringArm->TargetArmLength = 1200.0f;`
+   - `SpringArm->TargetArmLength = 1400.0f;` *(X14 2026-10-10: trước đây 1200.0f)*
    - `SpringArm->bEnableCameraLag = true;`
    - `SpringArm->CameraLagSpeed = 12.0f;`
    - `SpringArm->bDoCollisionTest = false;`
@@ -78,7 +79,7 @@
 - **AC-1 Test: SpringArm Transform Invariance**:
   - Given: Character rotating through 360 degrees and moving across terrain.
   - When: Camera rotation is evaluated.
-  - Then: Asserts Pitch is strictly $-45.0^\circ$, Yaw is strictly $+45.0^\circ$, and `TargetArmLength` remains $1200.0\text{ cm}$.
+  - Then: Asserts Pitch is strictly $-45.0^\circ$, Yaw is strictly $+45.0^\circ$, and `TargetArmLength` remains $1400.0\text{ cm}$ *(X14 2026-10-10: trước đây 1200.0 cm)*.
 
 - **AC-2 Test: Look-Ahead Offset Bounds**:
   - Given: Player aims cursor $1500\text{ cm}$ away along the positive X axis.

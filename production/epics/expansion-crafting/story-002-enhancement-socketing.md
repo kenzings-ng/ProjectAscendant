@@ -1,7 +1,8 @@
 # Story 002: Enhancement Pipeline +4 to +10 & Socketing
 
 > **Epic**: Expansion Crafting & Blacksmithing Forge  
-> **Status**: Done  
+> **Status**: In Progress  
+> **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `Done`): Bằng chứng: `Crafting.EnhancementSocketing`, `Itemization.BlacksmithSocketing`, `Network.ServerAuthority.UnlockSocketChargedServerSide` trong `Tests/evidence/x11b-e34f428-ue-automation.log` (77/77 PASS). AC-3 giới hạn socket lệch GDD và lệch generator (B3-13/M13); phí cường hoá lệch công thức GDD (B3-12); chưa có forge actor trong game (M6). Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
 > **Layer**: Expansion  
 > **Type**: Logic  
 > **Estimate**: 8 hours (1.0 days)  

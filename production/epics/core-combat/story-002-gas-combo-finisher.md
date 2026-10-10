@@ -1,7 +1,8 @@
 # Story 002: GAS 3-Hit Combo & Posture Finisher Execution
 
 > **Epic**: Core Combat & Abilities  
-> **Status**: Complete  
+> **Status**: In Progress  
+> **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `Complete`): Bằng chứng: `Core.Combat.GASComboFinisherIntegration` trong `Tests/evidence/x11b-e34f428-ue-automation.log` (77/77 PASS). AC-2 chưa đạt ở runtime: lag-comp dùng đồng hồ client (M8), sát thương bỏ qua công thức GDD (M11); thông số combo/finisher chờ duyệt cảm giác chơi (DECISIONS.md §12). Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
 > **Layer**: Core  
 > **Type**: Logic  
 > **Estimate**: 8 hours (L)  

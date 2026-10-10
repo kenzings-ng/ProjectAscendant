@@ -1,7 +1,8 @@
 # Story 001: Prototype Boss AI & 4-Phase Telegraph System
 
 > **Epic**: Encounter & Boss Mechanics Layer  
-> **Status**: ✅ Done  
+> **Status**: In Progress  
+> **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `✅ Done`): Bằng chứng: `AI.BossAITelegraphs` (model) trong `Tests/evidence/x11b-e34f428-ue-automation.log` (77/77 PASS). `UPABossAIComponent` không gắn vào actor nào; boss thật chạy AI riêng (M6/B2-1); kiến trúc lệch manifest/GDD (B2-11); AC-3 thiếu combo Pha 2, AC-1 recovery Tail Sweep 0.50s < 0.60s (B2-12); AC-4 `State.WallStunned` chưa đăng ký (B2-7). Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
 > **Layer**: Encounter / AI  
 > **Type**: Gameplay / AI  
 > **Estimate**: 8 hours (1.0 days)  

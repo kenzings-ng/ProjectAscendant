@@ -1,7 +1,8 @@
 # Story 003: Floating Combat Text & Action Feedback
 
 > **Epic**: Presentation & Interface Layer (Combat HUD & Interactive UI)  
-> **Status**: ✅ Done  
+> **Status**: In Progress  
+> **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `✅ Done`): Bằng chứng: `UI.FloatingCombatText` trong `Tests/evidence/x11b-e34f428-ue-automation.log` (77/77 PASS). Rà soát B4: PARTIAL. AC-3 không có nguồn kích hoạt vì Perfect Dodge chưa có ở runtime; `SpawnCombatText` không có caller (B4-21); AC-4 pool 50 lệch `control-manifest.md` 64 (B4-16, chờ chủ dự án). Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
 > **Layer**: Presentation  
 > **Type**: UI  
 > **Estimate**: 8 hours (1.0 days)  

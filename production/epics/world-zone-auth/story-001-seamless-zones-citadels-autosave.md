@@ -1,7 +1,8 @@
 # Story 001: 3-Tier Seamless Zones, Citadel Safe Zones, Auto-Save & Relog Return
 
 > **Epic**: World Integration, Sanctuaries & Account Authentication Layer  
-> **Status**: ✅ Done  
+> **Status**: In Progress  
+> **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `✅ Done`): Bằng chứng: `World.CitadelSafeZonesAndAutoSave` (model) trong `Tests/evidence/x11b-e34f428-ue-automation.log` (77/77 PASS). Rà soát B4: PARTIAL. AC-2 auto-save chỉ lưu trong bộ nhớ, `OnPlayerEnterCitadel` không có caller, chưa hồi phục thật (B4-11); AC-3 relog chưa được nối vào game. Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
 > **Layer**: World / Gameplay  
 > **Type**: World / Gameplay  
 > **Estimate**: 8 hours (1.0 days)  

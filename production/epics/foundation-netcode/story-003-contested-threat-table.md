@@ -1,7 +1,8 @@
 # Story 003: Contested Threat Table & Boss Aggro Synchronization
 
 > **Epic**: Open World MMO Netcode & Contested Aggro Sync  
-> **Status**: Complete  
+> **Status**: In Progress  
+> **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `Complete`): Bằng chứng: `Foundation.Combat.ContestedThreatTable` trong `Tests/evidence/x11b-e34f428-ue-automation.log` (77/77 PASS). Rà soát B4: PARTIAL. AC-2/AC-3/AC-11/AC-5 chỉ đạt ở model: `UPAThreatComponent` không được gắn vào actor nào, boss thật dùng AI riêng (B4-7/M6). Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
 > **Layer**: Foundation  
 > **Type**: Logic  
 > **Estimate**: 4 hours (M)  

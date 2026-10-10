@@ -5,7 +5,8 @@
 > **Layer**: Presentation / NPC Alignment & Prop Socket Validation  
 > **Type**: Art & Production (Wireframe / Stick-figure Proxy)  
 > **Estimate**: 1.5 days (12 hours)  
-> **Status**: Completed (Placeholder-tier art — cần thay thế bằng pixel art thật trước khi release)  
+> **Status**: Review  
+> **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `Completed (Placeholder-tier art)`): Bằng chứng: — (không có test tự động; asset proxy có trên main, commit `f686267`) trong `Tests/evidence/x11b-e34f428-ue-automation.log` (77/77 PASS). Asset proxy đã có, nhưng chưa có log kiểm tra tự động cho AC-1..AC-3. Art thật thay proxy là điều kiện release và cần chủ dự án duyệt thẩm mỹ. Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
 > **Owner**: Technical Artist & Pixel Artist  
 > **Governing Spec**: [`character-visual-system.md`](file:///mnt/Data/Projects/project-games/ProjectAscendant/design/gdd/character-visual-system.md)  
 

@@ -1,7 +1,8 @@
 # Story 004: Dash I-Frame, Perfect Dodge Sweet Spot & Hitstop
 
 > **Epic**: Encounter & Boss Mechanics Layer  
-> **Status**: ✅ Done  
+> **Status**: In Progress  
+> **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `✅ Done`): Bằng chứng: `Combat.DashIFramePerfectDodge` (model `FPADashModel`) trong `Tests/evidence/x11b-e34f428-ue-automation.log` (77/77 PASS). AC-2, AC-3, AC-4 chưa triển khai ở runtime (ghi chú X10); AC-1 model còn bộ số cũ; `UPADashEvasionComponent` không gắn vào actor nào (M6). Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
 > **Layer**: Combat / Movement  
 > **Type**: Gameplay / Mechanics  
 > **Estimate**: 8 hours (1.0 days)  

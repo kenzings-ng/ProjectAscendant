@@ -1,7 +1,8 @@
 # Story 002: Merchant Vendor Network & Buyback Window
 
 > **Epic**: Expansion Economy & Merchant Network  
-> **Status**: Done  
+> **Status**: Review  
+> **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `Done`): Bằng chứng: `Economy.Merchant`, `Network.ServerAuthority.BuybackIsPerPlayer`, `...BuybackPartialStackFreshUid`, `...InteractionRangeAndCombatEnforced`, `Network.ServiceRouting.*` trong `Tests/evidence/x11b-e34f428-ue-automation.log` (77/77 PASS). Các điểm PARTIAL của rà soát B3 (buyback dùng chung, RPC trên NPC, `ValidateInteraction` là code chết) đã sửa ở X11a/X11b (PR #21, #23). Chờ: test multi-process 1 server + 2 client (DECISIONS.md §11, client hiện chỉ mô phỏng); mâu thuẫn bán kính 300/250 cm (chờ chủ dự án); merchant chỉ có trên actor Smuggler và chưa map nào đặt actor này (M6). Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
 > **Layer**: Expansion  
 > **Type**: Logic  
 > **Estimate**: 8 hours (1.0 days)  

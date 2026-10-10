@@ -1,7 +1,8 @@
 # Story 002: Boss Health, Stagger Posture & Execution Reticle
 
 > **Epic**: Presentation & Interface Layer (Combat HUD & Interactive UI)  
-> **Status**: ✅ Done  
+> **Status**: Review  
+> **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `✅ Done`): Bằng chứng: `UI.BossHUD` (model) trong `Tests/evidence/x11b-e34f428-ue-automation.log` (77/77 PASS). Rà soát B4: MET. Chưa đủ bằng chứng: AC-4 (chiếu socket 3D lên màn hình) chưa được assert, test chỉ kiểm cờ hiển thị; ở runtime `State.Staggered` chưa đăng ký (M10). Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
 > **Layer**: Presentation  
 > **Type**: UI  
 > **Estimate**: 8 hours (1.0 days)  

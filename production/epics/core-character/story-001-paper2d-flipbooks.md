@@ -1,7 +1,8 @@
 # Story 001: Paper2D Sprite Extraction & Flipbooks
 
 > **Epic**: Core Character & PaperZD Integration  
-> **Status**: Complete  
+> **Status**: Review  
+> **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `Complete`): Bằng chứng: `Core.Character.Paper2DFlipbooksIntegration` trong `Tests/evidence/x11b-e34f428-ue-automation.log` (77/77 PASS). Không còn phát hiện mở. Chưa đủ bằng chứng: test chỉ kiểm file tồn tại và FPS; chưa assert AC-1 (Filter Nearest, không mipmap, `TEXTUREGROUP_Pixels`) và số frame của AC-2/AC-3. Cần kiểm lại trước khi đổi sang Complete. Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
 > **Layer**: Core  
 > **Type**: Asset  
 > **Estimate**: 8 hours (L)  

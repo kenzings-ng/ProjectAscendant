@@ -1,7 +1,8 @@
 # Story 003: Stone Golem Boss PaperZD AnimBP & Aggro Integration
 
 > **Epic**: Core Character & PaperZD Integration  
-> **Status**: Complete  
+> **Status**: In Progress  
+> **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `Complete`): Bằng chứng: `Core.Character.BossPaperZDAggroIntegration`, `Core.Combat.ReviewFixesRegression` trong `Tests/evidence/x11b-e34f428-ue-automation.log` (77/77 PASS). AC-1 chưa đạt: `ABP_StoneGolem` chỉ có node Sink (B1-2/M16); test aggro có assert tautology (C-2). Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
 > **Layer**: Core  
 > **Type**: Integration  
 > **Estimate**: 8 hours (L)  

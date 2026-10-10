@@ -1,7 +1,8 @@
 # Story 004: Shared Posture Finisher Priority & Instanced Loot Allocation
 
 > **Epic**: Open World MMO Netcode & Contested Aggro Sync  
-> **Status**: Complete  
+> **Status**: In Progress  
+> **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `Complete`): Bằng chứng: `Foundation.Netcode.ContestedLootFinisherIntegration` trong `Tests/evidence/x11b-e34f428-ue-automation.log` (77/77 PASS). Rà soát B4: PARTIAL. AC-7 tag `State.FinisherPriority` chưa đăng ký (M10); AC-6 loot instanced dựa vào `IsNetRelevantFor` mà Iris bỏ qua (B4-14/M8); AC-8 không có caller runtime (B4-8). Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
 > **Layer**: Foundation  
 > **Type**: Integration  
 > **Estimate**: 4 hours (M)  

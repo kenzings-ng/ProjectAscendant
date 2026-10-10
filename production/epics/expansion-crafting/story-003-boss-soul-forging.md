@@ -1,7 +1,8 @@
 # Story 003: Boss Soul Forging & Legendary Equipment
 
 > **Epic**: Expansion Crafting & Blacksmithing Forge  
-> **Status**: Done  
+> **Status**: In Progress  
+> **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `Done`): Bằng chứng: `Crafting.BossSoulForging`, `Network.ServerAuthority.BossSoulOutputServerDetermined` trong `Tests/evidence/x11b-e34f428-ue-automation.log` (77/77 PASS). AC-1 công thức dùng 1 loại bộ phận ×4 trong khi GDD yêu cầu 4 bộ phận khác nhau; chi phí 5.000 Vàng không có trong GDD (B3-17); chưa có forge actor trong game (M6). Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
 > **Layer**: Expansion  
 > **Type**: Integration  
 > **Estimate**: 8 hours (1.0 days)  

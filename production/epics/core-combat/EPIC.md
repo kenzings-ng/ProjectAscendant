@@ -3,8 +3,9 @@
 > **Layer**: Core  
 > **GDD**: [`design/gdd/combat-system.md`](file:///mnt/Data/Projects/project-games/design/gdd/combat-system.md), [`design/gdd/attributes-system.md`](file:///mnt/Data/Projects/project-games/design/gdd/attributes-system.md)  
 > **Architecture Module**: Combat & Evasion ([`docs/architecture/architecture.md`](file:///mnt/Data/Projects/project-games/docs/architecture/architecture.md) Chapter 3.3 Module 4 & 5)  
-> **Status**: Ready  
-> **Stories**: 2 Stories Created  
+> **Status**: In Progress  
+> **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `Ready`): trạng thái epic suy ra từ story (In Progress 2). Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
+> **Stories**: 2 Stories Created *(X14 2026-10-10: thực tế In Progress 2)*  
 
 ## Overview
 
@@ -21,5 +22,5 @@ This epic implements the player's core combat abilities using the Gameplay Abili
 
 | # | Story | Type | Status | Governing ADR |
 |---|---|---|---|---|
-| 001 | [`GAS Dash Ability & Invulnerability Window`](story-001-gas-dash-ability.md) | Logic | Ready | ADR-0002 |
-| 002 | [`GAS 3-Hit Combo & Posture Finisher Execution`](story-002-gas-combo-finisher.md) | Logic | Ready | ADR-0001, ADR-0002 |
+| 001 | [`GAS Dash Ability & Invulnerability Window`](story-001-gas-dash-ability.md) | Logic | In Progress | ADR-0002 |
+| 002 | [`GAS 3-Hit Combo & Posture Finisher Execution`](story-002-gas-combo-finisher.md) | Logic | In Progress | ADR-0001, ADR-0002 |

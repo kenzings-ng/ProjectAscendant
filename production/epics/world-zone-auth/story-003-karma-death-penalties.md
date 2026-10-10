@@ -1,7 +1,8 @@
 # Story 003: 5-Tier Karma State Machine & Death Penalties Matrix
 
 > **Epic**: World Integration, Sanctuaries & Account Authentication Layer  
-> **Status**: ✅ Done  
+> **Status**: In Progress  
+> **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `✅ Done`): Bằng chứng: `Economy.KarmaDeathPenalties` (model) trong `Tests/evidence/x11b-e34f428-ue-automation.log` (77/77 PASS). Rà soát B4: CONTRADICTS. AC-2..AC-4: đường chết runtime luôn áp phạt PvE, không rơi shard, model Karma không được dùng và không replicate (M18/B4-9); luật shard khi chết PvE mâu thuẫn `zone-system.md:88` (chờ chủ dự án). Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
 > **Layer**: Economy / Combat  
 > **Type**: Gameplay / Systems  
 > **Estimate**: 8 hours (1.0 days)  

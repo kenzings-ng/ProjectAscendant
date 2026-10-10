@@ -5,7 +5,8 @@
 > **Layer**: Presentation / Modular Paperdoll Extension  
 > **Type**: Architecture & Code (100% Placeholder Testable)  
 > **Estimate**: 1.0 day (8 hours)  
-> **Status**: Completed  
+> **Status**: In Progress  
+> **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `Completed`): Bằng chứng: `CharacterVisual.IdentitySocketsAndOverlays`, `Character.PaperdollModularSystem` trong `Tests/evidence/x11b-e34f428-ue-automation.log` (77/77 PASS). AC-2/AC-4 chưa đạt: bảng crest/tabard và test chỉ có 12/16 class (B1-13, C-6). Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
 > **Owner**: Gameplay Programmer  
 
 ---

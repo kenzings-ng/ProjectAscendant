@@ -1,7 +1,8 @@
 # Story 003: Anatomical Part Breaking & Skill Disabling Matrix
 
 > **Epic**: Encounter & Boss Mechanics Layer  
-> **Status**: ✅ Done  
+> **Status**: In Progress  
+> **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `✅ Done`): Bằng chứng: `Combat.PartBreakingMatrix` (model) trong `Tests/evidence/x11b-e34f428-ue-automation.log` (77/77 PASS). `UPAPartBreakingComponent` không gắn vào actor nào (M6); AC-2 khoá chiêu trong Behavior Tree chưa có (boss không dùng BT); AC-4 chưa có vị trí rơi (B2-14). Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
 > **Layer**: Combat / Encounter  
 > **Type**: Gameplay / Systems  
 > **Estimate**: 8 hours (1.0 days)  

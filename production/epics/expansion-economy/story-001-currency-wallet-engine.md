@@ -1,7 +1,8 @@
 # Story 001: Dual Currency Wallet & Transaction Engine
 
 > **Epic**: Expansion Economy & Merchant Network  
-> **Status**: Complete  
+> **Status**: In Progress  
+> **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `Complete`): Bằng chứng: `Economy.CurrencyWallet`, `Itemization.DualCurrencyTransactions` trong `Tests/evidence/x11b-e34f428-ue-automation.log` (77/77 PASS). Tên tiền tệ đã sửa ở X5 (PR #16). Còn mở: AC-2 không có `Server_AddCurrency`/`Server_DeductCurrency`, `Server_TransferCurrency` là chuyển tiền giữa người chơi trong khi DECISIONS §6 hoãn giao dịch (B3-21); AC-3 đường chết luôn áp phạt PvE, kể cả PvP và boss (M18). Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
 > **Layer**: Expansion  
 > **Type**: Logic  
 > **Estimate**: 8 hours (1.0 days)  

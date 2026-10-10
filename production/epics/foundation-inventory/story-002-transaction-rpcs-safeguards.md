@@ -1,7 +1,8 @@
 # Story 002: Server-Authoritative Transaction RPCs & Duplication Safeguards
 
 > **Epic**: Inventory & 5-Tier Item Database  
-> **Status**: Complete  
+> **Status**: In Progress  
+> **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `Complete`): Bằng chứng: `Foundation.Inventory.TransactionalRPCsAndSafeguards` trong `Tests/evidence/x11b-e34f428-ue-automation.log` (77/77 PASS). Rà soát B3: PARTIAL. AC-3 Lock/Junk không có Server RPC (B3-19); AC-4 `OverflowStash` là TArray thô, trái quy tắc FastArray (B3-11/M13); `TransactionID = 0` bỏ qua kiểm tra replay (B3-19). Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
 > **Layer**: Foundation  
 > **Type**: Logic  
 > **Estimate**: 4 hours (M)  

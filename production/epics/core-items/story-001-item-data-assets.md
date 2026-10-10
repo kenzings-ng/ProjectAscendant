@@ -2,6 +2,7 @@
 
 > **Epic**: Core Items & DataAssets  
 > **Status**: Complete  
+> **X14 (2026-10-10) — đối chiếu trạng thái** (giữ nguyên): Bằng chứng: `Core.Items.ItemDataAssetsIntegration` (nạp 4 file `.uasset` thật và assert AC-1..AC-3) trong `Tests/evidence/x11b-e34f428-ue-automation.log` (77/77 PASS). Giữ Complete. Hai điểm CONTRADICTS của rà soát B3 (tag class cũ, độ hiếm của sách kỹ năng) đã sửa ở X7 (PR #18, `252a046`) và X6 (PR #17, `fb0f907`). Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
 > **Layer**: Core  
 > **Type**: Asset  
 > **Estimate**: 8 hours (L)  

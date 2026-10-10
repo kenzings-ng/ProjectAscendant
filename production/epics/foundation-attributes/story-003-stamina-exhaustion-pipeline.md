@@ -1,7 +1,8 @@
 # Story 003: Stamina Regeneration, Depletion & Exhaustion State Pipeline
 
 > **Epic**: Character Attributes & Stats Engine (GAS)  
-> **Status**: Complete  
+> **Status**: In Progress  
+> **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `Complete`): Bằng chứng: `Foundation.Combat.StaminaExhaustionPipeline` (chỉ hàm thuần) trong `Tests/evidence/x11b-e34f428-ue-automation.log` (77/77 PASS). AC-1 Desperation Roll chưa có ở runtime (ghi chú X10); AC-2/AC-3 pipeline không có caller runtime (M12); AC-3 code dùng `>=` thay vì `>` 30% (x12-test-migration §3.3); MoveSpeed không lấy từ attribute GAS (B1-8). Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
 > **Layer**: Foundation  
 > **Type**: Logic  
 > **Estimate**: 4 hours (M)  

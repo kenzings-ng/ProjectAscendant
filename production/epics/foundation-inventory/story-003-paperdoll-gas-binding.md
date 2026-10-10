@@ -1,7 +1,8 @@
 # Story 003: Paperdoll Equipment Binding & GAS Attribute Integration
 
 > **Epic**: Inventory & 5-Tier Item Database  
-> **Status**: Complete  
+> **Status**: In Progress  
+> **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `Complete`): Bằng chứng: `Foundation.Inventory.PaperdollGASEquipmentIntegration` trong `Tests/evidence/x11b-e34f428-ue-automation.log` (77/77 PASS). AC-2 chưa có bằng chứng: test AC-2 là tautology, không trang bị qua `UPAEquipmentComponent`/GE (x12-test-migration §4, §5). Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
 > **Layer**: Foundation  
 > **Type**: Integration  
 > **Estimate**: 4 hours (M)  

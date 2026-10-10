@@ -5,7 +5,8 @@
 > **Layer**: Presentation / Silhouette & Socket Alignment  
 > **Type**: Art & Production (Wireframe / Stick-figure Proxy)  
 > **Estimate**: 2.5 days (20 hours)  
-> **Status**: Completed (Placeholder-tier art — cần thay thế bằng pixel art thật trước khi release)  
+> **Status**: In Progress  
+> **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `Completed (Placeholder-tier art)`): Bằng chứng: — (không có test tự động; commit `f686267`) trong `Tests/evidence/x11b-e34f428-ue-automation.log` (77/77 PASS). AC-2/AC-3 chưa đạt: `Content/art/characters/ClassIdentity/` chỉ có crest/tabard cho 12/16 class (B1-13); AC-5 không có log chạy `qa_silhouette_check.py`. Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
 > **Owner**: Technical Artist & Pixel Artist  
 > **Governing Spec**: [`character-visual-system.md`](file:///mnt/Data/Projects/project-games/ProjectAscendant/design/gdd/character-visual-system.md), [`DECISIONS.md`](file:///mnt/Data/Projects/project-games/ProjectAscendant/production/DECISIONS.md)  
 

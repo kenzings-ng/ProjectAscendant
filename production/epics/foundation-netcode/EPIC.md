@@ -3,8 +3,9 @@
 > **Layer**: Foundation  
 > **GDD**: [`design/gdd/multiplayer-coop.md`](file:///mnt/Data/Projects/project-games/design/gdd/multiplayer-coop.md)  
 > **Architecture Module**: Dedicated Server & MMO Combat Networking ([`docs/architecture/architecture.md`](file:///mnt/Data/Projects/project-games/docs/architecture/architecture.md) Chapter 1)  
-> **Status**: Ready  
-> **Stories**: 4 Stories Created  
+> **Status**: In Progress  
+> **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `Ready`): trạng thái epic suy ra từ story (In Progress 4). Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
+> **Stories**: 4 Stories Created *(X14 2026-10-10: thực tế In Progress 4)*  
 
 ## Overview
 
@@ -28,10 +29,10 @@ This epic implements the core multiplayer networking foundation for *Project Asc
 
 | # | Story | Type | Status | Governing ADR |
 |---|---|---|---|---|
-| 001 | [`Dedicated Server Locomotion Prediction & Lag Compensation Rewind`](story-001-locomotion-lag-compensation.md) | Logic | Ready | ADR-0001 |
-| 002 | [`Iris Dynamic Spatial Prioritization & Ghost Body Disconnect Protection`](story-002-iris-spatial-ghost-body.md) | Integration | Ready | ADR-0001 |
-| 003 | [`Contested Threat Table & Boss Aggro Synchronization`](story-003-contested-threat-table.md) | Logic | Ready | ADR-0001 |
-| 004 | [`Shared Posture Finisher Priority & Instanced Loot Allocation`](story-004-shared-finisher-instanced-loot.md) | Integration | Ready | ADR-0001 |
+| 001 | [`Dedicated Server Locomotion Prediction & Lag Compensation Rewind`](story-001-locomotion-lag-compensation.md) | Logic | In Progress | ADR-0001 |
+| 002 | [`Iris Dynamic Spatial Prioritization & Ghost Body Disconnect Protection`](story-002-iris-spatial-ghost-body.md) | Integration | In Progress | ADR-0001 |
+| 003 | [`Contested Threat Table & Boss Aggro Synchronization`](story-003-contested-threat-table.md) | Logic | In Progress | ADR-0001 |
+| 004 | [`Shared Posture Finisher Priority & Instanced Loot Allocation`](story-004-shared-finisher-instanced-loot.md) | Integration | In Progress | ADR-0001 |
 
 ## Definition of Done
 

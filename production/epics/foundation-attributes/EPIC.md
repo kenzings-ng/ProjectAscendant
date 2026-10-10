@@ -3,8 +3,9 @@
 > **Layer**: Foundation  
 > **GDD**: [`design/gdd/attributes-system.md`](file:///mnt/Data/Projects/project-games/design/gdd/attributes-system.md)  
 > **Architecture Module**: Character, Attributes & Gameplay Ability System ([`docs/architecture/architecture.md`](file:///mnt/Data/Projects/project-games/docs/architecture/architecture.md) Chapter 2)  
-> **Status**: Ready  
-> **Stories**: 3 Stories Created  
+> **Status**: In Progress  
+> **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `Ready`): trạng thái epic suy ra từ story (In Progress 3). Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
+> **Stories**: 3 Stories Created *(X14 2026-10-10: thực tế In Progress 3)*  
 
 ## Overview
 
@@ -29,9 +30,9 @@ This epic implements the foundational character attributes and statistics engine
 
 | # | Story | Type | Status | Governing ADR |
 |---|---|---|---|---|
-| 001 | [`Core AttributeSet Definition & Iris Network Replication`](story-001-attributeset-replication.md) | Logic | Ready | ADR-0002, ADR-0001 |
-| 002 | [`Non-Linear Damage & Posture Execution Calculations`](story-002-damage-posture-calculations.md) | Logic | Ready | ADR-0002 |
-| 003 | [`Stamina Regeneration, Depletion & Exhaustion State Pipeline`](story-003-stamina-exhaustion-pipeline.md) | Logic | Ready | ADR-0002, ADR-0001 |
+| 001 | [`Core AttributeSet Definition & Iris Network Replication`](story-001-attributeset-replication.md) | Logic | In Progress | ADR-0002, ADR-0001 |
+| 002 | [`Non-Linear Damage & Posture Execution Calculations`](story-002-damage-posture-calculations.md) | Logic | In Progress | ADR-0002 |
+| 003 | [`Stamina Regeneration, Depletion & Exhaustion State Pipeline`](story-003-stamina-exhaustion-pipeline.md) | Logic | In Progress | ADR-0002, ADR-0001 |
 
 ## Definition of Done
 

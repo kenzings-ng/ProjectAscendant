@@ -1,7 +1,8 @@
 # Story 001: Screen-Relative 8-Way Locomotion & Diagonal Vector Normalization
 
 > **Epic**: Input & Isometric Camera Controller  
-> **Status**: Complete  
+> **Status**: In Progress  
+> **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `Complete`): Bằng chứng: `Foundation.Controller.ScreenRelativeMovement` trong `Tests/evidence/x11b-e34f428-ue-automation.log` (77/77 PASS). AC-1..AC-3 đạt ở phần toán. Chưa đạt quy tắc bắt buộc của story/TR-ctrl-002: chưa dùng Enhanced Input (input kiểu cũ, B1-11/M17); AC-2 tốc độ 550 không lấy từ attribute GAS (B1-8). Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
 > **Layer**: Foundation  
 > **Type**: Logic  
 > **Estimate**: 4 hours (M)  

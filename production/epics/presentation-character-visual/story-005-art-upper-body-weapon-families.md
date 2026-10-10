@@ -5,7 +5,8 @@
 > **Layer**: Presentation / Combat Timing & Socket Alignment  
 > **Type**: Art & Production (Wireframe / Stick-figure Proxy)  
 > **Estimate**: 3.0 days (24 hours)  
-> **Status**: Completed (Placeholder-tier art — cần thay thế bằng pixel art thật trước khi release)  
+> **Status**: Review  
+> **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `Completed (Placeholder-tier art)`): Bằng chứng: — (không có test tự động; asset proxy có trên main, commit `fcdd4b2`) trong `Tests/evidence/x11b-e34f428-ue-automation.log` (77/77 PASS). Asset proxy đã có, nhưng chưa có log kiểm tra tự động cho AC-1..AC-3. Art thật thay proxy là điều kiện release và cần chủ dự án duyệt thẩm mỹ. Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
 > **Owner**: Technical Artist  
 > **Governing Spec**: [`SPEC-ART-2026-09-23-V2`](file:///mnt/Data/Projects/project-games/ProjectAscendant/design/art/pixel-asset-specifications.md), [`itemization.md`](file:///mnt/Data/Projects/project-games/ProjectAscendant/design/gdd/itemization.md)  
 

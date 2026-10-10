@@ -1,7 +1,8 @@
 # Story 001: Core AttributeSet Definition & Iris Network Replication
 
 > **Epic**: Character Attributes & Stats Engine (GAS)  
-> **Status**: Complete  
+> **Status**: In Progress  
+> **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `Complete`): Bằng chứng: `Foundation.Combat.AttributesAndReplication` trong `Tests/evidence/x11b-e34f428-ue-automation.log` (77/77 PASS). AC-3 chưa có bằng chứng: test AC-3 là tautology (tự broadcast rồi tự kiểm, x12-test-migration §4); chưa có test replication 1 server + 2 client (DECISIONS.md §11). Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
 > **Layer**: Foundation  
 > **Type**: Logic  
 > **Estimate**: 4 hours (M)  

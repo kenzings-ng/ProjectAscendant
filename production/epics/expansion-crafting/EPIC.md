@@ -3,8 +3,9 @@
 > **Layer**: Expansion  
 > **GDD**: [`design/gdd/blacksmithing-system.md`](../../design/gdd/blacksmithing-system.md)  
 > **Architecture Module**: Crafting, Enhancement & Durability Repair Architecture ([`docs/architecture/architecture.md`](../../docs/architecture/architecture.md))  
-> **Status**: Complete  
-> **Stories**: 3 Stories (3 Done)  
+> **Status**: In Progress  
+> **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `Complete`): trạng thái epic suy ra từ story (In Progress 3). Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
+> **Stories**: 3 Stories (3 Done) *(X14 2026-10-10: thực tế In Progress 3)*  
 
 ## Overview
 
@@ -29,9 +30,9 @@ This epic implements the zone-tiered blacksmithing and item enhancement engine f
 
 | # | Story | Type | Status | Governing ADR |
 |---|---|---|---|---|
-| 001 | [`Blacksmith Tier 1 Outpost Forge & Item Repair`](story-001-tier1-outpost-forge.md) | Logic | Done | ADR-0001, ADR-0003 |
-| 002 | [`Enhancement Pipeline +4 to +10 & Socketing`](story-002-enhancement-socketing.md) | Logic | Done | ADR-0001, ADR-0003 |
-| 003 | [`Boss Soul Forging & Legendary Equipment`](story-003-boss-soul-forging.md) | Integration | Done | ADR-0001, ADR-0003 |
+| 001 | [`Blacksmith Tier 1 Outpost Forge & Item Repair`](story-001-tier1-outpost-forge.md) | Logic | In Progress | ADR-0001, ADR-0003 |
+| 002 | [`Enhancement Pipeline +4 to +10 & Socketing`](story-002-enhancement-socketing.md) | Logic | In Progress | ADR-0001, ADR-0003 |
+| 003 | [`Boss Soul Forging & Legendary Equipment`](story-003-boss-soul-forging.md) | Integration | In Progress | ADR-0001, ADR-0003 |
 
 ## Definition of Done
 

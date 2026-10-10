@@ -1,7 +1,8 @@
 # Story 001: GAS Dash Ability & Invulnerability Window
 
 > **Epic**: Core Combat & Abilities  
-> **Status**: Complete  
+> **Status**: In Progress  
+> **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `Complete`): Bằng chứng: `Core.Combat.GASDashAbilityIntegration` trong `Tests/evidence/x11b-e34f428-ue-automation.log` (77/77 PASS). AC-4 chưa có bằng chứng (tautology); AC-3 việc hết cooldown chỉ được mô phỏng (x12-test-migration §4); chưa có test replication server + 2 client (DECISIONS.md §11); thông số dash đang chờ chủ dự án duyệt cảm giác chơi (DECISIONS.md §12). Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
 > **Layer**: Core  
 > **Type**: Logic  
 > **Estimate**: 8 hours (L)  

@@ -1,6 +1,7 @@
 # Story prog-001: Character XP, Leveling & Class Mastery
 
-> **Status**: Done
+> **Status**: In Progress  
+> **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `Done`): Bằng chứng: `Progression.AC1_MaxLevelCap`, `AC1_MultiLevelUp`, `AC1_NonLinearXPCurve`, `AC2_GrantXP_LevelUp_StatGrowth` trong `Tests/evidence/x11b-e34f428-ue-automation.log` (77/77 PASS). Rà soát B3: PARTIAL. AC-3 (replicate CurrentLevel/CurrentXP) chưa có test replication. Hệ class phụ/Class Level 1–20 của DECISIONS §4 nằm ngoài story này (M5, chưa có epic). Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
 > **Sprint**: 3
 > **Priority**: Must-Have
 > **Owner**: ue-gas-specialist

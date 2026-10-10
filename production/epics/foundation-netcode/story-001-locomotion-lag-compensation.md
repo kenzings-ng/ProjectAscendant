@@ -1,7 +1,8 @@
 # Story 001: Dedicated Server Locomotion Prediction & Lag Compensation Rewind
 
 > **Epic**: Open World MMO Netcode & Contested Aggro Sync  
-> **Status**: Complete  
+> **Status**: In Progress  
+> **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `Complete`): Bằng chứng: `Foundation.Netcode.LocomotionLagCompensation` trong `Tests/evidence/x11b-e34f428-ue-automation.log` (77/77 PASS). Rà soát B4: PARTIAL. AC-1 lag-comp runtime dùng đồng hồ client (B2-6/M8); AC-12, AC-9 chưa có test replication server + client (DECISIONS.md §11). Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
 > **Layer**: Foundation  
 > **Type**: Logic  
 > **Estimate**: 4 hours (M)  

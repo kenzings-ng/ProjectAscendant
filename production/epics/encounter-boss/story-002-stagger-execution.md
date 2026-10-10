@@ -1,7 +1,8 @@
 # Story 002: Posture Stagger, Kneel Window & True Damage Execution
 
 > **Epic**: Encounter & Boss Mechanics Layer  
-> **Status**: ✅ Done  
+> **Status**: In Progress  
+> **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `✅ Done`): Bằng chứng: `Combat.StaggerExecution` (model) trong `Tests/evidence/x11b-e34f428-ue-automation.log` (77/77 PASS). Model không dùng ở runtime (ghi chú X10, M6); AC-1 posture break gắn `State.Broken`, `State.Staggered` chưa đăng ký (M10); AC-2 `State.PostureImmune` chưa làm; AC-3 posture decay không chạy ở runtime (B2-7). Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
 > **Layer**: Combat / Encounter  
 > **Type**: Gameplay / Mechanics  
 > **Estimate**: 8 hours (1.0 days)  

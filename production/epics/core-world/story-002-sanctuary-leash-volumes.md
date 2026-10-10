@@ -1,7 +1,8 @@
 # Story 002: Sanctuary & Combat Zone Volumes
 
 > **Epic**: Core World & Level Blockout  
-> **Status**: Complete  
+> **Status**: In Progress  
+> **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `Complete`): Bằng chứng: `Core.World.SanctuaryLeashVolumeIntegration` trong `Tests/evidence/x11b-e34f428-ue-automation.log` (77/77 PASS). AC-2 (`ExecuteReturnMovement`, delegate leash) và AC-3 (delegate zone) chỉ có assert `TestTrue(..., true)` (x12-test-migration §4). AC-1 đạt (B4-12 đã bị bác bỏ). Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
 > **Layer**: Core  
 > **Type**: Logic  
 > **Estimate**: 8 hours (L)  

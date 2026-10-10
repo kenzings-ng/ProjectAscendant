@@ -1,7 +1,8 @@
 # Story 004: Account Subsystem, 1-Click Fast Playtest & Server Token Handshake
 
 > **Epic**: World Integration, Sanctuaries & Account Authentication Layer  
-> **Status**: ✅ Done  
+> **Status**: In Progress  
+> **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `✅ Done`): Bằng chứng: `Foundation.Account.AuthAndIdentityPipeline`, `Account.AuthTokenHandshake` trong `Tests/evidence/x11b-e34f428-ue-automation.log` (77/77 PASS). Rà soát B4: PARTIAL. AC-2 (< 0.1s) assert luôn đúng (C-4); AC-4 `ValidateJoinToken` chấp nhận mọi token đúng tiền tố và chưa có caller PreLogin (B4-2/C-4); thông tin đăng nhập mặc định hardcode (B4-20). Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
 > **Layer**: Security / Subsystem  
 > **Type**: Subsystem / Network  
 > **Estimate**: 8 hours (1.0 days)  

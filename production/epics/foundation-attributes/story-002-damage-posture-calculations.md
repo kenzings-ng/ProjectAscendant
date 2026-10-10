@@ -1,7 +1,8 @@
 # Story 002: Non-Linear Damage & Posture Execution Calculations
 
 > **Epic**: Character Attributes & Stats Engine (GAS)  
-> **Status**: Complete  
+> **Status**: In Progress  
+> **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `Complete`): Bằng chứng: `Foundation.Combat.DamageExecutionCalculations` trong `Tests/evidence/x11b-e34f428-ue-automation.log` (77/77 PASS). AC-1/AC-2/AC-3 chỉ đạt ở helper `UPADamageExecutionCalculation`; đòn cận chiến runtime không đi qua execution calc này (M11), nhánh `State.Staggered` không chạy vì tag chưa đăng ký (M10), công thức kết liễu runtime khác AC-3 (ghi chú X10). Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
 > **Layer**: Foundation  
 > **Type**: Logic  
 > **Estimate**: 4 hours (M)  
