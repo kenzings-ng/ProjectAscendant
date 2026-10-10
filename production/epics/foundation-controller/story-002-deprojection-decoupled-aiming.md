@@ -1,7 +1,8 @@
 # Story 002: Screen-to-World De-projection & Decoupled Twin-Stick Aiming
 
 > **Epic**: Input & Isometric Camera Controller  
-> **Status**: Complete  
+> **Status**: In Progress  
+> **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `Complete`): Bằng chứng: `Foundation.Controller.CursorDeprojectionAndAiming` trong `Tests/evidence/x11b-e34f428-ue-automation.log` (77/77 PASS). AC-2 chưa đạt ở runtime: hướng ngắm không được gửi lên server (B1-10/M8). AC-1/AC-3 đạt ở phần toán. Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
 > **Layer**: Foundation  
 > **Type**: Logic  
 > **Estimate**: 4 hours (M)  
@@ -32,7 +33,7 @@
 *From GDD `design/gdd/isometric-controller.md`, scoped to this story:*
 
 - [x] **AC-1 (Mouse Ground De-projection)**: Cursor screen coordinates are de-projected into world space via raycast intersecting a horizontal plane at character feet level ($Z = \text{CharacterLocation.Z}$), yielding accurate 3D world target coordinates regardless of camera zoom or aspect ratio.
-- [x] **AC-2 (Decoupled Aiming & Backpedaling)**: The character's visual orientation and combat aim vector point directly towards the de-projected target, allowing the player to move backwards (away from the target) while continuously aiming and attacking forwards.
+- [x] **AC-2 (Decoupled Aiming & Backpedaling)**: The character's visual orientation and combat aim vector point directly towards the de-projected target, allowing the player to move backwards (away from the target) while continuously aiming and attacking forwards. *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
 - [x] **AC-3 (Gamepad Twin-Stick Support)**: Right analog stick input evaluates directional aiming with a 0.2 deadzone (`GamepadDeadzone = 0.2`); releasing the right stick preserves the last aim orientation.
 
 ---
@@ -91,8 +92,7 @@
 
 **Story Type**: Logic  
 **Required evidence**: `tests/unit/controller/cursor_deprojection_aim_test.cpp` — must exist and pass automated CI  
-**Status**: [x] Passed (4 test suites, 24 assertions)  
-
+**Status**: [x] Passed (4 test suites, 24 assertions) *(X14 2026-10-10: tuyên bố PASS/Complete này không có bằng chứng tại thời điểm ghi — test ở `Tests/` gốc chưa được biên dịch cho đến X12 (rà soát R4), và đường dẫn đã chuyển sang `Source/ProjectAscendant/Private/Tests/`. Trạng thái thật: xem dòng X14 ở đầu file.)*  
 ---
 
 ## Dependencies
@@ -103,6 +103,8 @@
 ---
 
 ## Completion Notes
+> **X14 (2026-10-10)**: khối dưới đây là lịch sử, không còn đúng. Story hiện là `In Progress`; xem dòng X14 ở đầu file.
+
 **Completed**: 2026-09-16  
 **Criteria**: 3/3 passing (AC-1, AC-2, AC-3)  
 **Deviations**: None  

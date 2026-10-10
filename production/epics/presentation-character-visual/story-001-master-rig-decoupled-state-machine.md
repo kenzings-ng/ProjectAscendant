@@ -5,7 +5,8 @@
 > **Layer**: Presentation / Animation Architecture  
 > **Type**: Architecture & Code (100% Placeholder Testable)  
 > **Estimate**: 1.5 days (12 hours)  
-> **Status**: Ready for Dev  
+> **Status**: Review  
+> **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `Ready for Dev (sprint-status.yaml: done; epic-overview: Complete)`): Bằng chứng: `CharacterVisual.MasterRigDecoupledStateMachine` trong `Tests/evidence/x11b-e34f428-ue-automation.log` (77/77 PASS). Code đã commit trên main (`ff96e7f`, 2026-09-25) và test PASS, nhưng AC-1..AC-4 chưa từng được kiểm và đánh dấu. Cần kiểm từng AC trước khi đổi sang Complete. Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
 > **Owner**: Gameplay Programmer  
 
 ---

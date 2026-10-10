@@ -1,7 +1,8 @@
 # Story 002: Boss Health, Stagger Posture & Execution Reticle
 
 > **Epic**: Presentation & Interface Layer (Combat HUD & Interactive UI)  
-> **Status**: ✅ Done  
+> **Status**: In Progress  
+> **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `✅ Done`): Bằng chứng: `UI.BossHUD` (model) trong `Tests/evidence/x11b-e34f428-ue-automation.log` (77/77 PASS). Rà soát B4: MET ở mức model, nhưng còn mở: AC-2/AC-4 kích hoạt theo `State.Staggered`, tag này chưa đăng ký và posture break gắn `State.Broken` (M10); AC-4 (chiếu socket 3D lên màn hình) chưa được assert, test chỉ kiểm cờ hiển thị. Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
 > **Layer**: Presentation  
 > **Type**: UI  
 > **Estimate**: 8 hours (1.0 days)  
@@ -25,9 +26,9 @@
 ## Acceptance Criteria
 
 - [x] **AC-1 (Boss Health Bar & 3-Phase Thresholds)**: `UPABossHealthWidget` displays boss name, level, and health bar. Features distinct threshold notches at 75% and 25% Max HP indicating combat phase transitions.
-- [x] **AC-2 (Posture Stagger Meter & 4.0 Hz Flashing)**: Posture bar tracks accumulated posture damage (0% to 100%). When Posture reaches 100% (Boss enters `State.Staggered`), the bar triggers continuous 4.0 Hz flashing in bright red for the duration of the 3.0s stagger window.
+- [x] **AC-2 (Posture Stagger Meter & 4.0 Hz Flashing)**: Posture bar tracks accumulated posture damage (0% to 100%). When Posture reaches 100% (Boss enters `State.Staggered`), the bar triggers continuous 4.0 Hz flashing in bright red for the duration of the 3.0s stagger window. *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
 - [x] **AC-3 (Part Status Cross-out)**: Displays status indicators for breakable boss parts (Horn, Tail). When a part is broken (via gameplay tag or part break delegate), its icon displays an authoritative red cross-out overlay.
-- [x] **AC-4 (World-to-Screen Execution Reticle)**: When Boss is staggered, `UPAExecutionReticleWidget` projects the boss execution socket (`Socket_Execution`) from 3D world space to 2D screen coordinates, displaying the animated execution reticle and contextual finisher prompt (`Attack` / `Interact`).
+- [x] **AC-4 (World-to-Screen Execution Reticle)**: When Boss is staggered, `UPAExecutionReticleWidget` projects the boss execution socket (`Socket_Execution`) from 3D world space to 2D screen coordinates, displaying the animated execution reticle and contextual finisher prompt (`Attack` / `Interact`). *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
 
 ---
 

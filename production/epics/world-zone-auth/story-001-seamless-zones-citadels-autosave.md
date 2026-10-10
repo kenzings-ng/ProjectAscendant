@@ -1,7 +1,8 @@
 # Story 001: 3-Tier Seamless Zones, Citadel Safe Zones, Auto-Save & Relog Return
 
 > **Epic**: World Integration, Sanctuaries & Account Authentication Layer  
-> **Status**: ✅ Done  
+> **Status**: In Progress  
+> **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `✅ Done`): Bằng chứng: `World.CitadelSafeZonesAndAutoSave` (model) trong `Tests/evidence/x11b-e34f428-ue-automation.log` (77/77 PASS). Rà soát B4: PARTIAL. AC-2 auto-save chỉ lưu trong bộ nhớ, `OnPlayerEnterCitadel` không có caller, chưa hồi phục thật (B4-11); AC-3 relog chưa được nối vào game. Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
 > **Layer**: World / Gameplay  
 > **Type**: World / Gameplay  
 > **Estimate**: 8 hours (1.0 days)  
@@ -27,11 +28,11 @@
   - Khi người chơi bước vào: Xóa sạch cừu hận của toàn bộ quái vật đang đuổi theo (`DropAggro`).
   - Quái vật không thể tiến vào trong thành (bị chặn bởi NavMesh barrier).
   - Vô hiệu hóa mọi hành vi giao tranh PvP bên trong (`State.Pacified`).
-- [x] **AC-2 (Citadel Enter Auto-Save & Full Restoration)**: Ngay khi người chơi bước chân vào cổng Tòa Thành:
+- [x] **AC-2 (Citadel Enter Auto-Save & Full Restoration)**: Ngay khi người chơi bước chân vào cổng Tòa Thành: *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
   - Máy chủ lập tức kích hoạt cơ chế **Tự Động Lưu (Auto-Save)** toàn bộ dữ liệu nhân vật.
   - Hồi phục tức thời **100% HP, Mana, Stamina** và đầy 5/5 bình Dược phẩm (Flask charges).
   - Cập nhật Tòa Thành này thành `LastVisitedCitadelId` (Tòa thành người chơi vào gần nhất).
-- [x] **AC-3 (Relog Return to Last Visited Citadel)**: Khi người chơi thoát game (Quit, Disconnect, ngắt kết nối mạng) ở bất kỳ đâu ngoài hoang dã hoặc trong hầm ngục:
+- [x] **AC-3 (Relog Return to Last Visited Citadel)**: Khi người chơi thoát game (Quit, Disconnect, ngắt kết nối mạng) ở bất kỳ đâu ngoài hoang dã hoặc trong hầm ngục: *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
   - Khi đăng nhập lại vào game (Login / Relog), máy chủ luôn đưa nhân vật xuất hiện an toàn tại **Tòa Thành mà người chơi ghé thăm gần nhất (Last Visited Citadel)** với 100% tài nguyên.
   - Ngăn chặn hoàn toàn tình trạng bị quái cắn chết lén hoặc bị phục kích khi đang nạp game.
 - [x] **AC-4 (Citadel Fast Travel Teleportation - 2.0s)**: Cho phép dịch chuyển tức thời giữa các Tòa Thành đã khám phá:

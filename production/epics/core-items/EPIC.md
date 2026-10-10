@@ -3,8 +3,9 @@
 > **Layer**: Core  
 > **GDD**: [`design/gdd/inventory-system.md`](file:///mnt/Data/Projects/project-games/design/gdd/inventory-system.md)  
 > **Architecture Module**: Inventory & Item Database ([`docs/architecture/architecture.md`](file:///mnt/Data/Projects/project-games/docs/architecture/architecture.md) Chapter 3.2 Module 3)  
-> **Status**: Ready  
-> **Stories**: 1 Story Created  
+> **Status**: Complete  
+> **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `Ready`): trạng thái epic suy ra từ story (Complete 1). Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
+> **Stories**: 1 Story Created *(X14 2026-10-10: thực tế Complete 1)*  
 
 ## Overview
 
@@ -20,4 +21,4 @@ This epic creates the baseline item DataAsset instances (`.uasset`) in `Content/
 
 | # | Story | Type | Status | Governing ADR |
 |---|---|---|---|---|
-| 001 | [`Item DataAssets & Quickbar Assets Setup`](story-001-item-data-assets.md) | Asset | Ready | ADR-0003 |
+| 001 | [`Item DataAssets & Quickbar Assets Setup`](story-001-item-data-assets.md) | Asset | Complete | ADR-0003 |

@@ -1,7 +1,8 @@
 # Story 004: Merchant Shop & Blacksmith Forge Interactive Windows
 
 > **Epic**: Presentation & Interface Layer (Combat HUD & Interactive UI)  
-> **Status**: ✅ Done  
+> **Status**: In Progress  
+> **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `✅ Done`): Bằng chứng: `UI.ShopForgeUI`, `Network.ServiceRouting.ShopWidgetWaitsForConfirmation`, `...ForgeWidgetWaitsForConfirmation`, `...ShopBuybackWithoutUidRejectedLocally` trong `Tests/evidence/x11b-e34f428-ue-automation.log` (77/77 PASS). Lỗi "UI báo xong trước khi server xác nhận" và RPC trên NPC đã sửa ở X11b (PR #23). Còn mở: TR-hud-004 yêu cầu CommonUI nhưng widget là `UUserWidget` (B4-17/M17); AC-1 phụ thu Wanted dựa vào karma do client truyền, karma không replicate (B4-13). Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
 > **Layer**: Presentation  
 > **Type**: UI  
 > **Estimate**: 8 hours (1.0 days)  
@@ -24,7 +25,7 @@
 
 ## Acceptance Criteria
 
-- [x] **AC-1 (2-Column Merchant Shop Interface)**: Displays NPC catalog on left column and Player inventory on right column. Includes tab navigation: `[Buy]`, `[Sell]`, `[Buyback]`. Buyback tab displays up to 10 entries with exact refund prices. Displays 20% surcharge indicator when player Karma < -50 at Tier 2.
+- [x] **AC-1 (2-Column Merchant Shop Interface)**: Displays NPC catalog on left column and Player inventory on right column. Includes tab navigation: `[Buy]`, `[Sell]`, `[Buyback]`. Buyback tab displays up to 10 entries with exact refund prices. Displays 20% surcharge indicator when player Karma < -50 at Tier 2. *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
 - [x] **AC-2 (Blacksmith Forge Anvil Interface)**: Central anvil item slot for target equipment, satellite slots displaying required materials and gold (red if deficient, green if sufficient). Ward slot accepts `item_blacksmith_ward`. Shows stat delta preview (e.g. *Attack: 50 -> 58 (+8)*).
 - [x] **AC-3 (0.8s Hold-to-Craft Safe Interaction)**: Enhance and Boss Soul Forging actions require holding the forge button for 0.80 seconds (filling a progress bar) before dispatching the Server RPC, preventing accidental resource consumption.
 - [x] **AC-4 (Proximity & In-Combat Auto-Close)**: Opens via interaction prompt (E key) when within 300cm of NPC/Anvil. Automatically closes if distance exceeds 500cm or player enters combat (`InCombat == true`).

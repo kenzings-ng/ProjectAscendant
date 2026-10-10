@@ -3,8 +3,9 @@
 > **Layer**: Foundation  
 > **GDD**: [`design/gdd/inventory-system.md`](file:///mnt/Data/Projects/project-games/design/gdd/inventory-system.md)  
 > **Architecture Module**: Inventory, Items & Economy Data Architecture ([`docs/architecture/architecture.md`](file:///mnt/Data/Projects/project-games/docs/architecture/architecture.md) Chapter 5)  
-> **Status**: Ready  
-> **Stories**: 3 Stories Created  
+> **Status**: In Progress  
+> **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `Ready`): trạng thái epic suy ra từ story (In Progress 3). Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
+> **Stories**: 3 Stories Created *(X14 2026-10-10: thực tế In Progress 3)*  
 
 ## Overview
 
@@ -29,9 +30,9 @@ This epic implements the server-authoritative 30-slot grid inventory system, 5-r
 
 | # | Story | Type | Status | Governing ADR |
 |---|---|---|---|---|
-| 001 | [`FastArray Grid Inventory & Item DataAsset Hierarchy`](story-001-fastarray-inventory-data.md) | Logic | Ready | ADR-0003 |
-| 002 | [`Server-Authoritative Transaction RPCs & Duplication Safeguards`](story-002-transaction-rpcs-safeguards.md) | Logic | Ready | ADR-0003, ADR-0001 |
-| 003 | [`Paperdoll Equipment Binding & GAS Attribute Integration`](story-003-paperdoll-gas-binding.md) | Integration | Ready | ADR-0003, ADR-0002 |
+| 001 | [`FastArray Grid Inventory & Item DataAsset Hierarchy`](story-001-fastarray-inventory-data.md) | Logic | In Progress | ADR-0003 |
+| 002 | [`Server-Authoritative Transaction RPCs & Duplication Safeguards`](story-002-transaction-rpcs-safeguards.md) | Logic | In Progress | ADR-0003, ADR-0001 |
+| 003 | [`Paperdoll Equipment Binding & GAS Attribute Integration`](story-003-paperdoll-gas-binding.md) | Integration | In Progress | ADR-0003, ADR-0002 |
 
 ## Definition of Done
 

@@ -2,6 +2,7 @@
 
 > **Epic**: Expansion Economy & Merchant Network  
 > **Status**: In Progress  
+> **X14 (2026-10-10) — đối chiếu trạng thái** (giữ nguyên): Bằng chứng: `Economy.WanderingSmuggler` trong `Tests/evidence/x11b-e34f428-ue-automation.log` (77/77 PASS). Giữ In Progress (story vốn khớp thực tế; EPIC/index ghi Done là sai). AC chưa đánh dấu; AC-4 chưa tự đóng khi > 500 cm, restock dùng World time (B3-22); phụ thu karma mới chỉ ở UI, karma không replicate (PROGRESS §2.7). Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
 > **Layer**: Expansion  
 > **Type**: World  
 > **Estimate**: 8 hours (1.0 days)  

@@ -3,8 +3,9 @@
 > **Layer**: Foundation  
 > **GDD**: [`design/gdd/isometric-controller.md`](file:///mnt/Data/Projects/project-games/design/gdd/isometric-controller.md)  
 > **Architecture Module**: 2.5D Isometric Controller & Camera ([`docs/architecture/architecture.md`](file:///mnt/Data/Projects/project-games/docs/architecture/architecture.md) Chapter 3)  
-> **Status**: Ready  
-> **Stories**: 3 Stories Created  
+> **Status**: In Progress  
+> **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `Ready`): trạng thái epic suy ra từ story (In Progress 3). Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
+> **Stories**: 3 Stories Created *(X14 2026-10-10: thực tế In Progress 3)*  
 
 ## Overview
 
@@ -28,9 +29,9 @@ This epic implements the core 2.5D isometric player controller and camera system
 
 | # | Story | Type | Status | Governing ADR |
 |---|---|---|---|---|
-| 001 | [`Screen-Relative 8-Way Locomotion & Diagonal Vector Normalization`](story-001-screen-relative-locomotion.md) | Logic | Ready | ADR-0002, ADR-0001 |
-| 002 | [`Screen-to-World De-projection & Decoupled Twin-Stick Aiming`](story-002-deprojection-decoupled-aiming.md) | Logic | Ready | ADR-0002 |
-| 003 | [`Dynamic Look-Ahead SpringArm Camera & Line-of-Sight Occlusion Dither`](story-003-camera-lookahead-occlusion.md) | Integration | Ready | ADR-0002 |
+| 001 | [`Screen-Relative 8-Way Locomotion & Diagonal Vector Normalization`](story-001-screen-relative-locomotion.md) | Logic | In Progress | ADR-0002, ADR-0001 |
+| 002 | [`Screen-to-World De-projection & Decoupled Twin-Stick Aiming`](story-002-deprojection-decoupled-aiming.md) | Logic | In Progress | ADR-0002 |
+| 003 | [`Dynamic Look-Ahead SpringArm Camera & Line-of-Sight Occlusion Dither`](story-003-camera-lookahead-occlusion.md) | Integration | In Progress | ADR-0002 |
 
 ## Definition of Done
 

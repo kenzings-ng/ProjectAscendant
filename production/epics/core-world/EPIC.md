@@ -3,8 +3,9 @@
 > **Layer**: Core  
 > **GDD**: [`design/gdd/isometric-controller.md`](file:///mnt/Data/Projects/project-games/design/gdd/isometric-controller.md), [`design/gdd/game-concept.md`](file:///mnt/Data/Projects/project-games/design/gdd/game-concept.md)  
 > **Architecture Module**: World Partition & Map ([`docs/architecture/architecture.md`](file:///mnt/Data/Projects/project-games/docs/architecture/architecture.md) Chapter 3.3 Module 8)  
-> **Status**: Ready  
-> **Stories**: 2 Stories Created  
+> **Status**: In Progress  
+> **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `Ready`): trạng thái epic suy ra từ story (In Progress 2). Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
+> **Stories**: 2 Stories Created *(X14 2026-10-10: thực tế In Progress 2)*  
 
 ## Overview
 
@@ -21,8 +22,8 @@ This epic delivers the primary 3D Graybox testing arena (`L_Ruins_Blockout.umap`
 
 | # | Story | Type | Status | Governing ADR |
 |---|---|---|---|---|
-| 001 | [`Raw Map Blockout & Isometric Camera Setup`](story-001-map-blockout-camera.md) | Integration | Ready | ADR-0002 |
-| 002 | [`Sanctuary & Combat Zone Volumes`](story-002-sanctuary-leash-volumes.md) | Logic | Ready | ADR-0001 |
+| 001 | [`Raw Map Blockout & Isometric Camera Setup`](story-001-map-blockout-camera.md) | Integration | In Progress | ADR-0002 |
+| 002 | [`Sanctuary & Combat Zone Volumes`](story-002-sanctuary-leash-volumes.md) | Logic | In Progress | ADR-0001 |
 
 ## Definition of Done
 

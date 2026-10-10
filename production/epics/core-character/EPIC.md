@@ -3,8 +3,9 @@
 > **Layer**: Core  
 > **GDD**: [`design/gdd/game-concept.md`](file:///mnt/Data/Projects/project-games/design/gdd/game-concept.md), [`design/gdd/isometric-controller.md`](file:///mnt/Data/Projects/project-games/design/gdd/isometric-controller.md)  
 > **Architecture Module**: PaperZD Animation & Character Visuals ([`docs/architecture/architecture.md`](file:///mnt/Data/Projects/project-games/docs/architecture/architecture.md) Chapter 3.3 Module 4)  
-> **Status**: Ready  
-> **Stories**: 3 Stories Created  
+> **Status**: In Progress  
+> **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `Ready`): trạng thái epic suy ra từ story (In Progress 2, Review 1). Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
+> **Stories**: 3 Stories Created *(X14 2026-10-10: thực tế In Progress 2, Review 1)*  
 
 ## Overview
 
@@ -20,6 +21,6 @@ This epic integrates 2D pixel art character and boss spritesheets into Unreal En
 
 | # | Story | Type | Status | Governing ADR |
 |---|---|---|---|---|
-| 001 | [`Paper2D Sprite Extraction & Flipbooks`](story-001-paper2d-flipbooks.md) | Asset | Ready | ADR-0002 |
-| 002 | [`PaperZD AnimBP & State Machine Setup`](story-002-paperzd-animbp.md) | Integration | Ready | ADR-0002 |
-| 003 | [`Stone Golem Boss PaperZD AnimBP & Aggro Integration`](story-003-boss-paperzd-animbp.md) | Integration | Ready | ADR-0002 |
+| 001 | [`Paper2D Sprite Extraction & Flipbooks`](story-001-paper2d-flipbooks.md) | Asset | Review | ADR-0002 |
+| 002 | [`PaperZD AnimBP & State Machine Setup`](story-002-paperzd-animbp.md) | Integration | In Progress | ADR-0002 |
+| 003 | [`Stone Golem Boss PaperZD AnimBP & Aggro Integration`](story-003-boss-paperzd-animbp.md) | Integration | In Progress | ADR-0002 |

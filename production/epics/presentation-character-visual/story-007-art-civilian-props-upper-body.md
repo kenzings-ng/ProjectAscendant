@@ -5,7 +5,8 @@
 > **Layer**: Presentation / NPC Alignment & Prop Socket Validation  
 > **Type**: Art & Production (Wireframe / Stick-figure Proxy)  
 > **Estimate**: 1.5 days (12 hours)  
-> **Status**: Completed (Placeholder-tier art — cần thay thế bằng pixel art thật trước khi release)  
+> **Status**: Review  
+> **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `Completed (Placeholder-tier art)`): Bằng chứng: không có test/log tự động (asset commit `f686267`). Asset proxy đã có trên main, nhưng AC-1..AC-3 chưa được kiểm bằng script hay log nào. Art thật thay proxy là điều kiện release và cần chủ dự án duyệt thẩm mỹ. Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
 > **Owner**: Technical Artist & Pixel Artist  
 > **Governing Spec**: [`character-visual-system.md`](file:///mnt/Data/Projects/project-games/ProjectAscendant/design/gdd/character-visual-system.md)  
 
@@ -31,11 +32,11 @@ Tạo lập các tài nguyên wireframe proxy và placeholder geometric sprites 
 
 ## 2. Tiêu Chí Nghiệm Thu (Acceptance Criteria)
 
-- [x] **AC-1 (Đầy Đủ 205 Frames Upper Body Dân Sự Proxy)**:
+- [x] **AC-1 (Đầy Đủ 205 Frames Upper Body Dân Sự Proxy)**: *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
   - Xuất xưởng vào `Content/Art/Characters/Civilian/UpperBody/`.
   - Khớp khít đường nối eo $Y = 80$ với các Master Rigs Lower Body.
-- [x] **AC-2 (10 Đạo Cụ Hình Học Khớp Hand Sockets)**:
+- [x] **AC-2 (10 Đạo Cụ Hình Học Khớp Hand Sockets)**: *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
   - Xuất xưởng vào `Content/Art/Characters/Civilian/Props/`.
   - Snap chính xác vào `HandSocket_R` $(96, 76)$ hoặc `HandSocket_L` $(32, 76)$ trên 5 hướng.
-- [x] **AC-3 (Quest Giver Callout Frame Proxy)**:
+- [x] **AC-3 (Quest Giver Callout Frame Proxy)**: *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
   - Frame vẫy tay hình học để kiểm tra kích hoạt logic tương tác NPC từ xa.

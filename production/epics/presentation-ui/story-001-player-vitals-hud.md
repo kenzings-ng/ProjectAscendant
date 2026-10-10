@@ -1,7 +1,8 @@
 # Story 001: Player Vitals & Status HUD Engine
 
 > **Epic**: Presentation & Interface Layer (Combat HUD & Interactive UI)  
-> **Status**: ✅ Done  
+> **Status**: In Progress  
+> **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `✅ Done`): Bằng chứng: `UI.PlayerVitals` (model) trong `Tests/evidence/x11b-e34f428-ue-automation.log` (77/77 PASS). Rà soát B4: MET ở mức model, nhưng còn mở: TR-hud-001 yêu cầu CommonUI, widget là `UUserWidget` (B4-17/M17, MAJOR); AC-1 chưa có C++ nào tạo widget và bind vào AttributeSet, test chỉ kiểm `FPAVitalsModel` (B4-21); AC-3 Golden Flash dựa vào Perfect Dodge, mà Perfect Dodge chưa có ở runtime (encounter-boss/story-004). Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
 > **Layer**: Presentation  
 > **Type**: UI  
 > **Estimate**: 8 hours (1.0 days)  
@@ -29,9 +30,9 @@
 
 ## Acceptance Criteria
 
-- [x] **AC-1 (GAS Attribute Binding)**: `UPAPlayerVitalsWidget` binds to `UAscendantAttributeSet` delegates on initialization; Health, Stamina, and Mana percentages update instantaneously on attribute change without tick polling.
+- [x] **AC-1 (GAS Attribute Binding)**: `UPAPlayerVitalsWidget` binds to `UAscendantAttributeSet` delegates on initialization; Health, Stamina, and Mana percentages update instantaneously on attribute change without tick polling. *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
 - [x] **AC-2 (Catch-Up Ghost Bar)**: When Health decreases, the primary health bar drops immediately while the ghost bar maintains its position for 0.40s (`CatchUpDelay`) before smoothly interpolating at speed 3.5 (`CatchUpInterpSpeed`). When Health increases (healing), ghost bar matches immediately without delay.
-- [x] **AC-3 (Stamina State Feedback & Golden Flash)**: Normal stamina consumption updates the bar. Triggering Perfect Dodge activates a 0.20s Golden Flash (`bIsGoldenFlashing == true`) and visually reflects the +15 stamina refund. When `State.Exhausted` is applied, the stamina bar state switches to `Exhausted` (grayed out with lock indicator).
+- [x] **AC-3 (Stamina State Feedback & Golden Flash)**: Normal stamina consumption updates the bar. Triggering Perfect Dodge activates a 0.20s Golden Flash (`bIsGoldenFlashing == true`) and visually reflects the +15 stamina refund. When `State.Exhausted` is applied, the stamina bar state switches to `Exhausted` (grayed out with lock indicator). *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
 - [x] **AC-4 (Vignette & Screen Effects)**: When Health drops below 20% of MaxHealth, `bLowHealthVignetteActive` becomes true with heartbeat frequency scaling between 60 and 100 BPM. When `State.Exhausted` is active, `bExhaustionVignetteActive` becomes true (50% desaturation flag).
 
 ---

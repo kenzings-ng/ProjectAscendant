@@ -2,7 +2,7 @@
 
 > **Status**: Approved  
 > **Author**: Systems Designer & Gameplay Programmer  
-> **Last Updated**: 2026-10-09 (X10: đồng bộ thông số Dash theo code runtime)  
+> **Last Updated**: 2026-10-10 (X14: `TargetArmLength` mặc định 1200 → 1400 cm theo quyết định B1-9/X12); 2026-10-09 (X10: đồng bộ thông số Dash theo code runtime)  
 > **Implements Pillar**: True Skill Expression & Responsive Combat  
 > **Target Engine**: Unreal Engine 5 (Enhanced Input & SpringArm/Camera)
 
@@ -31,7 +31,7 @@ Người chơi cảm nhận sự chính xác tuyệt đối trong từng thao t�
 #### 1. Cấu Hình Camera & Cơ Chế Đón Đầu (Camera Specs & Dynamic Look-Ahead)
 
 Camera được điều khiển qua `USpringArmComponent` và `UCameraComponent` gắn trên Character:
-- **`TargetArmLength`:** **1200 cm** (Bao quát trọn vẹn đấu trường trong bán kính quan sát ~24 mét).
+- **`TargetArmLength`:** **1400 cm** (Bao quát trọn vẹn đấu trường trong bán kính quan sát ~24 mét). *(Cập nhật 2026-10-10 (X14): trước đây 1200 cm; đổi sang 1400 cm theo quyết định của chủ dự án (B1-9, X12), vẫn trong biên độ 1000–1400 cm; khớp code `PAIsometricMovementMath.h:51`.)*
 - **`CameraRotation`:** **Pitch = -45.0°**, **Yaw = 45.0°**, **Roll = 0.0°** (Góc nhìn nghiêng xiên chuẩn mực như *Hades*).
 - **`CameraLag`:** Kích hoạt với `CameraLagSpeed = 12.0` (Mượt mà, không giật hình khi người chơi lướt né tốc độ cao).
 - **`bDoCollisionTest = false`:** Tắt tính năng co lò xo camera khi va tường để tránh camera bị zoom sát mặt nhân vật gây mất phương hướng. Thay vào đó, toàn bộ tường/cột che khuất đường nhìn (Line of Sight) sẽ tự động kích hoạt **Material Dithered Opacity Mask** (Làm mờ bán trong suốt vật cản).
@@ -139,7 +139,7 @@ $$\vec{Velocity} = \text{Normalize}(\vec{V}_{world}) \times \text{MoveSpeed} \ti
 
 | Tên Biến Số | Giá Trị Mặc Định | Biên Độ Khuyến Nghị | Ý Nghĩa Cân Bằng |
 | :--- | :---: | :---: | :--- |
-| `TargetArmLength` | 1200.0 cm | 1000 – 1400 cm | Cự ly bao quát tầm nhìn của camera. |
+| `TargetArmLength` | 1400.0 cm | 1000 – 1400 cm | Cự ly bao quát tầm nhìn của camera. *(X14 2026-10-10: mặc định trước đây 1200.0 cm.)* |
 | `MaxLookAheadDistance` | 250.0 cm | 150 – 350 cm | Khoảng cách camera trôi đón đầu theo hướng ngắm. |
 | `LookAheadReturnSpeed` | 8.0 | 5.0 – 12.0 | Tốc độ camera hồi về tâm nhân vật. |
 | `GamepadDeadzone` | 0.2 | 0.1 – 0.3 | Vùng chết của cần analog để chống trôi cần (stick drift). |

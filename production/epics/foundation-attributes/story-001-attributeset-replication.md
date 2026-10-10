@@ -1,7 +1,8 @@
 # Story 001: Core AttributeSet Definition & Iris Network Replication
 
 > **Epic**: Character Attributes & Stats Engine (GAS)  
-> **Status**: Complete  
+> **Status**: In Progress  
+> **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `Complete`): Bằng chứng: `Foundation.Combat.AttributesAndReplication` trong `Tests/evidence/x11b-e34f428-ue-automation.log` (77/77 PASS). AC-3 chưa có bằng chứng: test AC-3 là tautology (tự broadcast rồi tự kiểm, x12-test-migration §4); chưa có test replication 1 server + 2 client (DECISIONS.md §11). Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
 > **Layer**: Foundation  
 > **Type**: Logic  
 > **Estimate**: 4 hours (M)  
@@ -33,7 +34,7 @@
 
 - [x] **AC-1 (Core Attributes Definition)**: Class `UAscendantAttributeSet` declares `Health`, `MaxHealth`, `Mana`, `MaxMana`, `Stamina`, `MaxStamina`, `Posture`, `MaxPosture`, `MoveSpeed`, and `IFrameDuration` using standard GAS accessor macros (`ATTRIBUTE_ACCESSORS`).
 - [x] **AC-2 (Value Clamping)**: `PreAttributeChange` clamps `Health` to $[0, \text{MaxHealth}]$, `Mana` to $[0, \text{MaxMana}]$, `Stamina` to $[0, \text{MaxStamina}]$, and `Posture` to $[0, \text{MaxPosture}]$.
-- [x] **AC-3 (Network Replication)**: All attributes implement `OnRep_` callbacks using `GAMEPLAYATTRIBUTE_REPNOTIFY` and synchronize from Dedicated Server to Autonomous and Simulated Proxies under Iris replication without hitching.
+- [x] **AC-3 (Network Replication)**: All attributes implement `OnRep_` callbacks using `GAMEPLAYATTRIBUTE_REPNOTIFY` and synchronize from Dedicated Server to Autonomous and Simulated Proxies under Iris replication without hitching. *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
 
 ---
 
@@ -89,8 +90,7 @@
 
 **Story Type**: Logic  
 **Required evidence**: `tests/unit/combat/attributes_replication_test.cpp` — must exist and pass automated CI  
-**Status**: [x] Passed (`tests/unit/combat/attributes_replication_test.cpp` — 3 test suites, 20 assertions)  
-
+**Status**: [x] Passed (`tests/unit/combat/attributes_replication_test.cpp` — 3 test suites, 20 assertions) *(X14 2026-10-10: tuyên bố PASS/Complete này không có bằng chứng tại thời điểm ghi — test ở `Tests/` gốc chưa được biên dịch cho đến X12 (rà soát R4), và đường dẫn đã chuyển sang `Source/ProjectAscendant/Private/Tests/`. Trạng thái thật: xem dòng X14 ở đầu file.)*  
 ---
 
 ## Dependencies
@@ -101,6 +101,8 @@
 ---
 
 ## Completion Notes
+> **X14 (2026-10-10)**: khối dưới đây là lịch sử, không còn đúng. Story hiện là `In Progress`; xem dòng X14 ở đầu file.
+
 **Completed**: 2026-09-16  
 **Criteria**: 3/3 passing (AC-1, AC-2, AC-3)  
 **Deviations**: None  

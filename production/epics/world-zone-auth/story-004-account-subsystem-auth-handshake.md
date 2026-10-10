@@ -1,7 +1,8 @@
 # Story 004: Account Subsystem, 1-Click Fast Playtest & Server Token Handshake
 
 > **Epic**: World Integration, Sanctuaries & Account Authentication Layer  
-> **Status**: ✅ Done  
+> **Status**: In Progress  
+> **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `✅ Done`): Bằng chứng: `Foundation.Account.AuthAndIdentityPipeline`, `Account.AuthTokenHandshake` trong `Tests/evidence/x11b-e34f428-ue-automation.log` (77/77 PASS). Rà soát B4: PARTIAL. AC-2 (< 0.1s) assert luôn đúng (C-4); AC-4 `ValidateJoinToken` chấp nhận mọi token đúng tiền tố và chưa có caller PreLogin (B4-2/C-4); thông tin đăng nhập mặc định hardcode (B4-20). Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
 > **Layer**: Security / Subsystem  
 > **Type**: Subsystem / Network  
 > **Estimate**: 8 hours (1.0 days)  
@@ -26,7 +27,7 @@
 - [x] **AC-1 (GameInstance Subsystem Persistence)**: `UPAAccountSubsystem` kế thừa `UGameInstanceSubsystem`:
   - Tồn tại xuyên suốt vòng đời game client mà không bị hủy khi nạp bản đồ (`LoginMap` $\to$ `CharacterSelectMap` $\to$ `OpenWorldMap`).
   - Lưu giữ thông tin phiên chơi `FPAAccountProfile` (AccountId, DisplayName, AuthToken, bIsDevProfile).
-- [x] **AC-2 (1-Click Fast Playtest Mode - < 0.1s)**:
+- [x] **AC-2 (1-Click Fast Playtest Mode - < 0.1s)**: *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
   - Cung cấp các nút tester sẵn (`Tester 1`, `Tester 2`, `Tester 3`) hoặc nhập tên tự do.
   - Bỏ qua mọi bước nhập mật khẩu, tự sinh ngẫu nhiên UUID và gắn cờ `bIsDevProfile = true`.
   - Hoàn tất phiên đăng nhập và kích hoạt sự kiện thành công trong thời gian $< 0.10$ giây.
@@ -34,7 +35,7 @@
   - Email phải tuân thủ chuẩn RFC 5322 (chứa `@` và dấu chấm hợp lệ ở phần tên miền, không chứa khoảng trắng).
   - Mật khẩu tối thiểu **6 ký tự**.
   - Kiểm tra xác nhận mật khẩu (Confirm Password) phải khớp 100%, nếu sai trả về lỗi rõ ràng.
-- [x] **AC-4 (Server Join Token Handshake)**:
+- [x] **AC-4 (Server Join Token Handshake)**: *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
   - Khi đăng nhập thành công, tự động sinh mã Token phiên chơi theo định dạng: `PA-TOKEN-[UUID]-[TIMESTAMP]`.
   - Cung cấp hàm xác thực token phía server (`ValidateJoinToken`) để Dedicated Server kiểm tra tính hợp lệ trước khi cho phép nhân vật spawn vào thế giới.
 

@@ -1,7 +1,8 @@
 # Story 002: PaperZD AnimBP & State Machine Setup
 
 > **Epic**: Core Character & PaperZD Integration  
-> **Status**: Complete  
+> **Status**: In Progress  
+> **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `Complete`): Bằng chứng: `Core.Character.PaperZDAnimBPIntegration` trong `Tests/evidence/x11b-e34f428-ue-automation.log` (77/77 PASS). AC-1, AC-3 chưa đạt: `ABP_Vanguard` chỉ có node Sink, chưa đặt notify Hitbox (B1-2/M16). Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
 > **Layer**: Core  
 > **Type**: Integration  
 > **Estimate**: 8 hours (L)  
@@ -21,6 +22,6 @@
 
 ## Acceptance Criteria
 
-- [x] **AC-1 (State Machine Architecture)**: `ABP_Vanguard` contains states: `Idle`, `Locomotion`, `Dash`, `LightAttack_Combo`, `Hurt`, `Stunned`, `Dead`. Transitions evaluate `Speed > 10.0f` and GAS tags.
+- [x] **AC-1 (State Machine Architecture)**: `ABP_Vanguard` contains states: `Idle`, `Locomotion`, `Dash`, `LightAttack_Combo`, `Hurt`, `Stunned`, `Dead`. Transitions evaluate `Speed > 10.0f` and GAS tags. *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
 - [x] **AC-2 (Directional Sprite Flipping)**: Horizontal facing flips character sprite component rotation (`Yaw 0` for right, `Yaw 180` for left) based on aim cursor angle or movement direction.
-- [x] **AC-3 (Combat Anim Notifies)**: `FB_Vanguard_Attack1` triggers custom PaperZD AnimNotify `AnimNotify_ActiveHitbox` at frame 2 to start collision trace, and `AnimNotify_EndHitbox` at frame 3.
+- [x] **AC-3 (Combat Anim Notifies)**: `FB_Vanguard_Attack1` triggers custom PaperZD AnimNotify `AnimNotify_ActiveHitbox` at frame 2 to start collision trace, and `AnimNotify_EndHitbox` at frame 3. *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*

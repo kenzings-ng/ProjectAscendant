@@ -5,7 +5,8 @@
 > **Layer**: Presentation & AI Gameplay Layer  
 > **Type**: Architecture & Code (100% Placeholder Testable)  
 > **Estimate**: 1.0 day (8 hours)  
-> **Status**: Completed  
+> **Status**: In Progress  
+> **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `Completed`): Bằng chứng: `CharacterVisual.CivilianNPCAndTownGuardAI` trong `Tests/evidence/x11b-e34f428-ue-automation.log` (77/77 PASS). AC-2 chưa đạt: palette swap chưa làm, chưa có material `M_PaperZD_Civilian_Base` (B1-14/M16). Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
 > **Owner**: Systems Designer & Gameplay Programmer  
 
 ---
@@ -33,7 +34,7 @@ Story này hiện thực hóa:
     - Thợ Rèn, Lính Gác $\rightarrow$ `EPAMasterRig::HeavyTank`.
     - Thương Nhân, Dân Làng $\rightarrow$ `EPAMasterRig::Agility` / `Caster`.
     - Quest Giver $\rightarrow$ `EPAMasterRig::Caster`.
-- [x] **AC-2 (Dynamic Palette Swap Material)**:
+- [x] **AC-2 (Dynamic Palette Swap Material)**: *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
   - Master Material `M_PaperZD_Civilian_Base` nhận tham số `ZoneColorRamp` (Vector Parameter) trong Dynamic Material Instance.
   - Hàm `SetZonePalette(FName ZoneId)` tự động nạp palette màu tương ứng:
     - `Verdant_Bastion`: Tông nâu/rêu vải thô.

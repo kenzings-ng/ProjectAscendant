@@ -1,7 +1,8 @@
 # Story 003: Floating Combat Text & Action Feedback
 
 > **Epic**: Presentation & Interface Layer (Combat HUD & Interactive UI)  
-> **Status**: ✅ Done  
+> **Status**: In Progress  
+> **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `✅ Done`): Bằng chứng: `UI.FloatingCombatText` trong `Tests/evidence/x11b-e34f428-ue-automation.log` (77/77 PASS). Rà soát B4: PARTIAL. AC-3 không có nguồn kích hoạt vì Perfect Dodge chưa có ở runtime; `SpawnCombatText` không có caller (B4-21); AC-4 pool 50 lệch `control-manifest.md` 64 (B4-16, chờ chủ dự án). Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
 > **Layer**: Presentation  
 > **Type**: UI  
 > **Estimate**: 8 hours (1.0 days)  
@@ -28,8 +29,8 @@
   - Critical Damage: Radiant orange-yellow text, scaled 1.5x with bounce animation.
   - Posture Damage: Golden-yellow text targeting posture bar.
 - [x] **AC-2 (Ballistic Radial Scatter Arc)**: Numbers spawn at hit location and follow ballistic arc equation: $\vec{P}(t) = \vec{P}_0 + \vec{V}_0 \cdot t + \frac{1}{2} \vec{g} \cdot t^2$ with $\vec{V}_0 = (v_x, v_y, 180\text{ cm/s})$ and gravity $\vec{g} = (0, 0, -300\text{ cm/s}^2)$. Radial offset $\pm 25\text{px}$ prevents overlapping during cleaves. Lifetime = 0.60s with fade-out.
-- [x] **AC-3 ("PERFECT!" Callout)**: When a Perfect Dodge is executed, spawns a golden-silver callout text ("PERFECT!") directly above the player character for 0.50s.
-- [x] **AC-4 (Performance & Object Pooling)**: Recycles text instances via an in-memory pool (up to 50 active instances) to prevent garbage collection spikes during high-density combat.
+- [x] **AC-3 ("PERFECT!" Callout)**: When a Perfect Dodge is executed, spawns a golden-silver callout text ("PERFECT!") directly above the player character for 0.50s. *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
+- [x] **AC-4 (Performance & Object Pooling)**: Recycles text instances via an in-memory pool (up to 50 active instances) to prevent garbage collection spikes during high-density combat. *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
 
 ---
 

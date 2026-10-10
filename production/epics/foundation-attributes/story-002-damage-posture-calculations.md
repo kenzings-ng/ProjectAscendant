@@ -1,7 +1,8 @@
 # Story 002: Non-Linear Damage & Posture Execution Calculations
 
 > **Epic**: Character Attributes & Stats Engine (GAS)  
-> **Status**: Complete  
+> **Status**: In Progress  
+> **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `Complete`): Bằng chứng: `Foundation.Combat.DamageExecutionCalculations` trong `Tests/evidence/x11b-e34f428-ue-automation.log` (77/77 PASS). AC-1/AC-2/AC-3 chỉ đạt ở helper `UPADamageExecutionCalculation`; đòn cận chiến runtime không đi qua execution calc này (M11), nhánh `State.Staggered` không chạy vì tag chưa đăng ký (M10), công thức kết liễu runtime khác AC-3 (ghi chú X10). Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
 > **Layer**: Foundation  
 > **Type**: Logic  
 > **Estimate**: 4 hours (M)  
@@ -31,13 +32,13 @@
 
 *From GDD `design/gdd/attributes-system.md`, scoped to this story:*
 
-- [x] **AC-1 (Effective Damage Calculation)**: Implement `UGEC_DamageCalculation` using formula:
+- [x] **AC-1 (Effective Damage Calculation)**: Implement `UGEC_DamageCalculation` using formula: *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
   $$\text{DamageTaken} = \text{RawDamage} \times \left( \frac{100}{100 + \text{Armor}} \right)$$
   If target has `GameplayTag.State.Invulnerable`, $\text{DamageTaken}$ is forced to 0.0f.
-- [x] **AC-2 (Posture Damage Calculation)**: Implement `UGEC_PostureCalculation` using formula:
+- [x] **AC-2 (Posture Damage Calculation)**: Implement `UGEC_PostureCalculation` using formula: *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
   $$\text{PostureDamage} = \text{BaseStagger} \times (1 + \text{StaggerBonus}) \times \text{HitMultiplier}$$
   Applying $\text{HitMultiplier} = 1.5$ on weakspots, and instantly applying $35\%$ of target's $\text{MaxPosture}$ on a Perfect Parry.
-- [x] **AC-3 (Stagger Execution Damage)**: When executing a staggered boss, calculate execution damage as:
+- [x] **AC-3 (Stagger Execution Damage)**: When executing a staggered boss, calculate execution damage as: *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
   $$\text{ExecuteDamage} = (\text{TargetMaxHP} \times 0.25) + (\text{BaseDamage} \times 3.0)$$
   bypassing standard armor reduction to guarantee boss defeat in 4 clean execution cycles.
   - *X10 (2026-10-09, DECISIONS.md §12): the runtime finisher `UPAGameplayAbility_Finisher` deals exactly `TargetMaxHP × 0.25` (`PAGameplayAbility_Finisher.h:95`, `PAGameplayAbility_MeleeAttack.cpp:104-108`) and is authoritative. The `+ (BaseDamage × 3.0)` term above exists only in `UPADamageExecutionCalculation` (`PADamageExecutionCalculation.cpp:64`), which the finisher does not call at runtime; `attributes-system.md` §3 now states the code formula. This [x] reflects the helper's tests, not runtime behaviour.*
@@ -95,8 +96,7 @@
  
 **Story Type**: Logic  
 **Required evidence**: `tests/unit/combat/damage_execution_calc_test.cpp` — must exist and pass automated CI  
-**Status**: [x] Created and passes automated test suite (`tests/unit/combat/damage_execution_calc_test.cpp` — 4 test suites, 16 assertions)  
-
+**Status**: [x] Created and passes automated test suite (`tests/unit/combat/damage_execution_calc_test.cpp` — 4 test suites, 16 assertions) *(X14 2026-10-10: tuyên bố PASS/Complete này không có bằng chứng tại thời điểm ghi — test ở `Tests/` gốc chưa được biên dịch cho đến X12 (rà soát R4), và đường dẫn đã chuyển sang `Source/ProjectAscendant/Private/Tests/`. Trạng thái thật: xem dòng X14 ở đầu file.)*  
 ---
 
 ## Dependencies
@@ -107,6 +107,8 @@
 ---
 
 ## Completion Notes
+> **X14 (2026-10-10)**: khối dưới đây là lịch sử, không còn đúng. Story hiện là `In Progress`; xem dòng X14 ở đầu file.
+
 
 **Completed**: 2026-09-16  
 **Criteria**: 3/3 passing (AC-1, AC-2, AC-3)  

@@ -1,7 +1,8 @@
 # Story 001: Blacksmith Tier 1 Outpost Forge & Item Repair
 
 > **Epic**: Expansion Crafting & Blacksmithing Forge  
-> **Status**: Done  
+> **Status**: In Progress  
+> **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `Done`): Bằng chứng: `Crafting.Blacksmith`, `Network.ServerAuthority.ServerComputedCostsAndTier`, `...InteractionRangeAndCombatEnforced`, `...ForeignOwnerComponentsRejected` trong `Tests/evidence/x11b-e34f428-ue-automation.log` (77/77 PASS). AC-4 (server authority) đã sửa ở X11a/X11b (PR #21, #23) nhưng client chỉ được mô phỏng (DECISIONS.md §11). Còn mở: AC-2 salvage trang bị ra shard trong khi GDD ghi ra quặng (M13); AC-3 phí cường hoá là bảng cố định, lệch công thức GDD (B3-12); chưa có forge actor nào trong game (M6). Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
 > **Layer**: Expansion  
 > **Type**: Logic  
 > **Estimate**: 8 hours (1.0 days)  
@@ -31,8 +32,8 @@
 ## Acceptance Criteria
 
 - [x] **AC-1 (Durability Repair Engine)**: `UPABlacksmithComponent` repairs equipped or inventory items calculating cost via `repair_cost = ceil(base_price * 0.25 * (1.0 - durability_pct))`, deducting Gold from `UPACurrencyComponent` and resetting `CurrentDurability = 100.0f`.
-- [x] **AC-2 (Item & Skill Book Salvaging)**: Disassembling equipment or skill books yields Skill Shards based on rarity (Common: 1, Uncommon: 3, Rare: 10, Epic: 25, Legendary: 75; Skill Books by skill rarity `EPASkillRarity` Normal/Rare/Epic/Mythic: 1/3/8/25 per `skill-progression-system.md` — *corrected 2026-10-09 (X6), was flat 5*), destroys the source item from `UPAInventoryComponent`, and credits Skill Shards to `UPACurrencyComponent`. Rejects locked items (`bIsLocked == true`). *(Cập nhật 2026-10-10 (X13): "rarity tier" → "rarity"; độ hiếm không dùng chữ "Tier", DECISIONS.md §1.)*
-- [x] **AC-3 (Safe Enhancement +1 to +3)**: Outpost Forge (Tier 1) supports safe enhancement up to +3 with 100% success rate, consuming Gold and Iron Ore (`iron_ore`), incrementing `EnhancementLevel`, and preventing enhancement beyond the Tier 1 ceiling (+3).
+- [x] **AC-2 (Item & Skill Book Salvaging)**: Disassembling equipment or skill books yields Skill Shards based on rarity (Common: 1, Uncommon: 3, Rare: 10, Epic: 25, Legendary: 75; Skill Books by skill rarity `EPASkillRarity` Normal/Rare/Epic/Mythic: 1/3/8/25 per `skill-progression-system.md` — *corrected 2026-10-09 (X6), was flat 5*), destroys the source item from `UPAInventoryComponent`, and credits Skill Shards to `UPACurrencyComponent`. Rejects locked items (`bIsLocked == true`). *(Cập nhật 2026-10-10 (X13): "rarity tier" → "rarity"; độ hiếm không dùng chữ "Tier", DECISIONS.md §1.)* *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
+- [x] **AC-3 (Safe Enhancement +1 to +3)**: Outpost Forge (Tier 1) supports safe enhancement up to +3 with 100% success rate, consuming Gold and Iron Ore (`iron_ore`), incrementing `EnhancementLevel`, and preventing enhancement beyond the Tier 1 ceiling (+3). *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
 - [x] **AC-4 (Interaction & Server Authority Guardrails)**: All operations enforce server authority, interaction distance $\le 300\text{cm}$ between character and forge, and reject requests when `In-Combat == true` or funds/materials are insufficient.
 
 ---

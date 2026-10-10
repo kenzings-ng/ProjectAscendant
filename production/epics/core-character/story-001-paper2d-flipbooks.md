@@ -1,7 +1,8 @@
 # Story 001: Paper2D Sprite Extraction & Flipbooks
 
 > **Epic**: Core Character & PaperZD Integration  
-> **Status**: Complete  
+> **Status**: Review  
+> **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `Complete`): Bằng chứng: `Core.Character.Paper2DFlipbooksIntegration` trong `Tests/evidence/x11b-e34f428-ue-automation.log` (77/77 PASS). Chỉ còn phát hiện chờ chủ dự án: AC-3 làm flipbook PaperZD cho boss, trong khi `DECISIONS.md:166,174` chọn Spine cho boss (MINOR, `review-B1-B2.md:16`). Chưa đủ bằng chứng: test chỉ kiểm file tồn tại và FPS; chưa assert AC-1 (Filter Nearest, không mipmap, `TEXTUREGROUP_Pixels`) và số frame của AC-2/AC-3. Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
 > **Layer**: Core  
 > **Type**: Asset  
 > **Estimate**: 8 hours (L)  
@@ -21,12 +22,14 @@
 
 ## Acceptance Criteria
 
-- [x] **AC-1 (Texture & Pixel Filtering)**: Imported textures `T_Vanguard_Spritesheet` and `T_Boss_Spritesheet` in `Content/art/characters/` configured with `Filter: Nearest`, `MipGenSettings: TMGS_NO_MIPMAPS`, and `TextureGroup: TEXTUREGROUP_Pixels` to prevent bilinear blurring.
-- [x] **AC-2 (Vanguard Flipbooks)**: Discrete flipbooks created in `Content/art/characters/vanguard/flipbooks/`: `FB_Vanguard_Idle` (8 frames), `FB_Vanguard_Run` (3 frames), `FB_Vanguard_Attack1` (8 frames), `FB_Vanguard_Dash` (6 frames), `FB_Vanguard_Hurt` (6 frames), `FB_Vanguard_Death` (6 frames) playing at 12.0 FPS with individual PNG frames in `Content/art/characters/vanguard/` and animated GIF previews.
-- [x] **AC-3 (Stone Golem Boss Flipbooks)**: Flipbooks created in `Content/art/characters/boss/flipbooks/`: `FB_Golem_Idle` (6 frames), `FB_Golem_Walk` (6 frames), `FB_Golem_Slam` (6 frames), `FB_Golem_Stagger` (5 frames), `FB_Golem_Death` (6 frames) playing at 10.0 FPS with individual PNG frames in `Content/art/characters/boss/` and animated GIF previews.
+- [x] **AC-1 (Texture & Pixel Filtering)**: Imported textures `T_Vanguard_Spritesheet` and `T_Boss_Spritesheet` in `Content/art/characters/` configured with `Filter: Nearest`, `MipGenSettings: TMGS_NO_MIPMAPS`, and `TextureGroup: TEXTUREGROUP_Pixels` to prevent bilinear blurring. *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
+- [x] **AC-2 (Vanguard Flipbooks)**: Discrete flipbooks created in `Content/art/characters/vanguard/flipbooks/`: `FB_Vanguard_Idle` (8 frames), `FB_Vanguard_Run` (3 frames), `FB_Vanguard_Attack1` (8 frames), `FB_Vanguard_Dash` (6 frames), `FB_Vanguard_Hurt` (6 frames), `FB_Vanguard_Death` (6 frames) playing at 12.0 FPS with individual PNG frames in `Content/art/characters/vanguard/` and animated GIF previews. *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
+- [x] **AC-3 (Stone Golem Boss Flipbooks)**: Flipbooks created in `Content/art/characters/boss/flipbooks/`: `FB_Golem_Idle` (6 frames), `FB_Golem_Walk` (6 frames), `FB_Golem_Slam` (6 frames), `FB_Golem_Stagger` (5 frames), `FB_Golem_Death` (6 frames) playing at 10.0 FPS with individual PNG frames in `Content/art/characters/boss/` and animated GIF previews. *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
 
 ---
 
 ## Two-Axis Review Verdict
+> **X14 (2026-10-10)**: các dòng PASS dưới đây là review code lúc đó, không phải bằng chứng AC. Story hiện là `Review`; xem dòng X14 ở đầu file.
+
 - **Standards Axis**: PASS (Mipmaps disabled `TMGS_NO_MIPMAPS`, project-relative path resolution via `unreal.Paths.project_content_dir()`, Nearest-neighbor pixel filter enforced).
 - **Spec Axis**: PASS (All 11 flipbooks created with exact playback FPS: 12.0 FPS for Vanguard and 10.0 FPS for Boss).

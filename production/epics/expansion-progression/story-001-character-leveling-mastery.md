@@ -1,6 +1,7 @@
 # Story prog-001: Character XP, Leveling & Class Mastery
 
-> **Status**: Done
+> **Status**: In Progress  
+> **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `Done`): Bằng chứng: `Progression.AC1_MaxLevelCap`, `AC1_MultiLevelUp`, `AC1_NonLinearXPCurve`, `AC2_GrantXP_LevelUp_StatGrowth` trong `Tests/evidence/x11b-e34f428-ue-automation.log` (77/77 PASS). Rà soát B3: PARTIAL. AC-3 (replicate CurrentLevel/CurrentXP) chưa có test replication. Hệ class phụ/Class Level 1–20 của DECISIONS §4 nằm ngoài story này (M5, chưa có epic). Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
 > **Sprint**: 3
 > **Priority**: Must-Have
 > **Owner**: ue-gas-specialist
@@ -28,7 +29,7 @@ Mỗi lần lên cấp:
 
 - [x] **AC-1**: `UPAProgressionComponent` quản lý XP đường cong phi tuyến Cấp 1→50; công thức `XPToNext(Lv) = ceil(100 * Lv^1.8)`; hỗ trợ multi-level-up; cap tại Level 50
 - [x] **AC-2**: Mỗi cấp độ tăng trưởng chỉ số cơ sở (Health/Mana/Stamina/Attack/Armor)~~ và ban thưởng 1 Điểm Kỹ Năng (Skill Point); SpendSkillPoint có validation~~ (phần Skill Point Removed 2026-10-10, DECISIONS §12)
-- [x] **AC-3**: Replicate CurrentLevel, CurrentXP~~, AvailableSkillPoints~~ qua network và cập nhật AttributeSet (AvailableSkillPoints Removed 2026-10-10, DECISIONS §12)
+- [x] **AC-3**: Replicate CurrentLevel, CurrentXP~~, AvailableSkillPoints~~ qua network và cập nhật AttributeSet (AvailableSkillPoints Removed 2026-10-10, DECISIONS §12) *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
 
 ---
 

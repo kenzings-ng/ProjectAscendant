@@ -4,6 +4,7 @@
 > **Stage**: Production (Final Backend Sprint)  
 > **Review Mode**: Lean  
 > **Capacity**: 10 days (80 hours) | Buffer (20%): 2 days (16 hours) | Available: 8 days (64 hours)  
+> **X14 (2026-10-10) — đối chiếu trạng thái**: Cả 4 story (zone-001, zone-002, zone-003, auth-001) là In Progress (rà soát B4: PARTIAL/CONTRADICTS; M6, M18). **Mâu thuẫn ngày**: sprint ghi 2026-10-17 → 2026-10-31 (tương lai), nhưng code đã merge vào main ngày 2026-09-23 (`ae116fe`, `105a778`, `fac4c72`, `3a69c6c`). Không tự đặt ngày mới. Các mục DoD [x] bên dưới không có bằng chứng. Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
 
 ---
 
@@ -40,7 +41,7 @@ Triển khai hệ thống 3 phân vùng thế giới mở nối liền với Tò
 ---
 
 ## Definition of Done for this Sprint
-- [x] 100% Must Have và Should Have tasks hoàn thành và vượt qua kiểm thử đơn vị & tích hợp.
-- [x] Hoàn tất toàn bộ logic phân vùng, Thánh địa, Co giãn độ khó, Danh dự & Xác thực tài khoản.
-- [x] 100% các hệ thống Gameplay & Backend của 18 GDD đạt chuẩn hoàn thiện (Backend Feature Complete).
-- [x] Bộ kiểm thử tự động Unreal Automation Tests đạt 100% Pass.
+- [x] 100% Must Have và Should Have tasks hoàn thành và vượt qua kiểm thử đơn vị & tích hợp. *(X14 2026-10-10: không có bằng chứng — xem ghi chú X14 ở đầu file)*
+- [x] Hoàn tất toàn bộ logic phân vùng, Thánh địa, Co giãn độ khó, Danh dự & Xác thực tài khoản. *(X14 2026-10-10: không có bằng chứng — xem ghi chú X14 ở đầu file)*
+- [x] 100% các hệ thống Gameplay & Backend của 18 GDD đạt chuẩn hoàn thiện (Backend Feature Complete). *(X14 2026-10-10: không có bằng chứng — xem ghi chú X14 ở đầu file)*
+- [x] Bộ kiểm thử tự động Unreal Automation Tests đạt 100% Pass. *(X14 2026-10-10: lần chạy mới nhất 77/77 PASS — `Tests/evidence/x11b-e34f428-ue-automation.log` — nhưng PASS không đồng nghĩa AC đạt)*

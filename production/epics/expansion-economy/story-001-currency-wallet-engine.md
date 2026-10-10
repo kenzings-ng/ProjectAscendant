@@ -1,7 +1,8 @@
 # Story 001: Dual Currency Wallet & Transaction Engine
 
 > **Epic**: Expansion Economy & Merchant Network  
-> **Status**: Complete  
+> **Status**: In Progress  
+> **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `Complete`): Bằng chứng: `Economy.CurrencyWallet`, `Itemization.DualCurrencyTransactions` trong `Tests/evidence/x11b-e34f428-ue-automation.log` (77/77 PASS). Tên tiền tệ đã sửa ở X5 (PR #16). Còn mở: AC-2 không có `Server_AddCurrency`/`Server_DeductCurrency`, `Server_TransferCurrency` là chuyển tiền giữa người chơi trong khi DECISIONS §6 hoãn giao dịch (B3-21); AC-3 đường chết luôn áp phạt PvE, kể cả PvP và boss (M18). Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
 > **Layer**: Expansion  
 > **Type**: Logic  
 > **Estimate**: 8 hours (1.0 days)  
@@ -31,8 +32,8 @@
 ## Acceptance Criteria
 
 - [x] **AC-1 (Dual Currency FastArray Replication)**: `UPACurrencyComponent` manages Gold (`EPACurrencyType::Gold`, max 9,999,999) and Skill Shards / Tàn Trang (`item_skill_shard`, `EPACurrencyType::SkillShards`, max 99,999) replicating state changes to owning client via `FFastArraySerializer` delta serialization.
-- [x] **AC-2 (Atomic Transaction RPCs & Anti-Duping)**: Server RPCs (`Server_AddCurrency`, `Server_DeductCurrency`, `Server_TransferCurrency`) validate sender authority, enforce non-negative balances, clamp to maximum capacity, and reject unauthorized or invalid operations with specific error codes (`EPACurrencyTransactionError`).
-- [x] **AC-3 (PvE Death Penalty)**: Upon player death in PvE (`HandlePvEDeathPenalty`), exactly 50% of carried Gold (`floor(Gold * 0.50)`) is deducted and prepared for world droplet drop, while 100% of Skill Shards are safeguarded.
+- [x] **AC-2 (Atomic Transaction RPCs & Anti-Duping)**: Server RPCs (`Server_AddCurrency`, `Server_DeductCurrency`, `Server_TransferCurrency`) validate sender authority, enforce non-negative balances, clamp to maximum capacity, and reject unauthorized or invalid operations with specific error codes (`EPACurrencyTransactionError`). *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
+- [x] **AC-3 (PvE Death Penalty)**: Upon player death in PvE (`HandlePvEDeathPenalty`), exactly 50% of carried Gold (`floor(Gold * 0.50)`) is deducted and prepared for world droplet drop, while 100% of Skill Shards are safeguarded. *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
 
 ---
 

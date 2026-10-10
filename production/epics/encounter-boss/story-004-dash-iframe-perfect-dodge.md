@@ -1,7 +1,8 @@
 # Story 004: Dash I-Frame, Perfect Dodge Sweet Spot & Hitstop
 
 > **Epic**: Encounter & Boss Mechanics Layer  
-> **Status**: ✅ Done  
+> **Status**: In Progress  
+> **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `✅ Done`): Bằng chứng: `Combat.DashIFramePerfectDodge` (model `FPADashModel`) trong `Tests/evidence/x11b-e34f428-ue-automation.log` (77/77 PASS). AC-2, AC-3, AC-4 chưa triển khai ở runtime (ghi chú X10); AC-1 model còn bộ số cũ; `UPADashEvasionComponent` không gắn vào actor nào (M6). Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
 > **Layer**: Combat / Movement  
 > **Type**: Gameplay / Mechanics  
 > **Estimate**: 8 hours (1.0 days)  
@@ -26,18 +27,18 @@
 
 ## Acceptance Criteria
 
-- [x] **AC-1 (Dash Timeline & Absolute I-Frame)**:
+- [x] **AC-1 (Dash Timeline & Absolute I-Frame)**: *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
   - Tổng thời gian lướt cố định ở **0.35 giây**, tiêu tốn **25 Stamina**, quãng đường di chuyển **450cm** (giá trị code runtime; trước 2026-10-09 ghi 0.45s / ≈380cm).
   - Từ $t = 0.05\text{s}$ đến $t = 0.25\text{s}$ (0.20s): Nhân vật sở hữu thẻ bất tử `State.Invulnerable`, miễn nhiễm hoàn toàn mọi sát thương và khống chế (trước 2026-10-09 ghi $t \in [0.00, 0.28]$).
   - Từ $t = 0.25\text{s} \to 0.35\text{s}$: Trở về trạng thái bình thường (hồi phục), có thể bị đánh trúng. Kết thúc lướt gán `Cooldown.Dash` 0.5s.
   - *Lưu ý: `FPADashModel` vẫn dùng 0.45s / 0.28s; cần task code riêng để hợp nhất với ability runtime.*
-- [x] **AC-2 (Perfect Dodge Sweet Spot & Rewards)** — chưa triển khai trong code (theo quyết định 2026-10-09: giá trị code là chuẩn) (chỉ có trong `FPADashModel`):
+- [x] **AC-2 (Perfect Dodge Sweet Spot & Rewards)** — chưa triển khai trong code (theo quyết định 2026-10-09: giá trị code là chuẩn) (chỉ có trong `FPADashModel`): *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
   - Khi đòn đánh của kẻ địch quét trúng capsule trong khung thời gian vàng **0.05s đến 0.15s** của cú lướt:
   - Hoàn trả ngay lập tức **+15 Stamina** (chi phí thực tế giảm từ $25 \to 10$).
   - Kích hoạt **Hitstop 0.08 giây** (làm chậm thời gian môi trường/quái vật $10\times$ với TimeDilation = 0.1, người chơi giữ nguyên TimeDilation = 1.0).
   - Cấp trạng thái `State.PerfectDodgeTriggered` trong 2.0s để kích hoạt đòn phản công.
-- [x] **AC-3 (Ledge-Fall Prevention)**: Trong suốt toàn bộ thời gian của cú lướt (0.35s theo code runtime; trước 2026-10-09 ghi 0.45s), nhân vật không bao giờ bị rơi khỏi mép vực (`bCanWalkOffLedges = false`). *(chưa triển khai trong code (theo quyết định 2026-10-09: giá trị code là chuẩn): `UPAGameplayAbility_Dash` không đặt cờ này.)*
-- [x] **AC-4 (Dash Attack Cancel)**: Từ mốc thời gian $t = 0.35\text{s}$, người chơi có thể nhấn nút Đánh để hủy 0.10s hồi phục còn lại và chuyển ngay lập tức sang đòn Dash Attack. *(chưa triển khai trong code (theo quyết định 2026-10-09: giá trị code là chuẩn); mốc 0.35s–0.45s dựa trên cú lướt 0.45s cũ và cần định lại cho cú lướt 0.35s.)*
+- [x] **AC-3 (Ledge-Fall Prevention)**: Trong suốt toàn bộ thời gian của cú lướt (0.35s theo code runtime; trước 2026-10-09 ghi 0.45s), nhân vật không bao giờ bị rơi khỏi mép vực (`bCanWalkOffLedges = false`). *(chưa triển khai trong code (theo quyết định 2026-10-09: giá trị code là chuẩn): `UPAGameplayAbility_Dash` không đặt cờ này.)* *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
+- [x] **AC-4 (Dash Attack Cancel)**: Từ mốc thời gian $t = 0.35\text{s}$, người chơi có thể nhấn nút Đánh để hủy 0.10s hồi phục còn lại và chuyển ngay lập tức sang đòn Dash Attack. *(chưa triển khai trong code (theo quyết định 2026-10-09: giá trị code là chuẩn); mốc 0.35s–0.45s dựa trên cú lướt 0.45s cũ và cần định lại cho cú lướt 0.35s.)* *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
 
 ---
 
