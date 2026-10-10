@@ -32,11 +32,11 @@ Each agent owns a specific domain, enforcing separation of concerns and quality.
 
 ## CHẾ ĐỘ TỰ VẬN HÀNH (Autonomous Mode)
 
-Mục tiêu: thực hiện tuần tự roadmap (Giai đoạn 0 → 6) và các quyết định thiết kế đã chốt, không cần tôi duyệt từng bước.
+Mục tiêu: thực hiện tuần tự roadmap (Giai đoạn 0 → 7, gồm 1.5 và 2B — DECISIONS §13) và các quyết định thiết kế đã chốt, không cần tôi duyệt từng bước.
 
 ### Quy trình mỗi đầu việc
 1. Tạo nhánh riêng từ main. Làm việc nhỏ, commit nhỏ. Mỗi PR chỉ chứa một đầu việc của ROADMAP (không gộp nhiều đầu việc, không đưa các thay đổi thuộc giai đoạn sau vào PR hiện tại).
-2. Trước khi sửa file nào, đọc nội dung gốc của file đó. Nếu chỉ thị (kể cả của tôi) mâu thuẫn với file, ghi lại mâu thuẫn và chọn theo file; báo trong PROGRESS.md.
+2. Trước khi sửa file nào, đọc nội dung gốc của file đó. Nếu chỉ thị (kể cả của tôi) mâu thuẫn với file: mâu thuẫn chạm tới DECISIONS.md hoặc ROADMAP.md → dừng và hỏi; mâu thuẫn khác → ghi lại, chọn theo file và báo trong PROGRESS.md (DECISIONS §13).
 3. Chạy toàn bộ cổng tự động: build, test ProjectAscendant.*, pixel-review (nếu có art), script kiểm tra nhất quán GDD (nếu sửa GDD), migration + test backend (nếu sửa backend).
 4. Gọi subagent "reviewer" với context mới: nhiệm vụ là TÌM LỖI, mỗi nhận xét phải trích file:dòng. Sửa hết lỗi reviewer nêu rồi chạy lại bước 3.
 5. Chỉ merge vào main khi mọi cổng pass và reviewer đồng ý. Push lên remote. Xác nhận bằng git ls-remote.
@@ -48,7 +48,7 @@ Trước khi làm roadmap: xây các cổng tự động còn thiếu (script ki
 ### BẮT BUỘC DỪNG VÀ HỎI TÔI khi
 - Cần duyệt thẩm mỹ: bộ art mẫu Vanguard (Giai đoạn 3), cảm giác chơi.
 - Cần tiêu tiền (asset pack, dịch vụ trả phí).
-- Thêm asset có license không phải CC0, hoặc asset sinh bằng AI.
+- Thêm asset có license không phải CC0, hoặc asset sinh bằng AI. Asset AI duyệt theo lô: gom mỗi lô vào một trang xem trước, mỗi lô vẫn phải dừng chờ duyệt (DECISIONS §13).
 - Xóa asset ngoài danh sách DELETE đã duyệt, hoặc thay đổi quyết định đã chốt.
 - Thử 3 lần vẫn không qua một cổng.
 

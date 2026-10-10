@@ -1,6 +1,6 @@
 # PROJECT ASCENDANT — ROADMAP
 
-> **Trạng thái**: Đã duyệt bởi chủ dự án. Chỉ chủ dự án được sửa file này.
+> **Trạng thái**: Đã duyệt bởi chủ dự án. Chỉ chủ dự án được sửa nội dung file này. Ngoại lệ (DECISIONS §13): agent được đổi `[~]` → `[x]` khi có đủ PR đã merge, log test và kết luận reviewer.
 > **Nguồn chuẩn đi kèm**: `production/DECISIONS.md`. Mâu thuẫn giữa hai file → dừng và hỏi.
 > **Quy trình thực thi**: theo `CLAUDE.md` (Autonomous Mode).
 
@@ -26,12 +26,13 @@ Giai đoạn 2B không cần duyệt thẩm mỹ, nên agent làm 2B trong lúc 
 **Mục tiêu**: repo an toàn, build và test chạy được bằng lệnh.
 
 - [x] Git LFS (`.gitattributes`) cho ảnh, `.aseprite`, `.atlas`, `.spine`, `.uasset`, `.umap`.
-- [x] Cổng tự động: `validate_gdd_consistency.py`, `test_backend_postgres.py` (PostgreSQL thật), CI job `gates` (PR #1).
+- [~] Cổng tự động: `validate_gdd_consistency.py`, `test_backend_postgres.py` (PostgreSQL thật), CI job `gates` (PR #1). _(Hạ về `[~]` ngày 2026-10-10 theo DECISIONS §13: chưa có bằng chứng, xem PROGRESS.md mục 2/M20.)_
 - [x] Nhánh Stone Golem Spine: asset đã có trên main (`Content/art/characters/boss/spine/`). Cần kiểm chứng: Walk không trượt chân, Slam có squash tiếp đất, texture Filter = Nearest, không mipmap.
 - [x] `.claude/settings.json` đúng cú pháp Claude Code và **đã chứng minh** chặn được lệnh cấm.
 - [x] Hook `pre-push` được cài (`git config core.hooksPath Tools/git-hooks`) và đã chứng minh chặn push vào main.
-- [x] Job `ue-tests` chuyển sang `workflow_dispatch`; UE test chạy local, log dán vào `PROGRESS.md`.
+- [~] Job `ue-tests` chuyển sang `workflow_dispatch`; UE test chạy local, log dán vào `PROGRESS.md`. _(Hạ về `[~]` ngày 2026-10-10 theo DECISIONS §13: chưa có bằng chứng, xem PROGRESS.md mục 3/M2.)_
 - [x] Sửa lỗi Character Select: `PACharacterSelectTypes.cpp` load `ranger_pixel_spritesheet` và `arcanist_pixel_spritesheet` nhưng repo chỉ có `.png`, không có `.uasset`.
+- [x] Bảo vệ nhánh `main`: ruleset 24157209 `active` (deletion, non_fast_forward, pull_request, required_status_checks "Fast Gates (GDD & Backend QA)") từ 2026-10-09; bằng chứng X3 trong PROGRESS.md. _(Thêm ngày 2026-10-10 theo DECISIONS §13.)_
 
 **Xong khi**: mọi mục trên là `[x]`.
 
@@ -133,10 +134,10 @@ Khối lượng theo 5 hướng + lật (story-004 → 007), 16 class:
 
 ## Giai đoạn 6 — Backend & lưu dữ liệu
 
-- [ ] Service NestJS + PostgreSQL theo schema trong `DECISIONS.md` mục 9 (bảng `accounts`, `characters`, `items`).
+- [ ] Service backend (công nghệ **chưa chốt**, quyết qua ADR-0006 — DECISIONS §13) + PostgreSQL theo schema trong `DECISIONS.md` mục 9 (bảng `accounts`, `characters`, `items`).
 - [ ] Client đăng nhập lấy JWT; dedicated server xác thực token.
 - [ ] Chỉ dedicated server gọi API ghi dữ liệu (`FHttpModule`); client không bao giờ ghi trực tiếp.
-- [ ] Test backend gọi vào **code NestJS thật** (không chỉ câu SQL trong file test): chống dupe, hoán đổi ô đồ, thăng chức bằng quyển trục.
+- [ ] Test backend gọi vào **code service backend thật** (công nghệ chưa chốt, ADR-0006) (không chỉ câu SQL trong file test): chống dupe, hoán đổi ô đồ, thăng chức bằng quyển trục.
 - [ ] Lưu khi thoát và lưu định kỳ.
 
 ---
