@@ -17,15 +17,20 @@
 #   - completed: chỉ ghi ngày khi story thật sự done. Không story nào của sprint 7 done, nên để trống; ngày cũ
 #     "2026-09-25" là ngày commit code/asset trên main (ff96e7f, 483e160, f3c32e0, 311101e, fcdd4b2, f686267),
 #     giữ lại trong comment từng story.
-#   - Ngày sprint (start 2026-11-01, end 2026-11-14) nằm SAU ngày commit 2026-09-25: mâu thuẫn ngày (rà soát C-17,
-#     A-14). Không tự đặt ngày mới; chờ chủ dự án/producer quyết.
+#
+# Y3b (2026-10-10, theo DECISIONS §13 "Ngày của sprint 5–7: đổi theo ngày commit thật"):
+#   - Ngày sprint cũ (start 2026-11-01, end 2026-11-14) nằm sau ngày commit 2026-09-25 (rà soát C-17, A-14).
+#     Đổi start/end theo ngày commit thật trên main, lấy bằng `git log --format=%ci`:
+#     commit đầu ff96e7f (visual-001, 2026-09-25 06:53:30 +0700), commit cuối b0e1a52 (tạo sprint-7.md, 2026-09-25 11:29:12 +0700).
+#     Không tính các commit sửa tài liệu về sau (374f836, 8b4400b X7, ce588c4/5199d97 X14). Cách lấy ghi ở production/sprints/sprint-7.md.
+#   - completed: vẫn để trống vì không story nào ở trạng thái done (Complete). Trạng thái không đổi.
 
 sprint: 7
 goal: "Character & NPC Visual Identity System — Master Rig Architecture, Decoupled State Machines, Helm Crest & Tabard Sockets, Civilian NPC Component & Dynamic Palette Swap, Town Guard AI, and Animation Timing / Socket Validation Wireframe Proxies."
-start: "2026-11-01"
-end: "2026-11-14"  # X14 2026-10-10: mâu thuẫn — commit thật của sprint là 2026-09-25 (xem header)
+start: "2026-09-25"  # Y3b 2026-10-10: theo ngày commit thật; trước đây "2026-11-01"
+end: "2026-09-25"  # Y3b 2026-10-10: theo ngày commit thật; trước đây "2026-11-14"
 generated: "2026-09-25"
-updated: "2026-10-10"  # X14; trước đây "2026-09-25"
+updated: "2026-10-10"  # X14, Y3b; trước đây "2026-09-25"
 
 stories:
   - id: "visual-001"
