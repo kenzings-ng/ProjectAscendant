@@ -4,7 +4,7 @@
 > **Stage**: Production (First Production Sprint)  
 > **Review Mode**: Lean  
 > **Capacity**: 10 days (80 hours) | Buffer (20%): 2 days (16 hours) | Available: 8 days (64 hours)  
-> **X14 (2026-10-10) — đối chiếu trạng thái**: Trạng thái thật của story sprint này: econ-001 In Progress, crft-001 In Progress, econ-002 Review, prog-001 In Progress, crft-002 In Progress, prog-002 Removed, econ-003 In Progress, crft-003 In Progress. Các mục DoD đánh [x] bên dưới không có bằng chứng (rà soát R4: test ở `Tests/` gốc chưa từng được biên dịch đến X12; DECISIONS.md §11 chưa có test 1 server + 2 client). Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
+> **X14 (2026-10-10) — đối chiếu trạng thái**: Trạng thái thật của story sprint này: econ-001 In Progress, crft-001 In Progress, econ-002 In Progress, prog-001 In Progress, crft-002 In Progress, prog-002 Removed, econ-003 In Progress, crft-003 In Progress. Các mục DoD đánh [x] bên dưới không có bằng chứng (rà soát R4: test ở `Tests/` gốc chưa từng được biên dịch đến X12; DECISIONS.md §11 chưa có test 1 server + 2 client). Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
 
 ---
 
