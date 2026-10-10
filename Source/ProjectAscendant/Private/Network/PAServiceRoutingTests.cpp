@@ -34,7 +34,7 @@
 
 namespace PAServiceRoutingTestHelper
 {
-	static AActor* SpawnLocatedActor(UWorld* World, const FVector& Location, AActor* Owner)
+	static AActor* SpawnRoutingTestActor(UWorld* World, const FVector& Location, AActor* Owner)
 	{
 		FActorSpawnParameters Params;
 		Params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
@@ -96,7 +96,7 @@ namespace PAServiceRoutingTestHelper
 		Player = FRoutedPlayer();
 	}
 
-	static UItemStaticDataAsset* MakeItem(FName ItemId, EPAItemCategory Category, EPAItemRarity Rarity, int32 BaseSellPrice, int32 MaxStack)
+	static UItemStaticDataAsset* MakeRoutingTestItem(FName ItemId, EPAItemCategory Category, EPAItemRarity Rarity, int32 BaseSellPrice, int32 MaxStack)
 	{
 		UItemStaticDataAsset* Asset = NewObject<UItemStaticDataAsset>();
 		Asset->ItemId = ItemId;
@@ -147,7 +147,7 @@ bool FPAServiceRoutingShopWidgetTest::RunTest(const FString& Parameters)
 	}
 
 	FRoutedPlayer Player = SpawnRoutedPlayer(World, FVector(0.0f, 0.0f, 0.0f));
-	AActor* Shop = SpawnLocatedActor(World, FVector(100.0f, 0.0f, 0.0f), nullptr); // NPC merchant, no player owner
+	AActor* Shop = SpawnRoutingTestActor(World, FVector(100.0f, 0.0f, 0.0f), nullptr); // NPC merchant, no player owner
 	UPAMerchantComponent* Merchant = NewObject<UPAMerchantComponent>(Shop, TEXT("TestMerchant"));
 	if (!TestNotNull(TEXT("Player"), Player.Router) || !TestNotNull(TEXT("Merchant"), Merchant))
 	{
@@ -156,7 +156,7 @@ bool FPAServiceRoutingShopWidgetTest::RunTest(const FString& Parameters)
 		return false;
 	}
 
-	UItemStaticDataAsset* Potion = MakeItem(FName("item_test_potion"), EPAItemCategory::Consumable, EPAItemRarity::Common, 10, 99);
+	UItemStaticDataAsset* Potion = MakeRoutingTestItem(FName("item_test_potion"), EPAItemCategory::Consumable, EPAItemRarity::Common, 10, 99);
 	FPAMerchantCatalogEntry CatalogEntry;
 	CatalogEntry.ItemData = Potion;
 	CatalogEntry.PriceGold = 10;
@@ -208,7 +208,7 @@ bool FPAServiceRoutingShopWidgetTest::RunTest(const FString& Parameters)
 	TestEqual(TEXT("Host: widget gold refreshed from wallet"), Widget->GetPlayerGold(), 90);
 
 	// --- Out of range (310 cm): server rejects, widget reports rejection only ---
-	Player.Pawn->SetActorLocation(FVector(410.0f, 0.0f, 0.0f));
+	Player.Pawn->SetActorLocation(FVector(410.0f, 0.0f, 0.0f)); // shop at x=100 -> 310 cm
 	Widget->ExecuteBuy();
 	TestEqual(TEXT("Host 310 cm: rejection delivered"), Probe->ShopRejectedCount, 2);
 	TestEqual(TEXT("Host 310 cm: DistanceExceeded"), Probe->LastShopError, EPATransactionError::DistanceExceeded);
@@ -237,7 +237,7 @@ bool FPAServiceRoutingForgeWidgetTest::RunTest(const FString& Parameters)
 	}
 
 	FRoutedPlayer Player = SpawnRoutedPlayer(World, FVector(0.0f, 0.0f, 0.0f));
-	AActor* ForgeActor = SpawnLocatedActor(World, FVector(100.0f, 0.0f, 0.0f), nullptr); // NPC forge, no player owner
+	AActor* ForgeActor = SpawnRoutingTestActor(World, FVector(100.0f, 0.0f, 0.0f), nullptr); // NPC forge, no player owner
 	UPABlacksmithComponent* Forge = NewObject<UPABlacksmithComponent>(ForgeActor, TEXT("TestForge"));
 	if (!TestNotNull(TEXT("Player"), Player.Router) || !TestNotNull(TEXT("Forge"), Forge))
 	{
@@ -248,8 +248,8 @@ bool FPAServiceRoutingForgeWidgetTest::RunTest(const FString& Parameters)
 	Forge->SetForgeTier(EPABlacksmithTier::Tier1_Outpost);
 
 	// +0 -> +1: 100 Gold + 2 iron_ore, 100% success (crft-001 AC-3).
-	Player.Inventory->AddItemToSlot(0, MakeItem(FName("item_test_sword"), EPAItemCategory::Equipment, EPAItemRarity::Rare, 300, 1), 1);
-	Player.Inventory->AddItemToSlot(1, MakeItem(FName("iron_ore"), EPAItemCategory::Material, EPAItemRarity::None, 0, 999), 2);
+	Player.Inventory->AddItemToSlot(0, MakeRoutingTestItem(FName("item_test_sword"), EPAItemCategory::Equipment, EPAItemRarity::Rare, 300, 1), 1);
+	Player.Inventory->AddItemToSlot(1, MakeRoutingTestItem(FName("iron_ore"), EPAItemCategory::Material, EPAItemRarity::None, 0, 999), 2);
 	EPACurrencyTransactionError CurrErr;
 	Player.Wallet->AddCurrency(EPACurrencyType::Gold, 100, CurrErr);
 
