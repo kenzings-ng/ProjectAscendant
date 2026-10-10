@@ -4,6 +4,7 @@
 > **Stage**: Production (First Production Sprint)  
 > **Review Mode**: Lean  
 > **Capacity**: 10 days (80 hours) | Buffer (20%): 2 days (16 hours) | Available: 8 days (64 hours)  
+> **X14 (2026-10-10) — đối chiếu trạng thái**: Trạng thái thật của story sprint này: econ-001 In Progress, crft-001 In Progress, econ-002 Review, prog-001 In Progress, crft-002 In Progress, prog-002 Removed, econ-003 In Progress, crft-003 In Progress. Các mục DoD đánh [x] bên dưới không có bằng chứng (rà soát R4: test ở `Tests/` gốc chưa từng được biên dịch đến X12; DECISIONS.md §11 chưa có test 1 server + 2 client). Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
 
 ---
 
@@ -50,7 +51,7 @@ Triển khai hệ thống Song Tiền Tệ (**Vàng & Tàn Trang - Gold & Skill 
 ---
 
 ## Definition of Done for this Sprint
-- [x] 100% Must Have tasks hoàn thành và vượt qua kiểm thử đơn vị & tích hợp
-- [x] Mọi giao dịch kinh tế, rèn đúc và thăng cấp được thẩm định nghiêm ngặt trên Server Authority
-- [x] 0 lỗi duplicate vật phẩm hoặc mất tiền tệ khi rớt mạng
-- [x] Bộ kiểm thử tự động Unreal Automation Tests đạt 100% Pass
+- [x] 100% Must Have tasks hoàn thành và vượt qua kiểm thử đơn vị & tích hợp *(X14 2026-10-10: không có bằng chứng — xem ghi chú X14 ở đầu file)*
+- [x] Mọi giao dịch kinh tế, rèn đúc và thăng cấp được thẩm định nghiêm ngặt trên Server Authority *(X14 2026-10-10: sai tại thời điểm ghi — server tin chi phí/tier do client gửi (M8); đã sửa ở X11a/X11b, PR #21/#23)*
+- [x] 0 lỗi duplicate vật phẩm hoặc mất tiền tệ khi rớt mạng *(X14 2026-10-10: không có bằng chứng — xem ghi chú X14 ở đầu file)*
+- [x] Bộ kiểm thử tự động Unreal Automation Tests đạt 100% Pass *(X14 2026-10-10: lần chạy mới nhất 77/77 PASS — `Tests/evidence/x11b-e34f428-ue-automation.log` — nhưng PASS không đồng nghĩa AC đạt, xem bảng X14)*

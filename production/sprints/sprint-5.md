@@ -4,6 +4,7 @@
 > **Stage**: Production  
 > **Review Mode**: Lean  
 > **Capacity**: 10 days (80 hours) | Buffer (20%): 2 days (16 hours) | Available: 8 days (64 hours)  
+> **X14 (2026-10-10) — đối chiếu trạng thái**: Cả 4 story (boss-001, stgr-001, stgr-002, dash-001) là In Progress — các component không gắn vào actor nào, nhiều AC chưa có ở runtime (rà soát M6, M10, ghi chú X10). **Mâu thuẫn ngày**: sprint ghi 2026-10-03 → 2026-10-17, nhưng code đã merge vào main ngày 2026-09-23 (`a616aac`, `e52e5e5`, `24b9848`, `27b6f36`), trước ngày bắt đầu sprint. Không tự đặt ngày mới; chờ chủ dự án/producer. Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
 
 ---
 

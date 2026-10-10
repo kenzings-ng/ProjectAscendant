@@ -8,81 +8,92 @@
 #   review         ↔  Review
 #   done           ↔  Complete
 #   blocked        ↔  Blocked
+#   (X14 2026-10-10: story bị gỡ theo quyết định ghi "Removed" ở story file; không có story Removed trong sprint này.)
+#
+# X14 (2026-10-10) — đối chiếu trạng thái, xem production/qa/x14-status-reconciliation.md.
+#   File này bị sửa tay một lần cho X14 (mâu thuẫn với dòng 2 "DO NOT edit manually"; chọn theo chỉ thị X14 của
+#   production/plans/execution-owner-decisions-2026-10-09.md, ghi lại để chủ dự án biết).
+#   - status: chỉ dùng giá trị chuẩn ở bảng trên. Các giá trị tự do "Completed (Placeholder-tier art …)" đã thay.
+#   - completed: chỉ ghi ngày khi story thật sự done. Không story nào của sprint 7 done, nên để trống; ngày cũ
+#     "2026-09-25" là ngày commit code/asset trên main (ff96e7f, 483e160, f3c32e0, 311101e, fcdd4b2, f686267),
+#     giữ lại trong comment từng story.
+#   - Ngày sprint (start 2026-11-01, end 2026-11-14) nằm SAU ngày commit 2026-09-25: mâu thuẫn ngày (rà soát C-17,
+#     A-14). Không tự đặt ngày mới; chờ chủ dự án/producer quyết.
 
 sprint: 7
 goal: "Character & NPC Visual Identity System — Master Rig Architecture, Decoupled State Machines, Helm Crest & Tabard Sockets, Civilian NPC Component & Dynamic Palette Swap, Town Guard AI, and Animation Timing / Socket Validation Wireframe Proxies."
 start: "2026-11-01"
-end: "2026-11-14"
+end: "2026-11-14"  # X14 2026-10-10: mâu thuẫn — commit thật của sprint là 2026-09-25 (xem header)
 generated: "2026-09-25"
-updated: "2026-09-25"
+updated: "2026-10-10"  # X14; trước đây "2026-09-25"
 
 stories:
   - id: "visual-001"
     name: "Master Rig Architecture & Decoupled State Machine Binding"
     file: "production/epics/presentation-character-visual/story-001-master-rig-decoupled-state-machine.md"
     priority: must-have
-    status: done
+    status: review  # X14 2026-10-10: trước đây done; story ghi 'Ready for Dev'; code + test PASS nhưng AC-1..AC-4 chưa được kiểm
     owner: "gameplay-programmer"
     estimate_days: 1.5
     blocker: ""
-    completed: "2026-09-25"
+    completed: ""  # X14 2026-10-10: trước đây "2026-09-25" = ngày commit ff96e7f, story chưa done
 
   - id: "visual-002"
     name: "Helm Crest Socket & Tabard Cutout Component Integration"
     file: "production/epics/presentation-character-visual/story-002-helm-crest-tabard-overlay-system.md"
     priority: must-have
-    status: done
+    status: in-progress  # X14 2026-10-10: trước đây done; AC-2/AC-4 chỉ có 12/16 class
     owner: "gameplay-programmer"
     estimate_days: 1.0
     blocker: ""
-    completed: "2026-09-25"
+    completed: ""  # X14 2026-10-10: trước đây "2026-09-25" = ngày commit 483e160, story chưa done
 
   - id: "visual-003"
     name: "Civilian NPC Component, Dynamic Palette Swap & Town Guard AI"
     file: "production/epics/presentation-character-visual/story-003-civilian-npc-palette-guard-ai.md"
     priority: must-have
-    status: done
+    status: in-progress  # X14 2026-10-10: trước đây done; AC-2 palette swap chưa làm
     owner: "systems-designer"
     estimate_days: 1.0
     blocker: ""
-    completed: "2026-09-25"
+    completed: ""  # X14 2026-10-10: trước đây "2026-09-25" = ngày commit f3c32e0, story chưa done
 
   - id: "visual-004"
     name: "4 Master Lower Body Animation Sets (420 Frames Wireframe Proxy)"
     file: "production/epics/presentation-character-visual/story-004-art-lower-body-master-rigs.md"
     priority: should-have
-    status: "Completed (Placeholder-tier art — cần thay thế bằng pixel art thật trước khi release)"
+    status: review  # X14 2026-10-10: trước đây "Completed (Placeholder-tier art — cần thay thế bằng pixel art thật trước khi release)"; asset proxy có, chưa có log kiểm tra tự động; art thật chờ duyệt
     owner: "technical-artist"
     estimate_days: 2.5
     blocker: ""
-    completed: "2026-09-25"
+    completed: ""  # X14 2026-10-10: trước đây "2026-09-25" = ngày commit 311101e, story chưa done
 
   - id: "visual-005"
     name: "7 Weapon Family Upper Body Combat Sets (560 Frames Wireframe Proxy)"
     file: "production/epics/presentation-character-visual/story-005-art-upper-body-weapon-families.md"
     priority: should-have
-    status: "Completed (Placeholder-tier art — cần thay thế bằng pixel art thật trước khi release)"
+    status: review  # X14 2026-10-10: trước đây "Completed (Placeholder-tier art — cần thay thế bằng pixel art thật trước khi release)"; asset proxy có, chưa có log kiểm tra tự động; art thật chờ duyệt
     owner: "technical-artist"
     estimate_days: 3.0
     blocker: ""
-    completed: "2026-09-25"
+    completed: ""  # X14 2026-10-10: trước đây "2026-09-25" = ngày commit fcdd4b2, story chưa done
 
   - id: "visual-006"
-    name: "12 Class Idle Stances, Crest Sockets & Tabards (360 Assets Wireframe Proxy)"
+    name: "16 Class Idle Stances, Crest Sockets & Tabards (500 Assets Wireframe Proxy)"  # X14 2026-10-10: trước đây "12 Class … (360 Assets …)", sửa theo tên story-006
     file: "production/epics/presentation-character-visual/story-006-art-class-idle-crest-tabard.md"
     priority: should-have
-    status: "Completed (Placeholder-tier art — cần thay thế bằng pixel art thật trước khi release)"
+    status: in-progress  # X14 2026-10-10: trước đây "Completed (Placeholder-tier art — cần thay thế bằng pixel art thật trước khi release)"; AC-2/AC-3 chỉ có crest/tabard cho 12/16 class; AC-5 không có log
     owner: "pixel-artist"
     estimate_days: 2.0
     blocker: ""
-    completed: "2026-09-25"
+    completed: ""  # X14 2026-10-10: trước đây "2026-09-25" = ngày commit f686267, story chưa done
 
   - id: "visual-007"
     name: "Civilian Upper Body & Town Props (255 Assets Wireframe Proxy)"
     file: "production/epics/presentation-character-visual/story-007-art-civilian-props-upper-body.md"
     priority: should-have
-    status: "Completed (Placeholder-tier art — cần thay thế bằng pixel art thật trước khi release)"
+    status: review  # X14 2026-10-10: trước đây "Completed (Placeholder-tier art — cần thay thế bằng pixel art thật trước khi release)"; asset proxy có, chưa có log kiểm tra tự động; art thật chờ duyệt
     owner: "pixel-artist"
     estimate_days: 1.5
     blocker: ""
-    completed: "2026-09-25"
+    completed: ""  # X14 2026-10-10: trước đây "2026-09-25" = ngày commit f686267, story chưa done
