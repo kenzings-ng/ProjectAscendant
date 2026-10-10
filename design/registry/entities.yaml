@@ -489,7 +489,7 @@ items:
     stackable: false
     attributes:
       archetype: "Weapon.1H.Mace"
-      # (2026-10-10, Y1, chủ dự án duyệt): thêm Inquisitor và Seraph theo DECISIONS.md:134-135 (khớp itemization.md:205).
+      # (2026-10-10, Y1 — đồng bộ với quyết định đã chốt DECISIONS.md:134-135, không phải lựa chọn duyệt mới): thêm Inquisitor và Seraph (khớp itemization.md:205).
       classes: ["Acolyte", "Templar", "Inquisitor", "Chronomancer", "Seraph"]
       base_speed: 1.00
       posture_stagger_bonus: 0.25
