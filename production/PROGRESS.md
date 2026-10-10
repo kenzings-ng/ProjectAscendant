@@ -404,11 +404,11 @@ Kế hoạch: `production/plans/execution-owner-decisions-2026-10-09.md`. Sau kh
 
 ### 2.7 Thực Thi Quyết Định Chủ Dự Án — Đợt 2 (2026-10-10)
 
-Sau khi merge PR #23, `git ls-remote origin main` = `9705f81`. Mỗi PR có code đều đã build `ProjectAscendantEditor` thành công và chạy `Tools/QA/run_headless_tests.sh --ue`. Bằng chứng nằm trong `Tests/evidence/`: mỗi file có commit hash, ngày chạy và exit code của script.
+Sau khi merge PR #23, `git ls-remote origin main` = `9705f81`. Mỗi PR có code đều đã build `ProjectAscendantEditor` thành công và chạy `Tools/QA/run_headless_tests.sh --ue`. Bằng chứng nằm trong `Tests/evidence/`: mỗi file có commit hash, ngày chạy và exit code của script. Ngoại lệ là lần X12a chạy riêng nhánh: không lưu log, xem dòng X12a.
 
 | Mục | PR | Merge trên `origin/main` | Test UE (Passed/Discovered, exit script) | CI Fast Gates (job) | Reviewer |
 |---|---|---|---|---|---|
-| X12a Sửa khoá file tag (`+GameplayTagList`) + Dash bị chặn bởi `Ability.Block.Dash` | #14 | `e0a2a5e` | 45/45 khi chạy riêng nhánh; 67/67 khi ghép với X12 (log lưu ở scratchpad) | 113882411341 | **PASS** |
+| X12a Sửa khoá file tag (`+GameplayTagList`) + Dash bị chặn bởi `Ability.Block.Dash` | #14 | `e0a2a5e` | 45/45 khi chạy riêng nhánh (chỉ ghi trong mô tả PR #14, không lưu log); 67/67 khi ghép với X12 — `x12-7c2f61f` (chạy ở commit đã chứa `e0a2a5e`) | 113882411341 | **PASS** |
 | X12 Đưa 22 test ở `Tests/` gốc vào module | #15 | `1d24c02` | 67/67, exit 0 — `x12-7c2f61f` | 113886008080 | FAIL (bằng chứng bị ghi đè + 6 điểm) → **PASS** |
 | X5 Ash Shards → `item_skill_shard` | #16 | `e3c7644` | 67/67, exit 0 — `x5-2cd20e4` (lần chạy 1 bị đứt log, chạy lại PASS) | 113889865303 | **PASS** |
 | X6 Thang độ hiếm kỹ năng 4 bậc | #17 | `fb0f907` | 68/68, exit 0 — `x6-02c8972` | 113990239032 | FAIL (asset Dash chưa tạo lại; luật ngăn chứa tràn) → **PASS** |
@@ -416,7 +416,7 @@ Sau khi merge PR #23, `git ls-remote origin main` = `9705f81`. Mỗi PR có code
 | X8 Boss dùng replication `Minimal` | #19 | `88e0e29` | 70/70, exit 0 — `x8-352ef6c` | 114003502377 | **PASS** |
 | X9 Gỡ talent tree, skill point, respec của talent | #20 | `dbe2d0e` | 66/66, exit 0 — `x9-32b9d3d` (bỏ 4 test của phần đã gỡ) | 114006983480 | FAIL (sửa GDD trái phép → đã hoàn lại) → **PASS** |
 | X4b Runner: `-ForceLogFlush` + số test đã chạy phải bằng số test tìm thấy | #22 | `cab19fc` | 3 lần liên tiếp 66/66, exit 0 — `x4b-b9cb387` | 114144699990 | **PASS** |
-| X11a Server tự tính chi phí và tier; kiểm quyền sở hữu, khoảng cách, combat | #21 | `79151b9` | 71/71 — `x11a-e72c004` (1/3 lần PASS; 2 lần đứt log, nguyên nhân là X4b) | 114155602922 (chạy lại sau lỗi Docker Hub rate limit) | FAIL (socket miễn phí) → **PASS** |
+| X11a Server tự tính chi phí và tier; kiểm quyền sở hữu, khoảng cách, combat | #21 | `79151b9` | 71/71 — `x11a-e72c004` (1/3 lần PASS; 2 lần còn lại đứt log do runner không flush log, đã sửa ở X4b #22) | 114155602922 (chạy lại sau lỗi Docker Hub rate limit) | FAIL (socket miễn phí) → **PASS** |
 | X11b Đưa RPC qua `UPAServiceRequestComponent` của người chơi; UI chờ server xác nhận | #23 | `9705f81` | 77/77 ×2, exit 0, Performed=77 — `x11b-e34f428` | 114157366849 | FAIL (buyback dùng chung) → FAIL (UID rỗng bị kick) → **PASS** |
 
 **Lệch so với plan:**
@@ -426,7 +426,7 @@ Sau khi merge PR #23, `git ls-remote origin main` = `9705f81`. Mỗi PR có code
 
 **Mâu thuẫn tài liệu đã ghi nhận** (theo CLAUDE.md bước 2; chọn theo file, chờ chủ dự án):
 1. **Bán kính tương tác:** `merchant-economy.md:24` ghi 300 cm, còn `control-manifest.md:75` ghi ≤250 cm. Code đang dùng 300 cm.
-2. **"điểm kỹ năng" trong dữ liệu auto-save** (`zone-system.md:53`) mâu thuẫn với DECISIONS §12 ("Skill Point không có trong GDD"). GDD được giữ nguyên. Cần chủ dự án cho biết đây là skill point hay cấp độ kỹ năng trong Grimoire (AC-7 `foundational-classes.md:445-448`).
+2. **"điểm kỹ năng" trong dữ liệu auto-save** (`zone-system.md:53`) mâu thuẫn với DECISIONS §12 (`DECISIONS.md:195`: "Đây là hệ thống không có trong GDD"). GDD được giữ nguyên. Cần chủ dự án cho biết đây là skill point hay cấp độ kỹ năng trong Grimoire (AC-7 `foundational-classes.md:445-448`).
 3. **Giá sửa đồ:** ví dụ trong `blacksmithing-system.md:247` ghi Rare = 125, còn `inventory-system.md:193` tính ra 300. Code theo 300.
 4. **`architecture.md:299-300`** vẫn ghi `Server_UpgradeEquipment` và `Server_RepairItem(int32)`, đều đã cũ. Cần một PR tài liệu riêng.
 5. **Tên kiểu trong GDD:** `skill-progression-system.md:70,80` ghi `EItemRarity`, còn code dùng `EPASkillRarity`.
@@ -450,7 +450,7 @@ Sau khi merge PR #23, `git ls-remote origin main` = `9705f81`. Mỗi PR có code
 - Bản đồ của Smuggler bán bằng Gold, trong khi GDD ghi bằng Shards.
 - FOV của camera chưa được chốt.
 - `art-bible.md:128` còn khung độ hiếm Immortal/Divine (cần duyệt thẩm mỹ).
-- `.gitattributes` quy định mọi `.uasset` dùng LFS, nhưng chỉ 5/3482 file là pointer.
+- `.gitattributes` quy định mọi `.uasset` dùng LFS, nhưng chỉ 5/3492 file là pointer (3482 file trong `Content/`).
 - `.claude/agents/reviewer.md` ghi "Guard: 5", trong khi DECISIONS ghi 6.
 
 ---
