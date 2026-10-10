@@ -1,10 +1,11 @@
-# Sprint 5 — 2026-10-03 to 2026-10-17
+# Sprint 5 — 2026-09-23 to 2026-09-23
 
 > **Sprint**: Sprint 5 (Encounter & Boss Mechanics Layer — Boss AI, Stagger & Perfect Evasion)  
 > **Stage**: Production  
 > **Review Mode**: Lean  
 > **Capacity**: 10 days (80 hours) | Buffer (20%): 2 days (16 hours) | Available: 8 days (64 hours)  
-> **X14 (2026-10-10) — đối chiếu trạng thái**: Cả 4 story (boss-001, stgr-001, stgr-002, dash-001) là In Progress — các component không gắn vào actor nào, nhiều AC chưa có ở runtime (rà soát M6, M10, ghi chú X10). **Mâu thuẫn ngày**: sprint ghi 2026-10-03 → 2026-10-17, nhưng code đã merge vào main ngày 2026-09-23 (`a616aac`, `e52e5e5`, `24b9848`, `27b6f36`), trước ngày bắt đầu sprint. Không tự đặt ngày mới; chờ chủ dự án/producer. Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
+> **X14 (2026-10-10) — đối chiếu trạng thái**: Cả 4 story (boss-001, stgr-001, stgr-002, dash-001) là In Progress — các component không gắn vào actor nào, nhiều AC chưa có ở runtime (rà soát M6, M10, ghi chú X10). Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
+> **Ngày sprint (2026-10-10, Y3b, theo DECISIONS §13)**: đổi theo ngày commit thật trên main. Trước đây ghi 2026-10-03 → 2026-10-17. Cách lấy: `git log --format=%ci` trên commit dựng sprint và các commit/merge của 4 story. Commit đầu: `f5804a7` (docs(sprint-5): initialize, 2026-09-23 09:13:51 +0700). Commit cuối: `27b6f36` (merge dash-001 → main, 2026-09-23 09:19:12 +0700). Commit story (commit/merge): `80fc59b`/`a616aac` (boss-001), `8d4d059`/`e52e5e5` (stgr-001), `1770985`/`24b9848` (stgr-002), `0ecbdd6`/`27b6f36` (dash-001). Không tính các commit rà soát/đồng bộ tài liệu về sau (`033631f` X10, `ce588c4`/`5199d97` X14). Chỉ đổi ngày; trạng thái story giữ nguyên.  
 
 ---
 

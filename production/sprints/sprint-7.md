@@ -1,10 +1,11 @@
-# Sprint 7 — 2026-11-01 to 2026-11-14
+# Sprint 7 — 2026-09-25 to 2026-09-25
 
 > **Sprint**: Sprint 7 (Character & NPC Visual Identity System)  
 > **Stage**: Production (Visual Identity & Modular Animation Layer)  
 > **Review Mode**: Lean  
 > **Capacity**: 10 days (80 hours) | Buffer (20%): 2 days (16 hours) | Available: 8 days (64 hours)  
-> **X14 (2026-10-10) — đối chiếu trạng thái**: Cột Status bên dưới đã đổi sang từ vựng chuẩn (`production/sprint-status.yaml`). **Mâu thuẫn ngày**: sprint ghi 2026-11-01 → 2026-11-14 (tương lai), nhưng code/asset đã commit trên main ngày 2026-09-25 (`ff96e7f`, `483e160`, `f3c32e0`, `311101e`, `fcdd4b2`, `f686267`). Không tự đặt ngày mới. Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
+> **X14 (2026-10-10) — đối chiếu trạng thái**: Cột Status bên dưới đã đổi sang từ vựng chuẩn (`production/sprint-status.yaml`). Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
+> **Ngày sprint (2026-10-10, Y3b, theo DECISIONS §13)**: đổi theo ngày commit thật trên main. Trước đây ghi 2026-11-01 → 2026-11-14. Cách lấy: `git log --format=%ci` trên các commit của 7 story và commit tạo file sprint này. Commit đầu: `ff96e7f` (visual-001, 2026-09-25 06:53:30 +0700). Commit cuối: `b0e1a52` (docs(visual): tạo `sprint-7.md`, xếp visual-004..007 là placeholder, 2026-09-25 11:29:12 +0700). Commit story: `ff96e7f` (visual-001), `483e160` (visual-002), `f3c32e0` (visual-003), `311101e` (visual-004), `fcdd4b2` (visual-005), `f686267` (visual-006, visual-007). Không tính các commit sửa tài liệu về sau (`374f836` fix(infra) 2026-09-29 đồng bộ DECISIONS/số frame, `8b4400b` X7, `ce588c4`/`5199d97` X14). Chỉ đổi ngày; trạng thái story giữ nguyên.  
 
 ---
 

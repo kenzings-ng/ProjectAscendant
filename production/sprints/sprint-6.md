@@ -1,10 +1,11 @@
-# Sprint 6 — 2026-10-17 to 2026-10-31
+# Sprint 6 — 2026-09-23 to 2026-09-23
 
 > **Sprint**: Sprint 6 (World Integration, Citadel Safe Zones & Account Authentication Layer)  
 > **Stage**: Production (Final Backend Sprint)  
 > **Review Mode**: Lean  
 > **Capacity**: 10 days (80 hours) | Buffer (20%): 2 days (16 hours) | Available: 8 days (64 hours)  
-> **X14 (2026-10-10) — đối chiếu trạng thái**: Cả 4 story (zone-001, zone-002, zone-003, auth-001) là In Progress (rà soát B4: PARTIAL/CONTRADICTS; M6, M18). **Mâu thuẫn ngày**: sprint ghi 2026-10-17 → 2026-10-31 (tương lai), nhưng code đã merge vào main ngày 2026-09-23 (`ae116fe`, `105a778`, `fac4c72`, `3a69c6c`). Không tự đặt ngày mới. Các mục DoD [x] bên dưới không có bằng chứng. Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
+> **X14 (2026-10-10) — đối chiếu trạng thái**: Cả 4 story (zone-001, zone-002, zone-003, auth-001) là In Progress (rà soát B4: PARTIAL/CONTRADICTS; M6, M18). Các mục DoD [x] bên dưới không có bằng chứng. Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
+> **Ngày sprint (2026-10-10, Y3b, theo DECISIONS §13)**: đổi theo ngày commit thật trên main. Trước đây ghi 2026-10-17 → 2026-10-31. Cách lấy: `git log --format=%ci` trên commit dựng sprint và các commit/merge của 4 story. Commit đầu: `7065d80` (docs(sprint-6): initialize, 2026-09-23 09:28:33 +0700). Commit cuối: `b0bc451` (feat(zone-001): refactor sang Citadel, 2026-09-23 09:55:02 +0700). Commit story (commit/merge): `8acf89f`/`ae116fe` (zone-001, thêm `b0bc451`), `3528187`/`105a778` (zone-002), `35ce2fa`/`fac4c72` (zone-003), `535fd87`/`3a69c6c` (auth-001); `dd3a1fc` (docs sprint-6, 09:42:10). Không tính các commit rà soát/đồng bộ tài liệu về sau (`ce588c4`/`5199d97` X14). Chỉ đổi ngày; trạng thái story giữ nguyên.  
 
 ---
 
