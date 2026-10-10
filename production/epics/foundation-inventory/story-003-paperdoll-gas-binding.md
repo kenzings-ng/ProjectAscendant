@@ -33,7 +33,7 @@
 *From GDD `design/gdd/inventory-system.md`, scoped to this story:*
 
 - [x] **AC-1 (6-Slot Paperdoll System)**: Implements 6 designated equipment slots: Mainhand Weapon, Offhand/Shield, Body Armor, Amulet, Ring 1, and Ring 2.
-- [x] **AC-2 (GAS GameplayEffect Binding)**: Equipping an item with stat modifiers applies a dynamic `UGameplayEffect` to the character's `UAbilitySystemComponent` and stores the active handle; unequipping removes the effect and restores stats immediately.
+- [x] **AC-2 (GAS GameplayEffect Binding)**: Equipping an item with stat modifiers applies a dynamic `UGameplayEffect` to the character's `UAbilitySystemComponent` and stores the active handle; unequipping removes the effect and restores stats immediately. *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
 - [x] **AC-3 (Quickbar 1–4 Consumables)**: Pressing keys 1–4 uses the assigned consumable potion, playing a 0.8s drinking action (`potion_use_duration = 0.8s`), reducing movement speed by 30% during drinking, and decrementing the stack count by 1.
 - [x] **AC-4 (Skill Book Class-Lock & Grant)**: Right-clicking a Skill Book checks `RequiredClassTag` and verifies character is not in combat (`!State.InCombat`); upon validation, consumes 1 book and grants the corresponding `UGameplayAbility` to the character's ASC.
 
@@ -100,8 +100,7 @@
 
 **Story Type**: Integration  
 **Required evidence**: `tests/integration/inventory/paperdoll_gas_equipment_test.cpp` — must exist and pass automated CI  
-**Status**: [x] Passed (`ProjectAscendant/Tests/integration/inventory/paperdoll_gas_equipment_test.cpp`, 5 test blocks passing, build succeeded)  
-
+**Status**: [x] Passed (`ProjectAscendant/Tests/integration/inventory/paperdoll_gas_equipment_test.cpp`, 5 test blocks passing, build succeeded) *(X14 2026-10-10: tuyên bố PASS/Complete này không có bằng chứng tại thời điểm ghi — test ở `Tests/` gốc chưa được biên dịch cho đến X12 (rà soát R4), và đường dẫn đã chuyển sang `Source/ProjectAscendant/Private/Tests/`. Trạng thái thật: xem dòng X14 ở đầu file.)*  
 ---
 
 ## Dependencies

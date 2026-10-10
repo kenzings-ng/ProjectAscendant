@@ -33,7 +33,7 @@
 *From GDD `design/gdd/isometric-controller.md`, scoped to this story:*
 
 - [x] **AC-1 (Isometric SpringArm Specifications)**: `USpringArmComponent` is configured with `TargetArmLength = 1400.0f`, fixed rotation `Pitch = -45.0f`, `Yaw = 45.0f`, `Roll = 0.0f`, `bDoCollisionTest = false`, and `CameraLagSpeed = 12.0f`. *(Cập nhật 2026-10-10 (X14): 1200 → 1400 theo quyết định của chủ dự án (B1-9, X12); 1400 nằm trong khoảng 1000–1400 cm của GDD, khớp `PAIsometricMovementMath.h:51` và test `CameraLookAheadAndOcclusion`.)*
-- [x] **AC-2 (Dynamic Look-Ahead Offset)**: As the player aims away from the character, the camera shifts up to $250\text{ cm}$ (`MaxLookAheadDistance = 250.0f`) along the aim direction; when aim returns to center, the camera smoothly re-centers with interpolation speed $8.0$ (`LookAheadReturnSpeed = 8.0f`).
+- [x] **AC-2 (Dynamic Look-Ahead Offset)**: As the player aims away from the character, the camera shifts up to $250\text{ cm}$ (`MaxLookAheadDistance = 250.0f`) along the aim direction; when aim returns to center, the camera smoothly re-centers with interpolation speed $8.0$ (`LookAheadReturnSpeed = 8.0f`). *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
 - [x] **AC-3 (Line-of-Sight Occlusion Dither)**: Line-traces between the camera and character detect any blocking 3D meshes (pillars, archways, trees), setting their dynamic material scalar parameter `DitherOpacity` to $0.25f$ within a $200\text{ cm}$ cylinder to ensure the player and boss telegraphs are never occluded.
 
 ---
@@ -101,8 +101,7 @@
 
 **Story Type**: Integration  
 **Required evidence**: `tests/integration/controller/camera_lookahead_occlusion_test.cpp` OR screenshot evidence in `production/qa/evidence/camera-lookahead-evidence.md`  
-**Status**: [x] Passed (`tests/integration/controller/camera_lookahead_occlusion_test.cpp` — 3 test suites, 22 assertions)  
-
+**Status**: [x] Passed (`tests/integration/controller/camera_lookahead_occlusion_test.cpp` — 3 test suites, 22 assertions) *(X14 2026-10-10: tuyên bố PASS/Complete này không có bằng chứng tại thời điểm ghi — test ở `Tests/` gốc chưa được biên dịch cho đến X12 (rà soát R4), và đường dẫn đã chuyển sang `Source/ProjectAscendant/Private/Tests/`. Trạng thái thật: xem dòng X14 ở đầu file.)*  
 ---
 
 ## Dependencies
@@ -113,6 +112,8 @@
 ---
 
 ## Completion Notes
+> **X14 (2026-10-10)**: khối dưới đây là lịch sử, không còn đúng. Story hiện là `In Progress`; xem dòng X14 ở đầu file.
+
 **Completed**: 2026-09-16  
 **Criteria**: 3/3 passing (AC-1, AC-2, AC-3)  
 **Deviations**: None  

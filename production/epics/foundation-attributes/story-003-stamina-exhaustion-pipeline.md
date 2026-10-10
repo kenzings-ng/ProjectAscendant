@@ -32,10 +32,10 @@
 
 *From GDD `design/gdd/attributes-system.md`, scoped to this story:*
 
-- [x] **AC-1 (Stamina Consumption & Desperation Roll)**: Dashing consumes 25 Stamina (`StaminaCost_Dash = 25.0f`). If Stamina is $>0$ but $<25$, a "Desperation Roll" is granted, deducting all remaining Stamina and setting an extended exhaustion penalty.
+- [x] **AC-1 (Stamina Consumption & Desperation Roll)**: Dashing consumes 25 Stamina (`StaminaCost_Dash = 25.0f`). If Stamina is $>0$ but $<25$, a "Desperation Roll" is granted, deducting all remaining Stamina and setting an extended exhaustion penalty. *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
   - *X10 (2026-10-09) — Desperation Roll: chưa triển khai trong code (theo quyết định 2026-10-09: giá trị code là chuẩn). The runtime dash ability `UPAGameplayAbility_Dash` blocks activation when Stamina < 25 (`PAGameplayAbility_Dash.cpp:30`, Story core-combat/001 AC-1). The Desperation Roll branch exists only in the pure helper `FPAStaminaPipeline::ConsumeStamina` (`PAStaminaComponent.cpp:32-35`), which is not called at runtime; this [x] reflects that helper's tests, not runtime behaviour.*
-- [x] **AC-2 (Regeneration Delay & Rate)**: Following any stamina consumption, regeneration pauses for 0.6 seconds (`StaminaRegenDelay = 0.6s`), after which Stamina regenerates at 45.0 points per second (`StaminaRegenRate = 45.0/s`) until reaching `MaxStamina`.
-- [x] **AC-3 (Exhaustion State & Penalty)**: When Stamina reaches 0, apply `GameplayTag.State.Exhausted`, which:
+- [x] **AC-2 (Regeneration Delay & Rate)**: Following any stamina consumption, regeneration pauses for 0.6 seconds (`StaminaRegenDelay = 0.6s`), after which Stamina regenerates at 45.0 points per second (`StaminaRegenRate = 45.0/s`) until reaching `MaxStamina`. *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
+- [x] **AC-3 (Exhaustion State & Penalty)**: When Stamina reaches 0, apply `GameplayTag.State.Exhausted`, which: *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
   - Reduces `MoveSpeed` by $25\%$
   - Blocks dash activation (`Ability.Block.Dash`)
   - Lasts for 1.5 seconds (or 2.2 seconds if triggered via Desperation Roll) until Stamina exceeds $30\%$.
@@ -96,8 +96,7 @@
 
 **Story Type**: Logic  
 **Required evidence**: `tests/unit/combat/stamina_exhaustion_test.cpp` — must exist and pass automated CI  
-**Status**: [x] Created and passes automated test suite (`tests/unit/combat/stamina_exhaustion_test.cpp` — 4 test suites, 16 assertions)  
-
+**Status**: [x] Created and passes automated test suite (`tests/unit/combat/stamina_exhaustion_test.cpp` — 4 test suites, 16 assertions) *(X14 2026-10-10: tuyên bố PASS/Complete này không có bằng chứng tại thời điểm ghi — test ở `Tests/` gốc chưa được biên dịch cho đến X12 (rà soát R4), và đường dẫn đã chuyển sang `Source/ProjectAscendant/Private/Tests/`. Trạng thái thật: xem dòng X14 ở đầu file.)*  
 ---
 
 ## Dependencies
@@ -108,6 +107,8 @@
 ---
 
 ## Completion Notes
+> **X14 (2026-10-10)**: khối dưới đây là lịch sử, không còn đúng. Story hiện là `In Progress`; xem dòng X14 ở đầu file.
+
 
 **Completed**: 2026-09-16  
 **Criteria**: 3/3 passing (AC-1, AC-2, AC-3)  

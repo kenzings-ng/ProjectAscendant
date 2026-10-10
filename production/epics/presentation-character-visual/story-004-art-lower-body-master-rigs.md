@@ -6,7 +6,7 @@
 > **Type**: Art & Production (Wireframe / Stick-figure Proxy)  
 > **Estimate**: 2.5 days (20 hours)  
 > **Status**: Review  
-> **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `Completed (Placeholder-tier art)`): Bằng chứng: — (không có test tự động; asset proxy có trên main, commit `311101e`) trong `Tests/evidence/x11b-e34f428-ue-automation.log` (77/77 PASS). Asset proxy đã có, nhưng chưa có log kiểm tra tự động cho AC-1..AC-3. Art thật thay proxy là điều kiện release (epic-overview Pha 3) và cần chủ dự án duyệt thẩm mỹ. Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
+> **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `Completed (Placeholder-tier art)`): Bằng chứng: không có test/log tự động (asset commit `311101e`). Asset proxy đã có trên main, nhưng AC-1..AC-3 chưa được kiểm bằng script hay log nào. Art thật thay proxy là điều kiện release (epic-overview Pha 3) và cần chủ dự án duyệt thẩm mỹ. Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
 > **Owner**: Technical Artist  
 > **Governing Spec**: [`SPEC-ART-2026-09-23-V2`](file:///mnt/Data/Projects/project-games/ProjectAscendant/design/art/pixel-asset-specifications.md)  
 
@@ -31,14 +31,14 @@ Thay thế các dummy placeholder flipbooks màu khối trong `visual-001` bằn
 
 ## 2. Tiêu Chí Nghiệm Thu (Acceptance Criteria)
 
-- [x] **AC-1 (Đầy Đủ 420 Frames Wireframe Proxy)**:
+- [x] **AC-1 (Đầy Đủ 420 Frames Wireframe Proxy)**: *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
   - Xuất xưởng 4 bộ Flipbook hoàn chỉnh vào `Content/Art/Characters/MasterRigs/`:
     - `FB_Lower_HeavyTank_Set` (105 frames).
     - `FB_Lower_Agility_Set` (105 frames).
     - `FB_Lower_Caster_Set` (105 frames).
     - `FB_Lower_Monk_Set` (105 frames).
-- [x] **AC-2 (Kiểm Tra Hoạt Ảnh & Timing)**:
+- [x] **AC-2 (Kiểm Tra Hoạt Ảnh & Timing)**: *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
   - Khung xương hình học phân biệt rõ ràng chân trái/phải, phục vụ kiểm tra chu kỳ chuyển động, nhịp bước (timing) và chuyển đổi trạng thái locomotion trong PaperZD.
-- [x] **AC-3 (Khớp Khít Khớp Nối & Pivot)**:
+- [x] **AC-3 (Khớp Khít Khớp Nối & Pivot)**: *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
   - Pivot điểm tiếp đất luôn nằm chính xác tại $(64, 114)$ trên toàn bộ 420 frames.
   - Vị trí nối eo $Y = 80$ phẳng phiu, đảm bảo khớp nối liền mạch khi ghép với Upper Body.

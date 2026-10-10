@@ -6,7 +6,7 @@
 > **Type**: Art & Production (Wireframe / Stick-figure Proxy)  
 > **Estimate**: 2.5 days (20 hours)  
 > **Status**: In Progress  
-> **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `Completed (Placeholder-tier art)`): Bằng chứng: — (không có test tự động; commit `f686267`) trong `Tests/evidence/x11b-e34f428-ue-automation.log` (77/77 PASS). AC-2/AC-3 chưa đạt: `Content/art/characters/ClassIdentity/` chỉ có crest/tabard cho 12/16 class (B1-13); AC-5 không có log chạy `qa_silhouette_check.py`. Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
+> **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `Completed (Placeholder-tier art)`): Bằng chứng: không có test/log tự động (asset commit `f686267`). AC-2/AC-3 chưa đạt: `Content/art/characters/ClassIdentity/` chỉ có crest/tabard cho 12/16 class (B1-13); AC-5 không có log chạy `qa_silhouette_check.py`. Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
 > **Owner**: Technical Artist & Pixel Artist  
 > **Governing Spec**: [`character-visual-system.md`](file:///mnt/Data/Projects/project-games/ProjectAscendant/design/gdd/character-visual-system.md), [`DECISIONS.md`](file:///mnt/Data/Projects/project-games/ProjectAscendant/production/DECISIONS.md)  
 
@@ -31,11 +31,11 @@ Tạo lập các tài nguyên wireframe proxy và placeholder geometric sprites 
 
 - [x] **AC-1 (Đầy Đủ 320 Frames Idle Wireframe Proxy)**:
   - Khung xương hình học phân định 16 tư thế cơ bản theo thiết kế silhouette (Vanguard khiên kiếm, Ranger giương cung, Arcanist cầm trượng, Berserker vác đại đao, Swordmaster buông kiếm, Shadowblade đao chéo X, v.v.).
-- [x] **AC-2 (16 Helm Crest Proxy Sprites - 80 Sprites)**:
+- [x] **AC-2 (16 Helm Crest Proxy Sprites - 80 Sprites)**: *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
   - 16 hình khối mào nón cơ sở ($32 \times 32$) $\times 5$ hướng gắn khớp vào `Socket_HelmCrest` $(64, 40)$.
-- [x] **AC-3 (16 Tabard / Sash Proxy Sprites - 80 Sprites)**:
+- [x] **AC-3 (16 Tabard / Sash Proxy Sprites - 80 Sprites)**: *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
   - 16 hình khối cờ ngực ($48 \times 64$) $\times 5$ hướng gắn khớp vào rãnh ngực của 9 bộ giáp cơ sở từ Itemization.
 - [x] **AC-4 (Bộ Cánh Lục Dực Seraph - 20 Sprites)**:
   - 20 sprites cánh Lục Dực (4 frames idle $\times 5$ hướng) gắn khớp vào `Socket_Back`.
-- [x] **AC-5 (Kiểm Tra Silhouette Check)**:
+- [x] **AC-5 (Kiểm Tra Silhouette Check)**: *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
   - Toàn bộ sprite proxy vượt qua script `qa_silhouette_check.py` để đảm bảo độ tương phản cơ bản và kích thước nhận diện tối thiểu ở mức thumbnail.

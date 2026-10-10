@@ -25,18 +25,18 @@
 
 ## Acceptance Criteria
 
-- [x] **AC-1 (Anatomical Part Health Tracking)**: Mỗi bộ phận giải phẫu của Trùm sở hữu thanh máu độc lập (tính theo tỷ lệ Max HP của Trùm):
+- [x] **AC-1 (Anatomical Part Health Tracking)**: Mỗi bộ phận giải phẫu của Trùm sở hữu thanh máu độc lập (tính theo tỷ lệ Max HP của Trùm): *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
   - **Horn (Sừng)**: Chiếm $20\%$ Max HP.
   - **Tail (Đuôi)**: Chiếm $15\%$ Max HP.
   - **Chest Armor (Giáp ngực)**: Chiếm $25\%$ Max HP.
   - Mọi sát thương đánh trúng bộ phận đều đồng thời trừ vào Tổng máu (Total HP) của Trùm.
-- [x] **AC-2 (Behavior Tree Skill Disabling)**: Khi một bộ phận bị phá vỡ (Part HP $\le 0$):
+- [x] **AC-2 (Behavior Tree Skill Disabling)**: Khi một bộ phận bị phá vỡ (Part HP $\le 0$): *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
   - Khi **Horn** gãy: Khóa vĩnh viễn chiêu `Iron Horn Charge` trong Behavior Tree, làm choáng trùm 1.5s.
   - Khi **Tail** đứt: Khóa vĩnh viễn chiêu `Iron Tail Sweep` trong Behavior Tree.
-- [x] **AC-3 (Chest Weakpoint Vulnerability)**: Khi **Chest Armor** vỡ:
+- [x] **AC-3 (Chest Weakpoint Vulnerability)**: Khi **Chest Armor** vỡ: *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
   - Vùng ngực chuyển thành **Tử huyệt (Weakpoint)**.
   - Mọi đòn đánh trúng ngực sau đó được nhân hệ số sát thương $+50\%$ ($Damage \times 1.50$).
-- [x] **AC-4 (Crafting Reagent Drop Notification)**: Khi bộ phận vỡ thành công, phát tín hiệu kèm thông tin vật phẩm rơi đặc thù (`Item_Beast_Horn_Shard`, `Item_Dragon_Tail_Sinew`, `Item_Hardened_Carapace`) tại tọa độ điểm gãy.
+- [x] **AC-4 (Crafting Reagent Drop Notification)**: Khi bộ phận vỡ thành công, phát tín hiệu kèm thông tin vật phẩm rơi đặc thù (`Item_Beast_Horn_Shard`, `Item_Dragon_Tail_Sinew`, `Item_Hardened_Carapace`) tại tọa độ điểm gãy. *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
 
 ---
 

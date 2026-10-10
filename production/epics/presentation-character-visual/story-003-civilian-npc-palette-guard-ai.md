@@ -34,7 +34,7 @@ Story này hiện thực hóa:
     - Thợ Rèn, Lính Gác $\rightarrow$ `EPAMasterRig::HeavyTank`.
     - Thương Nhân, Dân Làng $\rightarrow$ `EPAMasterRig::Agility` / `Caster`.
     - Quest Giver $\rightarrow$ `EPAMasterRig::Caster`.
-- [x] **AC-2 (Dynamic Palette Swap Material)**:
+- [x] **AC-2 (Dynamic Palette Swap Material)**: *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
   - Master Material `M_PaperZD_Civilian_Base` nhận tham số `ZoneColorRamp` (Vector Parameter) trong Dynamic Material Instance.
   - Hàm `SetZonePalette(FName ZoneId)` tự động nạp palette màu tương ứng:
     - `Verdant_Bastion`: Tông nâu/rêu vải thô.

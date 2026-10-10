@@ -4,8 +4,8 @@
 > **GDD**: [`design/gdd/merchant-economy.md`](../../design/gdd/merchant-economy.md)  
 > **Architecture Module**: Economy & Currency Transaction Architecture ([`docs/architecture/architecture.md`](../../docs/architecture/architecture.md))  
 > **Status**: In Progress  
-> **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `Complete`): trạng thái epic suy ra từ story (In Progress 2, Review 1). Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
-> **Stories**: 3 Stories (3 Done) *(X14 2026-10-10: thực tế In Progress 2, Review 1)*  
+> **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `Complete`): trạng thái epic suy ra từ story (In Progress 3). Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
+> **Stories**: 3 Stories (3 Done) *(X14 2026-10-10: thực tế In Progress 3)*  
 
 ## Overview
 
@@ -31,7 +31,7 @@ This epic implements the server-authoritative dual currency economy, merchant tr
 | # | Story | Type | Status | Governing ADR |
 |---|---|---|---|---|
 | 001 | [`Dual Currency Wallet & Transaction Engine`](story-001-currency-wallet-engine.md) | Logic | In Progress | ADR-0001, ADR-0003 |
-| 002 | [`Merchant Vendor Network & Buyback Window`](story-002-merchant-vendor-network.md) | Logic | Review | ADR-0001 |
+| 002 | [`Merchant Vendor Network & Buyback Window`](story-002-merchant-vendor-network.md) | Logic | In Progress | ADR-0001 |
 | 003 | [`Wilderness Wandering Smuggler & Limited Stock`](story-003-wandering-smuggler.md) | World | In Progress | ADR-0001 |
 
 ## Definition of Done

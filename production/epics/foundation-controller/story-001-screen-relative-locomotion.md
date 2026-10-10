@@ -33,7 +33,7 @@
 *From GDD `design/gdd/isometric-controller.md`, scoped to this story:*
 
 - [x] **AC-1 (Camera-Relative 8-Way Movement)**: Pressing W, S, A, D moves the character exactly orthogonal to the player's screen (W moves straight up-screen, S moves down-screen, A moves left-screen, D moves right-screen) by applying a $45^\circ$ yaw rotation matrix transformation to raw input vectors.
-- [x] **AC-2 (Diagonal Velocity Normalization)**: Pressing simultaneous diagonal inputs (e.g. W + D) normalizes the input vector length to 1.0, ensuring diagonal movement speed matches the 550 cm/s baseline and strictly prevents $\sqrt{2} \approx 1.414\times$ speed exploits.
+- [x] **AC-2 (Diagonal Velocity Normalization)**: Pressing simultaneous diagonal inputs (e.g. W + D) normalizes the input vector length to 1.0, ensuring diagonal movement speed matches the 550 cm/s baseline and strictly prevents $\sqrt{2} \approx 1.414\times$ speed exploits. *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
 - [x] **AC-3 (Cancellation on Opposing Inputs)**: Pressing opposing keys simultaneously (W + S or A + D) cancels movement input cleanly to zero, immediately transitioning locomotion to `Idle` state without lingering velocity.
 
 ---
@@ -94,8 +94,7 @@
 
 **Story Type**: Logic  
 **Required evidence**: `tests/unit/controller/screen_relative_movement_test.cpp` — must exist and pass automated CI  
-**Status**: [x] Verified and passing (5 test suites, 18 assertions)  
-
+**Status**: [x] Verified and passing (5 test suites, 18 assertions) *(X14 2026-10-10: tuyên bố PASS/Complete này không có bằng chứng tại thời điểm ghi — test ở `Tests/` gốc chưa được biên dịch cho đến X12 (rà soát R4), và đường dẫn đã chuyển sang `Source/ProjectAscendant/Private/Tests/`. Trạng thái thật: xem dòng X14 ở đầu file.)*  
 ---
 
 ## Dependencies
@@ -106,6 +105,8 @@
 ---
 
 ## Completion Notes
+> **X14 (2026-10-10)**: khối dưới đây là lịch sử, không còn đúng. Story hiện là `In Progress`; xem dòng X14 ở đầu file.
+
 **Completed**: 2026-09-16  
 **Criteria**: 3/3 passing (0 deferred)  
 **Deviations**: None  

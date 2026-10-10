@@ -25,7 +25,7 @@
 
 ## Acceptance Criteria
 
-- [x] **AC-1 (Dynamic HP Scaling Formula)**: Lượng máu tối đa của Boss tự động co giãn theo số lượng người chơi tham chiến trong bán kính 3000cm:
+- [x] **AC-1 (Dynamic HP Scaling Formula)**: Lượng máu tối đa của Boss tự động co giãn theo số lượng người chơi tham chiến trong bán kính 3000cm: *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
   $$\text{ScaledMaxHP} = \text{BaseMaxHP} \times (1.0 + 0.50 \times \max(0, N - 1))$$
   - Ví dụ: 1 người $\to 10,000\text{ HP}$; 4 người $\to 25,000\text{ HP}$.
 - [x] **AC-2 (Dynamic Posture Scaling Formula)**: Thanh Posture tối đa của Boss tự động co giãn theo số người tham chiến:
@@ -34,7 +34,7 @@
 - [x] **AC-3 (Anti-Zerg Crowd Control Reduction)**:
   - Khi $N \ge 4$ người tham chiến: Boss nhận kháng khống chế $+30\%$ (giảm thời gian choáng/knockback 30%).
   - Khi $N \ge 8$ người tham chiến: Boss nhận kháng khống chế $+50\%$ và tăng tốc độ xoay chuyển hướng đòn đánh $+25\%$.
-- [x] **AC-4 (Instanced Loot Contribution Threshold)**: Chỉ những người chơi hoặc tổ đội gây ra:
+- [x] **AC-4 (Instanced Loot Contribution Threshold)**: Chỉ những người chơi hoặc tổ đội gây ra: *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
   - $\ge 5\%$ Tổng sát thương Máu ($\text{DamageHP} \ge 0.05 \times \text{ScaledMaxHP}$) **HOẶC**
   - $\ge 10\%$ Tổng sát thương Phá thế ($\text{DamagePosture} \ge 0.10 \times \text{ScaledMaxPosture}$)
   - Mới đủ tư cách nhận hòm đồ rơi cá nhân riêng biệt (Instanced Loot). Người chơi dưới ngưỡng không nhận được bất kỳ vật phẩm nào (loại bỏ hoàn toàn vấn nạn đánh hôi).

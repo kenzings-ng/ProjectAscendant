@@ -4,8 +4,8 @@
 > **GDD**: [`design/gdd/combat-hud.md`](../../design/gdd/combat-hud.md), [`design/gdd/merchant-economy.md`](../../design/gdd/merchant-economy.md), [`design/gdd/blacksmithing-system.md`](../../design/gdd/blacksmithing-system.md)  
 > **Architecture Module**: UI & Player Experience Architecture ([`docs/architecture/architecture.md`](../../docs/architecture/architecture.md))  
 > **Status**: In Progress  
-> **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `✅ Complete`): trạng thái epic suy ra từ story (In Progress 2, Review 2). Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
-> **Stories**: 4/4 Stories Done *(X14 2026-10-10: thực tế In Progress 2, Review 2)*  
+> **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `✅ Complete`): trạng thái epic suy ra từ story (In Progress 4). Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
+> **Stories**: 4/4 Stories Done *(X14 2026-10-10: thực tế In Progress 4)*  
 
 ## Overview
 
@@ -32,8 +32,8 @@ This epic implements the minimal diegetic combat HUD, Boss health/posture encoun
 
 | # | Story | Type | Status | Governing ADR |
 |---|---|---|---|---|
-| 001 | [`Player Vitals & Status HUD Engine`](story-001-player-vitals-hud.md) | UI | Review | ADR-0002 |
-| 002 | [`Boss Health, Stagger Posture & Execution Reticle`](story-002-boss-stagger-reticle.md) | UI | Review | ADR-0001, ADR-0002 |
+| 001 | [`Player Vitals & Status HUD Engine`](story-001-player-vitals-hud.md) | UI | In Progress | ADR-0002 |
+| 002 | [`Boss Health, Stagger Posture & Execution Reticle`](story-002-boss-stagger-reticle.md) | UI | In Progress | ADR-0001, ADR-0002 |
 | 003 | [`Floating Combat Text & Action Feedback`](story-003-floating-combat-text.md) | UI | In Progress | ADR-0002 |
 | 004 | [`Merchant Shop & Blacksmith Forge Interactive Windows`](story-004-shop-forge-windows.md) | UI | In Progress | ADR-0001, ADR-0003 |
 

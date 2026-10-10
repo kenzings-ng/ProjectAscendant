@@ -1,8 +1,8 @@
 # Story 002: Merchant Vendor Network & Buyback Window
 
 > **Epic**: Expansion Economy & Merchant Network  
-> **Status**: Review  
-> **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `Done`): Bằng chứng: `Economy.Merchant`, `Network.ServerAuthority.BuybackIsPerPlayer`, `...BuybackPartialStackFreshUid`, `...InteractionRangeAndCombatEnforced`, `Network.ServiceRouting.*` trong `Tests/evidence/x11b-e34f428-ue-automation.log` (77/77 PASS). Các điểm PARTIAL của rà soát B3 (buyback dùng chung, RPC trên NPC, `ValidateInteraction` là code chết) đã sửa ở X11a/X11b (PR #21, #23). Chờ: test multi-process 1 server + 2 client (DECISIONS.md §11, client hiện chỉ mô phỏng); mâu thuẫn bán kính 300/250 cm (chờ chủ dự án); merchant chỉ có trên actor Smuggler và chưa map nào đặt actor này (M6). Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
+> **Status**: In Progress  
+> **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `Done`): Bằng chứng: `Economy.Merchant`, `Network.ServerAuthority.BuybackIsPerPlayer`, `...BuybackPartialStackFreshUid`, `...InteractionRangeAndCombatEnforced`, `Network.ServiceRouting.*` trong `Tests/evidence/x11b-e34f428-ue-automation.log` (77/77 PASS). Các điểm PARTIAL của rà soát B3 (buyback dùng chung, RPC trên NPC, `ValidateInteraction` là code chết) đã sửa ở X11a/X11b (PR #21, #23). Còn mở: AC-4 bán kính 300 cm (code, `merchant-economy.md:24`) mâu thuẫn `control-manifest.md:75` 250 cm (B4-16, chờ chủ dự án); merchant chỉ có trên actor Smuggler và chưa map nào đặt actor này (M6); chưa có test 1 server + 2 client (DECISIONS.md §11, client hiện chỉ mô phỏng). Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
 > **Layer**: Expansion  
 > **Type**: Logic  
 > **Estimate**: 8 hours (1.0 days)  
@@ -34,7 +34,7 @@
 - [x] **AC-1 (Vendor Catalog & Purchasing)**: `UPAMerchantComponent` provides a catalog of stock items with prices. Purchasing an item validates Gold balance, ensures available inventory slot, deducts Gold from `UPACurrencyComponent`, and adds the item to `UPAInventoryComponent` atomically on the server.
 - [x] **AC-2 (Item Selling & Vendor Penalty)**: Selling inventory items yields Gold based on `vendor_sell_price = floor(base_price * vendor_sell_penalty)` (default 30%). Rejects locked items (`bIsLocked == true`). Supports bulk selling all items flagged as junk (`bIsJunk == true`).
 - [x] **AC-3 (Buyback Window FIFO)**: Sold items are recorded into a session Buyback list (up to 10 slots). When full, the oldest sold item is discarded (FIFO). Buying back costs the exact Gold received when sold, returns the item with intact dynamic data, and removes it from the Buyback list.
-- [x] **AC-4 (Interaction & Server Authority Guardrails)**: All trading operations enforce server authority, interaction distance $\le 300\text{cm}$ between character and merchant, reject operations when `In-Combat == true`, and validate parameters.
+- [x] **AC-4 (Interaction & Server Authority Guardrails)**: All trading operations enforce server authority, interaction distance $\le 300\text{cm}$ between character and merchant, reject operations when `In-Combat == true`, and validate parameters. *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
 
 ---
 

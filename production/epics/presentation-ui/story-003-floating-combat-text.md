@@ -29,8 +29,8 @@
   - Critical Damage: Radiant orange-yellow text, scaled 1.5x with bounce animation.
   - Posture Damage: Golden-yellow text targeting posture bar.
 - [x] **AC-2 (Ballistic Radial Scatter Arc)**: Numbers spawn at hit location and follow ballistic arc equation: $\vec{P}(t) = \vec{P}_0 + \vec{V}_0 \cdot t + \frac{1}{2} \vec{g} \cdot t^2$ with $\vec{V}_0 = (v_x, v_y, 180\text{ cm/s})$ and gravity $\vec{g} = (0, 0, -300\text{ cm/s}^2)$. Radial offset $\pm 25\text{px}$ prevents overlapping during cleaves. Lifetime = 0.60s with fade-out.
-- [x] **AC-3 ("PERFECT!" Callout)**: When a Perfect Dodge is executed, spawns a golden-silver callout text ("PERFECT!") directly above the player character for 0.50s.
-- [x] **AC-4 (Performance & Object Pooling)**: Recycles text instances via an in-memory pool (up to 50 active instances) to prevent garbage collection spikes during high-density combat.
+- [x] **AC-3 ("PERFECT!" Callout)**: When a Perfect Dodge is executed, spawns a golden-silver callout text ("PERFECT!") directly above the player character for 0.50s. *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
+- [x] **AC-4 (Performance & Object Pooling)**: Recycles text instances via an in-memory pool (up to 50 active instances) to prevent garbage collection spikes during high-density combat. *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
 
 ---
 

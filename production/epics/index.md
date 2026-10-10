@@ -33,7 +33,7 @@
 
 | Epic | Layer | System | Design Document (GDD) | Governing ADRs | Stories Status | Epic Status |
 |---|---|---|---|---|---|---|
-| [`expansion-economy`](expansion-economy/EPIC.md) | Expansion | Dual Currency Economy & Merchant Network | [`merchant-economy.md`](../../design/gdd/merchant-economy.md) | ADR-0001, ADR-0003 | 3 stories (In Progress 2, Review 1) | **In Progress** *(trước đây **Done**)* |
+| [`expansion-economy`](expansion-economy/EPIC.md) | Expansion | Dual Currency Economy & Merchant Network | [`merchant-economy.md`](../../design/gdd/merchant-economy.md) | ADR-0001, ADR-0003 | 3 stories (In Progress 3) | **In Progress** *(trước đây **Done**)* |
 | [`expansion-crafting`](expansion-crafting/EPIC.md) | Expansion | 3-Tier Blacksmithing & Enhancement Forge | [`blacksmithing-system.md`](../../design/gdd/blacksmithing-system.md) | ADR-0001, ADR-0003 | 3 stories (In Progress 3) | **In Progress** *(trước đây **Done**)* |
 | [`expansion-progression`](expansion-progression/EPIC.md) | Expansion | Character XP, Leveling & Class Mastery | [`skill-progression-system.md`](../../design/gdd/skill-progression-system.md) | ADR-0001, ADR-0002 | 2 stories (In Progress 1; prog-002 Talent Tree: Removed — DECISIONS §12, 2026-10-10) | **In Progress** *(trước đây **Done**)* |
 
@@ -43,7 +43,7 @@
 
 | Epic | Layer | System | Design Document (GDD) | Governing ADRs | Stories Status | Epic Status |
 |---|---|---|---|---|---|---|
-| [`presentation-ui`](presentation-ui/EPIC.md) | Presentation | Combat HUD, Boss Vitals & Interactive Windows | [`combat-hud.md`](../../design/gdd/combat-hud.md) | ADR-0001, ADR-0002, ADR-0003 | 4 stories (In Progress 2, Review 2) | **In Progress** *(trước đây **Done**)* |
+| [`presentation-ui`](presentation-ui/EPIC.md) | Presentation | Combat HUD, Boss Vitals & Interactive Windows | [`combat-hud.md`](../../design/gdd/combat-hud.md) | ADR-0001, ADR-0002, ADR-0003 | 4 stories (In Progress 4) | **In Progress** *(trước đây **Done**)* |
 
 ---
 

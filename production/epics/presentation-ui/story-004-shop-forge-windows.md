@@ -25,7 +25,7 @@
 
 ## Acceptance Criteria
 
-- [x] **AC-1 (2-Column Merchant Shop Interface)**: Displays NPC catalog on left column and Player inventory on right column. Includes tab navigation: `[Buy]`, `[Sell]`, `[Buyback]`. Buyback tab displays up to 10 entries with exact refund prices. Displays 20% surcharge indicator when player Karma < -50 at Tier 2.
+- [x] **AC-1 (2-Column Merchant Shop Interface)**: Displays NPC catalog on left column and Player inventory on right column. Includes tab navigation: `[Buy]`, `[Sell]`, `[Buyback]`. Buyback tab displays up to 10 entries with exact refund prices. Displays 20% surcharge indicator when player Karma < -50 at Tier 2. *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
 - [x] **AC-2 (Blacksmith Forge Anvil Interface)**: Central anvil item slot for target equipment, satellite slots displaying required materials and gold (red if deficient, green if sufficient). Ward slot accepts `item_blacksmith_ward`. Shows stat delta preview (e.g. *Attack: 50 -> 58 (+8)*).
 - [x] **AC-3 (0.8s Hold-to-Craft Safe Interaction)**: Enhance and Boss Soul Forging actions require holding the forge button for 0.80 seconds (filling a progress bar) before dispatching the Server RPC, preventing accidental resource consumption.
 - [x] **AC-4 (Proximity & In-Combat Auto-Close)**: Opens via interaction prompt (E key) when within 300cm of NPC/Anvil. Automatically closes if distance exceeds 500cm or player enters combat (`InCombat == true`).

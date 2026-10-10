@@ -29,7 +29,7 @@ Mỗi lần lên cấp:
 
 - [x] **AC-1**: `UPAProgressionComponent` quản lý XP đường cong phi tuyến Cấp 1→50; công thức `XPToNext(Lv) = ceil(100 * Lv^1.8)`; hỗ trợ multi-level-up; cap tại Level 50
 - [x] **AC-2**: Mỗi cấp độ tăng trưởng chỉ số cơ sở (Health/Mana/Stamina/Attack/Armor)~~ và ban thưởng 1 Điểm Kỹ Năng (Skill Point); SpendSkillPoint có validation~~ (phần Skill Point Removed 2026-10-10, DECISIONS §12)
-- [x] **AC-3**: Replicate CurrentLevel, CurrentXP~~, AvailableSkillPoints~~ qua network và cập nhật AttributeSet (AvailableSkillPoints Removed 2026-10-10, DECISIONS §12)
+- [x] **AC-3**: Replicate CurrentLevel, CurrentXP~~, AvailableSkillPoints~~ qua network và cập nhật AttributeSet (AvailableSkillPoints Removed 2026-10-10, DECISIONS §12) *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
 
 ---
 

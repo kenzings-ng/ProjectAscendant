@@ -31,9 +31,9 @@
 
 ## Acceptance Criteria
 
-- [x] **AC-1 (Enhancement +4 to +6 - Tier 2 Wilderness Forge)**: Cường hóa +4 đến +6 tại Tier 2 Forge. Tỷ lệ thành công: +4 (70%), +5 (60%), +6 (50%). Thất bại giữ nguyên cấp độ hiện tại, tiêu hao nguyên liệu và vàng. Chặn cường hóa vượt mốc +6 tại Tier 2.
-- [x] **AC-2 (Enhancement +7 to +10 - Tier 3 Ancient Sanctuary Forge)**: Cường hóa +7 đến +10 tại Tier 3 Forge. Tỷ lệ thành công: +7 (40%), +8 (30%), +9 (25%), +10 (15%). Thất bại tụt chính xác 1 cấp (ví dụ: +7 lên +8 thất bại tụt về +6). Nếu có Đá Bảo Hộ (`item_blacksmith_ward`), tiêu hao đá và giữ nguyên cấp. TUYỆT ĐỐI không vỡ đồ.
-- [x] **AC-3 (Gem Socketing & Unsocketing)**: Đục tối đa 2 Lỗ Khảm Ngọc (Gem Sockets) cho trang bị từ độ hiếm Rare trở lên tại Tier 2 Forge. Khảm ngọc (`ruby`, `sapphire`, `topaz`) vào socket trống. Tháo ngọc với phí 100 Vàng hoàn trả ngọc về kho đồ và đưa socket về trạng thái trống. *(Cập nhật 2026-10-10 (X7): bỏ cách đánh số độ hiếm bằng "Tier/Bậc" — độ hiếm gọi bằng tên (DECISIONS.md §1).)*
+- [x] **AC-1 (Enhancement +4 to +6 - Tier 2 Wilderness Forge)**: Cường hóa +4 đến +6 tại Tier 2 Forge. Tỷ lệ thành công: +4 (70%), +5 (60%), +6 (50%). Thất bại giữ nguyên cấp độ hiện tại, tiêu hao nguyên liệu và vàng. Chặn cường hóa vượt mốc +6 tại Tier 2. *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
+- [x] **AC-2 (Enhancement +7 to +10 - Tier 3 Ancient Sanctuary Forge)**: Cường hóa +7 đến +10 tại Tier 3 Forge. Tỷ lệ thành công: +7 (40%), +8 (30%), +9 (25%), +10 (15%). Thất bại tụt chính xác 1 cấp (ví dụ: +7 lên +8 thất bại tụt về +6). Nếu có Đá Bảo Hộ (`item_blacksmith_ward`), tiêu hao đá và giữ nguyên cấp. TUYỆT ĐỐI không vỡ đồ. *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
+- [x] **AC-3 (Gem Socketing & Unsocketing)**: Đục tối đa 2 Lỗ Khảm Ngọc (Gem Sockets) cho trang bị từ độ hiếm Rare trở lên tại Tier 2 Forge. Khảm ngọc (`ruby`, `sapphire`, `topaz`) vào socket trống. Tháo ngọc với phí 100 Vàng hoàn trả ngọc về kho đồ và đưa socket về trạng thái trống. *(Cập nhật 2026-10-10 (X7): bỏ cách đánh số độ hiếm bằng "Tier/Bậc" — độ hiếm gọi bằng tên (DECISIONS.md §1).)* *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
 
 ---
 

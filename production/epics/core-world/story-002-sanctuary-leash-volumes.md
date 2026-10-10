@@ -23,5 +23,5 @@
 ## Acceptance Criteria
 
 - [x] **AC-1 (Sanctuary Volume Safezone)**: `APASanctuaryVolume` actor with 1000cm collision radius applies `State.InSanctuary` tag on overlapping players. Inside Sanctuary, players are immune to damage and offensive ability activation is blocked.
-- [x] **AC-2 (Monster Leash Boundary)**: Any hostile monster/boss pulled beyond 2500cm from its spawn origin enters `LeashReset` state, drops aggro, becomes immune to damage, and runs back to origin at 1.5x walk speed, regenerating 100% Posture and Health.
-- [x] **AC-3 (Zone Transition Replication)**: Entering or exiting a zone volume triggers Iris-replicated tag notifications to client HUD (`Zone.Sanctuary`, `Zone.Wilderness`).
+- [x] **AC-2 (Monster Leash Boundary)**: Any hostile monster/boss pulled beyond 2500cm from its spawn origin enters `LeashReset` state, drops aggro, becomes immune to damage, and runs back to origin at 1.5x walk speed, regenerating 100% Posture and Health. *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
+- [x] **AC-3 (Zone Transition Replication)**: Entering or exiting a zone volume triggers Iris-replicated tag notifications to client HUD (`Zone.Sanctuary`, `Zone.Wilderness`). *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*

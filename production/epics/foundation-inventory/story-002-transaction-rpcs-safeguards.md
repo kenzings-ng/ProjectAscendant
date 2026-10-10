@@ -34,8 +34,8 @@
 
 - [x] **AC-1 (Atomic Move & Swap Validation)**: `Server_MoveItem(int32 SourceSlot, int32 TargetSlot)` executes an atomic swap or merge on the Dedicated Server, verifying item existence and source slot lock state before mutation.
 - [x] **AC-2 (Split Stack Validation)**: `Server_SplitStack(int32 SourceSlot, int32 SplitAmount, int32 TargetSlot)` validates that `SplitAmount < SourceStack` and target slot is empty; if invalid, transaction rejects and client UI reverts.
-- [x] **AC-3 (QoL Item Lock & Junk Flags)**: Items with `bIsLocked == true` cannot be dropped, sold, or dismantled; pressing `[J]` toggles `bIsJunk == true` which qualifies the item for bulk liquidation at merchants.
-- [x] **AC-4 (Overflow Stash Routing)**: When inventory is full ($30/30$), items of Rare rarity or higher dropped by defeated bosses are routed to a 20-slot persistent Overflow Stash (`overflow_stash_limit = 20`) available at campfires. *(Cập nhật 2026-10-10 (X7): độ hiếm gọi bằng tên, không dùng "Tier/Bậc", DECISIONS.md §1.)*
+- [x] **AC-3 (QoL Item Lock & Junk Flags)**: Items with `bIsLocked == true` cannot be dropped, sold, or dismantled; pressing `[J]` toggles `bIsJunk == true` which qualifies the item for bulk liquidation at merchants. *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
+- [x] **AC-4 (Overflow Stash Routing)**: When inventory is full ($30/30$), items of Rare rarity or higher dropped by defeated bosses are routed to a 20-slot persistent Overflow Stash (`overflow_stash_limit = 20`) available at campfires. *(Cập nhật 2026-10-10 (X7): độ hiếm gọi bằng tên, không dùng "Tier/Bậc", DECISIONS.md §1.)* *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
 
 ---
 
@@ -96,8 +96,7 @@
 
 **Story Type**: Logic  
 **Required evidence**: `tests/unit/inventory/inventory_transaction_test.cpp` — must exist and pass automated CI  
-**Status**: [x] Passed automated verification in Tests/unit/inventory/inventory_transaction_test.cpp  
-
+**Status**: [x] Passed automated verification in Tests/unit/inventory/inventory_transaction_test.cpp *(X14 2026-10-10: tuyên bố PASS/Complete này không có bằng chứng tại thời điểm ghi — test ở `Tests/` gốc chưa được biên dịch cho đến X12 (rà soát R4), và đường dẫn đã chuyển sang `Source/ProjectAscendant/Private/Tests/`. Trạng thái thật: xem dòng X14 ở đầu file.)*  
 ---
 
 ## Dependencies

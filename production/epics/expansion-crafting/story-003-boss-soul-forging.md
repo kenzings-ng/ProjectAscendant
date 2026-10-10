@@ -31,7 +31,7 @@
 
 ## Acceptance Criteria
 
-- [x] **AC-1 (Boss Soul Legendary Forging - Tier 3 Forge Exclusive)**: Rèn đúc Thần Binh độ hiếm Legendary độc quyền tại Tier 3 Ancient Sanctuary Forge. Yêu cầu: 1x Linh Hồn Lãnh Chúa (`item_boss_soul_*`), 4x Mảnh vỡ bộ phận Boss (`item_boss_part_*`), 5x Quặng Hư Không Cổ Đại (`void_ore`), và 5,000 Vàng. Kiểm tra nghiêm ngặt nguyên liệu và Dedicated Server Authority; từ chối khi thực hiện tại Tier 1 hoặc Tier 2 Forge.
+- [x] **AC-1 (Boss Soul Legendary Forging - Tier 3 Forge Exclusive)**: Rèn đúc Thần Binh độ hiếm Legendary độc quyền tại Tier 3 Ancient Sanctuary Forge. Yêu cầu: 1x Linh Hồn Lãnh Chúa (`item_boss_soul_*`), 4x Mảnh vỡ bộ phận Boss (`item_boss_part_*`), 5x Quặng Hư Không Cổ Đại (`void_ore`), và 5,000 Vàng. Kiểm tra nghiêm ngặt nguyên liệu và Dedicated Server Authority; từ chối khi thực hiện tại Tier 1 hoặc Tier 2 Forge. *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
 - [x] **AC-2 (Prismatic Socket - 3rd Gem Socket Expansion)**: Cho phép đục Lỗ Khảm thứ 3 (Prismatic Socket / Lỗ Đa Sắc) trên trang bị độ hiếm Rare trở lên (đặc biệt Legendary) tại Tier 3 Ancient Sanctuary Forge. Hỗ trợ khảm tất cả các loại ngọc thông thường và Ngọc Đa Sắc (`prismatic_gem` / `gem_prismatic`).
 - [x] **AC-3 (Backpack Capacity Expansion Sequence)**: Nâng cấp sức chứa kho đồ theo 3 cấp độ tương ứng với 3 Bậc Lò Rèn:
   - Bậc 1 (30 -> 40 ô tại Tier 1 Forge): 10x Da Thú + 5x Quặng Đồng + 500 Vàng.

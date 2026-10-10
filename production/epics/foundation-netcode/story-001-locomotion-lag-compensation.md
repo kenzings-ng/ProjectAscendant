@@ -32,9 +32,9 @@
 
 *From GDD `design/gdd/multiplayer-coop.md`, scoped to this story:*
 
-- [x] **AC-1 (Lag Compensation Rewind)**: Server stores a circular buffer of character capsule transforms for the past 200ms (`server_max_lag_compensation = 0.20s`); when a client fires an attack with timestamp $T$, the server rewinds target positions to $T$ to validate collision sweeps.
-- [x] **AC-12 (Server Soft Reconciliation)**: If client predicted location diverges from server-authoritative location by more than $15\text{ cm}$ (`reconciliation_threshold = 15.0f`), the server issues a position correction packet and the client smoothly interpolates without snapping.
-- [x] **AC-9 (PvE Ally Collision Pass-Through)**: Character collision profiles between allied players in PvE are configured to ignore capsule pawn channels, allowing full movement pass-through (Zero Body Blocking).
+- [x] **AC-1 (Lag Compensation Rewind)**: Server stores a circular buffer of character capsule transforms for the past 200ms (`server_max_lag_compensation = 0.20s`); when a client fires an attack with timestamp $T$, the server rewinds target positions to $T$ to validate collision sweeps. *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
+- [x] **AC-12 (Server Soft Reconciliation)**: If client predicted location diverges from server-authoritative location by more than $15\text{ cm}$ (`reconciliation_threshold = 15.0f`), the server issues a position correction packet and the client smoothly interpolates without snapping. *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
+- [x] **AC-9 (PvE Ally Collision Pass-Through)**: Character collision profiles between allied players in PvE are configured to ignore capsule pawn channels, allowing full movement pass-through (Zero Body Blocking). *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
 
 ---
 
@@ -91,8 +91,7 @@
 
 **Story Type**: Logic  
 **Required evidence**: `ProjectAscendant/Tests/unit/network/net_lag_compensation_test.cpp` — must exist and pass automated CI  
-**Status**: [x] Created and Passing (6 test suites, 18 assertions PASS)  
-
+**Status**: [x] Created and Passing (6 test suites, 18 assertions PASS) *(X14 2026-10-10: tuyên bố PASS/Complete này không có bằng chứng tại thời điểm ghi — test ở `Tests/` gốc chưa được biên dịch cho đến X12 (rà soát R4), và đường dẫn đã chuyển sang `Source/ProjectAscendant/Private/Tests/`. Trạng thái thật: xem dòng X14 ở đầu file.)*  
 ---
 
 ## Dependencies

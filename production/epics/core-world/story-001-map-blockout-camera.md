@@ -30,11 +30,13 @@
 ## Acceptance Criteria
 
 - [x] **AC-1 (Map Creation & Playability)**: Level `L_Ruins_Blockout.umap` exists in `Content/Maps/`, contains a ground floor ($6000 \times 6000\text{ cm}$), PlayerStart at $(0, 0, 100)$, Directional Light (Moonlit), SkyLight, ExponentialHeightFog with volumetric fog enabled, and NavMeshBoundsVolume ($6000 \times 6000 \times 1000\text{ cm}$). Default maps configured in `DefaultEngine.ini`.
-- [x] **AC-2 (Isometric Camera Verification)**: In PIE, the camera maintains fixed isometric rotation (Pitch $-45^\circ$, Yaw $+45^\circ$) with `TargetArmLength = 1400.0f` (`kDefaultTargetArmLength`) and look-ahead offset reacting to character movement velocity.
+- [x] **AC-2 (Isometric Camera Verification)**: In PIE, the camera maintains fixed isometric rotation (Pitch $-45^\circ$, Yaw $+45^\circ$) with `TargetArmLength = 1400.0f` (`kDefaultTargetArmLength`) and look-ahead offset reacting to character movement velocity. *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
 - [x] **AC-3 (Occlusion Dither Verification)**: Placed stone pillars ($200 \times 200 \times 600\text{ cm}$) positioned between camera and player at `(-300, -300, 300)` trigger camera line-of-sight capsule trace, fading pillar material dither opacity to 0.25 within 0.15s when obstructing the character.
 
 ---
 
 ## Two-Axis Review Verdict
+> **X14 (2026-10-10)**: các dòng PASS dưới đây là review code lúc đó, không phải bằng chứng AC. Story hiện là `In Progress`; xem dòng X14 ở đầu file.
+
 - **Standards Axis**: PASS (TargetArmLength synchronized to 1400.0f in `PAIsometricMovementMath.h` and `PABaseCharacter.cpp`, dead `AndroidFileServerEditor` config cleaned from `DefaultEngine.ini`).
 - **Spec Axis**: PASS (`ExponentialHeightFog` with volumetric fog added to `build_blockout_map.py`, occlusion test ray verified against `(-300, -300, 300)`).

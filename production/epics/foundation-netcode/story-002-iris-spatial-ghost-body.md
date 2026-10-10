@@ -32,8 +32,8 @@
 
 *From GDD `design/gdd/multiplayer-coop.md`, scoped to this story:*
 
-- [x] **AC-10 (Iris 3-Tier Spatial Throttling)**: Actors within $1500\text{ cm}$ replicate at 60Hz (`iris_tier1_radius`); actors between $1500\text{ cm}$ and $3500\text{ cm}$ replicate at 30Hz (`iris_tier2_radius`); actors beyond $3500\text{ cm}$ are culled from high-frequency replication and represented as dormant proxies.
-- [x] **AC-4 (Anti-Combat-Logging Ghost Body)**: When a client connection drops while possessing `GameplayTag.State.InCombat`, the character pawn remains instantiated on the dedicated server for exactly 15.0s (`combat_disconnect_ghost_duration = 15.0s`), remaining vulnerable to damage and death penalties.
+- [x] **AC-10 (Iris 3-Tier Spatial Throttling)**: Actors within $1500\text{ cm}$ replicate at 60Hz (`iris_tier1_radius`); actors between $1500\text{ cm}$ and $3500\text{ cm}$ replicate at 30Hz (`iris_tier2_radius`); actors beyond $3500\text{ cm}$ are culled from high-frequency replication and represented as dormant proxies. *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
+- [x] **AC-4 (Anti-Combat-Logging Ghost Body)**: When a client connection drops while possessing `GameplayTag.State.InCombat`, the character pawn remains instantiated on the dedicated server for exactly 15.0s (`combat_disconnect_ghost_duration = 15.0s`), remaining vulnerable to damage and death penalties. *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
 
 ---
 
@@ -84,8 +84,7 @@
 
 **Story Type**: Integration  
 **Required evidence**: `ProjectAscendant/Tests/unit/network/iris_ghost_body_test.cpp` — must exist and pass automated CI  
-**Status**: [x] Created and Passing (7 test suites, 20 assertions PASS)  
-
+**Status**: [x] Created and Passing (7 test suites, 20 assertions PASS) *(X14 2026-10-10: tuyên bố PASS/Complete này không có bằng chứng tại thời điểm ghi — test ở `Tests/` gốc chưa được biên dịch cho đến X12 (rà soát R4), và đường dẫn đã chuyển sang `Source/ProjectAscendant/Private/Tests/`. Trạng thái thật: xem dòng X14 ở đầu file.)*  
 ---
 
 ## Dependencies

@@ -30,14 +30,14 @@
   - **Aggressor (Tạm thời 120s)**: Tên xám khi tấn công người vô tộc trước, bị cấm vào thị trấn trong thời gian đếm ngược.
   - **Criminal (-1 to -49)**: Tên cam, lính gác từ chối phục vụ.
   - **Wanted Outlaw (-50 to -100)**: Tên đỏ kèm biểu tượng đầu lâu, bị lính gác tấn công ngay khi gặp, bị phát sóng tọa độ toàn server mỗi 30s.
-- [x] **AC-2 (PvE Death Penalty - Ash Remnant)**: Khi chết do quái vật/môi trường (PvE):
+- [x] **AC-2 (PvE Death Penalty - Ash Remnant)**: Khi chết do quái vật/môi trường (PvE): *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
   - Rơi **50% số Vàng hiện có** và **100% Tàn Trang (Skill Shards)** thành một Tàn Tích Tro (Ash Remnant) tại tọa độ tử vong.
   - Khóa quyền nhặt trong 30 phút cho chính chủ. Trang bị đang mặc được bảo toàn 100%.
-- [x] **AC-3 (Innocent PvP Victim Protection)**: Khi người vô tội ($\text{Karma} \ge 0$) bị PK chết:
+- [x] **AC-3 (Innocent PvP Victim Protection)**: Khi người vô tội ($\text{Karma} \ge 0$) bị PK chết: *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
   - Chỉ mất **25% Vàng** (chuyển thẳng cho kẻ sát nhân làm tiền thưởng).
   - Bảo toàn 100% Tàn Trang và Trang bị đang mặc; không tạo Tàn tích Tro (tránh ức chế bị phạt kép).
   - Kẻ sát nhân bị trừ ngay lập tức **-30 điểm Karma**.
-- [x] **AC-4 (Wanted Outlaw Death & Labor Prison)**: Khi kẻ có lệnh truy nã ($\text{Karma} < -50$) bị tiêu diệt:
+- [x] **AC-4 (Wanted Outlaw Death & Labor Prison)**: Khi kẻ có lệnh truy nã ($\text{Karma} < -50$) bị tiêu diệt: *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
   - Rơi toàn bộ **100% Vàng** và **100% Tàn Trang** (ai cũng có thể nhặt tự do).
   - Có 15% tỷ lệ rơi 1 vật phẩm ngẫu nhiên trong túi đồ.
   - Bị tống vào **Nhà tù Lao Động (Labor Prison)** trong 5 phút thời gian thực HOẶC đào đủ 20 khối quặng để được trả tự do sớm. Khi ra tù, Karma được ấn định lại ở mức $-49$.

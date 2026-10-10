@@ -32,10 +32,10 @@
 
 *From GDD `design/gdd/multiplayer-coop.md`, scoped to this story:*
 
-- [x] **AC-2 (130% Threat Retargeting Rule)**: Boss re-evaluates Threat Table every 1.0s; if any player's threat score exceeds the current target's threat by $\ge 130\%$ (`threat_retarget_ratio = 1.30`), the boss immediately switches target and rotates towards the new threat leader.
-- [x] **AC-3 (Threat Decay)**: If a combatant deals no damage, applies no crowd control, and heals no targets for 3.0 seconds (`threat_decay_delay = 3.0s`), their accumulated threat score decays by 10% per second (`threat_decay_rate = 0.10/s`).
-- [x] **AC-11 (Taunt Multiplier & Snap)**: Activating a Tank Taunt ability multiplies current threat gained by $5.0\times$ (`taunt_multiplier = 5.0`) and immediately sets the caster's threat score to $\text{Max}(\text{CurrentTopThreat} + 100, \text{CasterThreat})$, forcing an instant target snap.
-- [x] **AC-5 (Leash Boundary Reset)**: If a mob or boss is pulled beyond $2500\text{ cm}$ from its spawn origin (`ai_leash_max_distance = 2500.0f`), it enters `LeashReset` state, becomes invulnerable to all damage, drops all threat, and returns to spawn at accelerated speed.
+- [x] **AC-2 (130% Threat Retargeting Rule)**: Boss re-evaluates Threat Table every 1.0s; if any player's threat score exceeds the current target's threat by $\ge 130\%$ (`threat_retarget_ratio = 1.30`), the boss immediately switches target and rotates towards the new threat leader. *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
+- [x] **AC-3 (Threat Decay)**: If a combatant deals no damage, applies no crowd control, and heals no targets for 3.0 seconds (`threat_decay_delay = 3.0s`), their accumulated threat score decays by 10% per second (`threat_decay_rate = 0.10/s`). *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
+- [x] **AC-11 (Taunt Multiplier & Snap)**: Activating a Tank Taunt ability multiplies current threat gained by $5.0\times$ (`taunt_multiplier = 5.0`) and immediately sets the caster's threat score to $\text{Max}(\text{CurrentTopThreat} + 100, \text{CasterThreat})$, forcing an instant target snap. *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
+- [x] **AC-5 (Leash Boundary Reset)**: If a mob or boss is pulled beyond $2500\text{ cm}$ from its spawn origin (`ai_leash_max_distance = 2500.0f`), it enters `LeashReset` state, becomes invulnerable to all damage, drops all threat, and returns to spawn at accelerated speed. *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
 
 ---
 
@@ -99,8 +99,7 @@
 
 **Story Type**: Logic  
 **Required evidence**: `ProjectAscendant/Tests/unit/combat/threat_table_test.cpp` — exists and covers AC-2, AC-3, AC-11, AC-5.  
-**Status**: [x] Complete  
-
+**Status**: [x] Complete *(X14 2026-10-10: tuyên bố PASS/Complete này không có bằng chứng tại thời điểm ghi — test ở `Tests/` gốc chưa được biên dịch cho đến X12 (rà soát R4), và đường dẫn đã chuyển sang `Source/ProjectAscendant/Private/Tests/`. Trạng thái thật: xem dòng X14 ở đầu file.)*  
 ---
 
 ## Dependencies

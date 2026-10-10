@@ -32,9 +32,9 @@
 
 *From GDD `design/gdd/multiplayer-coop.md`, scoped to this story:*
 
-- [x] **AC-7 (1.5s Finisher Exclusive Window)**: When a boss's Posture reaches 0, the player who delivered the final posture break is tagged as `Finisher`; only the Finisher can trigger the Execution interact prompt (`[E]`) during the first 1.5 seconds (`boss_finisher_exclusive_window = 1.5s`). After 1.5s, the window opens to any nearby player.
-- [x] **AC-6 (Instanced Loot Contribution Threshold)**: When a boss dies, the server calculates contribution ratios: only players who dealt $\ge 5\%$ of total HP damage (`boss_loot_contribution_hp = 0.05`) OR $\ge 10\%$ of total Posture damage receive an Instanced Loot droplet. Droplets are completely invisible and unpickable by other players.
-- [x] **AC-8 (Party EXP Sharing with Morale Bonus)**: When a monster dies, all party members within $3000\text{ cm}$ (`party_exp_radius = 3000.0f`) receive shared experience according to `party_exp_share` formula with morale modifiers (+10% for 2 players, +20% for 3 players, +35% for 4 players).
+- [x] **AC-7 (1.5s Finisher Exclusive Window)**: When a boss's Posture reaches 0, the player who delivered the final posture break is tagged as `Finisher`; only the Finisher can trigger the Execution interact prompt (`[E]`) during the first 1.5 seconds (`boss_finisher_exclusive_window = 1.5s`). After 1.5s, the window opens to any nearby player. *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
+- [x] **AC-6 (Instanced Loot Contribution Threshold)**: When a boss dies, the server calculates contribution ratios: only players who dealt $\ge 5\%$ of total HP damage (`boss_loot_contribution_hp = 0.05`) OR $\ge 10\%$ of total Posture damage receive an Instanced Loot droplet. Droplets are completely invisible and unpickable by other players. *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
+- [x] **AC-8 (Party EXP Sharing with Morale Bonus)**: When a monster dies, all party members within $3000\text{ cm}$ (`party_exp_radius = 3000.0f`) receive shared experience according to `party_exp_share` formula with morale modifiers (+10% for 2 players, +20% for 3 players, +35% for 4 players). *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
 
 ---
 
@@ -94,8 +94,7 @@
 
 **Story Type**: Integration  
 **Required evidence**: `tests/integration/combat/contested_loot_finisher_test.cpp` OR automated multi-client combat test  
-**Status**: [x] Passed (`ProjectAscendant/Tests/integration/combat/contested_loot_finisher_test.cpp`, 4 test blocks passing, build succeeded)  
-
+**Status**: [x] Passed (`ProjectAscendant/Tests/integration/combat/contested_loot_finisher_test.cpp`, 4 test blocks passing, build succeeded) *(X14 2026-10-10: tuyên bố PASS/Complete này không có bằng chứng tại thời điểm ghi — test ở `Tests/` gốc chưa được biên dịch cho đến X12 (rà soát R4), và đường dẫn đã chuyển sang `Source/ProjectAscendant/Private/Tests/`. Trạng thái thật: xem dòng X14 ở đầu file.)*  
 ---
 
 ## Dependencies

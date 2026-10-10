@@ -6,7 +6,7 @@
 > **Type**: Art & Production (Wireframe / Stick-figure Proxy)  
 > **Estimate**: 3.0 days (24 hours)  
 > **Status**: Review  
-> **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `Completed (Placeholder-tier art)`): Bằng chứng: — (không có test tự động; asset proxy có trên main, commit `fcdd4b2`) trong `Tests/evidence/x11b-e34f428-ue-automation.log` (77/77 PASS). Asset proxy đã có, nhưng chưa có log kiểm tra tự động cho AC-1..AC-3. Art thật thay proxy là điều kiện release và cần chủ dự án duyệt thẩm mỹ. Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
+> **X14 (2026-10-10) — đối chiếu trạng thái** (trước đây ghi `Completed (Placeholder-tier art)`): Bằng chứng: không có test/log tự động (asset commit `fcdd4b2`). Asset proxy đã có trên main, nhưng AC-1..AC-3 chưa được kiểm bằng script hay log nào. Art thật thay proxy là điều kiện release và cần chủ dự án duyệt thẩm mỹ. Bảng tổng: `production/qa/x14-status-reconciliation.md`.  
 > **Owner**: Technical Artist  
 > **Governing Spec**: [`SPEC-ART-2026-09-23-V2`](file:///mnt/Data/Projects/project-games/ProjectAscendant/design/art/pixel-asset-specifications.md), [`itemization.md`](file:///mnt/Data/Projects/project-games/ProjectAscendant/design/gdd/itemization.md)  
 
@@ -32,10 +32,10 @@ Tạo lập các bộ khung hình wireframe/stick-figure proxy (do script Python
 
 ## 2. Tiêu Chí Nghiệm Thu (Acceptance Criteria)
 
-- [x] **AC-1 (Đầy Đủ 560 Frames Wireframe Proxy)**:
+- [x] **AC-1 (Đầy Đủ 560 Frames Wireframe Proxy)**: *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
   - Xuất xưởng 7 bộ Flipbook proxy vào `Content/Art/Characters/UpperBodyWeapons/`.
-- [x] **AC-2 (Căn Chỉnh Hand Sockets)**:
+- [x] **AC-2 (Căn Chỉnh Hand Sockets)**: *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
   - Khung xương tay wireframe giữ vị trí bàn tay trùng khớp với `HandSocket_R` $(96, 76)$ và `HandSocket_L` $(32, 76)$ trong tư thế chuẩn, di chuyển theo đúng quỹ đạo vung đòn để kiểm tra timing đánh và đón đòn.
-- [x] **AC-3 (Kiểm Tra Quỹ Đạo Vũ Khí & Padding)**:
+- [x] **AC-3 (Kiểm Tra Quỹ Đạo Vũ Khí & Padding)**: *(X14 2026-10-10: chưa đạt / chưa có bằng chứng — xem dòng X14 ở đầu file.)*
   - Kiểm tra việc gắn kết các Sprite Vũ Khí cơ sở lên tay, đảm bảo vũ khí xoay theo góc vát đòn đánh mà không bị lệch chuôi.
   - Vùng phía trước mặt chừa khoảng đệm chuyển động (Motion Padding) $32\text{ px}$ để đón vệt chém Niagara Slash Trail.
