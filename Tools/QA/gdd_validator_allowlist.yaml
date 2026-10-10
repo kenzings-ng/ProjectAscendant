@@ -1,0 +1,29 @@
+# Allowlist for Tools/QA/validate_gdd_consistency.py (X13, 2026-10-10).
+#
+# Each entry accepts ONE known finding that needs an owner decision before the
+# document can be fixed. It does not disable a check: the finding is still printed
+# as [ALLOW], and an entry that no longer matches any finding fails the validator
+# (so it must be removed once the owner decides and the document is fixed).
+#
+# Fields (all required):
+#   file    - path relative to the project root (posix)
+#   check   - check id printed by the validator, e.g. weapon_relation, ash_shards
+#   pattern - Python regex searched in the text of the offending line
+#   reason  - why it is allowed and the open owner question
+#
+# Format note: the validator reads this file with a small stdlib reader. Keep to
+# "entries:" followed by "- key: value" items with plain or double-quoted scalars.
+
+entries:
+  - file: design/gdd/itemization.md
+    check: weapon_relation
+    pattern: "Two-Handed Heavy.*Dragon Knight"
+    reason: "OWNER QUESTION: DECISIONS.md:122 approves only Weapon.2H.Polearm for Dragon Knight and notes itemization.md:200 still lists Weapon.2H.Heavy as 'đang trình duyệt xác nhận'. Keep 2H Heavy for Dragon Knight (update DECISIONS §7) or remove it from itemization.md:200?"
+  - file: design/gdd/itemization.md
+    check: weapon_relation
+    pattern: "classes:\\s*\\[\"Berserker\", \"Dragon Knight\"\\]"
+    reason: "OWNER QUESTION: same pending decision as itemization.md:200 (DECISIONS.md:122) - YAML block weapon_family_2h_heavy lists Dragon Knight."
+  - file: design/registry/entities.yaml
+    check: weapon_relation
+    pattern: "classes:\\s*\\[\"Berserker\", \"Dragon Knight\"\\]"
+    reason: "OWNER QUESTION: same pending decision as itemization.md:200 (DECISIONS.md:122) - registry weapon_family_2h_heavy lists Dragon Knight."
