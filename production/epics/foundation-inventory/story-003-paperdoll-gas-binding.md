@@ -1,6 +1,6 @@
 # Story 003: Paperdoll Equipment Binding & GAS Attribute Integration
 
-> **Epic**: Inventory & 5-Tier Item Database  
+> **Epic**: Inventory & 5-Rarity Item Database *(Cập nhật 2026-10-10 (X13): tên epic đổi theo DECISIONS.md §1.)*  
 > **Status**: Complete  
 > **Layer**: Foundation  
 > **Type**: Integration  

@@ -298,7 +298,7 @@ Bằng đúng số Gold người chơi đã nhận khi bán. Không áp dụng c
 
 | Hệ Thống | Trạng Thái | Chiều Phụ Thuộc | Điểm Tích Hợp Cụ Thể |
 |---|---|---|---|
-| [`inventory-system.md`](file:///mnt/Data/Projects/project-games/design/gdd/inventory-system.md) | ✅ Approved | ↔ Song phương | `vendor_sell_penalty`, `base_inventory_slots`, `max_inventory_slots`, kiểm tra ô trống, vật phẩm 5-Tier |
+| [`inventory-system.md`](file:///mnt/Data/Projects/project-games/design/gdd/inventory-system.md) | ✅ Approved | ↔ Song phương | `vendor_sell_penalty`, `base_inventory_slots`, `max_inventory_slots`, kiểm tra ô trống, vật phẩm 5 độ hiếm *(Cập nhật 2026-10-10 (X13): "5-Tier" → "5 độ hiếm", DECISIONS.md §1.)* |
 | [`blacksmithing-system.md`](file:///mnt/Data/Projects/project-games/design/gdd/blacksmithing-system.md) | ✅ Approved | → Downstream | `repair_cost_formula`, `item_blacksmith_ward`, `gem_unsocket_fee`, nguyên liệu chế tác |
 | [`zone-system.md`](file:///mnt/Data/Projects/project-games/design/gdd/zone-system.md) | ✅ Approved | ← Upstream | Phân bố NPC theo 3 Bậc Vùng Đất, Lửa Trại, Sanctuary radius, Karma/Wanted rules |
 | [`attributes-system.md`](file:///mnt/Data/Projects/project-games/design/gdd/attributes-system.md) | ✅ Approved | ← Upstream | Consumable hồi HP/MP/Stamina, buff stats tạm thời |

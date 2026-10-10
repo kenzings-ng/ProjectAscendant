@@ -1,4 +1,4 @@
-# Epic: Inventory & 5-Tier Item Database
+# Epic: Inventory & 5-Rarity Item Database
 
 > **Layer**: Foundation  
 > **GDD**: [`design/gdd/inventory-system.md`](file:///mnt/Data/Projects/project-games/design/gdd/inventory-system.md)  
@@ -8,7 +8,7 @@
 
 ## Overview
 
-This epic implements the server-authoritative 30-slot grid inventory system, 5-tier item database, and transactional replication architecture for *Project Ascendant*. It establishes the `FFastArraySerializer` network delta-serialization structures, separation between immutable item definitions (`UItemStaticDataAsset`) and mutable instance properties (`FItemInstanceData`), and atomic transactional Server RPCs (Move, Split, Equip, Drop, Salvage) that eliminate item duplication exploits under network packet loss.
+This epic implements the server-authoritative 30-slot grid inventory system, 5-rarity item database, and transactional replication architecture for *Project Ascendant*. It establishes the `FFastArraySerializer` network delta-serialization structures, separation between immutable item definitions (`UItemStaticDataAsset`) and mutable instance properties (`FItemInstanceData`), and atomic transactional Server RPCs (Move, Split, Equip, Drop, Salvage) that eliminate item duplication exploits under network packet loss. *(Cập nhật 2026-10-10 (X13): "5-Tier Item Database" → "5-Rarity Item Database"; trang bị dùng 5 độ hiếm, không dùng chữ "Tier", DECISIONS.md §1.)*
 
 ## Governing ADRs
 

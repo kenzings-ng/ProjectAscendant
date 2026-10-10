@@ -1,6 +1,6 @@
 # Story 001: FastArray Grid Inventory & Item DataAsset Hierarchy
 
-> **Epic**: Inventory & 5-Tier Item Database  
+> **Epic**: Inventory & 5-Rarity Item Database *(Cập nhật 2026-10-10 (X13): tên epic đổi theo DECISIONS.md §1.)*  
 > **Status**: Complete  
 > **Layer**: Foundation  
 > **Type**: Logic  
@@ -32,7 +32,7 @@
 *From GDD `design/gdd/inventory-system.md`, scoped to this story:*
 
 - [x] **AC-1 (Backpack Capacity & Slot Limit)**: Character spawns with 30 unlocked grid slots (`base_inventory_slots = 30`), expandable up to 60 slots (`max_inventory_slots = 60`) in increments of 10.
-- [x] **AC-2 (Item DataAsset Hierarchy)**: Base item definitions inherit from `UPrimaryDataAsset` (`UItemStaticDataAsset`), defining ItemID, Rarity Tier (1–5), Category, Base Value, and Max Stack Size.
+- [x] **AC-2 (Item DataAsset Hierarchy)**: Base item definitions inherit from `UPrimaryDataAsset` (`UItemStaticDataAsset`), defining ItemID, Rarity (`RarityTier`: `EPAItemRarity`, Common → Legendary), Category, Base Value, and Max Stack Size. *(Cập nhật 2026-10-10 (X13): "Rarity Tier (1–5)" → tên độ hiếm, DECISIONS.md §1; `RarityTier` là tên thuộc tính trong code.)*
 - [x] **AC-3 (Stacking Rules Enforcement)**: Adding items respects category stack limits: Equipment and Skill Books max stack 1; Consumables max stack 20; Materials and Shards max stack 999.
 - [x] **AC-4 (FastArray Delta Serialization)**: Modifying a single slot in the 30-slot grid serializes only the changed entry across Iris replication channels, verifying zero full-array cloning overhead.
 

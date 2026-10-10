@@ -24,7 +24,7 @@ Accepted
 | Field | Value |
 |---|---|
 | **Depends On** | [`ADR-0001: Open World MMO Combat Networking`](adr-0001-open-world-mmo-combat-networking.md) |
-| **Enables** | Các Stories lập trình Combo, Hitbox quét 3D, Lướt né I-Frame và Chiêu thức 12 Class. |
+| **Enables** | Các Stories lập trình Combo, Hitbox quét 3D, Lướt né I-Frame và Chiêu thức 16 Class. *(Cập nhật 2026-10-10 (X13): "12 Class" → "16 Class", DECISIONS.md §2.)* |
 | **Blocks** | Không thể bắt đầu Sprint 1 cho Core Combat nếu chưa chốt hợp đồng PaperZD ➔ GAS. |
 | **Ordering Note** | Bắt buộc phải Accepted trước khi tạo Epics/Stories cho Tầng 1 và Tầng 2. |
 
