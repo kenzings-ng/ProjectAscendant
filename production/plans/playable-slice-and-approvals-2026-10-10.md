@@ -26,8 +26,8 @@ notes = (trống)   savedAt = 2026-10-10T11:11:36Z
 
 | Câu hỏi | Trả lời |
 |---|---|
-| Chèn luồng "vòng chơi được" lên trước thứ tự ROADMAP? | **Chèn lên trước.** Phần 2 client (Z4, Z5) gộp vào ROADMAP Giai đoạn 1.5 (`ROADMAP.md:54-57`). Login thật vẫn để Giai đoạn 6. Z1–Z3 nằm **ngoài** ROADMAP, đã được chủ dự án cho phép; việc lệch thứ tự được ghi vào DECISIONS §13 và PROGRESS |
-| Bản chơi thử có đánh boss Stone Golem? | **Có, làm luôn.** Thêm ROADMAP Giai đoạn 1 (nối hình và animation cho Vanguard, `ROADMAP.md:42-45`) và M6 (gắn boss/stagger vào game) vào luồng Z |
+| Chèn luồng "vòng chơi được" lên trước thứ tự ROADMAP? | **Chèn lên trước.** Phần 2 client (Z4, Z5) gộp vào ROADMAP Giai đoạn 1.5 (`ROADMAP.md:55-58`). Login thật vẫn để Giai đoạn 6. Z1–Z3 nằm **ngoài** ROADMAP, đã được chủ dự án cho phép; việc lệch thứ tự được ghi vào DECISIONS §13 và PROGRESS |
+| Bản chơi thử có đánh boss Stone Golem? | **Có, làm luôn.** Thêm ROADMAP Giai đoạn 1 (nối hình và animation cho Vanguard, `ROADMAP.md:43-46`) và M6 (gắn boss/stagger vào game) vào luồng Z |
 | Phí 5.000 Gold khi rèn Boss Soul? | **Ghi 5.000 Gold vào GDD**, giữ đúng như code |
 
 ## 2. Luồng Z — Vòng chơi được (ưu tiên 1)
@@ -42,7 +42,7 @@ Mục tiêu: chủ dự án chạy `run_game.sh` và đi hết vòng sau:
 | Z3 | Trong game: tạo HUD khi vào map (vitals, boss HUD, chữ sát thương); đặt Smuggler và một Lò rèn vào map Outpost (`L_VerdantFrontier_Outpost`, đóng vai `OpenWorldMap` cho tới Giai đoạn 5); phím tương tác mở Shop/Forge qua `UPAServiceRequestComponent` | Ngoài ROADMAP | SA-ui | Có | — |
 | Z3b | Đánh boss: ROADMAP Giai đoạn 1 (nối hình và animation cho Vanguard) và M6 (gắn BossAI/Stagger/PostureSync/Threat vào Stone Golem; chỉ đăng ký các tag đã có trong GDD hoặc DECISIONS §8, ví dụ `State.Staggered`; không tự đặt tag mới) | Giai đoạn 1 + M6 | SA-gameplay | Có | Đã duyệt trong §1.1. 🛑 Asset AI nếu có thì duyệt theo lô |
 | Z4 | Bản chơi thử: `run_game.sh` đã có chế độ `server` (`-server -PORT=7777`) và `client`. Cần thêm: client tự kết nối tới `127.0.0.1:7777`, và lệnh mở 1 server + 2 client trên cùng máy. Kèm checklist chơi thử | Giai đoạn 1.5 | SA-qa | Có | 🛑 **Chủ dự án chơi thử, duyệt cảm giác chơi** (`feel-core=playtest`) |
-| Z5 | Test replication tự động thật (1 server + 2 client, multi-process) theo DECISIONS §11 | Giai đoạn 1.5 | SA-net | Có | Giữ 🛑 ở `ROADMAP.md:57` |
+| Z5 | Test replication tự động thật (1 server + 2 client, multi-process) theo DECISIONS §11 | Giai đoạn 1.5 | SA-net | Có | Giữ 🛑 ở `ROADMAP.md:58` |
 
 ## 3. Luồng Y — Thực thi 26 lựa chọn (song song với Z)
 
@@ -50,7 +50,7 @@ Mục tiêu: chủ dự án chạy `run_game.sh` và đi hết vòng sau:
 |---|---|---|---|
 | Y2 | **Làm trước Y1/Y4/Y5.** Thêm `DECISIONS.md` §13 ghi đủ 26 lựa chọn và §1.1, gồm cả các mục chỉ ghi nhận: `feel-buffer=later` (giữ nhãn "chưa triển khai", chốt khi làm input buffer), `a-proxies=review`, việc lệch thứ tự ROADMAP. Sửa `DECISIONS.md:6` từ "Giai đoạn 0 → 6" thành "0 → 7" theo `r-range` | Tài liệu | Main |
 | Y1 | Thông số đã duyệt (**đã làm**, nhánh `docs/y1-approved-params`): Ranger 0.30s (`entities.yaml`, `foundational-classes.md` Q1); FOV 90 (`isometric-controller.md`); bán kính 300cm (control-manifest); giá Rare 300 (blacksmithing); "điểm kỹ năng" → cấp kỹ năng Grimoire; Dragon Knight chỉ dùng Polearm (gỡ allowlist); Dash Cancel ≈0.27–0.35s. Kèm thêm một chỉnh sửa **không phải lựa chọn của chủ dự án**: registry Maces & Relics thêm Inquisitor/Seraph, để khớp quyết định đã chốt ở `DECISIONS.md:134-135` | Tài liệu | SA-design |
-| Y3 | **ROADMAP** (chủ dự án đã cho phép):<br>• hạ `:29` và `:33` về `[~]`<br>• thêm mục "bảo vệ nhánh main" `[x]`, có bằng chứng từ X3<br>• `:136` và `:139`: NestJS → "chưa chốt (ADR-0006)"<br>• `:3`: theo `r-edit`, agent chỉ được đổi `[~]`→`[x]` khi có PR đã merge, log test và kết luận reviewer; phần nội dung còn lại vẫn chỉ chủ dự án được sửa<br>(Việc chèn luồng Z **không** ghi vào ROADMAP, chỉ ghi ở DECISIONS §13 và PROGRESS theo §1.1.)<br>**CLAUDE.md:**<br>• phạm vi "Giai đoạn 0 → 7"<br>• quy tắc khi file mâu thuẫn: chạm DECISIONS hoặc ROADMAP thì dừng hỏi; còn lại chọn theo file và ghi vào PROGRESS<br>• asset AI: gom mỗi lô vào **một trang xem trước**, mỗi lô vẫn phải dừng chờ chủ dự án duyệt | Tài liệu | Main |
+| Y3 | **ROADMAP** (chủ dự án đã cho phép):<br>• hạ `:29` và `:33` về `[~]`<br>• thêm mục "bảo vệ nhánh main" `[x]`, có bằng chứng từ X3<br>• `:136` và `:139` (dòng trước Y3, `dec7374`; nay là `:137`, `:140`): NestJS → "chưa chốt (ADR-0006)"<br>• `:3`: theo `r-edit`, agent chỉ được đổi `[~]`→`[x]` khi có PR đã merge, log test và kết luận reviewer; phần nội dung còn lại vẫn chỉ chủ dự án được sửa<br>(Việc chèn luồng Z **không** ghi vào ROADMAP, chỉ ghi ở DECISIONS §13 và PROGRESS theo §1.1.)<br>**CLAUDE.md:**<br>• phạm vi "Giai đoạn 0 → 7"<br>• quy tắc khi file mâu thuẫn: chạm DECISIONS hoặc ROADMAP thì dừng hỏi; còn lại chọn theo file và ghi vào PROGRESS<br>• asset AI: gom mỗi lô vào **một trang xem trước**, mỗi lô vẫn phải dừng chờ chủ dự án duyệt | Tài liệu | Main |
 | Y3b | Ngày sprint 5–7 theo ngày commit thật: `production/sprints/sprint-5.md:1`, `sprint-6.md`, `sprint-7.md` và `production/sprint-status.yaml`. Gỡ ghi chú X14 "Không tự đặt ngày mới" (`sprint-5.md:7` và tương tự) | Tài liệu | SA-producer |
 | Y4 | PvE chết rơi 100% Tàn Trang (sửa code, test, story; `zone-system.md:88` là chuẩn). Bản đồ của Smuggler bán bằng Tàn Trang | Code | SA-economy |
 | Y5 | Boss Soul đúng GDD: 4 bộ phận khác nhau (Sừng, Vảy đuôi, Giáp ngực, Cánh), đồ ra theo class (AC-5); ghi 5.000 Gold vào `blacksmithing-system.md` (§1.1) | Code + tài liệu | SA-economy |
@@ -74,5 +74,5 @@ Mục tiêu: chủ dự án chạy `run_game.sh` và đi hết vòng sau:
 - Chơi thử và duyệt cảm giác chơi (Z4).
 - Asset sinh bằng AI: duyệt theo lô qua trang xem trước.
 - Quota LFS có thể phát sinh chi phí (Y8).
-- `ROADMAP.md:57`, ở Giai đoạn 1.5.
+- `ROADMAP.md:58`, ở Giai đoạn 1.5.
 - Một cổng không qua sau 3 lần thử.

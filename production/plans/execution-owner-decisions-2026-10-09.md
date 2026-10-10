@@ -64,8 +64,8 @@ Ký hiệu người làm: **Main** = phiên Claude chính; **SA** = Claude subag
 3. **Phạm vi giai đoạn**: CLAUDE.md và `DECISIONS.md:6` ghi "Giai đoạn 0 → 6", còn ROADMAP có thêm 1.5, 2B và 7 (Alpha).
 4. **Quy tắc khi các file mâu thuẫn**: `ROADMAP.md:4` bảo dừng và hỏi; CLAUDE.md bước 2 bảo chọn theo file và ghi vào PROGRESS.
 5. **`ROADMAP.md` tự mâu thuẫn**: dòng 3 nói chỉ chủ dự án được sửa, nhưng dòng 10 cho agent tự đổi `[~]` thành `[x]`.
-6. **Backend**: `ROADMAP.md:136,139` chốt NestJS, trong khi ADR-0006 trong `architecture.md:766` chưa quyết.
-7. **Art sinh bằng AI**: `DECISIONS.md:168` (nhân vật làm bằng AI + Aseprite) ↔ CLAUDE.md và `ROADMAP.md:119` (asset AI phải dừng và hỏi). Hệ quả là mọi asset nhân vật ở Giai đoạn 3–4 đều phải dừng hỏi.
+6. **Backend**: `ROADMAP.md:136,139 (dòng trước Y3, `dec7374`)` chốt NestJS, trong khi ADR-0006 trong `architecture.md:766` chưa quyết.
+7. **Art sinh bằng AI**: `DECISIONS.md:168` (nhân vật làm bằng AI + Aseprite) ↔ CLAUDE.md và `ROADMAP.md:119 (dòng trước Y3, `dec7374`)` (asset AI phải dừng và hỏi). Hệ quả là mọi asset nhân vật ở Giai đoạn 3–4 đều phải dừng hỏi.
 
 **Điểm dừng chung:**
 - Một cổng không qua sau 3 lần thử.

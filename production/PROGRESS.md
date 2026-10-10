@@ -511,6 +511,24 @@ Sau khi merge PR #26, `git ls-remote origin main` = `8a28233`. Cả hai PR đề
 
 ---
 
+### 2.9 Luồng "vòng chơi được" & lựa chọn của chủ dự án — DECISIONS §13 (2026-10-10)
+
+Plan: `production/plans/playable-slice-and-approvals-2026-10-10.md` (PR #28, `73541a7`). Lựa chọn của chủ dự án ghi ở DECISIONS §13 (PR #30, squash `10332ac`).
+
+| Đầu việc | PR | Commit trên main | Cổng | Reviewer |
+|---|---|---|---|---|
+| Y2 DECISIONS §13 | #30 | `10332ac` | GDD validator exit 0; CI Fast Gates PASS | FAIL (gán quyết định của agent cho chủ dự án; lỡ kèm 43 file art Vanguard ở `6d93da1`) → sửa (`772d41e`, `d5c5739`) → **PASS** |
+| Y1 Thông số theo §13 | #29 | `dec7374` | GDD validator exit 0; self-test validator PASS; CI Fast Gates PASS | FAIL → sửa → **PASS** |
+| Y3 ROADMAP + CLAUDE.md | #32 | (ghi sau khi merge) | GDD validator PASSED | FAIL (tham chiếu số dòng bị lệch, ghi chú `:29`/`:33` chỉ sai chỗ, PROGRESS chưa cập nhật) → đang sửa |
+
+**Đã được chủ dự án trả lời ở §13** (gỡ khỏi danh sách chờ ở §2.6–2.8): `ROADMAP.md:29`/`:33` hạ về `[~]` và thêm mục bảo vệ nhánh `main` (Y3); phạm vi 0→7 (Y3); quy tắc khi file mâu thuẫn (Y3); quyền sửa ROADMAP (Y3, `ROADMAP.md:3`); backend chưa chốt NestJS, quyết qua ADR-0006 (Y3; ADR-0006 hiện chỉ là một dòng ở `docs/architecture/architecture.md:766`, chưa có file); asset AI duyệt theo lô (Y3); ngày sprint 5–7 theo commit (Y3b, PR #31); Dragon Knight bỏ khỏi 2H Heavy (Y1).
+
+**Mâu thuẫn mới, chạm DECISIONS/ROADMAP → đã chuyển thành câu hỏi cho chủ dự án** (theo `CLAUDE.md:39`):
+- Mục mới "Bảo vệ nhánh `main`" (Y3) đẩy các dòng sau xuống 1. `DECISIONS.md:241` vẫn ghi "🛑 ở `ROADMAP.md:57`", nay là `:58`. Agent không sửa DECISIONS.
+- `ROADMAP.md:10` (chưa đổi) cho agent đổi `[~]`→`[x]` chỉ cần ghi bằng chứng vào PROGRESS, và cho đổi `[~]`→`[ ]`; `ROADMAP.md:3` mới (theo `DECISIONS.md:231`) chặt hơn và không nhắc việc hạ về `[ ]`. Agent không sửa dòng 10.
+
+Các tham chiếu số dòng ROADMAP trong plan đã chỉnh theo vị trí mới. Tham chiếu lịch sử trong `execution-owner-decisions-2026-10-09.md:67-68` được giữ, có ghi chú "(dòng trước Y3, `dec7374`)".
+
 ## 3. Danh Sách 16 Class Đã Được Duyệt Chính Thức
 *(Chi tiết đầy đủ xem tại [`DECISIONS.md`](file:///mnt/Data/Projects/project-games/ProjectAscendant/production/DECISIONS.md))*
 
