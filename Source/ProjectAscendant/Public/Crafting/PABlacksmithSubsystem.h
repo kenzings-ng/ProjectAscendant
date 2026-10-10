@@ -156,24 +156,30 @@ public:
 	/**
 	 * AC-1 (item-007): Sửa chữa độ bền trang bị về 100% bằng giao dịch nguyên tử (Server-Authoritative).
 	 * Kiểm tra số dư Gold của Wallet. Nếu không đủ: trả về InsufficientGold, giữ nguyên số dư và độ bền.
+	 * X11a: chi phí luôn do server tính (GetRepairCost); không nhận chi phí từ client.
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Itemization|Blacksmith")
 	bool ServerRepairItem(
 		UPARAM(ref) FPASavedItemInstance& Item,
 		UPACurrencyComponent* Wallet,
-		int32 CostGold,
 		EPACraftingError& OutError);
+
+	/**
+	 * X11a: Chi phí sửa chữa server-authoritative cho FPASavedItemInstance:
+	 * RepairCost = ceil(BasePrice * 0.25 * (1 - Current/Max)) (blacksmithing-system.md §4).
+	 * BasePrice = ItemStaticData->BaseSellPrice nếu > 0, ngược lại BasePrice(Rarity) theo RarityTag (inventory-system.md §7.1).
+	 */
+	static int32 GetRepairCost(const FPASavedItemInstance& Item);
 
 	/**
 	 * AC-2 (item-007): Tẩy lại 1 dòng Affix trên trang bị tiêu hao 2,000 Gold + 5 Skill Shards (Tàn Trang) (GDD §7.2).
 	 * Kiểm tra số dư song tiền tệ nguyên tử. Nếu thiếu bất kỳ loại nào: trả về mã lỗi tương ứng, rollback 100%, affixes giữ nguyên.
+	 * X11a: chi phí luôn là FPABlacksmithFormulas::GetReforgeAffixCost; ForgeTier do server (lò rèn) cung cấp.
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Itemization|Blacksmith")
 	bool ServerReforgeAffix(
 		UPARAM(ref) FPASavedItemInstance& Item,
 		int32 AffixIndex,
-		int32 CostGold,
-		int32 CostShards,
 		EPAForgeTier ForgeTier,
 		UPACurrencyComponent* Wallet,
 		UPAServerItemGeneratorSubsystem* ItemGenerator,
@@ -181,7 +187,7 @@ public:
 
 	/**
 	 * AC-3 (item-007): Đục lỗ khảm ngọc trên trang bị theo Bậc Lò Rèn tiêu hao Gold + Shards (GDD §7.2).
-	 * Chi phí tự động xác định nếu CostGold/CostShards <= 0:
+	 * X11a: chi phí luôn do server xác định theo ô sẽ mở (FPABlacksmithFormulas::GetSocketUnlockCost):
 	 * - Socket 1: 1,000 Gold + 3 Shards
 	 * - Socket 2: 3,000 Gold + 8 Shards
 	 * - Socket 3 (Prismatic): 15,000 Gold + 20 Shards
@@ -190,8 +196,6 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Itemization|Blacksmith")
 	bool ServerAddSocket(
 		UPARAM(ref) FPASavedItemInstance& Item,
-		int32 CostGold,
-		int32 CostShards,
 		EPAForgeTier ForgeTier,
 		UPACurrencyComponent* Wallet,
 		EPACraftingError& OutError);
@@ -201,15 +205,12 @@ public:
 		TArray<FPASavedItemInstance>& InventoryItems,
 		const FGuid& ItemUID,
 		UPACurrencyComponent* Wallet,
-		int32 CostGold,
 		EPACraftingError& OutError);
 
 	bool ServerReforgeAffixByUID(
 		TArray<FPASavedItemInstance>& InventoryItems,
 		const FGuid& ItemUID,
 		int32 AffixIndex,
-		int32 CostGold,
-		int32 CostShards,
 		EPAForgeTier ForgeTier,
 		UPACurrencyComponent* Wallet,
 		UPAServerItemGeneratorSubsystem* ItemGenerator,
@@ -218,8 +219,6 @@ public:
 	bool ServerAddSocketByUID(
 		TArray<FPASavedItemInstance>& InventoryItems,
 		const FGuid& ItemUID,
-		int32 CostGold,
-		int32 CostShards,
 		EPAForgeTier ForgeTier,
 		UPACurrencyComponent* Wallet,
 		EPACraftingError& OutError);

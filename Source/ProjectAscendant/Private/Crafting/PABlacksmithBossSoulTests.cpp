@@ -16,6 +16,7 @@
  *
  * Automated unit tests for Story crft-003 (Boss Soul Forging & Legendary Equipment):
  *  - AC-1: Boss Soul Legendary Forging at Tier 3 Forge (1x Soul, 4x Parts, 5x Void Ore, 5,000 Gold).
+ *          X11a: output is resolved from the forge's server-side recipe, never supplied by the caller.
  *  - AC-2: Prismatic Socket (3rd Gem Socket Expansion) and Prismatic Gem socketing at Tier 3 Forge.
  *  - AC-3: Backpack capacity expansion sequence (30 -> 40 -> 50 -> 60 max).
  *  - AC-4: Proximity and in-combat interaction guardrails.
@@ -65,6 +66,12 @@ bool FPABlacksmithBossSoulTests::RunTest(const FString& Parameters)
 			VoidOreAsset->Category = EPAItemCategory::Material;
 			VoidOreAsset->MaxStackSize = 999;
 
+			// X11a: server-side recipe on the forge maps the consumed boss soul to the Legendary output
+			FPABossSoulRecipe Recipe;
+			Recipe.BossSoulItemId = FName("item_boss_soul_dragon");
+			Recipe.OutputItemData = BossSoulSword;
+			Blacksmith->AddBossSoulRecipe(Recipe);
+
 			// Seed Wallet with 10,000 Gold
 			EPACurrencyTransactionError CurrErr;
 			Wallet->AddCurrency(EPACurrencyType::Gold, 10000, CurrErr);
@@ -79,7 +86,7 @@ bool FPABlacksmithBossSoulTests::RunTest(const FString& Parameters)
 			// --- Test 1: Tier Gating - Fails at Tier 1 and Tier 2 Forges ---
 			Blacksmith->SetForgeTier(EPABlacksmithTier::Tier1_Outpost);
 			bool bForged = Blacksmith->ForgeBossSoulEquipment(
-				Inventory, Wallet, BossSoulSword,
+				Inventory, Wallet,
 				FName("item_boss_soul_dragon"), FName("item_boss_horn"), FName("void_ore"),
 				CraftErr);
 			TestFalse(TEXT("AC-1: Boss soul forging rejected at Tier 1 Forge"), bForged);
@@ -87,16 +94,44 @@ bool FPABlacksmithBossSoulTests::RunTest(const FString& Parameters)
 
 			Blacksmith->SetForgeTier(EPABlacksmithTier::Tier2_Wilderness);
 			bForged = Blacksmith->ForgeBossSoulEquipment(
-				Inventory, Wallet, BossSoulSword,
+				Inventory, Wallet,
 				FName("item_boss_soul_dragon"), FName("item_boss_horn"), FName("void_ore"),
 				CraftErr);
 			TestFalse(TEXT("AC-1: Boss soul forging rejected at Tier 2 Forge"), bForged);
 			TestEqual(TEXT("AC-1: Error is MaxTierLevelReached at Tier 2"), CraftErr, EPACraftingError::MaxTierLevelReached);
 
-			// --- Test 2: Successful Forging at Tier 3 Forge ---
+			// --- Test 1b (X11a): boss soul without a server recipe is rejected, nothing consumed ---
 			Blacksmith->SetForgeTier(EPABlacksmithTier::Tier3_Sanctuary);
+			UItemStaticDataAsset* UnknownSoulAsset = NewObject<UItemStaticDataAsset>();
+			UnknownSoulAsset->ItemId = FName("item_boss_soul_unknown");
+			UnknownSoulAsset->Category = EPAItemCategory::Material;
+			UnknownSoulAsset->MaxStackSize = 10;
+			Inventory->AddItemToSlot(4, UnknownSoulAsset, 1);
+
 			bForged = Blacksmith->ForgeBossSoulEquipment(
-				Inventory, Wallet, BossSoulSword,
+				Inventory, Wallet,
+				FName("item_boss_soul_unknown"), FName("item_boss_horn"), FName("void_ore"),
+				CraftErr);
+			TestFalse(TEXT("AC-1: Boss soul without server recipe rejected"), bForged);
+			TestEqual(TEXT("AC-1: Error is InvalidItemType for unknown recipe"), CraftErr, EPACraftingError::InvalidItemType);
+			TestEqual(TEXT("AC-1: Gold untouched after recipe rejection"), Wallet->GetGold(), 10000LL);
+			TestEqual(TEXT("AC-1: Unknown soul not consumed"), Inventory->GetItemCount(FName("item_boss_soul_unknown")), 1);
+			TestEqual(TEXT("AC-1: Boss parts not consumed"), Inventory->GetItemCount(FName("item_boss_horn")), 4);
+			TestEqual(TEXT("AC-1: Void ore not consumed"), Inventory->GetItemCount(FName("void_ore")), 5);
+			Inventory->RemoveItemFromSlot(4, 1);
+
+			// --- Test 1c (X11a): ingredient ids must be boss part / void ore items ---
+			bForged = Blacksmith->ForgeBossSoulEquipment(
+				Inventory, Wallet,
+				FName("item_boss_soul_dragon"), FName("iron_ore"), FName("void_ore"),
+				CraftErr);
+			TestFalse(TEXT("AC-1: Non boss-part ingredient rejected"), bForged);
+			TestEqual(TEXT("AC-1: Error is InvalidItemType for wrong ingredient"), CraftErr, EPACraftingError::InvalidItemType);
+			TestEqual(TEXT("AC-1: Gold untouched after ingredient rejection"), Wallet->GetGold(), 10000LL);
+
+			// --- Test 2: Successful Forging at Tier 3 Forge ---
+			bForged = Blacksmith->ForgeBossSoulEquipment(
+				Inventory, Wallet,
 				FName("item_boss_soul_dragon"), FName("item_boss_horn"), FName("void_ore"),
 				CraftErr);
 			TestTrue(TEXT("AC-1: Boss soul forging succeeds at Tier 3 Forge"), bForged);
@@ -117,7 +152,7 @@ bool FPABlacksmithBossSoulTests::RunTest(const FString& Parameters)
 
 			// --- Test 3: Insufficient Materials Failure ---
 			bForged = Blacksmith->ForgeBossSoulEquipment(
-				Inventory, Wallet, BossSoulSword,
+				Inventory, Wallet,
 				FName("item_boss_soul_dragon"), FName("item_boss_horn"), FName("void_ore"),
 				CraftErr);
 			TestFalse(TEXT("AC-1: Forging fails without ingredients"), bForged);
@@ -137,8 +172,10 @@ bool FPABlacksmithBossSoulTests::RunTest(const FString& Parameters)
 		{
 			Blacksmith->SetForgeTier(EPABlacksmithTier::Tier3_Sanctuary);
 
+			// X11a: sockets are charged 1,000/3 + 3,000/8 + 15,000/20 (itemization.md 7.2) -> 19,000 Gold + 31 Shards
 			EPACurrencyTransactionError CurrErr;
-			Wallet->AddCurrency(EPACurrencyType::Gold, 5000, CurrErr);
+			Wallet->AddCurrency(EPACurrencyType::Gold, 20000, CurrErr);
+			Wallet->AddCurrency(EPACurrencyType::SkillShards, 31, CurrErr);
 
 			// Place a Rare Weapon in Slot 0
 			UItemStaticDataAsset* RareWeapon = NewObject<UItemStaticDataAsset>();
@@ -160,6 +197,8 @@ bool FPABlacksmithBossSoulTests::RunTest(const FString& Parameters)
 			TestTrue(TEXT("AC-2: Unlocking 3rd socket succeeds at Tier 3 Forge"), bUnlocked3);
 			TestEqual(TEXT("AC-2: Weapon now has 3 sockets (Prismatic unlocked)"), Inventory->GetItemAtSlot(0)->DynamicData.SocketedGemIds.Num(), 3);
 			TestTrue(TEXT("AC-2: Socket index 2 is recognized as Prismatic Socket"), FPABlacksmithFormulas::IsPrismaticSocket(2));
+			TestEqual(TEXT("AC-2: Three sockets charged 19,000 Gold -> 1,000"), Wallet->GetGold(), 1000LL);
+			TestEqual(TEXT("AC-2: Three sockets charged 31 Shards -> 0"), Wallet->GetSkillShards(), 0LL);
 
 			// Attempting to unlock 4th socket fails (cap is 3)
 			bool bUnlocked4 = Blacksmith->UnlockSocket(Inventory, Wallet, 0, CraftErr);

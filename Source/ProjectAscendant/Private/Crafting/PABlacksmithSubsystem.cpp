@@ -6,6 +6,28 @@
 #include "GameFramework/Actor.h"
 #include "Economy/PACurrencyComponent.h"
 #include "Itemization/PAServerItemGeneratorSubsystem.h"
+#include "Inventory/PAItemStaticDataAsset.h"
+
+namespace
+{
+	/** X11a: Map FPASavedItemInstance::RarityTag (Item.Rarity.* / Rarity.*) back to EPAItemRarity. */
+	EPAItemRarity RarityFromTag(const FGameplayTag& RarityTag)
+	{
+		const FString TagStr = RarityTag.GetTagName().ToString();
+		FString Leaf;
+		if (!TagStr.Split(TEXT("."), nullptr, &Leaf, ESearchCase::IgnoreCase, ESearchDir::FromEnd))
+		{
+			Leaf = TagStr;
+		}
+
+		if (Leaf == TEXT("Common"))    { return EPAItemRarity::Common; }
+		if (Leaf == TEXT("Uncommon"))  { return EPAItemRarity::Uncommon; }
+		if (Leaf == TEXT("Rare"))      { return EPAItemRarity::Rare; }
+		if (Leaf == TEXT("Epic"))      { return EPAItemRarity::Epic; }
+		if (Leaf == TEXT("Legendary")) { return EPAItemRarity::Legendary; }
+		return EPAItemRarity::None;
+	}
+}
 
 UPABlacksmithSubsystem::UPABlacksmithSubsystem()
 {
@@ -473,10 +495,24 @@ bool UPABlacksmithSubsystem::ApplyGemBonusToAttributeSet(
 // Dual-Currency Server Transactions (Story item-007, EPIC-ITEMIZATION-001)
 // -------------------------------------------------------------------------
 
+int32 UPABlacksmithSubsystem::GetRepairCost(const FPASavedItemInstance& Item)
+{
+	int32 BasePrice = 0;
+	if (Item.ItemStaticData && Item.ItemStaticData->BaseSellPrice > 0)
+	{
+		BasePrice = Item.ItemStaticData->BaseSellPrice;
+	}
+	else
+	{
+		BasePrice = FPABlacksmithFormulas::GetBasePriceForRarity(RarityFromTag(Item.RarityTag));
+	}
+
+	return FPABlacksmithFormulas::CalculateRepairCost(BasePrice, Item.CurrentDurability, Item.MaxDurability);
+}
+
 bool UPABlacksmithSubsystem::ServerRepairItem(
 	FPASavedItemInstance& Item,
 	UPACurrencyComponent* Wallet,
-	int32 CostGold,
 	EPACraftingError& OutError)
 {
 	OutError = EPACraftingError::None;
@@ -493,10 +529,13 @@ bool UPABlacksmithSubsystem::ServerRepairItem(
 		return false;
 	}
 
-	int32 ActualCost = CostGold;
+	// X11a: chi phí luôn do server tính từ trạng thái vật phẩm (không nhận chi phí từ client).
+	const int32 ActualCost = GetRepairCost(Item);
 	if (ActualCost <= 0)
 	{
-		ActualCost = FPABlacksmithFormulas::CalculateRepairCost(200, Item.CurrentDurability, Item.MaxDurability);
+		// Không xác định được giá cơ sở (thiếu static data và RarityTag) -> từ chối thay vì sửa miễn phí.
+		OutError = EPACraftingError::ServerRejected;
+		return false;
 	}
 
 	// Kiểm tra số dư vàng nguyên tử TRƯỚC khi khấu trừ
@@ -522,8 +561,6 @@ bool UPABlacksmithSubsystem::ServerRepairItem(
 bool UPABlacksmithSubsystem::ServerReforgeAffix(
 	FPASavedItemInstance& Item,
 	int32 AffixIndex,
-	int32 CostGold,
-	int32 CostShards,
 	EPAForgeTier ForgeTier,
 	UPACurrencyComponent* Wallet,
 	UPAServerItemGeneratorSubsystem* ItemGenerator,
@@ -543,8 +580,10 @@ bool UPABlacksmithSubsystem::ServerReforgeAffix(
 		return false;
 	}
 
-	const int32 RequiredGold = (CostGold > 0) ? CostGold : 2000;
-	const int32 RequiredShards = (CostShards > 0) ? CostShards : 5;
+	// X11a: chi phí cố định theo GDD (itemization.md §7.2), không nhận từ client.
+	int32 RequiredGold = 0;
+	int32 RequiredShards = 0;
+	FPABlacksmithFormulas::GetReforgeAffixCost(RequiredGold, RequiredShards);
 
 	// Kiểm tra số dư song tiền tệ nguyên tử TRƯỚC khi chạm vào ví
 	if (Wallet->GetGold() < RequiredGold)
@@ -592,8 +631,6 @@ bool UPABlacksmithSubsystem::ServerReforgeAffix(
 
 bool UPABlacksmithSubsystem::ServerAddSocket(
 	FPASavedItemInstance& Item,
-	int32 CostGold,
-	int32 CostShards,
 	EPAForgeTier ForgeTier,
 	UPACurrencyComponent* Wallet,
 	EPACraftingError& OutError)
@@ -613,26 +650,13 @@ bool UPABlacksmithSubsystem::ServerAddSocket(
 		return false;
 	}
 
-	// 2. Xác định chi phí theo từng slot (GDD §7.2) nếu không truyền vào cố định
-	int32 RequiredGold = CostGold;
-	int32 RequiredShards = CostShards;
-	if (RequiredGold <= 0 || RequiredShards <= 0)
+	// 2. X11a: Chi phí luôn do server xác định theo ô sẽ mở (GDD itemization.md §7.2), không nhận từ client.
+	int32 RequiredGold = 0;
+	int32 RequiredShards = 0;
+	if (!FPABlacksmithFormulas::GetSocketUnlockCost(TargetIndex, RequiredGold, RequiredShards))
 	{
-		if (TargetIndex == 0)
-		{
-			RequiredGold = (RequiredGold <= 0) ? 1000 : RequiredGold;
-			RequiredShards = (RequiredShards <= 0) ? 3 : RequiredShards;
-		}
-		else if (TargetIndex == 1)
-		{
-			RequiredGold = (RequiredGold <= 0) ? 3000 : RequiredGold;
-			RequiredShards = (RequiredShards <= 0) ? 8 : RequiredShards;
-		}
-		else // TargetIndex >= 2: Lỗ Prismatic thứ 3
-		{
-			RequiredGold = (RequiredGold <= 0) ? 15000 : RequiredGold;
-			RequiredShards = (RequiredShards <= 0) ? 20 : RequiredShards;
-		}
+		OutError = EPACraftingError::InvalidSocketIndex;
+		return false;
 	}
 
 	// 3. Kiểm tra số dư song tiền tệ TRƯỚC khi khấu trừ
@@ -679,14 +703,13 @@ bool UPABlacksmithSubsystem::ServerRepairItemByUID(
 	TArray<FPASavedItemInstance>& InventoryItems,
 	const FGuid& ItemUID,
 	UPACurrencyComponent* Wallet,
-	int32 CostGold,
 	EPACraftingError& OutError)
 {
 	for (FPASavedItemInstance& Item : InventoryItems)
 	{
 		if (Item.ItemInstanceUID == ItemUID)
 		{
-			return ServerRepairItem(Item, Wallet, CostGold, OutError);
+			return ServerRepairItem(Item, Wallet, OutError);
 		}
 	}
 
@@ -698,8 +721,6 @@ bool UPABlacksmithSubsystem::ServerReforgeAffixByUID(
 	TArray<FPASavedItemInstance>& InventoryItems,
 	const FGuid& ItemUID,
 	int32 AffixIndex,
-	int32 CostGold,
-	int32 CostShards,
 	EPAForgeTier ForgeTier,
 	UPACurrencyComponent* Wallet,
 	UPAServerItemGeneratorSubsystem* ItemGenerator,
@@ -709,7 +730,7 @@ bool UPABlacksmithSubsystem::ServerReforgeAffixByUID(
 	{
 		if (Item.ItemInstanceUID == ItemUID)
 		{
-			return ServerReforgeAffix(Item, AffixIndex, CostGold, CostShards, ForgeTier, Wallet, ItemGenerator, OutError);
+			return ServerReforgeAffix(Item, AffixIndex, ForgeTier, Wallet, ItemGenerator, OutError);
 		}
 	}
 
@@ -720,8 +741,6 @@ bool UPABlacksmithSubsystem::ServerReforgeAffixByUID(
 bool UPABlacksmithSubsystem::ServerAddSocketByUID(
 	TArray<FPASavedItemInstance>& InventoryItems,
 	const FGuid& ItemUID,
-	int32 CostGold,
-	int32 CostShards,
 	EPAForgeTier ForgeTier,
 	UPACurrencyComponent* Wallet,
 	EPACraftingError& OutError)
@@ -730,7 +749,7 @@ bool UPABlacksmithSubsystem::ServerAddSocketByUID(
 	{
 		if (Item.ItemInstanceUID == ItemUID)
 		{
-			return ServerAddSocket(Item, CostGold, CostShards, ForgeTier, Wallet, OutError);
+			return ServerAddSocket(Item, ForgeTier, Wallet, OutError);
 		}
 	}
 

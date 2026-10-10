@@ -9,6 +9,7 @@
 
 class UPAInventoryComponent;
 class UPACurrencyComponent;
+class APlayerController;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FPAOnItemPurchased, FName, ItemId, int32, Quantity, int32, TotalCost);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FPAOnItemSold, FName, ItemId, int32, Quantity, int32, TotalReceived);
@@ -91,6 +92,18 @@ public:
 	UFUNCTION(BlueprintPure, Category = "ProjectAscendant|Merchant")
 	bool ValidateInteraction(const AActor* InteractingActor, bool bInCombat, EPATransactionError& OutError) const;
 
+	/**
+	 * X11a: Player that may have sent a Server RPC on this component (APlayerController on the owner chain of
+	 * this component's actor). nullptr for NPC-owned merchants (such RPCs cannot arrive from a client; see X11b).
+	 */
+	APlayerController* GetRequestingPlayerController() const;
+
+	/**
+	 * X11a: Server precondition run by every Server RPC before any state mutation: authority, requesting player
+	 * with a pawn, Inventory / Wallet owned by the requesting player, and ValidateInteraction (distance + State.InCombat).
+	 */
+	bool ValidateServerRequest(const APlayerController* Requester, const UActorComponent* Inventory, const UActorComponent* Wallet, EPATransactionError& OutError) const;
+
 	// -------------------------------------------------------------------------
 	// Server RPCs
 	// -------------------------------------------------------------------------
@@ -120,7 +133,9 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "ProjectAscendant|Merchant")
 	FPAOnTransactionFailed OnTransactionFailed;
 
-	static constexpr float kMaxInteractionDistance = 300.0f; // 300cm theo AC-4
+	// 300cm theo AC-4 và GDD merchant-economy.md:24. Mâu thuẫn: control-manifest.md:75 ghi 250cm —
+	// đang chờ chủ dự án quyết định; giữ 300cm theo GDD (X11a, không sửa tài liệu).
+	static constexpr float kMaxInteractionDistance = 300.0f;
 	static constexpr int32 kMaxBuybackSlots = 10;          // 10 ô Buyback theo AC-3
 
 protected:

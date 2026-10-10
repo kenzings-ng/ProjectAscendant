@@ -88,12 +88,92 @@ struct PROJECTASCENDANT_API FPABackpackExpansionRequirements
 };
 
 /**
+ * FPABossSoulRecipe
+ *
+ * X11a: Server-side Boss Soul forging recipe — partial implementation of blacksmithing-system.md §B
+ * ("Chế Tác Thần Binh Từ Linh Hồn Boss"): one boss-part id x4 instead of 4 distinct parts, class-specific output pending.
+ * The Legendary output is decided by the server from the consumed Linh Hồn Lãnh Chúa (`item_boss_soul_*`);
+ * the client only names which soul to consume and can never choose the output item.
+ * Recipes are configured on the forge (Tier 3) component; no recipe data assets exist yet in Content.
+ */
+USTRUCT(BlueprintType)
+struct PROJECTASCENDANT_API FPABossSoulRecipe
+{
+	GENERATED_BODY()
+
+	/** Item id of the boss soul consumed by this recipe (must satisfy FPABlacksmithFormulas::IsBossSoulItem). */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Blacksmith|BossSoul")
+	FName BossSoulItemId = NAME_None;
+
+	/** Legendary equipment produced. Must be Category Equipment with RarityTier Legendary or the recipe is rejected. */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Blacksmith|BossSoul")
+	TObjectPtr<UItemStaticDataAsset> OutputItemData = nullptr;
+};
+
+/**
  * FPABlacksmithFormulas
  *
  * Bộ công thức toán học và bảng tỷ lệ rèn đúc chuẩn xác theo GDD blacksmithing-system.md.
  */
 struct PROJECTASCENDANT_API FPABlacksmithFormulas
 {
+	/**
+	 * X11a: Giá cơ sở theo độ hiếm (inventory-system.md §7.1):
+	 * BasePrice(Rarity) = 50 * RarityMultiplier; RarityMultiplier = 1.0 / 2.5 / 6.0 / 15.0 / 40.0
+	 * (Common / Uncommon / Rare / Epic / Legendary). Dùng cho chi phí sửa chữa khi vật phẩm không có static data.
+	 */
+	static int32 GetBasePriceForRarity(EPAItemRarity Rarity)
+	{
+		switch (Rarity)
+		{
+		case EPAItemRarity::Common:    return 50;
+		case EPAItemRarity::Uncommon:  return 125;
+		case EPAItemRarity::Rare:      return 300;
+		case EPAItemRarity::Epic:      return 750;
+		case EPAItemRarity::Legendary: return 2000;
+		default:                       return 0;
+		}
+	}
+
+	/**
+	 * X11a: Chi phí tẩy lại 1 dòng Affix (itemization.md §7.2 "Tẩy lại 1 dòng Affix (Reroll)"): 2,000 Vàng + 5 Shards.
+	 * Server luôn dùng giá trị này; client không gửi chi phí.
+	 */
+	static void GetReforgeAffixCost(int32& OutGoldCost, int32& OutShardCost)
+	{
+		OutGoldCost = 2000;
+		OutShardCost = 5;
+	}
+
+	/**
+	 * X11a: Chi phí đục lỗ ngọc theo chỉ số ô (itemization.md §7.2):
+	 * - Ô 0 (lỗ thứ 1): 1,000 Vàng + 3 Shards
+	 * - Ô 1 (lỗ thứ 2): 3,000 Vàng + 8 Shards
+	 * - Ô 2 (Prismatic thứ 3): 15,000 Vàng + 20 Shards
+	 */
+	static bool GetSocketUnlockCost(int32 SocketIndex, int32& OutGoldCost, int32& OutShardCost)
+	{
+		switch (SocketIndex)
+		{
+		case 0:
+			OutGoldCost = 1000;
+			OutShardCost = 3;
+			return true;
+		case 1:
+			OutGoldCost = 3000;
+			OutShardCost = 8;
+			return true;
+		case 2:
+			OutGoldCost = 15000;
+			OutShardCost = 20;
+			return true;
+		default:
+			OutGoldCost = 0;
+			OutShardCost = 0;
+			return false;
+		}
+	}
+
 	/**
 	 * AC-1: Tính chi phí sửa chữa độ bền bằng Vàng:
 	 * repair_cost = ceil(base_price * 0.25 * (1.0 - (current_durability / max_durability)))
