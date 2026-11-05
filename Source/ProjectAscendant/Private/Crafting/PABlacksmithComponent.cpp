@@ -11,6 +11,7 @@
 #include "GameFramework/Actor.h"
 #include "GameFramework/Pawn.h"
 #include "GameFramework/PlayerController.h"
+#include "Character/PABaseCharacter.h"
 #include "Network/PAServerRequestValidation.h"
 
 namespace
@@ -657,6 +658,18 @@ bool UPABlacksmithComponent::ForgeBossSoulEquipment(
 	FName VoidOreItemId,
 	EPACraftingError& OutError)
 {
+	return ForgeBossSoulEquipment(Inventory, Wallet, BossSoulItemId, BossPartItemId, VoidOreItemId, EPACharacterClass::Vanguard, OutError);
+}
+
+bool UPABlacksmithComponent::ForgeBossSoulEquipment(
+	UPAInventoryComponent* Inventory,
+	UPACurrencyComponent* Wallet,
+	FName BossSoulItemId,
+	FName BossPartItemId,
+	FName VoidOreItemId,
+	EPACharacterClass CharacterClass,
+	EPACraftingError& OutError)
+{
 	if (!Inventory || !Wallet)
 	{
 		OutError = EPACraftingError::ServerRejected;
@@ -679,9 +692,6 @@ bool UPABlacksmithComponent::ForgeBossSoulEquipment(
 		return false;
 	}
 
-	// X11a: kiểm tra loại nguyên liệu và đầu ra do server quyết định qua recipe. Đây chỉ là triển khai MỘT PHẦN của
-	// blacksmithing-system.md §B: code dùng 4x một loại mảnh vỡ (BossPartItemId) thay vì 4 bộ phận khác nhau theo GDD
-	// (Sừng, Vảy Đuôi, Giáp Ngực, Cánh), và đầu ra theo Class (dòng cải biến kỹ năng) vẫn chưa làm.
 	if (!FPABlacksmithFormulas::IsBossSoulItem(BossSoulItemId) ||
 		!FPABlacksmithFormulas::IsBossPartItem(BossPartItemId) ||
 		!FPABlacksmithFormulas::IsVoidOreItem(VoidOreItemId))
@@ -692,7 +702,7 @@ bool UPABlacksmithComponent::ForgeBossSoulEquipment(
 	}
 
 	const FPABossSoulRecipe* Recipe = FindBossSoulRecipe(BossSoulItemId);
-	UItemStaticDataAsset* BossSoulItemData = Recipe ? Recipe->OutputItemData.Get() : nullptr;
+	UItemStaticDataAsset* BossSoulItemData = Recipe ? Recipe->GetOutputForClass(CharacterClass) : nullptr;
 	if (!BossSoulItemData ||
 		BossSoulItemData->Category != EPAItemCategory::Equipment ||
 		BossSoulItemData->RarityTier != EPAItemRarity::Legendary)
@@ -750,6 +760,126 @@ bool UPABlacksmithComponent::ForgeBossSoulEquipment(
 	Inventory->ConsumeItemQuantity(VoidOreItemId, VoidOreCount);
 
 	// Create and add boss-soul (Legendary) equipment
+	FPAItemInstanceData DynamicData;
+	DynamicData.CurrentDurability = 100.0f;
+	DynamicData.EnhancementLevel = 0;
+	Inventory->AddItemToSlot(EmptySlot, BossSoulItemData, 1, DynamicData);
+
+	OutError = EPACraftingError::None;
+	OnBossSoulForged.Broadcast(BossSoulItemData->ItemId, BossSoulItemData->RarityTier);
+	return true;
+}
+
+bool UPABlacksmithComponent::ForgeBossSoulEquipmentWithFourParts(
+	UPAInventoryComponent* Inventory,
+	UPACurrencyComponent* Wallet,
+	FName BossSoulItemId,
+	FName HornItemId,
+	FName TailScaleItemId,
+	FName ChestArmorItemId,
+	FName WingItemId,
+	FName VoidOreItemId,
+	EPACharacterClass CharacterClass,
+	EPACraftingError& OutError)
+{
+	if (!Inventory || !Wallet)
+	{
+		OutError = EPACraftingError::ServerRejected;
+		OnCraftingFailed.Broadcast(OutError);
+		return false;
+	}
+
+	if (GetOwner() && !GetOwner()->HasAuthority())
+	{
+		OutError = EPACraftingError::ServerRejected;
+		OnCraftingFailed.Broadcast(OutError);
+		return false;
+	}
+
+	// AC-1: Độc quyền tại Tier 3 Ancient Sanctuary Forge
+	if (ForgeTier < EPABlacksmithTier::Tier3_Sanctuary)
+	{
+		OutError = EPACraftingError::MaxTierLevelReached;
+		OnCraftingFailed.Broadcast(OutError);
+		return false;
+	}
+
+	// DECISIONS §13 & blacksmithing-system.md §B:
+	// Xác thực 4 bộ phận Boss giải phẫu riêng biệt (Sừng, Vảy Đuôi, Giáp Ngực, Cánh).
+	if (!FPABlacksmithFormulas::IsBossSoulItem(BossSoulItemId) ||
+		!FPABlacksmithFormulas::IsVoidOreItem(VoidOreItemId) ||
+		!FPABlacksmithFormulas::ValidateFourDistinctBossParts(HornItemId, TailScaleItemId, ChestArmorItemId, WingItemId))
+	{
+		OutError = EPACraftingError::InvalidItemType;
+		OnCraftingFailed.Broadcast(OutError);
+		return false;
+	}
+
+	const FPABossSoulRecipe* Recipe = FindBossSoulRecipe(BossSoulItemId);
+	UItemStaticDataAsset* BossSoulItemData = Recipe ? Recipe->GetOutputForClass(CharacterClass) : nullptr;
+	if (!BossSoulItemData ||
+		BossSoulItemData->Category != EPAItemCategory::Equipment ||
+		BossSoulItemData->RarityTier != EPAItemRarity::Legendary)
+	{
+		OutError = EPACraftingError::InvalidItemType;
+		OnCraftingFailed.Broadcast(OutError);
+		return false;
+	}
+
+	// Empty slot check
+	const int32 EmptySlot = Inventory->FindFirstEmptySlot();
+	if (EmptySlot == INDEX_NONE)
+	{
+		OutError = EPACraftingError::InventoryFull;
+		OnCraftingFailed.Broadcast(OutError);
+		return false;
+	}
+
+	int32 GoldCost = 0;
+	int32 VoidOreCount = 0;
+	int32 BossPartCount = 0;
+	int32 BossSoulCount = 0;
+	FPABlacksmithFormulas::GetBossSoulForgingCost(GoldCost, VoidOreCount, BossPartCount, BossSoulCount);
+
+	// Gold check (5,000 Gold theo DECISIONS §13)
+	if (Wallet->GetGold() < GoldCost)
+	{
+		OutError = EPACraftingError::InsufficientGold;
+		OnCraftingFailed.Broadcast(OutError);
+		return false;
+	}
+
+	// Material checks: 1 soul, 1 horn, 1 tail, 1 chest, 1 wing, 5 void ore
+	if (Inventory->GetItemCount(BossSoulItemId) < BossSoulCount ||
+		Inventory->GetItemCount(HornItemId) < 1 ||
+		Inventory->GetItemCount(TailScaleItemId) < 1 ||
+		Inventory->GetItemCount(ChestArmorItemId) < 1 ||
+		Inventory->GetItemCount(WingItemId) < 1 ||
+		Inventory->GetItemCount(VoidOreItemId) < VoidOreCount)
+	{
+		OutError = EPACraftingError::InsufficientMaterials;
+		OnCraftingFailed.Broadcast(OutError);
+		return false;
+	}
+
+	// Deduct Gold (5,000 Gold)
+	EPACurrencyTransactionError CurrErr = EPACurrencyTransactionError::None;
+	if (GoldCost > 0 && !Wallet->DeductCurrency(EPACurrencyType::Gold, GoldCost, CurrErr))
+	{
+		OutError = EPACraftingError::InsufficientGold;
+		OnCraftingFailed.Broadcast(OutError);
+		return false;
+	}
+
+	// Consume 4 distinct parts + void ore + boss soul
+	Inventory->ConsumeItemQuantity(BossSoulItemId, BossSoulCount);
+	Inventory->ConsumeItemQuantity(HornItemId, 1);
+	Inventory->ConsumeItemQuantity(TailScaleItemId, 1);
+	Inventory->ConsumeItemQuantity(ChestArmorItemId, 1);
+	Inventory->ConsumeItemQuantity(WingItemId, 1);
+	Inventory->ConsumeItemQuantity(VoidOreItemId, VoidOreCount);
+
+	// Deliver class-specific boss-soul (Legendary) equipment
 	FPAItemInstanceData DynamicData;
 	DynamicData.CurrentDurability = 100.0f;
 	DynamicData.EnhancementLevel = 0;
@@ -938,7 +1068,57 @@ bool UPABlacksmithComponent::ServerHandleForgeBossSoul(const APlayerController* 
 		OnCraftingFailed.Broadcast(OutError);
 		return false;
 	}
-	return ForgeBossSoulEquipment(Inventory, Wallet, BossSoulItemId, BossPartItemId, VoidOreItemId, OutError);
+
+	EPACharacterClass CharClass = EPACharacterClass::Vanguard;
+	if (Requester)
+	{
+		if (const APABaseCharacter* BaseChar = Cast<APABaseCharacter>(Requester->GetPawn()))
+		{
+			CharClass = BaseChar->GetCharacterClass();
+		}
+	}
+
+	return ForgeBossSoulEquipment(Inventory, Wallet, BossSoulItemId, BossPartItemId, VoidOreItemId, CharClass, OutError);
+}
+
+bool UPABlacksmithComponent::ServerHandleForgeBossSoulWithFourParts(
+	const APlayerController* Requester,
+	UPAInventoryComponent* Inventory,
+	UPACurrencyComponent* Wallet,
+	FName BossSoulItemId,
+	FName HornItemId,
+	FName TailScaleItemId,
+	FName ChestArmorItemId,
+	FName WingItemId,
+	FName VoidOreItemId,
+	EPACraftingError& OutError)
+{
+	if (!ValidateServerRequest(Requester, Inventory, Wallet, OutError))
+	{
+		OnCraftingFailed.Broadcast(OutError);
+		return false;
+	}
+
+	EPACharacterClass CharClass = EPACharacterClass::Vanguard;
+	if (Requester)
+	{
+		if (const APABaseCharacter* BaseChar = Cast<APABaseCharacter>(Requester->GetPawn()))
+		{
+			CharClass = BaseChar->GetCharacterClass();
+		}
+	}
+
+	return ForgeBossSoulEquipmentWithFourParts(
+		Inventory,
+		Wallet,
+		BossSoulItemId,
+		HornItemId,
+		TailScaleItemId,
+		ChestArmorItemId,
+		WingItemId,
+		VoidOreItemId,
+		CharClass,
+		OutError);
 }
 
 bool UPABlacksmithComponent::ServerHandleExpandBackpack(const APlayerController* Requester, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, EPACraftingError& OutError)

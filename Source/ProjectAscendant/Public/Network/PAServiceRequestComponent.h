@@ -112,6 +112,19 @@ public:
 	void Server_RequestForgeBossSoul(int32 RequestId, AActor* ForgeActor, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, FName BossSoulItemId, FName BossPartItemId, FName VoidOreItemId);
 
 	UFUNCTION(Server, Reliable, WithValidation, BlueprintCallable, Category = "ProjectAscendant|ServiceRequest")
+	void Server_RequestForgeBossSoulWithFourParts(
+		int32 RequestId,
+		AActor* ForgeActor,
+		UPAInventoryComponent* Inventory,
+		UPACurrencyComponent* Wallet,
+		FName BossSoulItemId,
+		FName HornItemId,
+		FName TailScaleItemId,
+		FName ChestArmorItemId,
+		FName WingItemId,
+		FName VoidOreItemId);
+
+	UFUNCTION(Server, Reliable, WithValidation, BlueprintCallable, Category = "ProjectAscendant|ServiceRequest")
 	void Server_RequestForgeExpandBackpack(int32 RequestId, AActor* ForgeActor, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet);
 
 	/** Itemization (item-007): item addressed by UID in this player's bound saved-item inventory. */

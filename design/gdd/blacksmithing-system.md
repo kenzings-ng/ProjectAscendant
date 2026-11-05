@@ -76,7 +76,9 @@ Chỉ có thể thực hiện tại **Lò Rèn Cấm Địa**. Công thức rèn
   - 1 $\times$ Linh Hồn Lãnh Chúa (`item_boss_soul_*`) thu được khi diệt Boss.
   - 4 $\times$ Bộ phận rách/chặt từ Boss qua cơ chế Part Breaking ([`stagger-system.md`](file:///mnt/Data/Projects/project-games/design/gdd/stagger-system.md)): Sừng, Vảy Đuôi, Giáp Ngực, Cánh.
   - 5 $\times$ Quặng Hư Không Cổ Đại.
+  - Chi phí rèn: **5.000 Vàng**.
 - **Đặc tính Thần Binh (Legendary - Boss Soul Forging):**
+  - Trang bị đầu ra tương thích chính xác theo Chức nghiệp (Class) của người chơi (Vanguard, Ranger, Arcanist...).
   - Cải biến cơ chế chiêu thức của Class (Ví dụ: Cú chém *Blade Arc* của Vanguard phóng thêm sóng xung kích lửa; mũi tên *Piercing Shot* của Ranger để lại vệt nổ liên hoàn).
 
 ---

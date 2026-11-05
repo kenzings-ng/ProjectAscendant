@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Inventory/PAInventoryTypes.h"
+#include "UI/PACharacterSelectTypes.h"
 #include "PABlacksmithTypes.generated.h"
 
 /**
@@ -90,11 +91,11 @@ struct PROJECTASCENDANT_API FPABackpackExpansionRequirements
 /**
  * FPABossSoulRecipe
  *
- * X11a: Server-side Boss Soul forging recipe — partial implementation of blacksmithing-system.md §B
- * ("Chế Tác Thần Binh Từ Linh Hồn Boss"): one boss-part id x4 instead of 4 distinct parts, class-specific output pending.
- * The Legendary output is decided by the server from the consumed Linh Hồn Lãnh Chúa (`item_boss_soul_*`);
- * the client only names which soul to consume and can never choose the output item.
- * Recipes are configured on the forge (Tier 3) component; no recipe data assets exist yet in Content.
+ * DECISIONS §13 & blacksmithing-system.md §B:
+ * Server-side Boss Soul forging recipe.
+ * The Legendary output is decided by the server from the consumed Linh Hồn Lãnh Chúa (`item_boss_soul_*`)
+ * and tailored to the player's Character Class (Vanguard, Ranger, Arcanist).
+ * Recipes are configured on the Tier 3 Sanctuary forge component.
  */
 USTRUCT(BlueprintType)
 struct PROJECTASCENDANT_API FPABossSoulRecipe
@@ -105,9 +106,26 @@ struct PROJECTASCENDANT_API FPABossSoulRecipe
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Blacksmith|BossSoul")
 	FName BossSoulItemId = NAME_None;
 
-	/** Legendary equipment produced. Must be Category Equipment with RarityTier Legendary or the recipe is rejected. */
+	/** Default Legendary equipment produced if no class match or class is unspecified. */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Blacksmith|BossSoul")
 	TObjectPtr<UItemStaticDataAsset> OutputItemData = nullptr;
+
+	/** Class-specific Legendary equipment outputs (e.g. Vanguard -> Blade/Shield, Ranger -> Bow, Arcanist -> Staff/Wand). */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Blacksmith|BossSoul")
+	TMap<EPACharacterClass, TObjectPtr<UItemStaticDataAsset>> ClassOutputs;
+
+	/** Helper resolving output asset for the player's class (falls back to OutputItemData). */
+	UItemStaticDataAsset* GetOutputForClass(EPACharacterClass CharacterClass) const
+	{
+		if (const TObjectPtr<UItemStaticDataAsset>* ClassItem = ClassOutputs.Find(CharacterClass))
+		{
+			if (ClassItem->Get())
+			{
+				return ClassItem->Get();
+			}
+		}
+		return OutputItemData.Get();
+	}
 };
 
 /**
@@ -474,8 +492,66 @@ struct PROJECTASCENDANT_API FPABlacksmithFormulas
 
 	static bool IsBossPartItem(FName ItemId)
 	{
-		const FString Str = ItemId.ToString();
-		return Str.Contains(TEXT("boss_part")) || Str.Contains(TEXT("boss_horn")) || Str.Contains(TEXT("boss_scale")) || Str.Contains(TEXT("boss_wing")) || ItemId == FName("boss_part") || ItemId == FName("item_boss_part");
+		const FString Str = ItemId.ToString().ToLower();
+		return Str.Contains(TEXT("boss_part")) || Str.Contains(TEXT("boss_horn")) ||
+		       Str.Contains(TEXT("boss_scale")) || Str.Contains(TEXT("boss_wing")) ||
+		       Str.Contains(TEXT("boss_chest")) || Str.Contains(TEXT("carapace")) ||
+		       Str.Contains(TEXT("tail")) || Str.Contains(TEXT("horn")) ||
+		       Str.Contains(TEXT("wing")) || ItemId == FName("boss_part") ||
+		       ItemId == FName("item_boss_part");
+	}
+
+	static bool IsBossHornItem(FName ItemId)
+	{
+		const FString Str = ItemId.ToString().ToLower();
+		return Str.Contains(TEXT("horn")) || ItemId == FName("boss_horn") ||
+		       ItemId == FName("item_boss_horn") || ItemId == FName("Item_Beast_Horn_Shard");
+	}
+
+	static bool IsBossTailScaleItem(FName ItemId)
+	{
+		const FString Str = ItemId.ToString().ToLower();
+		return Str.Contains(TEXT("scale")) || Str.Contains(TEXT("tail")) ||
+		       ItemId == FName("boss_scale") || ItemId == FName("item_boss_scale") ||
+		       ItemId == FName("Item_Dragon_Tail_Sinew");
+	}
+
+	static bool IsBossChestArmorItem(FName ItemId)
+	{
+		const FString Str = ItemId.ToString().ToLower();
+		return Str.Contains(TEXT("chest")) || Str.Contains(TEXT("carapace")) ||
+		       Str.Contains(TEXT("armor")) || ItemId == FName("boss_chest") ||
+		       ItemId == FName("item_boss_chest") || ItemId == FName("Item_Hardened_Carapace");
+	}
+
+	static bool IsBossWingItem(FName ItemId)
+	{
+		const FString Str = ItemId.ToString().ToLower();
+		return Str.Contains(TEXT("wing")) || ItemId == FName("boss_wing") ||
+		       ItemId == FName("item_boss_wing") || ItemId == FName("Item_Dragon_Wing_Membrane");
+	}
+
+	/**
+	 * DECISIONS §13 & blacksmithing-system.md §B:
+	 * Xác thực 4 bộ phận Boss giải phẫu riêng biệt (Sừng, Vảy đuôi, Giáp ngực, Cánh).
+	 * Bắt buộc 4 ID vật phẩm phải khác nhau hoàn toàn và khớp đúng danh mục giải phẫu.
+	 */
+	static bool ValidateFourDistinctBossParts(FName Horn, FName TailScale, FName ChestArmor, FName Wing)
+	{
+		if (Horn.IsNone() || TailScale.IsNone() || ChestArmor.IsNone() || Wing.IsNone())
+		{
+			return false;
+		}
+		if (Horn == TailScale || Horn == ChestArmor || Horn == Wing ||
+		    TailScale == ChestArmor || TailScale == Wing ||
+		    ChestArmor == Wing)
+		{
+			return false;
+		}
+		return IsBossHornItem(Horn) &&
+		       IsBossTailScaleItem(TailScale) &&
+		       IsBossChestArmorItem(ChestArmor) &&
+		       IsBossWingItem(Wing);
 	}
 
 	static bool IsVoidOreItem(FName ItemId)

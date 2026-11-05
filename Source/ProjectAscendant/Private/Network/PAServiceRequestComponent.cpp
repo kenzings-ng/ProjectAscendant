@@ -233,6 +233,51 @@ void UPAServiceRequestComponent::Server_RequestForgeBossSoul_Implementation(int3
 	}
 }
 
+bool UPAServiceRequestComponent::Server_RequestForgeBossSoulWithFourParts_Validate(
+	int32 RequestId,
+	AActor* ForgeActor,
+	UPAInventoryComponent* Inventory,
+	UPACurrencyComponent* Wallet,
+	FName BossSoulItemId,
+	FName HornItemId,
+	FName TailScaleItemId,
+	FName ChestArmorItemId,
+	FName WingItemId,
+	FName VoidOreItemId)
+{
+	return true;
+}
+
+void UPAServiceRequestComponent::Server_RequestForgeBossSoulWithFourParts_Implementation(
+	int32 RequestId,
+	AActor* ForgeActor,
+	UPAInventoryComponent* Inventory,
+	UPACurrencyComponent* Wallet,
+	FName BossSoulItemId,
+	FName HornItemId,
+	FName TailScaleItemId,
+	FName ChestArmorItemId,
+	FName WingItemId,
+	FName VoidOreItemId)
+{
+	if (UPABlacksmithComponent* Forge = ResolveForgeOrReject(RequestId, ForgeActor))
+	{
+		EPACraftingError Err = EPACraftingError::None;
+		const bool bOk = Forge->ServerHandleForgeBossSoulWithFourParts(
+			GetRequestingPlayerController(),
+			Inventory,
+			Wallet,
+			BossSoulItemId,
+			HornItemId,
+			TailScaleItemId,
+			ChestArmorItemId,
+			WingItemId,
+			VoidOreItemId,
+			Err);
+		Client_ConfirmForgeRequest(RequestId, bOk, Err);
+	}
+}
+
 bool UPAServiceRequestComponent::Server_RequestForgeExpandBackpack_Validate(int32 RequestId, AActor* ForgeActor, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet)
 {
 	return true;

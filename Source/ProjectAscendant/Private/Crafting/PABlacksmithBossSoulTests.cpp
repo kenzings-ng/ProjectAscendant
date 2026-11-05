@@ -342,6 +342,213 @@ bool FPABlacksmithBossSoulTests::RunTest(const FString& Parameters)
 		}
 	}
 
+	// =========================================================================
+	// AC-1 / DECISIONS §13: Boss Soul Forging with 4 Distinct Parts & Class Outputs
+	// =========================================================================
+	{
+		UPABlacksmithComponent* Blacksmith = NewObject<UPABlacksmithComponent>();
+		UPAInventoryComponent* Inventory = NewObject<UPAInventoryComponent>();
+		UPACurrencyComponent* Wallet = NewObject<UPACurrencyComponent>();
+
+		TestNotNull(TEXT("DECISIONS §13: BlacksmithComponent created"), Blacksmith);
+		TestNotNull(TEXT("DECISIONS §13: InventoryComponent created"), Inventory);
+		TestNotNull(TEXT("DECISIONS §13: CurrencyComponent created"), Wallet);
+
+		if (Blacksmith && Inventory && Wallet)
+		{
+			// Setup 3 class-specific Legendary equipment assets + 1 fallback
+			UItemStaticDataAsset* FallbackSword = NewObject<UItemStaticDataAsset>();
+			FallbackSword->ItemId = FName("item_boss_soul_dragon_slayer");
+			FallbackSword->Category = EPAItemCategory::Equipment;
+			FallbackSword->RarityTier = EPAItemRarity::Legendary;
+
+			UItemStaticDataAsset* VanguardBlade = NewObject<UItemStaticDataAsset>();
+			VanguardBlade->ItemId = FName("item_boss_soul_vanguard_blade");
+			VanguardBlade->Category = EPAItemCategory::Equipment;
+			VanguardBlade->RarityTier = EPAItemRarity::Legendary;
+
+			UItemStaticDataAsset* RangerBow = NewObject<UItemStaticDataAsset>();
+			RangerBow->ItemId = FName("item_boss_soul_ranger_bow");
+			RangerBow->Category = EPAItemCategory::Equipment;
+			RangerBow->RarityTier = EPAItemRarity::Legendary;
+
+			UItemStaticDataAsset* ArcanistStaff = NewObject<UItemStaticDataAsset>();
+			ArcanistStaff->ItemId = FName("item_boss_soul_arcanist_staff");
+			ArcanistStaff->Category = EPAItemCategory::Equipment;
+			ArcanistStaff->RarityTier = EPAItemRarity::Legendary;
+
+			// Setup materials: 1 soul, 1 horn, 1 scale, 1 chest, 1 wing, 5 void ore
+			UItemStaticDataAsset* SoulAsset = NewObject<UItemStaticDataAsset>();
+			SoulAsset->ItemId = FName("item_boss_soul_dragon");
+			SoulAsset->Category = EPAItemCategory::Material;
+
+			UItemStaticDataAsset* HornAsset = NewObject<UItemStaticDataAsset>();
+			HornAsset->ItemId = FName("item_boss_horn");
+			HornAsset->Category = EPAItemCategory::Material;
+
+			UItemStaticDataAsset* TailScaleAsset = NewObject<UItemStaticDataAsset>();
+			TailScaleAsset->ItemId = FName("item_boss_scale");
+			TailScaleAsset->Category = EPAItemCategory::Material;
+
+			UItemStaticDataAsset* ChestArmorAsset = NewObject<UItemStaticDataAsset>();
+			ChestArmorAsset->ItemId = FName("item_boss_chest");
+			ChestArmorAsset->Category = EPAItemCategory::Material;
+
+			UItemStaticDataAsset* WingAsset = NewObject<UItemStaticDataAsset>();
+			WingAsset->ItemId = FName("item_boss_wing");
+			WingAsset->Category = EPAItemCategory::Material;
+
+			UItemStaticDataAsset* VoidOreAsset = NewObject<UItemStaticDataAsset>();
+			VoidOreAsset->ItemId = FName("void_ore");
+			VoidOreAsset->Category = EPAItemCategory::Material;
+
+			FPABossSoulRecipe Recipe;
+			Recipe.BossSoulItemId = FName("item_boss_soul_dragon");
+			Recipe.OutputItemData = FallbackSword;
+			Recipe.ClassOutputs.Add(EPACharacterClass::Vanguard, VanguardBlade);
+			Recipe.ClassOutputs.Add(EPACharacterClass::Ranger, RangerBow);
+			Recipe.ClassOutputs.Add(EPACharacterClass::Arcanist, ArcanistStaff);
+			Blacksmith->AddBossSoulRecipe(Recipe);
+
+			// Formulas unit test for distinct parts
+			TestTrue(TEXT("DECISIONS §13: Formulas distinct parts validation succeeds with valid 4 parts"),
+				FPABlacksmithFormulas::ValidateFourDistinctBossParts(
+					FName("item_boss_horn"), FName("item_boss_scale"), FName("item_boss_chest"), FName("item_boss_wing")));
+			TestFalse(TEXT("DECISIONS §13: Formulas distinct parts validation rejects duplicate parts (horn + horn)"),
+				FPABlacksmithFormulas::ValidateFourDistinctBossParts(
+					FName("item_boss_horn"), FName("item_boss_horn"), FName("item_boss_chest"), FName("item_boss_wing")));
+			TestFalse(TEXT("DECISIONS §13: Formulas distinct parts validation rejects non-part item (iron_ore)"),
+				FPABlacksmithFormulas::ValidateFourDistinctBossParts(
+					FName("item_boss_horn"), FName("item_boss_scale"), FName("iron_ore"), FName("item_boss_wing")));
+
+			// Seed inventory
+			Inventory->AddItemToSlot(1, SoulAsset, 1);
+			Inventory->AddItemToSlot(2, HornAsset, 1);
+			Inventory->AddItemToSlot(3, TailScaleAsset, 1);
+			Inventory->AddItemToSlot(4, ChestArmorAsset, 1);
+			Inventory->AddItemToSlot(5, WingAsset, 1);
+			Inventory->AddItemToSlot(6, VoidOreAsset, 5);
+
+			EPACraftingError CraftErr = EPACraftingError::None;
+
+			// Test Tier gating
+			Blacksmith->SetForgeTier(EPABlacksmithTier::Tier2_Wilderness);
+			EPACurrencyTransactionError CurrErr;
+			Wallet->AddCurrency(EPACurrencyType::Gold, 10000, CurrErr);
+
+			bool bForged = Blacksmith->ForgeBossSoulEquipmentWithFourParts(
+				Inventory, Wallet,
+				FName("item_boss_soul_dragon"),
+				FName("item_boss_horn"), FName("item_boss_scale"), FName("item_boss_chest"), FName("item_boss_wing"),
+				FName("void_ore"), EPACharacterClass::Vanguard, CraftErr);
+			TestFalse(TEXT("DECISIONS §13: Forging rejected at Tier 2 Forge"), bForged);
+			TestEqual(TEXT("DECISIONS §13: Error is MaxTierLevelReached at Tier 2"), CraftErr, EPACraftingError::MaxTierLevelReached);
+
+			// Set to Tier 3 Forge
+			Blacksmith->SetForgeTier(EPABlacksmithTier::Tier3_Sanctuary);
+
+			// Test duplicate part rejection at component level
+			bForged = Blacksmith->ForgeBossSoulEquipmentWithFourParts(
+				Inventory, Wallet,
+				FName("item_boss_soul_dragon"),
+				FName("item_boss_horn"), FName("item_boss_horn"), FName("item_boss_chest"), FName("item_boss_wing"),
+				FName("void_ore"), EPACharacterClass::Vanguard, CraftErr);
+			TestFalse(TEXT("DECISIONS §13: Forging rejected when duplicate parts provided"), bForged);
+			TestEqual(TEXT("DECISIONS §13: Error is InvalidItemType for duplicates"), CraftErr, EPACraftingError::InvalidItemType);
+
+			// Test non-part rejection
+			bForged = Blacksmith->ForgeBossSoulEquipmentWithFourParts(
+				Inventory, Wallet,
+				FName("item_boss_soul_dragon"),
+				FName("item_boss_horn"), FName("item_boss_scale"), FName("void_ore"), FName("item_boss_wing"),
+				FName("void_ore"), EPACharacterClass::Vanguard, CraftErr);
+			TestFalse(TEXT("DECISIONS §13: Forging rejected when non-part provided"), bForged);
+			TestEqual(TEXT("DECISIONS §13: Error is InvalidItemType for non-part"), CraftErr, EPACraftingError::InvalidItemType);
+
+			// Test insufficient gold (< 5,000)
+			Wallet->DeductCurrency(EPACurrencyType::Gold, 6000, CurrErr); // Leaves 4,000 Gold
+			bForged = Blacksmith->ForgeBossSoulEquipmentWithFourParts(
+				Inventory, Wallet,
+				FName("item_boss_soul_dragon"),
+				FName("item_boss_horn"), FName("item_boss_scale"), FName("item_boss_chest"), FName("item_boss_wing"),
+				FName("void_ore"), EPACharacterClass::Vanguard, CraftErr);
+			TestFalse(TEXT("DECISIONS §13: Forging rejected with < 5,000 Gold"), bForged);
+			TestEqual(TEXT("DECISIONS §13: Error is InsufficientGold"), CraftErr, EPACraftingError::InsufficientGold);
+
+			// Replenish Gold to 10,000
+			Wallet->AddCurrency(EPACurrencyType::Gold, 6000, CurrErr);
+
+			// Successful Vanguard Forging: outputs VanguardBlade
+			bForged = Blacksmith->ForgeBossSoulEquipmentWithFourParts(
+				Inventory, Wallet,
+				FName("item_boss_soul_dragon"),
+				FName("item_boss_horn"), FName("item_boss_scale"), FName("item_boss_chest"), FName("item_boss_wing"),
+				FName("void_ore"), EPACharacterClass::Vanguard, CraftErr);
+			TestTrue(TEXT("DECISIONS §13: Vanguard Boss soul forging succeeds with 4 distinct parts"), bForged);
+			TestEqual(TEXT("DECISIONS §13: Error is None on success"), CraftErr, EPACraftingError::None);
+			TestEqual(TEXT("DECISIONS §13: Wallet deducted 5,000 Gold -> 5,000 remaining"), Wallet->GetGold(), 5000LL);
+			TestEqual(TEXT("DECISIONS §13: Boss Soul consumed (0 remaining)"), Inventory->GetItemCount(FName("item_boss_soul_dragon")), 0);
+			TestEqual(TEXT("DECISIONS §13: Horn consumed (0 remaining)"), Inventory->GetItemCount(FName("item_boss_horn")), 0);
+			TestEqual(TEXT("DECISIONS §13: Tail Scale consumed (0 remaining)"), Inventory->GetItemCount(FName("item_boss_scale")), 0);
+			TestEqual(TEXT("DECISIONS §13: Chest Armor consumed (0 remaining)"), Inventory->GetItemCount(FName("item_boss_chest")), 0);
+			TestEqual(TEXT("DECISIONS §13: Wing consumed (0 remaining)"), Inventory->GetItemCount(FName("item_boss_wing")), 0);
+			TestEqual(TEXT("DECISIONS §13: Void Ore consumed (0 remaining)"), Inventory->GetItemCount(FName("void_ore")), 0);
+
+			const FPAInventoryItemEntry* ResultItem = Inventory->GetItemAtSlot(0);
+			TestNotNull(TEXT("DECISIONS §13: Output item present at slot 0"), ResultItem);
+			if (ResultItem)
+			{
+				TestEqual(TEXT("DECISIONS §13: Output item is Vanguard Blade"), ResultItem->ItemDefId, FName("item_boss_soul_vanguard_blade"));
+				TestEqual(TEXT("DECISIONS §13: Durability is 100%"), ResultItem->DynamicData.CurrentDurability, 100.0f);
+			}
+
+			// Clear slot 0 and test Ranger class output
+			Inventory->RemoveItemFromSlot(0, 1);
+			Inventory->AddItemToSlot(1, SoulAsset, 1);
+			Inventory->AddItemToSlot(2, HornAsset, 1);
+			Inventory->AddItemToSlot(3, TailScaleAsset, 1);
+			Inventory->AddItemToSlot(4, ChestArmorAsset, 1);
+			Inventory->AddItemToSlot(5, WingAsset, 1);
+			Inventory->AddItemToSlot(6, VoidOreAsset, 5);
+
+			bForged = Blacksmith->ForgeBossSoulEquipmentWithFourParts(
+				Inventory, Wallet,
+				FName("item_boss_soul_dragon"),
+				FName("item_boss_horn"), FName("item_boss_scale"), FName("item_boss_chest"), FName("item_boss_wing"),
+				FName("void_ore"), EPACharacterClass::Ranger, CraftErr);
+			TestTrue(TEXT("DECISIONS §13: Ranger Boss soul forging succeeds"), bForged);
+			const FPAInventoryItemEntry* RangerResult = Inventory->GetItemAtSlot(0);
+			TestNotNull(TEXT("DECISIONS §13: Ranger output item present"), RangerResult);
+			if (RangerResult)
+			{
+				TestEqual(TEXT("DECISIONS §13: Output item is Ranger Bow"), RangerResult->ItemDefId, FName("item_boss_soul_ranger_bow"));
+			}
+
+			// Clear slot 0 and test Arcanist class output
+			Inventory->RemoveItemFromSlot(0, 1);
+			Wallet->AddCurrency(EPACurrencyType::Gold, 5000, CurrErr);
+			Inventory->AddItemToSlot(1, SoulAsset, 1);
+			Inventory->AddItemToSlot(2, HornAsset, 1);
+			Inventory->AddItemToSlot(3, TailScaleAsset, 1);
+			Inventory->AddItemToSlot(4, ChestArmorAsset, 1);
+			Inventory->AddItemToSlot(5, WingAsset, 1);
+			Inventory->AddItemToSlot(6, VoidOreAsset, 5);
+
+			bForged = Blacksmith->ForgeBossSoulEquipmentWithFourParts(
+				Inventory, Wallet,
+				FName("item_boss_soul_dragon"),
+				FName("item_boss_horn"), FName("item_boss_scale"), FName("item_boss_chest"), FName("item_boss_wing"),
+				FName("void_ore"), EPACharacterClass::Arcanist, CraftErr);
+			TestTrue(TEXT("DECISIONS §13: Arcanist Boss soul forging succeeds"), bForged);
+			const FPAInventoryItemEntry* ArcanistResult = Inventory->GetItemAtSlot(0);
+			TestNotNull(TEXT("DECISIONS §13: Arcanist output item present"), ArcanistResult);
+			if (ArcanistResult)
+			{
+				TestEqual(TEXT("DECISIONS §13: Output item is Arcanist Staff"), ArcanistResult->ItemDefId, FName("item_boss_soul_arcanist_staff"));
+			}
+		}
+	}
+
 	return true;
 }
 

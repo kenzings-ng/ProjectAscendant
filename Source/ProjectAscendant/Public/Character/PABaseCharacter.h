@@ -7,6 +7,7 @@
 #include "AbilitySystemInterface.h"
 #include "Controller/PAIsometricMovementMath.h"
 #include "Network/PANetLagCompensation.h"
+#include "UI/PACharacterSelectTypes.h"
 #include "PABaseCharacter.generated.h"
 
 class UCharacterMovementComponent;
@@ -37,6 +38,19 @@ public:
 	APABaseCharacter(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
 	virtual void PostInitializeComponents() override;
+
+	// -------------------------------------------------------------------------
+	// Character Class (foundational-classes.md & DECISIONS §13)
+	// -------------------------------------------------------------------------
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Replicated, Category = "ProjectAscendant|Character")
+	EPACharacterClass CharacterClass = EPACharacterClass::Vanguard;
+
+	UFUNCTION(BlueprintPure, Category = "ProjectAscendant|Character")
+	EPACharacterClass GetCharacterClass() const { return CharacterClass; }
+
+	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category = "ProjectAscendant|Character")
+	void SetCharacterClass(EPACharacterClass InClass) { CharacterClass = InClass; }
 
 	// -------------------------------------------------------------------------
 	// Locomotion (Story 001)

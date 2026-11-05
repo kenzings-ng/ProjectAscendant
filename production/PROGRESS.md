@@ -753,3 +753,34 @@ Các tham chiếu số dòng ROADMAP trong plan đã chỉnh theo vị trí mớ
   - Gate 2: Git LFS Pointers: PASS (0 violations).
   - Gate 3: UE Automation Tests: `ProjectAscendant.Economy` 4/4 PASS; `ProjectAscendant.Network` 13/13 PASS.
 - **Reviewer độc lập**: Chuẩn bị triệu hồi subagent thẩm định chéo.
+
+---
+
+## 10. Nhật Ký Đầu Việc: Nhánh `feat/y5-boss-soul-crafting` (Bước Y5 - Rèn Boss Soul Chuẩn GDD & DECISIONS §13)
+
+- **Mục tiêu**: Bước Y5 trong `production/plans/playable-slice-and-approvals-2026-10-10.md:56` và `DECISIONS.md` §13:
+  1. 4 bộ phận Boss giải phẫu riêng biệt: Sừng (Horn), Vảy Đuôi (Tail Scale), Giáp Ngực (Chest Armor), Cánh (Wing).
+  2. Trang bị Legendary đầu ra tương thích chính xác theo Chức nghiệp (Class) của người chơi (Vanguard, Ranger, Arcanist...).
+  3. Ghi rõ chi phí 5.000 Vàng vào `design/gdd/blacksmithing-system.md` §B.
+- **Nhánh**: `feat/y5-boss-soul-crafting`.
+- **Nội dung thực hiện**:
+  1. **Đồng Bộ Tài Liệu Thiết Kế (`blacksmithing-system.md`)**:
+     - Bổ sung chi phí rèn: **5.000 Vàng**.
+     - Bổ sung quy tắc: "Trang bị đầu ra tương thích chính xác theo Chức nghiệp (Class) của người chơi (Vanguard, Ranger, Arcanist...)".
+  2. **Cấu Trúc Dữ Liệu & Công Thức Rèn Đúc (`PABlacksmithTypes.h`)**:
+     - Bổ sung `TMap<EPACharacterClass, TObjectPtr<UItemStaticDataAsset>> ClassOutputs` và helper `GetOutputForClass(EPACharacterClass)` vào `FPABossSoulRecipe`.
+     - Bổ sung các bộ lọc nhận diện bộ phận Boss: `IsBossHornItem`, `IsBossTailScaleItem`, `IsBossChestArmorItem`, `IsBossWingItem`.
+     - Bổ sung hàm kiểm tra 4 bộ phận khác nhau: `ValidateFourDistinctBossParts(Horn, TailScale, ChestArmor, Wing)`.
+  3. **Lưu Trữ & Đồng Bộ Class Nhân Vật (`PABaseCharacter.h` / `.cpp`)**:
+     - Thêm biến replicated `EPACharacterClass CharacterClass` cùng getter `GetCharacterClass()` và setter `SetCharacterClass()`.
+     - Khởi tạo giá trị trong `BeginPlay()` từ `SelectedClass` và đăng ký replication trong `GetLifetimeReplicatedProps`.
+  4. **Triển Khai Nghiệp Vụ Rèn Boss Soul Phía Server (`PABlacksmithComponent.h` / `.cpp`)**:
+     - Bổ sung `ForgeBossSoulEquipmentWithFourParts` khấu trừ 1 Linh Hồn Boss, 1 Sừng, 1 Vảy Đuôi, 1 Giáp Ngực, 1 Cánh, 5 Quặng Hư Không và 5.000 Vàng; xuất trang bị Legendary tương ứng theo Class người chơi.
+     - Cập nhật `ServerHandleForgeBossSoul` và bổ sung `ServerHandleForgeBossSoulWithFourParts` tự động phân giải Class từ `APABaseCharacter` của requester.
+  5. **Mở Rộng Giao Thức Mạng Server-Authoritative (`PAServiceRequestComponent.h` / `.cpp`)**:
+     - Thêm RPC tin cậy `Server_RequestForgeBossSoulWithFourParts` với validation phía server, không cho phép client tự ý chỉ định trang bị đầu ra hay chi phí.
+  6. **Đồng Bộ Story Tracker (`story-003-boss-soul-forging.md`)**:
+     - Cập nhật AC-1 (4 bộ phận giải phẫu và 5.000 Vàng) và bổ sung AC-5 (Trang bị Legendary theo Class).
+  7. **Kiểm Thử Tự Động (`PABlacksmithBossSoulTests.cpp` & `PAServerAuthorityTests.cpp`)**:
+     - Kiểm tra đầy đủ các điều kiện: Tier gating, trùng lặp bộ phận (duplicate parts), thiếu vàng (< 5.000 Gold), thiếu nguyên liệu, và thành công xuất trang bị theo từng class (Vanguard, Ranger, Arcanist).
+     - Kiểm tra RPC Server Authority và tĩnh hóa giao diện mạng (`static_assert`).

@@ -131,6 +131,37 @@ public:
 		EPACraftingError& OutError);
 
 	/**
+	 * AC-1 (crft-003) & DECISIONS §13 / blacksmithing-system.md §B:
+	 * Rèn đúc trang bị Legendary từ Linh Hồn Boss với 4 bộ phận giải phẫu riêng biệt:
+	 * Sừng (Horn), Vảy Đuôi (Tail Scale), Giáp Ngực (Chest Armor), Cánh (Wing).
+	 * Trang bị đầu ra tương thích chính xác theo Class của người chơi.
+	 */
+	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category = "ProjectAscendant|Crafting")
+	bool ForgeBossSoulEquipmentWithFourParts(
+		UPAInventoryComponent* Inventory,
+		UPACurrencyComponent* Wallet,
+		FName BossSoulItemId,
+		FName HornItemId,
+		FName TailScaleItemId,
+		FName ChestArmorItemId,
+		FName WingItemId,
+		FName VoidOreItemId,
+		EPACharacterClass CharacterClass,
+		EPACraftingError& OutError);
+
+	/**
+	 * C++ overload của ForgeBossSoulEquipment hỗ trợ xác định đầu ra theo Class.
+	 */
+	bool ForgeBossSoulEquipment(
+		UPAInventoryComponent* Inventory,
+		UPACurrencyComponent* Wallet,
+		FName BossSoulItemId,
+		FName BossPartItemId,
+		FName VoidOreItemId,
+		EPACharacterClass CharacterClass,
+		EPACraftingError& OutError);
+
+	/**
 	 * AC-3 (crft-003): Mở rộng sức chứa kho đồ theo cấp tuần tự (30 -> 40 -> 50 -> 60).
 	 * Kiểm tra điều kiện nguyên liệu, vàng và Bậc Lò Rèn tương ứng.
 	 */
@@ -187,6 +218,9 @@ public:
 
 	/** X11a: output comes from the server recipe for BossSoulItemId; the request cannot choose it. */
 	bool ServerHandleForgeBossSoul(const APlayerController* Requester, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, FName BossSoulItemId, FName BossPartItemId, FName VoidOreItemId, EPACraftingError& OutError);
+
+	/** DECISIONS §13: 4 distinct parts (Horn, Tail, Chest, Wing) and class-specific output */
+	bool ServerHandleForgeBossSoulWithFourParts(const APlayerController* Requester, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, FName BossSoulItemId, FName HornItemId, FName TailScaleItemId, FName ChestArmorItemId, FName WingItemId, FName VoidOreItemId, EPACraftingError& OutError);
 
 	bool ServerHandleExpandBackpack(const APlayerController* Requester, UPAInventoryComponent* Inventory, UPACurrencyComponent* Wallet, EPACraftingError& OutError);
 

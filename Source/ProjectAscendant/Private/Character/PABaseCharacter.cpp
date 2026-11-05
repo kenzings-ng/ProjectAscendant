@@ -148,6 +148,8 @@ void APABaseCharacter::BeginPlay()
 				SelectedClass = EPACharacterClass::Arcanist;
 			}
 
+			CharacterClass = SelectedClass;
+
 			const FPACharacterClassInfo ClassInfo = FPACharacterClassRegistry::GetClassInfo(SelectedClass);
 			if (AttributeSet)
 			{
@@ -329,6 +331,7 @@ void APABaseCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
+	DOREPLIFETIME(APABaseCharacter, CharacterClass);
 	DOREPLIFETIME_CONDITION(APABaseCharacter, bIsExhausted, COND_None);
 	DOREPLIFETIME_CONDITION(APABaseCharacter, CurrentAimDirection, COND_SimulatedOnly);
 }
